@@ -1,0 +1,79 @@
+import { type ReactNode } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuthStore } from './store/authStore'
+
+import Home from './pages/Home'
+import Search from './pages/Search'
+import ProfessionalDetail from './pages/ProfessionalDetail'
+import RequestService from './pages/RequestService'
+import MisSolicitudes from './pages/MisSolicitudes'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import ProOnboarding from './pages/pro/ProOnboarding'
+import ProProfile from './pages/pro/ProProfile'
+import ProRequests from './pages/pro/ProRequests'
+import ProWorkHistory from './pages/pro/ProWorkHistory'
+
+function ProtectedRoute({
+  children,
+  requiredRole,
+}: {
+  children: ReactNode
+  requiredRole?: 'client' | 'professional'
+}) {
+  const user = useAuthStore((s) => s.user)
+  if (!user) return <Navigate to="/login" replace />
+  if (requiredRole && user.role !== requiredRole) return <Navigate to="/" replace />
+  return <>{children}</>
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/buscar/:categoria" element={<Search />} />
+        <Route path="/buscar" element={<Search />} />
+        <Route path="/profesional/:id" element={<ProfessionalDetail />} />
+        <Route path="/solicitar/:id" element={<RequestService />} />
+        <Route
+          path="/mis-solicitudes"
+          element={
+            <ProtectedRoute requiredRole="client">
+              <MisSolicitudes />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Register />} />
+        <Route path="/pro/registro" element={<ProOnboarding />} />
+        <Route
+          path="/pro/perfil"
+          element={
+            <ProtectedRoute requiredRole="professional">
+              <ProProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pro/solicitudes"
+          element={
+            <ProtectedRoute requiredRole="professional">
+              <ProRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pro/trabajos"
+          element={
+            <ProtectedRoute requiredRole="professional">
+              <ProWorkHistory />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App
