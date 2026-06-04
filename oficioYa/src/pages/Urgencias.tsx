@@ -17,6 +17,7 @@ export default function Urgencias() {
       <button
         type="button"
         onClick={() => navigate(-1)}
+        aria-label="Volver atrás"
         className="flex items-center gap-1.5 text-white/80 text-sm mb-4 active:opacity-60 transition-opacity"
       >
         <ArrowLeft size={16} />

@@ -10,6 +10,7 @@ export function UrgenciasBanner() {
     <button
       type="button"
       onClick={() => navigate('/urgencias')}
+      aria-label="Ver profesionales en urgencias 24H"
       className="w-full text-left rounded-2xl p-4 shadow-lg active:scale-[.99] transition-transform duration-150"
       style={{ background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)', boxShadow: '0 6px 20px rgba(220,38,38,.3)' }}
     >
