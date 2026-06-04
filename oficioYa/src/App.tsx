@@ -13,6 +13,7 @@ import ProOnboarding from './pages/pro/ProOnboarding'
 import ProProfile from './pages/pro/ProProfile'
 import ProRequests from './pages/pro/ProRequests'
 import ProWorkHistory from './pages/pro/ProWorkHistory'
+import Urgencias from './pages/Urgencias'
 
 function ProtectedRoute({
   children,
@@ -34,6 +35,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/buscar/:categoria" element={<Search />} />
         <Route path="/buscar" element={<Search />} />
+        <Route path="/urgencias" element={<Urgencias />} />
         <Route path="/profesional/:id" element={<ProfessionalDetail />} />
         <Route path="/solicitar/:id" element={<RequestService />} />
         <Route

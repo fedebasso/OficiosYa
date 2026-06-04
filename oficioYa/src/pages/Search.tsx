@@ -9,6 +9,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   electricista: 'Electricistas',
   plomero: 'Sanitarios',
   aire_acondicionado: 'Aire Acondicionado',
+  cerrajero: 'Cerrajeros',
+  albanil: 'Albañiles',
 }
 
 export default function Search() {
