@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { Button } from '../components/ui/Button'
@@ -8,13 +7,7 @@ import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { UrgenciasBanner } from '../components/home/UrgenciasBanner'
 
 export default function Home() {
-  const [query, setQuery] = useState('')
   const navigate = useNavigate()
-
-  function handleSearch() {
-    const trimmed = query.trim()
-    navigate(trimmed ? `/buscar/${encodeURIComponent(trimmed)}` : '/buscar')
-  }
 
   const homeHeader = (
     <header className="bg-primary px-4 pt-10 pb-5 sticky top-0 z-50">
@@ -35,7 +28,7 @@ export default function Home() {
           👤
         </button>
       </div>
-      <SearchBar value={query} onChange={setQuery} onSearch={handleSearch} />
+      <SearchBar onSearch={() => navigate('/buscar')} />
     </header>
   )
 

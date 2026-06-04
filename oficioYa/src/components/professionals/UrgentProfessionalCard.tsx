@@ -26,15 +26,11 @@ export function UrgentProfessionalCard({ professional }: Props) {
 
   function handleWhatsApp(e: React.MouseEvent) {
     e.stopPropagation()
-    window.open(`https://wa.me/${whatsapp}`, '_blank')
+    window.open(`https://wa.me/${whatsapp}`, '_blank', 'noopener,noreferrer')
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => navigate(`/profesional/${professional.id}`)}
-      className="w-full text-left bg-white rounded-2xl overflow-hidden shadow-md active:scale-[.99] transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2"
-    >
+    <div className="bg-white rounded-2xl overflow-hidden shadow-md">
       {/* Header rojo */}
       <div
         className="flex items-center gap-2 px-3 py-1.5"
@@ -48,10 +44,14 @@ export function UrgentProfessionalCard({ professional }: Props) {
 
       {/* Body */}
       <div className="p-3">
-        {/* Perfil */}
-        <div className="flex items-center gap-2.5 mb-2.5">
+        {/* Perfil — toca aquí para ir al perfil */}
+        <button
+          type="button"
+          onClick={() => navigate(`/profesional/${professional.id}`)}
+          className="w-full text-left flex items-center gap-2.5 mb-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg"
+        >
           <Avatar src={profiles.avatar_url} name={profiles.full_name} size="md" />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="text-[13px] font-extrabold text-text-main leading-tight">
               {profiles.full_name}
             </div>
@@ -59,7 +59,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
               {specialty}{verified && ' · ✓ Verificado/a'}
             </div>
           </div>
-        </div>
+        </button>
 
         {/* Stats */}
         <div className="flex gap-3 text-[11px] text-gray-500 mb-2">
@@ -73,7 +73,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
           ⏱ Responde en ~{response_time_min} minutos
         </div>
 
-        {/* Botones */}
+        {/* Botones de acción */}
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
@@ -91,7 +91,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
           </button>
         </div>
       </div>
-    </button>
+    </div>
   )
 }
 

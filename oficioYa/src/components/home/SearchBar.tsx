@@ -1,12 +1,10 @@
 import { Search } from 'lucide-react'
 
 interface SearchBarProps {
-  value: string
-  onChange: (v: string) => void
   onSearch: () => void
 }
 
-export function SearchBar({ value, onSearch }: SearchBarProps) {
+export function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <button
       type="button"
@@ -15,11 +13,7 @@ export function SearchBar({ value, onSearch }: SearchBarProps) {
       aria-label="Buscar profesional"
     >
       <Search size={17} className="text-primary flex-shrink-0" />
-      {value ? (
-        <span className="flex-1 text-sm text-text-main">{value}</span>
-      ) : (
-        <span className="flex-1 text-sm text-gray-400">Electricista, plomero, cerrajero...</span>
-      )}
+      <span className="flex-1 text-sm text-gray-400">Electricista, plomero, cerrajero...</span>
     </button>
   )
 }
