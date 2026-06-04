@@ -30,9 +30,10 @@ export function UrgentProfessionalCard({ professional }: Props) {
   }
 
   return (
-    <div
-      className="bg-white rounded-2xl overflow-hidden shadow-md active:scale-[.99] transition-transform duration-150"
+    <button
+      type="button"
       onClick={() => navigate(`/profesional/${professional.id}`)}
+      className="w-full text-left bg-white rounded-2xl overflow-hidden shadow-md active:scale-[.99] transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2"
     >
       {/* Header rojo */}
       <div
@@ -77,20 +78,20 @@ export function UrgentProfessionalCard({ professional }: Props) {
           <button
             type="button"
             onClick={handleCall}
-            className="bg-primary text-white rounded-xl py-2.5 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity"
+            className="bg-primary text-white rounded-xl py-2.5 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
           >
             📞 Llamar
           </button>
           <button
             type="button"
             onClick={handleWhatsApp}
-            className="bg-whatsapp text-white rounded-xl py-2.5 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity"
+            className="bg-whatsapp text-white rounded-xl py-2.5 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-1"
           >
             💬 WhatsApp
           </button>
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
