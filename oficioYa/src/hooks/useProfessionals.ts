@@ -183,22 +183,26 @@ export function useProfessionalById(id: string) {
 export function useUrgentProfessionals() {
   const [professionals, setProfessionals] = useState<ProfessionalWithProfile[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const load = async () => {
       setLoading(true)
+      setError(null)
       try {
         if (isPlaceholderConfig()) {
           const urgent = MOCK_PROFESSIONALS.filter((p) => p.available_now)
           setProfessionals(urgent)
         } else {
-          const { data, error } = await supabase
+          const { data, error: err } = await supabase
             .from('professionals')
             .select('*, profiles(*)')
             .eq('available_now', true)
-          if (error) throw error
+          if (err) throw err
           setProfessionals((data as ProfessionalWithProfile[]) ?? [])
         }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Error al cargar urgencias')
       } finally {
         setLoading(false)
       }
@@ -206,5 +210,5 @@ export function useUrgentProfessionals() {
     load()
   }, [])
 
-  return { professionals, loading }
+  return { professionals, loading, error }
 }
