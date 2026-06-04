@@ -19,6 +19,10 @@ export interface Professional {
   verified: boolean
   whatsapp: string
   zone: string
+  featured: boolean
+  jobs_count: number
+  response_time_min: number
+  available_now: boolean
 }
 
 export interface WorkPhoto {
@@ -42,6 +46,10 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     verified: true,
     whatsapp: '598912345678',
     zone: 'Pocitos',
+    featured: true,
+    jobs_count: 127,
+    response_time_min: 15,
+    available_now: true,
     profiles: { id: '1', role: 'professional', full_name: 'Carlos Méndez', phone: '598912345678', avatar_url: null, city: 'Montevideo', created_at: '' },
   },
   {
@@ -52,6 +60,10 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     verified: true,
     whatsapp: '598923456789',
     zone: 'Malvín',
+    featured: true,
+    jobs_count: 83,
+    response_time_min: 20,
+    available_now: true,
     profiles: { id: '2', role: 'professional', full_name: 'Roberto Silva', phone: '598923456789', avatar_url: null, city: 'Montevideo', created_at: '' },
   },
   {
@@ -62,7 +74,39 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     verified: false,
     whatsapp: '598934567890',
     zone: 'Centro',
+    featured: false,
+    jobs_count: 41,
+    response_time_min: 45,
+    available_now: false,
     profiles: { id: '3', role: 'professional', full_name: 'Diego Fernández', phone: '598934567890', avatar_url: null, city: 'Montevideo', created_at: '' },
+  },
+  {
+    id: '4',
+    bio: 'Cerrajera con disponibilidad 24 horas. Apertura de puertas, cambio de cerraduras, duplicado de llaves.',
+    categories: ['cerrajero'],
+    avg_rating: 4.9,
+    verified: true,
+    whatsapp: '598945678901',
+    zone: 'Centro',
+    featured: true,
+    jobs_count: 89,
+    response_time_min: 10,
+    available_now: true,
+    profiles: { id: '4', role: 'professional', full_name: 'Ana Rodríguez', phone: '598945678901', avatar_url: null, city: 'Montevideo', created_at: '' },
+  },
+  {
+    id: '5',
+    bio: 'Albañil con más de 15 años en obras civiles, reparaciones y remodelaciones.',
+    categories: ['albanil'],
+    avg_rating: 4.6,
+    verified: true,
+    whatsapp: '598956789012',
+    zone: 'Punta Carretas',
+    featured: false,
+    jobs_count: 64,
+    response_time_min: 30,
+    available_now: false,
+    profiles: { id: '5', role: 'professional', full_name: 'Pablo Torres', phone: '598956789012', avatar_url: null, city: 'Montevideo', created_at: '' },
   },
 ]
 
@@ -134,4 +178,33 @@ export function useProfessionalById(id: string) {
   }, [id])
 
   return { professional, loading, error }
+}
+
+export function useUrgentProfessionals() {
+  const [professionals, setProfessionals] = useState<ProfessionalWithProfile[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true)
+      try {
+        if (isPlaceholderConfig()) {
+          const urgent = MOCK_PROFESSIONALS.filter((p) => p.available_now)
+          setProfessionals(urgent)
+        } else {
+          const { data, error } = await supabase
+            .from('professionals')
+            .select('*, profiles(*)')
+            .eq('available_now', true)
+          if (error) throw error
+          setProfessionals((data as ProfessionalWithProfile[]) ?? [])
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
+  return { professionals, loading }
 }
