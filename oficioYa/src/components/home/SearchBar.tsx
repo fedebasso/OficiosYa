@@ -8,30 +8,32 @@ interface SearchBarProps {
 
 export function SearchBar({ value, onChange, onSearch }: SearchBarProps) {
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') {
-      onSearch()
-    }
+    if (e.key === 'Enter') onSearch()
   }
 
   return (
-    <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: 'rgba(255,255,255,0.18)' }}>
-      <button
-        type="button"
-        onClick={onSearch}
-        aria-label="Buscar"
-        className="text-white/80 hover:text-white transition-colors shrink-0"
-      >
-        <Search size={18} />
-      </button>
+    <button
+      type="button"
+      onClick={onSearch}
+      className="w-full flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-lg text-left"
+      aria-label="Abrir búsqueda"
+    >
+      <Search size={17} className="text-primary flex-shrink-0" />
+      {value ? (
+        <span className="flex-1 text-sm text-text-main">{value}</span>
+      ) : (
+        <span className="flex-1 text-sm text-gray-400">Electricista, plomero, cerrajero...</span>
+      )}
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="¿Qué servicio buscás?"
-        className="flex-1 bg-transparent text-white placeholder-white/60 text-sm outline-none"
+        className="sr-only"
+        aria-hidden
+        tabIndex={-1}
       />
-    </div>
+    </button>
   )
 }
 
