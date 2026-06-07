@@ -1,28 +1,29 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { PageShell } from '../components/layout/PageShell'
-import { Header } from '../components/layout/Header'
+import { useParams } from 'react-router-dom'
 import { ProfessionalProfile } from '../components/professionals/ProfessionalProfile'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { useProfessionalById } from '../hooks/useProfessionals'
 
 export default function ProfessionalDetail() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const { professional, loading, error } = useProfessionalById(id ?? '')
 
-  return (
-    <PageShell
-      showBottomNav={false}
-      header={<Header title="Perfil" showBack onBack={() => navigate(-1)} />}
-    >
-      <div className="p-4">
-        {loading && <div className="flex justify-center py-8"><LoadingSpinner /></div>}
-        {error && <p className="text-center text-red-500 py-8">{error}</p>}
-        {!loading && !error && !professional && (
-          <p className="text-center text-gray-400 py-8">Profesional no encontrado</p>
-        )}
-        {professional && <ProfessionalProfile professional={professional} photos={[]} />}
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-background">
+        <LoadingSpinner />
       </div>
-    </PageShell>
-  )
+    )
+  }
+
+  if (error || !professional) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background gap-3 px-6 text-center">
+        <div className="text-4xl">😕</div>
+        <p className="font-bold text-text-main">Profesional no encontrado</p>
+        <p className="text-sm text-gray-400">{error ?? 'No pudimos cargar este perfil'}</p>
+      </div>
+    )
+  }
+
+  return <ProfessionalProfile professional={professional} photos={[]} />
 }
