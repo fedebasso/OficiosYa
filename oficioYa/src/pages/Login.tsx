@@ -50,7 +50,12 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-sm text-red-600">
+              <div
+                id="login-error"
+                role="alert"
+                aria-live="polite"
+                className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-sm text-red-600"
+              >
                 {error}
               </div>
             )}
@@ -61,7 +66,7 @@ export default function Login() {
                 Email
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
                   ✉️
                 </span>
                 <input
@@ -70,6 +75,7 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
                   required
+                  aria-describedby={error ? 'login-error' : undefined}
                   className="w-full bg-white border-[1.5px] border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-text-main placeholder:text-gray-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-150"
                 />
               </div>
@@ -81,7 +87,7 @@ export default function Login() {
                 Contraseña
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
                   🔒
                 </span>
                 <input
@@ -90,6 +96,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
+                  aria-describedby={error ? 'login-error' : undefined}
                   className="w-full bg-white border-[1.5px] border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-text-main placeholder:text-gray-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-150"
                 />
               </div>
@@ -99,7 +106,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-white rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-white rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               style={{ boxShadow: '0 4px 14px rgba(15,110,86,.3)' }}
             >
               {loading ? (
