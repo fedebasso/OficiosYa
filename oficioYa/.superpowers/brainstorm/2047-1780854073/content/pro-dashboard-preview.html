@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Dashboard — OficioYa</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #cbd5e1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 28px 12px 80px;
+  }
+  h1 { text-align:center; font-size:14px; font-weight:800; color:#1e293b; margin-bottom:4px; }
+  p.sub { text-align:center; font-size:12px; color:#64748b; margin-bottom:28px; }
+  .section-title {
+    text-align:center; font-size:11px; font-weight:800; color:#475569;
+    text-transform:uppercase; letter-spacing:1px; margin:28px 0 16px;
+    display:flex; align-items:center; gap:10px; justify-content:center;
+  }
+  .section-title::before,.section-title::after{content:'';flex:1;max-width:60px;height:1px;background:#94a3b8;}
+
+  .screens { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; align-items:flex-start; }
+  .screen-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .screen-label { font-size:11px; font-weight:800; color:#334155; text-transform:uppercase; letter-spacing:.5px; }
+  .screen-desc { font-size:10px; color:#64748b; text-align:center; line-height:1.4; max-width:260px; }
+  .rec { font-size:10px; color:#0F6E56; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:20px; padding:2px 8px; }
+
+  .phone { width:290px; background:#f4f4f2; border-radius:30px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.22); border:6px solid #1e293b; }
+  .phone-scroll { max-height:600px; overflow-y:auto; scrollbar-width:none; }
+  .phone-scroll::-webkit-scrollbar { display:none; }
+  .statusbar { padding:6px 14px 2px; display:flex; justify-content:space-between; }
+  .statusbar span { font-size:9px; font-weight:600; }
+
+  /* ── SHARED ── */
+  .hero-verde { background:#0F6E56; padding:12px 16px 44px; position:relative; }
+  .hero-verde::after { content:''; position:absolute; bottom:0; left:0; right:0; height:28px; background:#f4f4f2; border-radius:28px 28px 0 0; }
+  .hero-back { color:rgba(255,255,255,.7); font-size:11px; margin-bottom:8px; }
+  .hero-logo { font-size:22px; font-weight:900; color:white; line-height:1; }
+  .hero-logo span { color:#9FE1CB; }
+  .hero-subtitle { font-size:11px; color:rgba(255,255,255,.6); margin-top:2px; }
+  .hero-badge { display:inline-flex; align-items:center; gap:4px; background:rgba(255,255,255,.15); color:#9FE1CB; font-size:9px; font-weight:700; padding:3px 8px; border-radius:20px; margin-top:8px; }
+
+  /* ── ONBOARDING A ── */
+  .ob-a-hero { background:#0F6E56; padding:20px 16px 52px; position:relative; text-align:center; }
+  .ob-a-hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:28px; background:#f4f4f2; border-radius:28px 28px 0 0; }
+  .ob-a-logo { font-size:24px; font-weight:900; color:white; }
+  .ob-a-logo span { color:#9FE1CB; }
+  .ob-a-tagline { font-size:11px; color:rgba(255,255,255,.6); margin-top:3px; }
+  .ob-a-body { padding:8px 14px 16px; }
+  .ob-a-title { font-size:17px; font-weight:900; color:#1a1a1a; margin-bottom:2px; }
+  .ob-a-sub { font-size:11px; color:#94a3b8; margin-bottom:14px; }
+  .ob-a-step { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; }
+  .ob-a-step-num { width:28px; height:28px; border-radius:50%; background:#0F6E56; color:white; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .ob-a-step-text { font-size:12px; font-weight:700; color:#1a1a1a; line-height:1.2; }
+  .ob-a-step-sub { font-size:10px; color:#94a3b8; margin-top:1px; }
+  .ob-a-benefits { background:white; border-radius:14px; padding:12px; margin-bottom:14px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+  .ob-a-benefit-row { display:flex; align-items:center; gap:8px; padding:4px 0; font-size:11px; color:#374151; }
+  .ob-a-benefit-icon { font-size:14px; }
+  .btn-g { background:#0F6E56; color:white; border-radius:12px; padding:13px; text-align:center; font-size:13px; font-weight:700; margin-bottom:8px; box-shadow:0 4px 12px rgba(15,110,86,.25); }
+  .btn-ghost { text-align:center; font-size:12px; color:#0F6E56; font-weight:700; padding:8px; }
+
+  /* ── ONBOARDING B ── */
+  .ob-b-hero { background:linear-gradient(160deg,#0F6E56,#07453a); padding:20px 16px 52px; position:relative; }
+  .ob-b-hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:28px; background:#f4f4f2; border-radius:28px 28px 0 0; }
+  .ob-b-logo { font-size:24px; font-weight:900; color:white; }
+  .ob-b-logo span { color:#9FE1CB; }
+  .ob-b-portal { font-size:9px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:6px; }
+  .ob-b-greeting { font-size:16px; font-weight:900; color:white; margin-top:8px; }
+  .ob-b-sub { font-size:11px; color:rgba(255,255,255,.6); margin-top:2px; }
+  .ob-b-body { padding:8px 14px 16px; }
+  .ob-b-progress { margin-bottom:14px; }
+  .ob-b-progress-label { font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.3px; margin-bottom:6px; }
+  .ob-b-bar-bg { background:#e5e7eb; border-radius:20px; height:5px; margin-bottom:12px; }
+  .ob-b-bar-fill { background:#0F6E56; border-radius:20px; height:5px; width:0%; }
+  .ob-b-cards { display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+  .ob-b-card { background:white; border-radius:14px; padding:12px; display:flex; align-items:center; gap:10px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+  .ob-b-card-icon { font-size:22px; flex-shrink:0; }
+  .ob-b-card-info { flex:1; }
+  .ob-b-card-title { font-size:12px; font-weight:800; color:#1a1a1a; }
+  .ob-b-card-desc { font-size:10px; color:#94a3b8; margin-top:1px; }
+  .ob-b-card-status { font-size:9px; font-weight:700; padding:2px 7px; border-radius:20px; }
+  .status-pending { background:#fef3c7; color:#92400e; }
+  .status-done { background:#f0fdf4; color:#0F6E56; }
+
+  /* ── PROFILE A ── */
+  .pf-a-hero { background:#0F6E56; padding:10px 14px 44px; position:relative; }
+  .pf-a-hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:28px; background:#f4f4f2; border-radius:28px 28px 0 0; }
+  .pf-a-back { color:rgba(255,255,255,.7); font-size:11px; margin-bottom:6px; }
+  .pf-a-title { color:white; font-size:18px; font-weight:900; }
+  .pf-a-sub { color:rgba(255,255,255,.6); font-size:11px; margin-top:2px; }
+  .pf-a-av-wrap { display:flex; justify-content:center; margin-top:-28px; margin-bottom:12px; }
+  .pf-a-av { width:64px; height:64px; border-radius:50%; background:#7c3aed; display:flex; align-items:center; justify-content:center; color:white; font-weight:900; font-size:22px; border:3px solid white; box-shadow:0 4px 12px rgba(0,0,0,.15); position:relative; }
+  .pf-a-cam { position:absolute; bottom:0; right:0; background:#0F6E56; width:18px; height:18px; border-radius:50%; border:2px solid white; display:flex; align-items:center; justify-content:center; font-size:9px; color:white; }
+  .pf-a-name { text-align:center; font-size:14px; font-weight:800; color:#1a1a1a; margin-bottom:14px; }
+  .section-card { background:white; border-radius:14px; margin:0 12px 10px; padding:12px 14px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .sec-lbl { font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+  .input-row { border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 12px; font-size:12px; color:#94a3b8; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .input-row:last-child { margin-bottom:0; }
+  .cat-pills { display:flex; flex-wrap:wrap; gap:6px; }
+  .cat-pill { border:1.5px solid #e5e7eb; border-radius:20px; padding:4px 10px; font-size:10px; font-weight:600; color:#64748b; }
+  .cat-pill.sel { background:#0F6E56; border-color:#0F6E56; color:white; }
+  .zone-sel { border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 12px; font-size:12px; color:#94a3b8; display:flex; align-items:center; justify-content:space-between; }
+  .save-btn { background:#0F6E56; color:white; border-radius:12px; margin:0 12px 12px; padding:13px; text-align:center; font-size:13px; font-weight:700; box-shadow:0 4px 12px rgba(15,110,86,.25); }
+
+  /* ── PROFILE B ── */
+  .pf-b-header { background:#0F6E56; padding:10px 14px 12px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:10; }
+  .pf-b-back { color:rgba(255,255,255,.7); font-size:11px; }
+  .pf-b-title { color:white; font-size:15px; font-weight:900; flex:1; }
+  .pf-b-save-top { background:rgba(255,255,255,.15); color:white; font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; }
+  .pf-b-content { padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .pf-b-av-section { background:white; border-radius:16px; padding:16px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+  .pf-b-av { width:56px; height:56px; border-radius:50%; background:#7c3aed; display:flex; align-items:center; justify-content:center; color:white; font-weight:900; font-size:20px; position:relative; flex-shrink:0; }
+  .pf-b-av-cam { position:absolute; bottom:0; right:0; background:#0F6E56; width:16px; height:16px; border-radius:50%; border:2px solid white; font-size:8px; color:white; display:flex; align-items:center; justify-content:center; }
+  .pf-b-av-info { flex:1; }
+  .pf-b-av-name { font-size:14px; font-weight:800; color:#1a1a1a; }
+  .pf-b-av-change { font-size:10px; color:#0F6E56; font-weight:600; margin-top:2px; }
+  .pf-b-field { background:white; border-radius:14px; padding:12px 14px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .pf-b-field-lbl { font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+  .pf-b-input { border:1.5px solid #e5e7eb; border-radius:10px; padding:9px 12px; font-size:12px; color:#94a3b8; width:100%; }
+  .pf-b-textarea { border:1.5px solid #e5e7eb; border-radius:10px; padding:9px 12px; font-size:12px; color:#94a3b8; width:100%; height:56px; resize:none; }
+  .pf-b-cats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+  .pf-b-cat { border:1.5px solid #e5e7eb; border-radius:10px; padding:8px 4px; text-align:center; font-size:9px; font-weight:700; color:#64748b; }
+  .pf-b-cat.sel { background:#f0fdf4; border-color:#0F6E56; color:#0F6E56; }
+  .pf-b-cat-emoji { font-size:16px; display:block; margin-bottom:3px; }
+</style>
+</head>
+<body>
+
+<h1>Pro Dashboard — Ronda 1</h1>
+<p class="sub">ProOnboarding y ProProfile. Dos opciones por pantalla.</p>
+
+<!-- ═══ ONBOARDING ═══ -->
+<div class="section-title">ProOnboarding</div>
+<div class="screens">
+
+  <!-- A: Steps numerados + beneficios -->
+  <div class="screen-wrap">
+    <div class="screen-label">A — Steps + beneficios</div>
+    <div class="screen-desc">Pasos numerados claros. Card de beneficios para motivar. Directo y accionable.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="ob-a-hero">
+          <div style="text-align:center">
+            <div class="ob-a-logo">Oficio<span>Ya</span></div>
+            <div class="ob-a-tagline">Portal de profesionales</div>
+          </div>
+        </div>
+        <div class="ob-a-body">
+          <div class="ob-a-title">¡Hola, Carlos! 👋</div>
+          <div class="ob-a-sub">Completá tu perfil para recibir clientes</div>
+          <div style="margin-bottom:14px">
+            <div class="ob-a-step">
+              <div class="ob-a-step-num">1</div>
+              <div><div class="ob-a-step-text">Completá tu bio</div><div class="ob-a-step-sub">Contá tu experiencia y especialidades</div></div>
+            </div>
+            <div class="ob-a-step">
+              <div class="ob-a-step-num">2</div>
+              <div><div class="ob-a-step-text">Elegí tus servicios</div><div class="ob-a-step-sub">Qué categorías ofrecés</div></div>
+            </div>
+            <div class="ob-a-step">
+              <div class="ob-a-step-num">3</div>
+              <div><div class="ob-a-step-text">Agregá WhatsApp</div><div class="ob-a-step-sub">Los clientes te contactarán directo</div></div>
+            </div>
+          </div>
+          <div class="ob-a-benefits">
+            <div class="ob-a-benefit-row"><span class="ob-a-benefit-icon">🎯</span><span>Aparecés en búsquedas de tu zona</span></div>
+            <div class="ob-a-benefit-row"><span class="ob-a-benefit-icon">⚡</span><span>Ofrecé disponibilidad 24 horas</span></div>
+            <div class="ob-a-benefit-row"><span class="ob-a-benefit-icon">⭐</span><span>Construí tu reputación con reseñas</span></div>
+          </div>
+          <div class="btn-g">Completar mi perfil</div>
+          <div class="btn-ghost">Ver solicitudes →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B: Cards con estado de progreso -->
+  <div class="screen-wrap">
+    <div class="screen-label">B — Cards de progreso</div>
+    <div class="screen-desc">Cada paso como card con estado "pendiente/listo". Sensación de progreso y gamificación.</div>
+    <div class="rec">⭐ Más motivador</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="ob-b-hero">
+          <div class="ob-b-portal">Portal profesional</div>
+          <div class="ob-b-logo">Oficio<span>Ya</span></div>
+          <div class="ob-b-greeting">¡Hola, Carlos! 👋</div>
+          <div class="ob-b-sub">Completá tu perfil para empezar a recibir clientes</div>
+        </div>
+        <div class="ob-b-body">
+          <div class="ob-b-progress">
+            <div class="ob-b-progress-label">Progreso del perfil — 0 de 3</div>
+            <div class="ob-b-bar-bg"><div class="ob-b-bar-fill"></div></div>
+          </div>
+          <div class="ob-b-cards">
+            <div class="ob-b-card">
+              <div class="ob-b-card-icon">📝</div>
+              <div class="ob-b-card-info">
+                <div class="ob-b-card-title">Bio y experiencia</div>
+                <div class="ob-b-card-desc">Contá quién sos y qué hacés</div>
+              </div>
+              <div class="ob-b-card-status status-pending">Pendiente</div>
+            </div>
+            <div class="ob-b-card">
+              <div class="ob-b-card-icon">🔧</div>
+              <div class="ob-b-card-info">
+                <div class="ob-b-card-title">Servicios y zona</div>
+                <div class="ob-b-card-desc">Qué ofrecés y dónde trabajás</div>
+              </div>
+              <div class="ob-b-card-status status-pending">Pendiente</div>
+            </div>
+            <div class="ob-b-card">
+              <div class="ob-b-card-icon">📱</div>
+              <div class="ob-b-card-info">
+                <div class="ob-b-card-title">WhatsApp de contacto</div>
+                <div class="ob-b-card-desc">Para que los clientes te escriban</div>
+              </div>
+              <div class="ob-b-card-status status-pending">Pendiente</div>
+            </div>
+          </div>
+          <div class="btn-g">Completar mi perfil →</div>
+          <div class="btn-ghost">Ver solicitudes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="section-title">ProProfile</div>
+<div class="screens">
+
+  <!-- A: Avatar flotante + secciones separadas -->
+  <div class="screen-wrap">
+    <div class="screen-label">A — Avatar flotante + secciones</div>
+    <div class="screen-desc">Mismo patrón que ProfessionalProfile. Hero verde, avatar flotante, cards por sección.</div>
+    <div class="rec">⭐ Más consistente</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="pf-a-hero">
+          <div class="pf-a-back">← Volver</div>
+          <div class="pf-a-title">Mi perfil</div>
+          <div class="pf-a-sub">Así te ven los clientes</div>
+        </div>
+        <div class="pf-a-av-wrap">
+          <div class="pf-a-av">C<div class="pf-a-cam">📷</div></div>
+        </div>
+        <div class="pf-a-name">Carlos Méndez</div>
+        <div class="section-card">
+          <div class="sec-lbl">Descripción</div>
+          <div class="input-row" style="height:44px;align-items:flex-start;padding-top:10px;color:#1a1a1a;font-size:11px;">Electricista con 10 años de experiencia...</div>
+        </div>
+        <div class="section-card">
+          <div class="sec-lbl">WhatsApp</div>
+          <div class="input-row"><span style="font-size:13px">📱</span><span>598 91 234 567</span></div>
+        </div>
+        <div class="section-card">
+          <div class="sec-lbl">Servicios (5 categorías)</div>
+          <div class="cat-pills">
+            <div class="cat-pill sel">⚡ Electricista</div>
+            <div class="cat-pill">🚿 Sanitario</div>
+            <div class="cat-pill">❄️ Aire Ac.</div>
+            <div class="cat-pill">🔑 Cerrajero</div>
+            <div class="cat-pill">🧱 Albañil</div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="sec-lbl">Zona de trabajo</div>
+          <div class="zone-sel"><span style="color:#1a1a1a;font-size:12px;">📍 Pocitos</span><span style="color:#94a3b8">▼</span></div>
+        </div>
+        <div class="section-card">
+          <div class="sec-lbl">Disponibilidad</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;border:1.5px solid #0F6E56;background:#f0fdf4;border-radius:10px;padding:8px;text-align:center;font-size:10px;font-weight:700;color:#0F6E56;">⚡ 24H Urgencias</div>
+            <div style="flex:1;border:1.5px solid #e5e7eb;border-radius:10px;padding:8px;text-align:center;font-size:10px;font-weight:700;color:#94a3b8;">Solo diurno</div>
+          </div>
+        </div>
+        <div class="save-btn">Guardar cambios</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B: Header inline + campos horizontales -->
+  <div class="screen-wrap">
+    <div class="screen-label">B — Header con save arriba</div>
+    <div class="screen-desc">Botón "Guardar" visible en el header. Avatar en fila con el nombre. Más compacto.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="pf-b-header">
+          <div class="pf-b-back">←</div>
+          <div class="pf-b-title">Mi perfil</div>
+          <div class="pf-b-save-top">Guardar</div>
+        </div>
+        <div class="pf-b-content">
+          <!-- Avatar row -->
+          <div class="pf-b-av-section">
+            <div class="pf-b-av">C<div class="pf-b-av-cam">📷</div></div>
+            <div class="pf-b-av-info">
+              <div class="pf-b-av-name">Carlos Méndez</div>
+              <div class="pf-b-av-change">Cambiar foto</div>
+            </div>
+          </div>
+          <!-- Bio -->
+          <div class="pf-b-field">
+            <div class="pf-b-field-lbl">Descripción</div>
+            <div class="pf-b-textarea" style="color:#1a1a1a;font-size:11px;">Electricista con 10 años de experiencia...</div>
+          </div>
+          <!-- WhatsApp -->
+          <div class="pf-b-field">
+            <div class="pf-b-field-lbl">WhatsApp</div>
+            <div class="pf-b-input" style="color:#1a1a1a;">598 91 234 567</div>
+          </div>
+          <!-- Servicios grid -->
+          <div class="pf-b-field">
+            <div class="pf-b-field-lbl">Servicios</div>
+            <div class="pf-b-cats">
+              <div class="pf-b-cat sel"><span class="pf-b-cat-emoji">⚡</span>Electricista</div>
+              <div class="pf-b-cat"><span class="pf-b-cat-emoji">🚿</span>Sanitario</div>
+              <div class="pf-b-cat"><span class="pf-b-cat-emoji">❄️</span>Aire Ac.</div>
+              <div class="pf-b-cat"><span class="pf-b-cat-emoji">🔑</span>Cerrajero</div>
+              <div class="pf-b-cat"><span class="pf-b-cat-emoji">🧱</span>Albañil</div>
+            </div>
+          </div>
+          <!-- Zona -->
+          <div class="pf-b-field">
+            <div class="pf-b-field-lbl">Zona de trabajo</div>
+            <div class="pf-b-input" style="color:#1a1a1a;display:flex;justify-content:space-between;">📍 Pocitos <span style="color:#94a3b8">▼</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

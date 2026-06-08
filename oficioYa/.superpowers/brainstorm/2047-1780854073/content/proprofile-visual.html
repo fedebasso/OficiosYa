@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProProfile Visual — OficioYa</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 28px 12px 80px;
+  }
+  h1 { text-align:center; font-size:14px; font-weight:800; color:#f1f5f9; margin-bottom:4px; }
+  p.sub { text-align:center; font-size:12px; color:#64748b; margin-bottom:32px; }
+
+  .screens { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; align-items:flex-start; }
+  .screen-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .screen-label { font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; }
+  .screen-desc { font-size:10px; color:#64748b; text-align:center; line-height:1.5; max-width:250px; }
+
+  .phone { width:280px; background:#f4f4f2; border-radius:30px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,.5); border:6px solid #0f172a; }
+  .phone-scroll { max-height:620px; overflow-y:auto; scrollbar-width:none; }
+  .phone-scroll::-webkit-scrollbar { display:none; }
+  .sb { padding:6px 14px 2px; display:flex; justify-content:space-between; }
+  .sb span { font-size:9px; font-weight:600; }
+
+  /* ══════════════════════════════════
+     OPCIÓN A — "Vista de cliente" preview
+  ══════════════════════════════════ */
+  .a-header {
+    background:#0F6E56; padding:10px 14px;
+    display:flex; align-items:center; gap:10px;
+    position:sticky; top:0; z-index:10;
+  }
+  .a-back { color:rgba(255,255,255,.7); font-size:11px; }
+  .a-title { color:white; font-size:15px; font-weight:900; flex:1; }
+  .a-preview-toggle {
+    display:flex; background:rgba(255,255,255,.15); border-radius:20px; padding:2px;
+    gap:2px;
+  }
+  .a-tab { font-size:9px; font-weight:700; padding:4px 8px; border-radius:16px; color:rgba(255,255,255,.6); }
+  .a-tab.active { background:white; color:#0F6E56; }
+
+  /* Preview section: como se ve en la app */
+  .a-preview-card {
+    margin:12px; background:white; border-radius:18px;
+    overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.1);
+  }
+  .a-preview-banner {
+    background:linear-gradient(135deg,#0F6E56,#07453a);
+    height:70px; display:flex; align-items:flex-end; padding:10px 12px 0;
+    position:relative;
+  }
+  .a-preview-av {
+    width:52px; height:52px; border-radius:50%; background:#7c3aed;
+    display:flex; align-items:center; justify-content:center;
+    color:white; font-weight:900; font-size:18px;
+    border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,.2);
+    margin-bottom:-26px;
+  }
+  .a-preview-body { padding:32px 12px 12px; }
+  .a-preview-name { font-size:14px; font-weight:900; color:#1a1a1a; }
+  .a-preview-spec { font-size:10px; color:#64748b; }
+  .a-preview-stats { display:flex; gap:10px; margin:8px 0; }
+  .a-stat { font-size:10px; font-weight:700; color:#0F6E56; }
+  .a-preview-badges { display:flex; gap:5px; }
+  .a-badge-v { background:#f0fdf4; color:#0F6E56; border:1px solid #bbf7d0; font-size:8px; font-weight:700; padding:2px 7px; border-radius:20px; }
+  .a-badge-u { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; font-size:8px; font-weight:700; padding:2px 7px; border-radius:20px; }
+
+  /* Edit section */
+  .a-edit-label { font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; padding:8px 12px 4px; }
+  .a-field { margin:0 12px 8px; }
+  .a-field-lbl { font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.3px; margin-bottom:4px; }
+  .a-input { background:white; border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 12px; font-size:12px; color:#1a1a1a; width:100%; }
+  .a-textarea { background:white; border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 12px; font-size:12px; color:#1a1a1a; width:100%; height:54px; resize:none; }
+  .a-cats-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin:0 12px 8px; }
+  .a-cat { background:white; border:1.5px solid #e5e7eb; border-radius:12px; padding:8px 4px; text-align:center; }
+  .a-cat.sel { background:#f0fdf4; border-color:#0F6E56; }
+  .a-cat-em { font-size:18px; display:block; }
+  .a-cat-nm { font-size:9px; font-weight:700; color:#64748b; margin-top:2px; }
+  .a-cat.sel .a-cat-nm { color:#0F6E56; }
+  .a-save { background:#0F6E56; color:white; border-radius:12px; margin:4px 12px 12px; padding:12px; text-align:center; font-size:13px; font-weight:700; box-shadow:0 4px 12px rgba(15,110,86,.25); }
+
+  /* ══════════════════════════════════
+     OPCIÓN B — Glassmorphism dark hero
+  ══════════════════════════════════ */
+  .b-hero {
+    background:linear-gradient(150deg,#064e3b,#0F6E56 50%,#047857);
+    padding:14px 14px 60px; position:relative;
+  }
+  .b-hero-back { color:rgba(255,255,255,.6); font-size:11px; margin-bottom:14px; }
+  .b-av-center { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .b-av {
+    width:72px; height:72px; border-radius:50%; background:#7c3aed;
+    display:flex; align-items:center; justify-content:center;
+    color:white; font-weight:900; font-size:26px;
+    border:3px solid rgba(255,255,255,.4);
+    box-shadow:0 0 0 6px rgba(255,255,255,.1);
+    position:relative;
+  }
+  .b-av-cam {
+    position:absolute; bottom:0; right:0; background:white;
+    width:20px; height:20px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; box-shadow:0 2px 6px rgba(0,0,0,.2);
+  }
+  .b-name { color:white; font-size:16px; font-weight:900; }
+  .b-spec { color:rgba(255,255,255,.65); font-size:11px; }
+  /* Floating card over hero */
+  .b-float-card {
+    background:white; border-radius:20px; margin:0 12px;
+    margin-top:-32px; padding:14px;
+    box-shadow:0 8px 24px rgba(0,0,0,.12); position:relative; z-index:2;
+  }
+  .b-stats-row { display:flex; justify-content:space-around; padding-bottom:12px; border-bottom:1px solid #f1f5f9; margin-bottom:12px; }
+  .b-stat { text-align:center; }
+  .b-stat-val { font-size:15px; font-weight:900; color:#1a1a1a; }
+  .b-stat-lbl { font-size:8px; color:#94a3b8; text-transform:uppercase; margin-top:1px; }
+  .b-avail-toggle { display:flex; gap:6px; }
+  .b-avail-btn { flex:1; border-radius:10px; padding:8px; text-align:center; font-size:10px; font-weight:700; }
+  .b-avail-btn.active { background:#0F6E56; color:white; }
+  .b-avail-btn.inactive { background:#f8fafc; color:#94a3b8; border:1px solid #e5e7eb; }
+  /* Fields below */
+  .b-fields { padding:12px; display:flex; flex-direction:column; gap:8px; }
+  .b-field-card { background:white; border-radius:14px; padding:12px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .b-field-lbl { font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+  .b-input { border:1.5px solid #f1f5f9; border-radius:10px; padding:9px 11px; font-size:12px; color:#1a1a1a; width:100%; background:#fafafa; }
+  .b-textarea { border:1.5px solid #f1f5f9; border-radius:10px; padding:9px 11px; font-size:12px; color:#1a1a1a; width:100%; background:#fafafa; height:52px; resize:none; }
+  .b-cats-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+  .b-cat { background:#fafafa; border:1.5px solid #f1f5f9; border-radius:10px; padding:8px 4px; text-align:center; }
+  .b-cat.sel { background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-color:#0F6E56; }
+  .b-cat-em { font-size:17px; display:block; }
+  .b-cat-nm { font-size:9px; font-weight:700; color:#94a3b8; margin-top:2px; }
+  .b-cat.sel .b-cat-nm { color:#0F6E56; }
+  .b-save { background:linear-gradient(135deg,#0F6E56,#047857); color:white; border-radius:14px; margin:0 12px 16px; padding:14px; text-align:center; font-size:13px; font-weight:800; box-shadow:0 6px 16px rgba(15,110,86,.35); }
+
+  /* ══════════════════════════════════
+     OPCIÓN C — Card con foto de portada editable
+  ══════════════════════════════════ */
+  .c-header { background:#0F6E56; padding:10px 14px; display:flex; align-items:center; gap:10px; }
+  .c-back { color:rgba(255,255,255,.7); font-size:11px; }
+  .c-title { color:white; font-size:15px; font-weight:900; flex:1; }
+  .c-done { background:#9FE1CB; color:#0F6E56; font-size:11px; font-weight:800; padding:5px 12px; border-radius:20px; }
+  /* Cover photo area */
+  .c-cover {
+    background:linear-gradient(135deg,#1a4a3a 0%,#0F6E56 50%,#34d399 100%);
+    height:80px; position:relative; display:flex; align-items:center; justify-content:flex-end;
+    padding:8px;
+  }
+  .c-cover-btn { background:rgba(0,0,0,.3); color:white; font-size:9px; font-weight:700; padding:4px 8px; border-radius:20px; backdrop-filter:blur(4px); }
+  .c-av-wrap { position:absolute; bottom:-28px; left:14px; }
+  .c-av { width:56px; height:56px; border-radius:50%; background:#7c3aed; display:flex; align-items:center; justify-content:center; color:white; font-weight:900; font-size:20px; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+  .c-info-row { padding:38px 14px 8px; display:flex; align-items:flex-end; justify-content:space-between; }
+  .c-name { font-size:15px; font-weight:900; color:#1a1a1a; }
+  .c-spec { font-size:10px; color:#64748b; }
+  .c-edit-av { background:#f1f5f9; color:#64748b; font-size:9px; font-weight:700; padding:4px 10px; border-radius:20px; }
+  /* Stats mini -->
+  .c-mini-stats { display:flex; gap:12px; padding:0 14px 10px; border-bottom:1px solid #f1f5f9; margin-bottom:10px; }
+  .c-mini-stat { font-size:10px; color:#64748b; font-weight:600; }
+  .c-mini-stat strong { color:#1a1a1a; }
+  /* Fields -->
+  .c-fields { padding:0 12px; display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .c-field { background:white; border-radius:14px; padding:12px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .c-lbl { font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+  .c-input { border:1.5px solid #e5e7eb; border-radius:10px; padding:9px 12px; font-size:12px; color:#1a1a1a; width:100%; }
+  .c-cats { display:flex; flex-wrap:wrap; gap:5px; }
+  .c-cat-btn { border:1.5px solid #e5e7eb; border-radius:20px; padding:5px 10px; font-size:10px; font-weight:600; color:#64748b; }
+  .c-cat-btn.sel { background:#0F6E56; border-color:#0F6E56; color:white; }
+  .c-avail { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .c-avail-btn { border-radius:10px; padding:9px; text-align:center; font-size:10px; font-weight:700; }
+  .c-avail-btn.on { background:#fef2f2; border:1.5px solid #fecaca; color:#dc2626; }
+  .c-avail-btn.off { background:#f8fafc; border:1.5px solid #e5e7eb; color:#94a3b8; }
+  .c-save { background:#0F6E56; color:white; border-radius:12px; margin:0 12px 14px; padding:13px; text-align:center; font-size:13px; font-weight:800; box-shadow:0 4px 12px rgba(15,110,86,.3); }
+</style>
+</head>
+<body>
+
+<h1>ProProfile — Opciones más visuales</h1>
+<p class="sub">Tres direcciones completamente distintas. Todas con las 5 categorías.</p>
+
+<div class="screens">
+
+  <!-- OPCIÓN A: Preview de cómo te ven los clientes -->
+  <div class="screen-wrap">
+    <div class="screen-label">A — "Así te ven los clientes"</div>
+    <div class="screen-desc">Muestra una preview real de tu card + formulario debajo. El profesional ve exactamente lo que verá el cliente.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="sb" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.5)">●●● 🔋</span></div>
+        <div class="a-header">
+          <div class="a-back">←</div>
+          <div class="a-title">Mi perfil</div>
+          <div class="a-preview-toggle">
+            <div class="a-tab active">Preview</div>
+            <div class="a-tab">Editar</div>
+          </div>
+        </div>
+        <!-- Preview card -->
+        <div class="a-preview-card">
+          <div class="a-preview-banner">
+            <div class="a-preview-av">C</div>
+          </div>
+          <div class="a-preview-body">
+            <div class="a-preview-name">Carlos Méndez</div>
+            <div class="a-preview-spec">Electricista · Pocitos</div>
+            <div class="a-preview-stats">
+              <span class="a-stat">⭐ 4.8</span>
+              <span class="a-stat">🔧 127 trabajos</span>
+              <span class="a-stat">⏱ ~15 min</span>
+            </div>
+            <div class="a-preview-badges">
+              <span class="a-badge-v">✓ Verificado</span>
+              <span class="a-badge-u">⚡ Urgencias</span>
+            </div>
+          </div>
+        </div>
+        <div class="a-edit-label">Editar información</div>
+        <div class="a-field">
+          <div class="a-field-lbl">Bio</div>
+          <div class="a-textarea" style="font-size:11px;">Electricista matriculado con 10 años de experiencia...</div>
+        </div>
+        <div class="a-field">
+          <div class="a-field-lbl">WhatsApp</div>
+          <div class="a-input">598 91 234 567</div>
+        </div>
+        <div class="a-field" style="margin:0 12px 6px">
+          <div class="a-field-lbl">Servicios</div>
+        </div>
+        <div class="a-cats-grid">
+          <div class="a-cat sel"><span class="a-cat-em">⚡</span><div class="a-cat-nm">Electricista</div></div>
+          <div class="a-cat"><span class="a-cat-em">🚿</span><div class="a-cat-nm">Sanitario</div></div>
+          <div class="a-cat"><span class="a-cat-em">❄️</span><div class="a-cat-nm">Aire Ac.</div></div>
+          <div class="a-cat"><span class="a-cat-em">🔑</span><div class="a-cat-nm">Cerrajero</div></div>
+          <div class="a-cat"><span class="a-cat-em">🧱</span><div class="a-cat-nm">Albañil</div></div>
+        </div>
+        <div class="a-save" style="margin-top:10px">Guardar cambios</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPCIÓN B: Dark gradient hero + float card -->
+  <div class="screen-wrap">
+    <div class="screen-label">B — Gradient oscuro + card flotante</div>
+    <div class="screen-desc">Hero verde profundo con avatar prominente y glow. Card blanca flotante con stats y toggle de disponibilidad. Muy premium.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="sb" style="background:#064e3b"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.5)">●●● 🔋</span></div>
+        <div class="b-hero">
+          <div class="b-hero-back">← Volver</div>
+          <div class="b-av-center">
+            <div class="b-av">C<div class="b-av-cam">📷</div></div>
+            <div class="b-name">Carlos Méndez</div>
+            <div class="b-spec">Electricista · Pocitos</div>
+          </div>
+        </div>
+        <!-- Float card -->
+        <div class="b-float-card">
+          <div class="b-stats-row">
+            <div class="b-stat"><div class="b-stat-val">4.8</div><div class="b-stat-lbl">Rating</div></div>
+            <div style="width:1px;background:#f1f5f9"></div>
+            <div class="b-stat"><div class="b-stat-val">127</div><div class="b-stat-lbl">Trabajos</div></div>
+            <div style="width:1px;background:#f1f5f9"></div>
+            <div class="b-stat"><div class="b-stat-val">~15m</div><div class="b-stat-lbl">Respuesta</div></div>
+          </div>
+          <div class="b-avail-toggle">
+            <div class="b-avail-btn active">⚡ Urgencias 24H</div>
+            <div class="b-avail-btn inactive">Solo diurno</div>
+          </div>
+        </div>
+        <!-- Fields -->
+        <div class="b-fields">
+          <div class="b-field-card">
+            <div class="b-field-lbl">Descripción</div>
+            <div class="b-textarea" style="font-size:11px;">Electricista matriculado con 10 años de experiencia...</div>
+          </div>
+          <div class="b-field-card">
+            <div class="b-field-lbl">WhatsApp</div>
+            <div class="b-input">598 91 234 567</div>
+          </div>
+          <div class="b-field-card">
+            <div class="b-field-lbl">Servicios</div>
+            <div class="b-cats-grid">
+              <div class="b-cat sel"><span class="b-cat-em">⚡</span><div class="b-cat-nm">Electricista</div></div>
+              <div class="b-cat"><span class="b-cat-em">🚿</span><div class="b-cat-nm">Sanitario</div></div>
+              <div class="b-cat"><span class="b-cat-em">❄️</span><div class="b-cat-nm">Aire Ac.</div></div>
+              <div class="b-cat"><span class="b-cat-em">🔑</span><div class="b-cat-nm">Cerrajero</div></div>
+              <div class="b-cat"><span class="b-cat-em">🧱</span><div class="b-cat-nm">Albañil</div></div>
+            </div>
+          </div>
+          <div class="b-field-card">
+            <div class="b-field-lbl">Zona de trabajo</div>
+            <div class="b-input" style="display:flex;justify-content:space-between;">📍 Pocitos <span style="color:#94a3b8">▼</span></div>
+          </div>
+        </div>
+        <div class="b-save">Guardar cambios</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPCIÓN C: Cover photo + avatar -->
+  <div class="screen-wrap">
+    <div class="screen-label">C — Portada editable + avatar</div>
+    <div class="screen-desc">Foto de portada editable (como LinkedIn). Avatar superpuesto. Stats mini. Botón "Guardar" en header. Muy familiar y moderno.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="sb" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.5)">●●● 🔋</span></div>
+        <div class="c-header">
+          <div class="c-back">←</div>
+          <div class="c-title">Mi perfil</div>
+          <div class="c-done">Guardar</div>
+        </div>
+        <!-- Cover -->
+        <div class="c-cover">
+          <div class="c-cover-btn">📷 Editar portada</div>
+          <div class="c-av-wrap"><div class="c-av">C</div></div>
+        </div>
+        <!-- Info row -->
+        <div class="c-info-row">
+          <div>
+            <div class="c-name">Carlos Méndez</div>
+            <div class="c-spec">Electricista · Pocitos</div>
+          </div>
+          <div class="c-edit-av">📷 Foto</div>
+        </div>
+        <!-- Mini stats -->
+        <div class="c-mini-stats">
+          <div class="c-mini-stat">⭐ <strong>4.8</strong></div>
+          <div class="c-mini-stat">🔧 <strong>127</strong> trabajos</div>
+          <div class="c-mini-stat">✓ Verificado</div>
+        </div>
+        <!-- Fields -->
+        <div class="c-fields">
+          <div class="c-field">
+            <div class="c-lbl">Descripción</div>
+            <div class="c-input" style="height:46px;display:flex;align-items:flex-start;padding-top:8px;font-size:11px;">Electricista matriculado con 10 años...</div>
+          </div>
+          <div class="c-field">
+            <div class="c-lbl">WhatsApp</div>
+            <div class="c-input">📱 598 91 234 567</div>
+          </div>
+          <div class="c-field">
+            <div class="c-lbl">Servicios</div>
+            <div class="c-cats">
+              <div class="c-cat-btn sel">⚡ Electricista</div>
+              <div class="c-cat-btn">🚿 Sanitario</div>
+              <div class="c-cat-btn">❄️ Aire Ac.</div>
+              <div class="c-cat-btn">🔑 Cerrajero</div>
+              <div class="c-cat-btn">🧱 Albañil</div>
+            </div>
+          </div>
+          <div class="c-field">
+            <div class="c-lbl">Disponibilidad</div>
+            <div class="c-avail">
+              <div class="c-avail-btn on">⚡ Urgencias 24H</div>
+              <div class="c-avail-btn off">Solo diurno</div>
+            </div>
+          </div>
+        </div>
+        <div class="c-save">Guardar cambios</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

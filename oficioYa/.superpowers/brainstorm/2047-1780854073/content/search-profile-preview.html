@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search + Profile — OficioYa</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 28px 16px 60px;
+  }
+  h1 { text-align:center; font-size: 14px; font-weight: 800; color: #334155; margin-bottom: 4px; }
+  p.sub { text-align:center; font-size: 12px; color: #94a3b8; margin-bottom: 28px; }
+
+  .section-title {
+    text-align: center; font-size: 13px; font-weight: 800; color: #475569;
+    text-transform: uppercase; letter-spacing: .5px; margin: 24px 0 16px;
+  }
+
+  .screens { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; align-items: flex-start; }
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .screen-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+  .rec { font-size: 10px; color: #0F6E56; font-weight: 700; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; padding: 2px 8px; }
+
+  .phone { width: 300px; background: #f4f4f2; border-radius: 32px; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,.22); border: 7px solid #1e293b; }
+  .phone-scroll { max-height: 640px; overflow-y: auto; scrollbar-width: none; }
+  .phone-scroll::-webkit-scrollbar { display: none; }
+
+  /* Shared */
+  .statusbar { padding: 6px 16px 2px; display:flex; justify-content:space-between; }
+  .statusbar span { font-size: 9px; font-weight: 600; }
+
+  /* ── SEARCH OPTION A: Header minimalista + filtros ── */
+  .hdr-search-a {
+    background: white; padding: 10px 14px 0;
+    border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 10;
+  }
+  .hdr-back { display: flex; align-items: center; gap: 6px; color: #0F6E56; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .hdr-title-a { font-size: 17px; font-weight: 900; color: #1a1a1a; margin-bottom: 10px; }
+  .filter-chips { display: flex; gap: 6px; padding-bottom: 10px; overflow-x: auto; scrollbar-width: none; }
+  .filter-chip {
+    white-space: nowrap; border-radius: 20px; padding: 5px 12px; font-size: 10px; font-weight: 700;
+    border: 1.5px solid #e5e7eb; color: #64748b; background: white; cursor: pointer; flex-shrink: 0;
+  }
+  .filter-chip.active { border-color: #0F6E56; background: #f0fdf4; color: #0F6E56; }
+
+  /* ── SEARCH OPTION B: Header verde tipo Home ── */
+  .hdr-search-b { background: #0F6E56; padding: 10px 14px 14px; position: sticky; top: 0; z-index: 10; }
+  .hdr-search-b .back { color: rgba(255,255,255,.7); font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+  .hdr-search-b .title { color: white; font-size: 18px; font-weight: 900; }
+  .hdr-search-b .count { color: rgba(255,255,255,.6); font-size: 11px; margin-top: 2px; }
+
+  /* Pro card shared */
+  .pro-card { background: white; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 5px rgba(0,0,0,.07); margin-bottom: 6px; cursor: pointer; }
+  .pro-av { width: 44px; height: 44px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:16px; flex-shrink:0; }
+  .pro-name { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+  .pro-badge { background: #0F6E56; color: white; font-size: 7px; font-weight: 700; padding: 1px 4px; border-radius: 3px; margin-left: 4px; }
+  .pro-meta { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+  .pro-chev { color: #d1d5db; margin-left: auto; font-size: 16px; }
+
+  /* ── PROFILE OPTION A: Hero banner + stats ── */
+  .profile-hero-a {
+    background: linear-gradient(160deg, #0F6E56 0%, #0a5040 100%);
+    padding: 14px 14px 32px; position: relative;
+  }
+  .profile-back { color: rgba(255,255,255,.7); font-size: 11px; display:flex; align-items:center; gap:4px; margin-bottom: 16px; }
+  .profile-hero-info { display: flex; align-items: center; gap: 12px; }
+  .profile-av-lg { width: 60px; height: 60px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:900; font-size:22px; border: 3px solid rgba(255,255,255,.3); flex-shrink:0; }
+  .profile-hero-name { color: white; font-size: 16px; font-weight: 900; }
+  .profile-hero-spec { color: rgba(255,255,255,.7); font-size: 11px; margin-top: 2px; }
+  .profile-hero-verified { display: inline-flex; align-items:center; gap:3px; background: rgba(255,255,255,.15); color: #9FE1CB; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; margin-top: 4px; }
+  .stats-row { display: flex; justify-content: space-around; background: white; border-radius: 14px; margin: -16px 14px 0; padding: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+  .stat { text-align: center; }
+  .stat-val { font-size: 15px; font-weight: 900; color: #1a1a1a; }
+  .stat-lbl { font-size: 9px; color: #94a3b8; margin-top: 1px; text-transform: uppercase; letter-spacing: .3px; }
+  .stat-div { width: 1px; background: #f1f5f9; }
+
+  /* ── PROFILE OPTION B: Card centrada simple ── */
+  .profile-card-b { background: white; border-radius: 16px; margin: 12px; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+  .profile-av-b { width: 72px; height: 72px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:900; font-size:26px; }
+  .profile-name-b { font-size: 17px; font-weight: 900; color: #1a1a1a; }
+  .profile-zone-b { font-size: 11px; color: #94a3b8; }
+  .verified-b { background: #f0fdf4; color: #0F6E56; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid #bbf7d0; }
+  .stars { display:flex; gap:2px; align-items:center; }
+  .star { color: #fbbf24; font-size: 13px; }
+  .stats-b { display:flex; gap:16px; font-size:11px; color:#64748b; }
+
+  /* Shared profile sections */
+  .profile-section { background: white; border-radius: 14px; margin: 0 12px 8px; padding: 12px 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .sec-title { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .bio-text { font-size: 12px; color: #374151; line-height: 1.5; }
+  .cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cat-chip { background: #f0fdf4; color: #0F6E56; font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #bbf7d0; }
+  .response-chip { background: #fef2f2; color: #dc2626; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
+
+  /* CTAs */
+  .cta-area { padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .btn-green { background: #0F6E56; color: white; border-radius: 12px; padding: 13px; text-align:center; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(15,110,86,.25); }
+  .btn-wa { background: #25D366; color: white; border-radius: 12px; padding: 13px; text-align:center; font-size: 13px; font-weight: 700; }
+
+  /* Empty state */
+  .empty { text-align:center; padding: 40px 20px; }
+  .empty-emoji { font-size: 40px; margin-bottom: 12px; }
+  .empty-title { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 4px; }
+  .empty-sub { font-size: 12px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<h1>Search + ProfessionalProfile — Preview</h1>
+<p class="sub">Mostrando las 2 pantallas con distintos estilos. Elegí el que más te guste para cada una.</p>
+
+<!-- ═══════════════ SEARCH ═══════════════ -->
+<div class="section-title">📋 Search — ¿Cómo querés el header?</div>
+<div class="screens">
+
+  <!-- Search A: Blanco + filtros -->
+  <div class="screen-wrap">
+    <div class="screen-label">A — Header blanco + filtros</div>
+    <div class="rec">⭐ Más info</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:white"><span style="color:#1a1a1a">9:41</span><span style="color:#94a3b8">●●● 🔋</span></div>
+        <div class="hdr-search-a">
+          <div class="hdr-back">← Volver</div>
+          <div class="hdr-title-a">Electricistas</div>
+          <div class="filter-chips">
+            <div class="filter-chip active">Todos</div>
+            <div class="filter-chip">⭐ Mejor rating</div>
+            <div class="filter-chip">📍 Pocitos</div>
+            <div class="filter-chip">✓ Verificados</div>
+            <div class="filter-chip">⚡ Urgencias</div>
+          </div>
+        </div>
+        <div style="padding:10px 10px 0">
+          <div class="pro-card">
+            <div class="pro-av" style="background:#0F6E56">C</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-name">Carlos Méndez <span class="pro-badge">✓</span></div>
+              <div class="pro-meta">⭐ 4.8 · Pocitos · 127 trabajos</div>
+            </div>
+            <div class="pro-chev">›</div>
+          </div>
+          <div class="pro-card">
+            <div class="pro-av" style="background:#1d4ed8">R</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-name">Roberto Silva <span class="pro-badge">✓</span></div>
+              <div class="pro-meta">⭐ 4.5 · Malvín · 83 trabajos</div>
+            </div>
+            <div class="pro-chev">›</div>
+          </div>
+          <div class="pro-card">
+            <div class="pro-av" style="background:#7c3aed">D</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-name">Diego Fernández</div>
+              <div class="pro-meta">⭐ 4.2 · Centro · 41 trabajos</div>
+            </div>
+            <div class="pro-chev">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search B: Header verde -->
+  <div class="screen-wrap">
+    <div class="screen-label">B — Header verde</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="hdr-search-b">
+          <div class="back">← Volver</div>
+          <div class="title">Electricistas</div>
+          <div class="count">3 profesionales encontrados</div>
+        </div>
+        <div style="padding:10px 10px 0">
+          <div class="pro-card">
+            <div class="pro-av" style="background:#0F6E56">C</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-name">Carlos Méndez <span class="pro-badge">✓</span></div>
+              <div class="pro-meta">⭐ 4.8 · Pocitos · 127 trabajos</div>
+            </div>
+            <div class="pro-chev">›</div>
+          </div>
+          <div class="pro-card">
+            <div class="pro-av" style="background:#1d4ed8">R</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-name">Roberto Silva <span class="pro-badge">✓</span></div>
+              <div class="pro-meta">⭐ 4.5 · Malvín · 83 trabajos</div>
+            </div>
+            <div class="pro-chev">›</div>
+          </div>
+          <div class="pro-card" style="background:#fef2f2;border:1.5px solid #fecaca">
+            <div class="pro-av" style="background:#dc2626">A</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-name">Ana Rodríguez <span class="pro-badge">✓</span></div>
+              <div class="pro-meta">⚡ Urgencias · ⭐ 4.9 · Centro</div>
+            </div>
+            <div class="pro-chev">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PROFILE ═══════════════ -->
+<div class="section-title">👤 ProfessionalProfile — ¿Qué estilo de hero?</div>
+<div class="screens">
+
+  <!-- Profile A: Hero verde + stats flotantes -->
+  <div class="screen-wrap">
+    <div class="screen-label">A — Hero verde + stats</div>
+    <div class="rec">⭐ Más premium</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="profile-hero-a">
+          <div class="profile-back">← Volver</div>
+          <div class="profile-hero-info">
+            <div class="profile-av-lg" style="background:#7c3aed">C</div>
+            <div>
+              <div class="profile-hero-name">Carlos Méndez</div>
+              <div class="profile-hero-spec">Electricista · Pocitos</div>
+              <div class="profile-hero-verified">✓ Verificado</div>
+            </div>
+          </div>
+        </div>
+        <!-- Stats flotantes -->
+        <div class="stats-row">
+          <div class="stat"><div class="stat-val">4.8</div><div class="stat-lbl">Rating</div></div>
+          <div class="stat-div"></div>
+          <div class="stat"><div class="stat-val">127</div><div class="stat-lbl">Trabajos</div></div>
+          <div class="stat-div"></div>
+          <div class="stat"><div class="stat-val">~15m</div><div class="stat-lbl">Respuesta</div></div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="profile-section">
+          <div class="sec-title">Sobre mí</div>
+          <div class="bio-text">Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales.</div>
+        </div>
+        <div class="profile-section">
+          <div class="sec-title">Servicios</div>
+          <div class="cat-chips"><div class="cat-chip">⚡ Electricista</div></div>
+        </div>
+        <div class="cta-area">
+          <div class="btn-green">Solicitar servicio</div>
+          <div class="btn-wa">💬 Contactar por WhatsApp</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile B: Card centrada -->
+  <div class="screen-wrap">
+    <div class="screen-label">B — Card centrada</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#f4f4f2"><span style="color:#1a1a1a">9:41</span><span style="color:#94a3b8">●●● 🔋</span></div>
+        <div style="background:white;padding:8px 12px 6px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:6px;">
+          <span style="color:#0F6E56;font-size:11px;">← Perfil</span>
+        </div>
+        <div style="padding:0 0 8px">
+          <div class="profile-card-b">
+            <div class="profile-av-b" style="background:#7c3aed">C</div>
+            <div class="profile-name-b">Carlos Méndez</div>
+            <div class="profile-zone-b">Pocitos · Montevideo</div>
+            <div class="verified-b">✓ Verificado</div>
+            <div class="stars">
+              <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star" style="opacity:.3">★</span>
+              <span style="font-size:11px;color:#64748b;margin-left:4px;">4.8</span>
+            </div>
+            <div class="stats-b">
+              <span>🔧 127 trabajos</span>
+              <span>⏱ ~15 min</span>
+            </div>
+          </div>
+          <div class="profile-section">
+            <div class="sec-title">Sobre mí</div>
+            <div class="bio-text">Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales.</div>
+          </div>
+          <div class="profile-section">
+            <div class="sec-title">Servicios</div>
+            <div class="cat-chips"><div class="cat-chip">⚡ Electricista</div></div>
+          </div>
+          <div class="cta-area">
+            <div class="btn-green">Solicitar servicio</div>
+            <div class="btn-wa">💬 Contactar por WhatsApp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

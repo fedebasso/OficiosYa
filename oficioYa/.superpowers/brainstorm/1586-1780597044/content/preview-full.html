@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficioYa — Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 24px 16px 40px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Phone wrapper */
+  .phone {
+    width: 375px;
+    background: #f4f4f2;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,.35);
+    border: 10px solid #1a1a1a;
+    position: relative;
+  }
+
+  /* Scrollable content inside phone */
+  .phone-inner {
+    max-height: 780px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .phone-inner::-webkit-scrollbar { display: none; }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: #0F6E56;
+    padding: 8px 20px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .status-bar span { color: white; font-size: 11px; font-weight: 600; }
+
+  /* HEADER */
+  .header {
+    background: #0F6E56;
+    padding: 12px 20px 18px;
+    position: sticky;
+    top: 28px;
+    z-index: 99;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .logo { color: white; font-size: 22px; font-weight: 900; line-height: 1; }
+  .logo span { color: #9FE1CB; }
+  .logo-sub { color: rgba(255,255,255,.6); font-size: 11px; margin-top: 2px; }
+  .avatar-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.15);
+    border: 1.5px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .search-bar {
+    background: white;
+    border-radius: 14px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.18);
+    cursor: text;
+  }
+  .search-icon { font-size: 16px; color: #0F6E56; }
+  .search-placeholder { font-size: 14px; color: #b0b0b0; }
+
+  /* CONTENT */
+  .content { padding: 16px; display: flex; flex-direction: column; gap: 20px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 10px;
+  }
+
+  /* CATEGORÍAS */
+  .categories-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .categories-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .category-item {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 6px;
+    text-align: center;
+    box-shadow: 0 1px 6px rgba(0,0,0,.07);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    border: 1.5px solid transparent;
+  }
+  .category-item:active { transform: scale(.96); }
+  .category-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); border-color: #9FE1CB; }
+  .category-emoji { font-size: 26px; line-height: 1; }
+  .category-label { font-size: 10px; font-weight: 700; color: #1a1a1a; margin-top: 5px; text-transform: uppercase; letter-spacing: .3px; }
+
+  /* PROFESIONALES */
+  .pro-card {
+    background: white;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.07);
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: box-shadow .15s;
+  }
+  .pro-card:last-child { margin-bottom: 0; }
+  .pro-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+  .pro-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 18px; flex-shrink: 0;
+  }
+  .pro-name { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+  .pro-badge {
+    background: #0F6E56; color: white;
+    font-size: 8px; font-weight: 700;
+    padding: 2px 5px; border-radius: 4px;
+    vertical-align: middle; margin-left: 4px;
+  }
+  .pro-meta { font-size: 11px; color: #777; margin-top: 2px; }
+  .pro-chevron { color: #d1d5db; font-size: 18px; margin-left: auto; }
+
+  /* URGENCIAS BANNER */
+  .urgencias-banner {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 6px 20px rgba(220,38,38,.3);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .urgencias-banner:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(220,38,38,.35); }
+  .urgencias-live {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 8px;
+  }
+  .live-dot {
+    width: 8px; height: 8px; background: #4ade80; border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(74,222,128,.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(74,222,128,.3); }
+    50% { box-shadow: 0 0 0 5px rgba(74,222,128,.15); }
+  }
+  .live-text { color: rgba(255,255,255,.85); font-size: 10px; font-weight: 700; letter-spacing: .6px; }
+  .urgencias-title { color: white; font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+  .urgencias-sub { color: rgba(255,255,255,.75); font-size: 12px; margin-bottom: 14px; line-height: 1.4; }
+  .urgencias-cta {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #dc2626;
+    letter-spacing: .1px;
+  }
+
+  /* CTA PRO */
+  .pro-cta {
+    background: white;
+    border-radius: 14px;
+    border: 1.5px solid #e5e7eb;
+    padding: 14px 16px;
+  }
+  .pro-cta-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
+  .pro-cta-sub { font-size: 11px; color: #888; margin-bottom: 12px; }
+  .pro-cta-btn {
+    border: 2px solid #0F6E56;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0F6E56;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .pro-cta-btn:hover { background: #f0fdf4; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    background: white;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    padding: 8px 0 12px;
+    position: sticky;
+    bottom: 0;
+    z-index: 99;
+  }
+  .nav-item {
+    flex: 1; text-align: center; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .nav-icon { font-size: 20px; }
+  .nav-label { font-size: 9px; font-weight: 700; }
+  .nav-item.active .nav-label { color: #0F6E56; }
+  .nav-item:not(.active) .nav-label { color: #aaa; }
+
+  /* Label under phone */
+  .phone-label {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div>
+  <div class="phone">
+    <div class="phone-inner">
+
+      <!-- STATUS BAR -->
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>●●● WiFi 🔋</span>
+      </div>
+
+      <!-- HEADER -->
+      <div class="header">
+        <div class="header-top">
+          <div>
+            <div class="logo">Oficio<span>Ya</span></div>
+            <div class="logo-sub">📍 Montevideo</div>
+          </div>
+          <div class="avatar-btn">
+            <span style="font-size:17px;">👤</span>
+          </div>
+        </div>
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <span class="search-placeholder">Electricista, plomero, cerrajero...</span>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+
+        <!-- CATEGORÍAS -->
+        <section>
+          <div class="section-label">¿Qué necesitás?</div>
+          <div class="categories-grid-3">
+            <div class="category-item">
+              <div class="category-emoji">⚡</div>
+              <div class="category-label">Electricista</div>
+            </div>
+            <div class="category-item">
+              <div class="category-emoji">🚿</div>
+              <div class="category-label">Sanitario</div>
+            </div>
+            <div class="category-item">
+              <div class="category-emoji">❄️</div>
+              <div class="category-label">Aire Ac.</div>
+            </div>
+          </div>
+          <div class="categories-grid-2">
+            <div class="category-item">
+              <div class="category-emoji">🔑</div>
+              <div class="category-label">Cerrajero</div>
+            </div>
+            <div class="category-item">
+              <div class="category-emoji">🧱</div>
+              <div class="category-label">Albañil</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROFESIONALES DESTACADOS -->
+        <section>
+          <div class="section-label">Profesionales destacados</div>
+          <div class="pro-card">
+            <div class="pro-avatar" style="background:#0F6E56;">C</div>
+            <div style="flex:1;min-width:0;">
+              <div class="pro-name">Carlos Méndez <span class="pro-badge">✓ VER</span></div>
+              <div class="pro-meta">⭐ 4.8 · Pocitos · 127 trabajos</div>
+            </div>
+            <div class="pro-chevron">›</div>
+          </div>
+          <div class="pro-card">
+            <div class="pro-avatar" style="background:#1d4ed8;">R</div>
+            <div style="flex:1;min-width:0;">
+              <div class="pro-name">Roberto Silva <span class="pro-badge">✓ VER</span></div>
+              <div class="pro-meta">⭐ 4.5 · Malvín · 83 trabajos</div>
+            </div>
+            <div class="pro-chevron">›</div>
+          </div>
+          <div class="pro-card">
+            <div class="pro-avatar" style="background:#7c3aed;">A</div>
+            <div style="flex:1;min-width:0;">
+              <div class="pro-name">Ana Rodríguez <span class="pro-badge">✓ VER</span></div>
+              <div class="pro-meta">⭐ 4.9 · Centro · 89 trabajos</div>
+            </div>
+            <div class="pro-chevron">›</div>
+          </div>
+        </section>
+
+        <!-- URGENCIAS 24H -->
+        <section>
+          <div class="urgencias-banner">
+            <div class="urgencias-live">
+              <div class="live-dot"></div>
+              <span class="live-text">3 DISPONIBLES AHORA</span>
+            </div>
+            <div class="urgencias-title">🚨 Urgencias 24H</div>
+            <div class="urgencias-sub">Profesionales verificados que responden en menos de 30 minutos</div>
+            <div class="urgencias-cta">Ver profesionales disponibles →</div>
+          </div>
+        </section>
+
+        <!-- CTA PRO -->
+        <section>
+          <div class="pro-cta">
+            <div class="pro-cta-title">¿Sos profesional?</div>
+            <div class="pro-cta-sub">Unite a OficiosYa y conseguí clientes en tu zona.</div>
+            <div class="pro-cta-btn">Registrarme como profesional</div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- BOTTOM NAV -->
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Inicio</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-label">Buscar</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Solicitudes</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="phone-label">OficioYa — Home preview · 375px</div>
+</div>
+
+</body>
+</html>

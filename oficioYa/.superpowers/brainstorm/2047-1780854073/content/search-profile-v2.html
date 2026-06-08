@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search + Profile V2 — OficioYa</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #cbd5e1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 28px 12px 80px;
+  }
+  h1 { text-align:center; font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+  p.sub { text-align:center; font-size: 12px; color: #64748b; margin-bottom: 28px; }
+  .section-title {
+    text-align: center; font-size: 11px; font-weight: 800; color: #475569;
+    text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 16px;
+    display: flex; align-items: center; gap: 10px; justify-content: center;
+  }
+  .section-title::before, .section-title::after { content:''; flex:1; max-width:60px; height:1px; background:#94a3b8; }
+
+  .screens { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: flex-start; }
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; max-width: 300px; }
+  .screen-label { font-size: 11px; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: .5px; }
+  .screen-desc { font-size: 10px; color: #64748b; text-align: center; line-height: 1.4; max-width: 260px; }
+
+  .phone { width: 290px; background: #f4f4f2; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,.22); border: 6px solid #1e293b; }
+  .phone-scroll { max-height: 600px; overflow-y: auto; scrollbar-width: none; }
+  .phone-scroll::-webkit-scrollbar { display: none; }
+  .statusbar { padding: 6px 14px 2px; display:flex; justify-content:space-between; }
+  .statusbar span { font-size: 9px; font-weight: 600; }
+
+  /* ════════════ SEARCH C — Búsqueda con barra activa ════════════ */
+  .search-c-hdr {
+    background: #f4f4f2; padding: 8px 12px 10px; position:sticky; top:0; z-index:10;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .search-c-topbar { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .search-c-back { width:32px;height:32px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 1px 4px rgba(0,0,0,.1);flex-shrink:0; }
+  .search-c-input { flex:1; background:white; border-radius:12px; padding:9px 12px; font-size:12px; color:#94a3b8; box-shadow:0 1px 4px rgba(0,0,0,.08); display:flex;align-items:center;gap:6px; }
+  .search-c-sort { background:#0F6E56;color:white;border-radius:10px;padding:8px 10px;font-size:10px;font-weight:700;white-space:nowrap;flex-shrink:0; }
+  .search-c-meta { font-size:10px;color:#94a3b8;padding:0 2px; }
+  .search-c-meta strong { color:#1a1a1a; }
+  /* Cards horizontales amplias */
+  .card-h { background:white;border-radius:14px;padding:12px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,.07); }
+  .card-h-top { display:flex;align-items:flex-start;gap:10px;margin-bottom:8px; }
+  .av-sm { width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:15px;flex-shrink:0; }
+  .card-h-info { flex:1;min-width:0; }
+  .card-h-name { font-size:13px;font-weight:800;color:#1a1a1a; display:flex;align-items:center;gap:4px; }
+  .badge-v { background:#0F6E56;color:white;font-size:7px;font-weight:700;padding:1px 4px;border-radius:3px; }
+  .card-h-zone { font-size:10px;color:#94a3b8;margin-top:1px; }
+  .card-h-rating { font-size:11px;color:#1a1a1a;font-weight:700; }
+  .card-h-stats { display:flex;gap:8px;border-top:1px solid #f1f5f9;padding-top:8px; }
+  .stat-pill { background:#f8fafc;border-radius:8px;padding:4px 8px;font-size:9px;color:#64748b;font-weight:600; }
+  .stat-pill.green { background:#f0fdf4;color:#0F6E56; }
+
+  /* ════════════ SEARCH D — Grid 2 columnas ════════════ */
+  .search-d-hdr { background:#0F6E56;padding:10px 12px 20px;position:sticky;top:0;z-index:10; }
+  .search-d-topbar { display:flex;align-items:center;gap:8px;margin-bottom:10px; }
+  .search-d-back { color:rgba(255,255,255,.7);font-size:11px;font-weight:700; }
+  .search-d-title { color:white;font-size:17px;font-weight:900;flex:1; }
+  .search-d-filter { background:rgba(255,255,255,.15);color:white;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px; }
+  .search-d-searchbar { background:rgba(255,255,255,.15);border-radius:12px;padding:8px 12px;color:rgba(255,255,255,.7);font-size:12px;display:flex;align-items:center;gap:6px; }
+  .grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 10px 0; }
+  .card-grid { background:white;border-radius:14px;padding:12px 10px;box-shadow:0 1px 6px rgba(0,0,0,.07); }
+  .card-grid-av { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:13px;margin-bottom:6px; }
+  .card-grid-name { font-size:11px;font-weight:800;color:#1a1a1a;margin-bottom:2px; }
+  .card-grid-meta { font-size:9px;color:#94a3b8; }
+  .card-grid-rating { font-size:11px;font-weight:700;color:#1a1a1a;margin-top:4px; }
+
+  /* ════════════ PROFILE C — Split layout ════════════ */
+  .profile-c-top { background:linear-gradient(150deg,#0F6E56,#07453a);padding:12px 12px 0; }
+  .profile-c-back { color:rgba(255,255,255,.7);font-size:11px;margin-bottom:14px;display:flex;align-items:center;gap:4px; }
+  .profile-c-av-wrap { display:flex;justify-content:center;margin-bottom:-28px; }
+  .profile-c-av { width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:26px;border:4px solid white;box-shadow:0 4px 16px rgba(0,0,0,.2); }
+  .profile-c-body { padding:36px 12px 12px; }
+  .profile-c-name-row { text-align:center;margin-bottom:4px; }
+  .profile-c-name { font-size:18px;font-weight:900;color:#1a1a1a; }
+  .profile-c-spec { font-size:12px;color:#64748b; }
+  .profile-c-badges { display:flex;justify-content:center;gap:6px;margin-bottom:14px; }
+  .badge-green { background:#f0fdf4;color:#0F6E56;border:1px solid #bbf7d0;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px; }
+  .badge-red { background:#fef2f2;color:#dc2626;border:1px solid #fecaca;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px; }
+  /* Stats en row de 3 */
+  .profile-c-stats { display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px; }
+  .profile-c-stat { background:white;border-radius:12px;padding:10px 6px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .profile-c-stat-val { font-size:16px;font-weight:900;color:#1a1a1a; }
+  .profile-c-stat-lbl { font-size:8px;color:#94a3b8;text-transform:uppercase;letter-spacing:.3px;margin-top:2px; }
+  .profile-c-section { background:white;border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .profile-c-sec-title { font-size:9px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px; }
+  .bio-c { font-size:11px;color:#374151;line-height:1.5; }
+  .cat-chip-c { display:inline-flex;align-items:center;gap:4px;background:#f0fdf4;color:#0F6E56;border:1px solid #bbf7d0;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px; }
+  .cta-c { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px; }
+  .btn-primary-c { background:#0F6E56;color:white;border-radius:12px;padding:12px;text-align:center;font-size:11px;font-weight:800; }
+  .btn-wa-c { background:#25D366;color:white;border-radius:12px;padding:12px;text-align:center;font-size:11px;font-weight:800; }
+
+  /* ════════════ PROFILE D — Header foto + info abajo ════════════ */
+  .profile-d-header { position:relative; }
+  .profile-d-photo { width:100%;height:140px;object-fit:cover;display:block; background:linear-gradient(135deg,#1a4a3a,#0F6E56); }
+  .profile-d-overlay { position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%); }
+  .profile-d-backbtn { position:absolute;top:10px;left:12px;background:rgba(0,0,0,.3);color:white;font-size:11px;padding:5px 10px;border-radius:20px;backdrop-filter:blur(4px); }
+  .profile-d-name-over { position:absolute;bottom:12px;left:12px;right:12px; }
+  .profile-d-name { color:white;font-size:17px;font-weight:900; }
+  .profile-d-spec { color:rgba(255,255,255,.75);font-size:11px; }
+  /* Info row horizontal */
+  .profile-d-inforow { background:white;padding:10px 12px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid #f1f5f9; }
+  .badge-d { font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px; }
+  .profile-d-stats { display:flex;justify-content:space-around;padding:10px 12px;background:white;border-bottom:1px solid #f1f5f9; }
+  .stat-d { text-align:center; }
+  .stat-d-val { font-size:14px;font-weight:900;color:#1a1a1a; }
+  .stat-d-lbl { font-size:8px;color:#94a3b8;text-transform:uppercase;margin-top:1px; }
+  .profile-d-section { padding:10px 12px;border-bottom:1px solid #f1f5f9; }
+  .sec-d-title { font-size:9px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px; }
+  .cta-d { display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px; }
+  .btn-d-g { background:#0F6E56;color:white;border-radius:12px;padding:12px;text-align:center;font-size:11px;font-weight:800; }
+  .btn-d-w { background:#25D366;color:white;border-radius:12px;padding:12px;text-align:center;font-size:11px;font-weight:800; }
+</style>
+</head>
+<body>
+
+<h1>Search + Profile — Opciones alternativas</h1>
+<p class="sub">Distribución de información completamente diferente en cada opción</p>
+
+<!-- ═══ SEARCH ═══ -->
+<div class="section-title">Search</div>
+<div class="screens">
+
+  <!-- C: Barra de búsqueda activa + cards expandidas -->
+  <div class="screen-wrap">
+    <div class="screen-label">C — Cards expandidas</div>
+    <div class="screen-desc">Más info en cada card. Barra de búsqueda activa con filtro de orden. Stats visibles sin abrir el perfil.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#f4f4f2"><span style="color:#1a1a1a">9:41</span><span style="color:#94a3b8">●●● 🔋</span></div>
+        <div class="search-c-hdr">
+          <div class="search-c-topbar">
+            <div class="search-c-back">←</div>
+            <div class="search-c-input"><span style="color:#0F6E56">🔍</span><span>Electricistas...</span></div>
+            <div class="search-c-sort">↕ Rating</div>
+          </div>
+          <div class="search-c-meta"><strong>3 profesionales</strong> en Montevideo</div>
+        </div>
+        <div style="padding:8px 10px 0">
+          <div class="card-h">
+            <div class="card-h-top">
+              <div class="av-sm" style="background:#0F6E56">C</div>
+              <div class="card-h-info">
+                <div class="card-h-name">Carlos Méndez <span class="badge-v">✓</span></div>
+                <div class="card-h-zone">📍 Pocitos</div>
+              </div>
+              <div class="card-h-rating">⭐ 4.8</div>
+            </div>
+            <div class="card-h-stats">
+              <div class="stat-pill green">🔧 127 trabajos</div>
+              <div class="stat-pill green">⏱ ~15 min</div>
+              <div class="stat-pill">⚡ Urgencias</div>
+            </div>
+          </div>
+          <div class="card-h">
+            <div class="card-h-top">
+              <div class="av-sm" style="background:#1d4ed8">R</div>
+              <div class="card-h-info">
+                <div class="card-h-name">Roberto Silva <span class="badge-v">✓</span></div>
+                <div class="card-h-zone">📍 Malvín</div>
+              </div>
+              <div class="card-h-rating">⭐ 4.5</div>
+            </div>
+            <div class="card-h-stats">
+              <div class="stat-pill green">🔧 83 trabajos</div>
+              <div class="stat-pill green">⏱ ~20 min</div>
+              <div class="stat-pill">⚡ Urgencias</div>
+            </div>
+          </div>
+          <div class="card-h">
+            <div class="card-h-top">
+              <div class="av-sm" style="background:#7c3aed">D</div>
+              <div class="card-h-info">
+                <div class="card-h-name">Diego Fernández</div>
+                <div class="card-h-zone">📍 Centro</div>
+              </div>
+              <div class="card-h-rating">⭐ 4.2</div>
+            </div>
+            <div class="card-h-stats">
+              <div class="stat-pill">🔧 41 trabajos</div>
+              <div class="stat-pill">⏱ ~45 min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D: Grid 2 columnas -->
+  <div class="screen-wrap">
+    <div class="screen-label">D — Grid 2 columnas</div>
+    <div class="screen-desc">Vista tipo galería. Ves más profesionales de un vistazo. Header verde con búsqueda integrada.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="search-d-hdr">
+          <div class="search-d-topbar">
+            <div class="search-d-back">←</div>
+            <div class="search-d-title">Electricistas</div>
+            <div class="search-d-filter">⚡ Urgencias</div>
+          </div>
+          <div class="search-d-searchbar"><span>🔍</span><span>Buscar por nombre o zona...</span></div>
+        </div>
+        <div class="grid-2">
+          <div class="card-grid">
+            <div class="card-grid-av" style="background:#0F6E56">C</div>
+            <div class="card-grid-name">Carlos Méndez</div>
+            <div class="card-grid-meta">Pocitos · ✓ Ver.</div>
+            <div class="card-grid-rating">⭐ 4.8</div>
+            <div style="font-size:8px;color:#0F6E56;margin-top:4px;font-weight:700;">🔧 127 trabajos</div>
+          </div>
+          <div class="card-grid">
+            <div class="card-grid-av" style="background:#1d4ed8">R</div>
+            <div class="card-grid-name">Roberto Silva</div>
+            <div class="card-grid-meta">Malvín · ✓ Ver.</div>
+            <div class="card-grid-rating">⭐ 4.5</div>
+            <div style="font-size:8px;color:#0F6E56;margin-top:4px;font-weight:700;">🔧 83 trabajos</div>
+          </div>
+          <div class="card-grid">
+            <div class="card-grid-av" style="background:#7c3aed">D</div>
+            <div class="card-grid-name">Diego Fernández</div>
+            <div class="card-grid-meta">Centro</div>
+            <div class="card-grid-rating">⭐ 4.2</div>
+            <div style="font-size:8px;color:#94a3b8;margin-top:4px;font-weight:600;">🔧 41 trabajos</div>
+          </div>
+          <div class="card-grid" style="background:#fef2f2;border:1px solid #fecaca;">
+            <div class="card-grid-av" style="background:#dc2626">A</div>
+            <div class="card-grid-name">Ana Rodríguez</div>
+            <div class="card-grid-meta">Centro · ✓ Ver.</div>
+            <div class="card-grid-rating">⭐ 4.9</div>
+            <div style="font-size:8px;color:#dc2626;margin-top:4px;font-weight:700;">⚡ Urgencias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="section-title">Professional Profile</div>
+<div class="screens">
+
+  <!-- C: Stats independientes + CTAs en grid -->
+  <div class="screen-wrap">
+    <div class="screen-label">C — Stats en cards + CTA grid</div>
+    <div class="screen-desc">Avatar flotante sobre el header. Stats en 3 cards separadas. Botones Solicitar y WhatsApp en grid lado a lado.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#0F6E56"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.6)">●●● 🔋</span></div>
+        <div class="profile-c-top">
+          <div class="profile-c-back">← Volver</div>
+          <div class="profile-c-av-wrap">
+            <div class="profile-c-av" style="background:#7c3aed">C</div>
+          </div>
+        </div>
+        <div class="profile-c-body">
+          <div class="profile-c-name-row">
+            <div class="profile-c-name">Carlos Méndez</div>
+            <div class="profile-c-spec">Electricista · Pocitos</div>
+          </div>
+          <div class="profile-c-badges">
+            <div class="badge-green">✓ Verificado</div>
+            <div class="badge-red">⚡ Urgencias 24H</div>
+          </div>
+          <div class="profile-c-stats">
+            <div class="profile-c-stat"><div class="profile-c-stat-val">4.8</div><div class="profile-c-stat-lbl">Rating</div></div>
+            <div class="profile-c-stat"><div class="profile-c-stat-val">127</div><div class="profile-c-stat-lbl">Trabajos</div></div>
+            <div class="profile-c-stat"><div class="profile-c-stat-val">15m</div><div class="profile-c-stat-lbl">Respuesta</div></div>
+          </div>
+          <div class="cta-c">
+            <div class="btn-primary-c">📋 Solicitar</div>
+            <div class="btn-wa-c">💬 WhatsApp</div>
+          </div>
+          <div class="profile-c-section">
+            <div class="profile-c-sec-title">Sobre mí</div>
+            <div class="bio-c">Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales.</div>
+          </div>
+          <div class="profile-c-section">
+            <div class="profile-c-sec-title">Servicios</div>
+            <div><span class="cat-chip-c">⚡ Electricista</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D: Foto de fondo + info en tiras horizontales -->
+  <div class="screen-wrap">
+    <div class="screen-label">D — Fondo oscuro + tiras</div>
+    <div class="screen-desc">Header tipo foto de portada oscura con nombre encima. Stats e info en tiras horizontales limpias. Compacto y escaneable.</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar" style="background:#1a4a3a"><span style="color:white">9:41</span><span style="color:rgba(255,255,255,.5)">●●● 🔋</span></div>
+        <div class="profile-d-header">
+          <div class="profile-d-photo" style="display:flex;align-items:center;justify-content:center;">
+            <div style="width:80px;height:80px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:30px;border:4px solid rgba(255,255,255,.3);">C</div>
+          </div>
+          <div class="profile-d-overlay"></div>
+          <div class="profile-d-backbtn">← Volver</div>
+          <div class="profile-d-name-over">
+            <div class="profile-d-name">Carlos Méndez</div>
+            <div class="profile-d-spec">Electricista · Pocitos, Montevideo</div>
+          </div>
+        </div>
+        <div class="profile-d-inforow">
+          <span class="badge-d" style="background:#f0fdf4;color:#0F6E56;border:1px solid #bbf7d0;">✓ Verificado</span>
+          <span class="badge-d" style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca;">⚡ Urgencias</span>
+        </div>
+        <div class="profile-d-stats">
+          <div class="stat-d"><div class="stat-d-val">⭐ 4.8</div><div class="stat-d-lbl">Rating</div></div>
+          <div style="width:1px;background:#f1f5f9"></div>
+          <div class="stat-d"><div class="stat-d-val">127</div><div class="stat-d-lbl">Trabajos</div></div>
+          <div style="width:1px;background:#f1f5f9"></div>
+          <div class="stat-d"><div class="stat-d-val">~15m</div><div class="stat-d-lbl">Respuesta</div></div>
+        </div>
+        <div class="cta-d">
+          <div class="btn-d-g">📋 Solicitar servicio</div>
+          <div class="btn-d-w">💬 WhatsApp</div>
+        </div>
+        <div class="profile-d-section">
+          <div class="sec-d-title">Sobre mí</div>
+          <div style="font-size:11px;color:#374151;line-height:1.5;">Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales.</div>
+        </div>
+        <div class="profile-d-section">
+          <div class="sec-d-title">Servicios</div>
+          <span style="background:#f0fdf4;color:#0F6E56;border:1px solid #bbf7d0;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;">⚡ Electricista</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

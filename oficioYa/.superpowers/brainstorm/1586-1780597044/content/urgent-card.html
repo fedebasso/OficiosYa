@@ -1,0 +1,115 @@
+<h2>¿Cómo querés la card de profesional urgente?</h2>
+<p class="subtitle">La info es la misma en las 3. Cambia el layout y la jerarquía visual.</p>
+
+<div class="cards">
+
+  <!-- OPCIÓN A: Horizontal compacta -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f4f2; padding: 14px; font-family: system-ui;">
+      <div style="background:white;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:3px solid #dc2626;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <!-- Avatar -->
+          <div style="width:44px;height:44px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;flex-shrink:0;">C</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:1px;">
+              <span style="font-size:13px;font-weight:700;color:#1a1a1a;">Carlos Méndez</span>
+              <span style="background:#0F6E56;color:white;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px;">✓ VER</span>
+            </div>
+            <div style="font-size:11px;color:#666;">⭐ 4.8 · Pocitos · 127 trabajos</div>
+          </div>
+          <!-- Badges -->
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+            <div style="background:#dc2626;color:white;font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;">24H</div>
+            <div style="background:#16a34a;color:white;font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;">● DISPONIBLE</div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:#888;margin-bottom:10px;">⏱ Responde en ~15 min</div>
+        <!-- Botones -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="background:#0F6E56;color:white;border-radius:8px;padding:8px;text-align:center;font-size:11px;font-weight:700;">📞 Llamar</div>
+          <div style="background:#25D366;color:white;border-radius:8px;padding:8px;text-align:center;font-size:11px;font-weight:700;">💬 WhatsApp</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Horizontal compacta</h3>
+      <p>Borde rojo izquierdo como señal de urgencia. Info densa pero legible. Botones en grid 2 columnas.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN B: Card completa con fondo tinted -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f4f2; padding: 14px; font-family: system-ui;">
+      <div style="background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1);">
+        <!-- Header rojo -->
+        <div style="background:linear-gradient(90deg,#dc2626,#b91c1c);padding:6px 12px;display:flex;align-items:center;gap:6px;">
+          <div style="width:7px;height:7px;background:#4ade80;border-radius:50%;animation:none;"></div>
+          <span style="color:white;font-size:10px;font-weight:700;letter-spacing:.5px;">DISPONIBLE AHORA · 24H</span>
+        </div>
+        <!-- Body -->
+        <div style="padding:12px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="width:48px;height:48px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;">C</div>
+            <div>
+              <div style="font-size:14px;font-weight:800;color:#1a1a1a;">Carlos Méndez</div>
+              <div style="font-size:11px;color:#0F6E56;font-weight:600;">Electricista ✓ Verificado</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:10px;font-size:11px;color:#666;">
+            <span>⭐ 4.8</span>
+            <span>📍 Pocitos</span>
+            <span>🔧 127 trabajos</span>
+          </div>
+          <div style="background:#fef2f2;border-radius:6px;padding:6px 8px;font-size:10px;color:#dc2626;font-weight:600;margin-bottom:10px;">⏱ Responde en aproximadamente 15 minutos</div>
+          <div style="display:flex;gap-8px;gap:6px;">
+            <div style="flex:1;background:#0F6E56;color:white;border-radius:8px;padding:9px;text-align:center;font-size:12px;font-weight:700;">📞 Llamar</div>
+            <div style="flex:1;background:#25D366;color:white;border-radius:8px;padding:9px;text-align:center;font-size:12px;font-weight:700;">💬 WhatsApp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Card con header de urgencia</h3>
+      <p>Barra roja superior con indicador de disponibilidad. Más visual, más premium. Estilo notificación de emergencia.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN C: Minimalista con pill badges -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f4f2; padding: 14px; font-family: system-ui;">
+      <div style="background:white;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);">
+        <!-- Top row: avatar + info + dot -->
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+          <div style="position:relative;flex-shrink:0;">
+            <div style="width:46px;height:46px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:17px;">C</div>
+            <div style="position:absolute;bottom:0;right:0;width:12px;height:12px;background:#16a34a;border-radius:50%;border:2px solid white;"></div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">Carlos Méndez</div>
+            <div style="font-size:11px;color:#666;margin-bottom:6px;">Electricista · Pocitos</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;border:1px solid #fecaca;">24H</span>
+              <span style="background:#f0fdf4;color:#16a34a;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;border:1px solid #bbf7d0;">● Online</span>
+              <span style="background:#f0fdf4;color:#0F6E56;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;border:1px solid #bbf7d0;">✓ Verificado</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;font-size:11px;color:#666;margin-bottom:6px;">
+          <span>⭐ <strong style="color:#1a1a1a;">4.8</strong></span>
+          <span>🔧 <strong style="color:#1a1a1a;">127</strong> trabajos</span>
+          <span>⏱ <strong style="color:#1a1a1a;">~15 min</strong></span>
+        </div>
+        <div style="height:1px;background:#f0f0f0;margin-bottom:10px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;border:1.5px solid #0F6E56;color:#0F6E56;border-radius:8px;padding:8px;text-align:center;font-size:11px;font-weight:700;">📞 Llamar</div>
+          <div style="flex:1;background:#25D366;color:white;border-radius:8px;padding:8px;text-align:center;font-size:11px;font-weight:700;">💬 WhatsApp</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Pill badges + dot de presencia</h3>
+      <p>Dot verde en el avatar indica online. Pills pequeñas para 24H/Online/Verificado. Más limpio, menos ruidoso visualmente.</p>
+    </div>
+  </div>
+
+</div>

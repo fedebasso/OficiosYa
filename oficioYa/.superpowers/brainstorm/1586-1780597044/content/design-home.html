@@ -1,0 +1,197 @@
+<h2>Diseño final — Home Screen</h2>
+<p class="subtitle">Así va a quedar el Home. Revisá jerarquía, spacing y todos los elementos. Decime si algo no te cierra.</p>
+
+<div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;">
+
+  <!-- PHONE FRAME -->
+  <div style="width:320px;">
+    <div style="font-size:11px;font-weight:700;color:#666;text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Home — vista completa</div>
+    <div style="background:#1a1a1a;border-radius:36px;padding:10px;box-shadow:0 16px 48px rgba(0,0,0,.3);">
+      <div style="background:#f4f4f2;border-radius:28px;overflow:hidden;font-family:system-ui;">
+
+        <!-- STATUS BAR -->
+        <div style="background:#0F6E56;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+          <span style="color:white;font-size:10px;font-weight:600;">9:41</span>
+          <span style="color:white;font-size:10px;">●●● WiFi 🔋</span>
+        </div>
+
+        <!-- HEADER VERDE (Hero A) -->
+        <div style="background:#0F6E56;padding:12px 16px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div>
+              <div style="font-size:19px;font-weight:900;color:white;line-height:1;">Oficio<span style="color:#9FE1CB">Ya</span></div>
+              <div style="font-size:10px;color:rgba(255,255,255,.65);margin-top:1px;">📍 Montevideo</div>
+            </div>
+            <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;">
+              <span style="color:white;font-size:15px;">👤</span>
+            </div>
+          </div>
+          <!-- Search Bar -->
+          <div style="background:white;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);">
+            <span style="font-size:15px;color:#0F6E56;">🔍</span>
+            <span style="font-size:13px;color:#aaa;font-weight:400;">Electricista, plomero...</span>
+          </div>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div style="padding:12px 14px;display:flex;flex-direction:column;gap:12px;">
+
+          <!-- URGENCIAS BANNER -->
+          <div style="background:linear-gradient(135deg,#dc2626,#991b1b);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 12px rgba(220,38,38,.3);">
+            <div style="width:38px;height:38px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🚨</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:800;color:white;letter-spacing:.2px;">Urgencias 24H</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.8);margin-top:1px;">3 profesionales disponibles ahora</div>
+            </div>
+            <div style="background:rgba(255,255,255,.2);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;color:white;">Ver →</div>
+          </div>
+
+          <!-- CATEGORÍAS -->
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">¿Qué necesitás?</div>
+            <!-- Fila 1: 3 categorías -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;">
+              <div style="background:white;border-radius:10px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);">
+                <div style="font-size:22px;">⚡</div>
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;margin-top:3px;">Electricista</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);">
+                <div style="font-size:22px;">🚿</div>
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;margin-top:3px;">Sanitario</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);">
+                <div style="font-size:22px;">❄️</div>
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;margin-top:3px;">Aire Ac.</div>
+              </div>
+            </div>
+            <!-- Fila 2: 2 categorías centradas -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <div style="background:white;border-radius:10px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);">
+                <div style="font-size:22px;">🔑</div>
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;margin-top:3px;">Cerrajero</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);">
+                <div style="font-size:22px;">🧱</div>
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;margin-top:3px;">Albañil</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRO CTA -->
+          <div style="background:white;border-radius:12px;border:1.5px solid #e5e7eb;padding:12px 14px;">
+            <div style="font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:2px;">¿Sos profesional?</div>
+            <div style="font-size:10px;color:#888;margin-bottom:10px;">Unite y conseguí clientes en tu zona.</div>
+            <div style="background:transparent;border:1.5px solid #0F6E56;border-radius:8px;padding:8px;text-align:center;font-size:11px;font-weight:700;color:#0F6E56;">Registrarme como profesional</div>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div style="background:white;border-top:1px solid #f0f0f0;display:flex;padding:6px 0 10px;">
+          <div style="flex:1;text-align:center;"><div style="font-size:18px;">🏠</div><div style="font-size:8px;color:#0F6E56;font-weight:700;">Inicio</div></div>
+          <div style="flex:1;text-align:center;"><div style="font-size:18px;">🔍</div><div style="font-size:8px;color:#aaa;">Buscar</div></div>
+          <div style="flex:1;text-align:center;"><div style="font-size:18px;">📋</div><div style="font-size:8px;color:#aaa;">Solicitudes</div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE FRAME 2: Urgencias Page -->
+  <div style="width:320px;">
+    <div style="font-size:11px;font-weight:700;color:#666;text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Urgencias 24H — /urgencias</div>
+    <div style="background:#1a1a1a;border-radius:36px;padding:10px;box-shadow:0 16px 48px rgba(0,0,0,.3);">
+      <div style="background:#f4f4f2;border-radius:28px;overflow:hidden;font-family:system-ui;">
+
+        <!-- STATUS BAR -->
+        <div style="background:#dc2626;padding:6px 16px 0;display:flex;justify-content:space-between;">
+          <span style="color:white;font-size:10px;font-weight:600;">9:41</span>
+          <span style="color:white;font-size:10px;">●●● WiFi 🔋</span>
+        </div>
+
+        <!-- HEADER URGENCIAS -->
+        <div style="background:linear-gradient(160deg,#dc2626,#991b1b);padding:12px 16px 16px;color:white;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-size:13px;opacity:.8;">← Volver</span>
+          </div>
+          <div style="font-size:18px;font-weight:900;">🚨 Urgencias 24H</div>
+          <div style="font-size:11px;opacity:.8;margin-top:2px;">Profesionales disponibles ahora mismo</div>
+          <!-- Indicador live -->
+          <div style="display:flex;align-items:center;gap:6px;margin-top:8px;background:rgba(255,255,255,.15);border-radius:20px;padding:5px 10px;width:fit-content;">
+            <div style="width:7px;height:7px;background:#4ade80;border-radius:50%;"></div>
+            <span style="font-size:10px;font-weight:700;">3 disponibles ahora</span>
+          </div>
+        </div>
+
+        <!-- CARDS URGENTES -->
+        <div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px;">
+
+          <!-- Card urgente B -->
+          <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+            <div style="background:linear-gradient(90deg,#dc2626,#b91c1c);padding:5px 12px;display:flex;align-items:center;gap:6px;">
+              <div style="width:7px;height:7px;background:#4ade80;border-radius:50%;"></div>
+              <span style="color:white;font-size:9px;font-weight:700;letter-spacing:.5px;">DISPONIBLE AHORA · 24H</span>
+            </div>
+            <div style="padding:10px 12px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <div style="width:40px;height:40px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:15px;flex-shrink:0;">C</div>
+                <div>
+                  <div style="font-size:13px;font-weight:800;color:#1a1a1a;">Carlos Méndez</div>
+                  <div style="font-size:10px;color:#0F6E56;font-weight:600;">Electricista · ✓ Verificado</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;font-size:10px;color:#666;margin-bottom:6px;">
+                <span>⭐ 4.8</span><span>📍 Pocitos</span><span>🔧 127 trabajos</span>
+              </div>
+              <div style="background:#fef2f2;border-radius:6px;padding:5px 8px;font-size:10px;color:#dc2626;font-weight:600;margin-bottom:8px;">⏱ Responde en ~15 minutos</div>
+              <div style="display:flex;gap:6px;">
+                <div style="flex:1;background:#0F6E56;color:white;border-radius:8px;padding:7px;text-align:center;font-size:11px;font-weight:700;">📞 Llamar</div>
+                <div style="flex:1;background:#25D366;color:white;border-radius:8px;padding:7px;text-align:center;font-size:11px;font-weight:700;">💬 WhatsApp</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card urgente 2 -->
+          <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+            <div style="background:linear-gradient(90deg,#dc2626,#b91c1c);padding:5px 12px;display:flex;align-items:center;gap:6px;">
+              <div style="width:7px;height:7px;background:#4ade80;border-radius:50%;"></div>
+              <span style="color:white;font-size:9px;font-weight:700;letter-spacing:.5px;">DISPONIBLE AHORA · 24H</span>
+            </div>
+            <div style="padding:10px 12px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <div style="width:40px;height:40px;border-radius:50%;background:#1d4ed8;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:15px;flex-shrink:0;">A</div>
+                <div>
+                  <div style="font-size:13px;font-weight:800;color:#1a1a1a;">Ana Rodríguez</div>
+                  <div style="font-size:10px;color:#0F6E56;font-weight:600;">Cerrajera · ✓ Verificada</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;font-size:10px;color:#666;margin-bottom:6px;">
+                <span>⭐ 4.9</span><span>📍 Centro</span><span>🔧 89 trabajos</span>
+              </div>
+              <div style="background:#fef2f2;border-radius:6px;padding:5px 8px;font-size:10px;color:#dc2626;font-weight:600;margin-bottom:8px;">⏱ Responde en ~10 minutos</div>
+              <div style="display:flex;gap:6px;">
+                <div style="flex:1;background:#0F6E56;color:white;border-radius:8px;padding:7px;text-align:center;font-size:11px;font-weight:700;">📞 Llamar</div>
+                <div style="flex:1;background:#25D366;color:white;border-radius:8px;padding:7px;text-align:center;font-size:11px;font-weight:700;">💬 WhatsApp</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:24px;padding:16px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+  <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">¿Qué incluye este diseño?</div>
+  <ul style="margin:0;padding-left:16px;font-size:12px;color:#555;line-height:1.8;">
+    <li>Home con Hero verde + search + banner urgencias + 5 categorías (3+2) + CTA pro</li>
+    <li>Nueva ruta <code>/urgencias</code> con header rojo y lista de profesionales disponibles</li>
+    <li>Card urgente estilo B con header rojo, dot verde, botones llamar/WhatsApp</li>
+    <li>5 categorías: Electricista, Sanitario, Aire Ac., Cerrajero, Albañil</li>
+    <li>Mock data de 3 profesionales urgentes con todos los campos</li>
+    <li>BottomNav sin cambios (mantener Inicio, Buscar, Solicitudes)</li>
+    <li>ProfessionalCard regular mejorada con más info visible</li>
+  </ul>
+</div>

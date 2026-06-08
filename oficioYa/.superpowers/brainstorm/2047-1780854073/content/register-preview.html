@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Redesign — OficioYa</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 28px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  h1 { font-size: 14px; font-weight: 800; color: #334155; }
+  p.sub { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
+
+  .screens { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; align-items: flex-start; }
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .screen-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+
+  .phone {
+    width: 320px;
+    background: #f4f4f2;
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    border: 8px solid #1e293b;
+  }
+  .phone-scroll { max-height: 680px; overflow-y: auto; scrollbar-width: none; }
+  .phone-scroll::-webkit-scrollbar { display: none; }
+
+  .statusbar { background: #0F6E56; padding: 7px 18px 3px; display: flex; justify-content: space-between; }
+  .statusbar span { color: white; font-size: 10px; font-weight: 600; }
+
+  .hero { background: #0F6E56; padding: 28px 24px 44px; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+  .hero-logo { font-size: 30px; font-weight: 900; color: white; line-height: 1; letter-spacing: -1px; }
+  .hero-logo span { color: #9FE1CB; }
+  .hero-tagline { font-size: 12px; color: rgba(255,255,255,.6); }
+  .hero::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 28px; background: #f4f4f2; border-radius: 28px 28px 0 0; }
+
+  .form-area { padding: 6px 18px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .form-title { font-size: 17px; font-weight: 900; color: #1a1a1a; }
+  .form-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field-label { font-size: 10px; font-weight: 700; color: #4b5563; text-transform: uppercase; letter-spacing: .3px; }
+  .input-wrap { position: relative; }
+  .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; }
+  .input-field {
+    width: 100%; background: white; border: 1.5px solid #e5e7eb; border-radius: 14px;
+    padding: 12px 12px 12px 38px; font-size: 13px; color: #1a1a1a; outline: none;
+  }
+  .input-field::placeholder { color: #d1d5db; }
+  .input-field.focused { border-color: #0F6E56; box-shadow: 0 0 0 3px rgba(15,110,86,.1); }
+
+  /* Role selector */
+  .role-label { font-size: 10px; font-weight: 700; color: #4b5563; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 6px; }
+
+  /* OPCIÓN A: Cards grandes con ilustración */
+  .role-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .role-card {
+    border: 2px solid #e5e7eb; border-radius: 16px; padding: 14px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; transition: all .15s; background: white;
+  }
+  .role-card.selected { border-color: #0F6E56; background: #f0fdf4; }
+  .role-card-icon { font-size: 28px; line-height: 1; }
+  .role-card-name { font-size: 12px; font-weight: 800; color: #1a1a1a; }
+  .role-card-desc { font-size: 9px; color: #94a3b8; text-align: center; line-height: 1.3; }
+  .role-card.selected .role-card-name { color: #0F6E56; }
+
+  /* OPCIÓN B: Toggle pills */
+  .role-toggle { display: flex; background: #f1f5f9; border-radius: 14px; padding: 3px; gap: 2px; }
+  .role-pill {
+    flex: 1; padding: 10px 6px; border-radius: 11px; text-align: center;
+    font-size: 12px; font-weight: 700; color: #64748b; cursor: pointer; transition: all .15s;
+  }
+  .role-pill.selected { background: white; color: #0F6E56; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+
+  /* OPCIÓN C: Lista con descripción */
+  .role-list { display: flex; flex-direction: column; gap: 6px; }
+  .role-list-item {
+    border: 2px solid #e5e7eb; border-radius: 14px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px; cursor: pointer; background: white; transition: all .15s;
+  }
+  .role-list-item.selected { border-color: #0F6E56; background: #f0fdf4; }
+  .role-list-icon { font-size: 24px; flex-shrink: 0; }
+  .role-list-info { flex: 1; }
+  .role-list-name { font-size: 13px; font-weight: 800; color: #1a1a1a; }
+  .role-list-desc { font-size: 10px; color: #94a3b8; margin-top: 1px; }
+  .role-list-item.selected .role-list-name { color: #0F6E56; }
+  .role-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #e5e7eb; flex-shrink: 0; }
+  .role-list-item.selected .role-check { background: #0F6E56; border-color: #0F6E56; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; }
+
+  .btn-primary {
+    width: 100%; background: #0F6E56; color: white; border: none; border-radius: 14px;
+    padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(15,110,86,.3);
+  }
+  .login-row { text-align: center; font-size: 12px; color: #6b7280; }
+  .login-row a { color: #0F6E56; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h1>Register — Selector de rol</h1>
+<p class="sub">El resto es igual al Login. Elegí cómo se ve el selector Cliente / Profesional.</p>
+
+<div class="screens">
+
+  <!-- OPCIÓN A: Role cards grandes -->
+  <div class="screen-wrap">
+    <div class="screen-label">A — Cards visuales</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar"><span>9:41</span><span>●●● 🔋</span></div>
+        <div class="hero">
+          <div class="hero-logo">Oficio<span>Ya</span></div>
+          <div class="hero-tagline">Creá tu cuenta gratis</div>
+        </div>
+        <div class="form-area">
+          <div>
+            <div class="form-title">Empezá ahora</div>
+            <div class="form-sub">Solo te lleva 1 minuto</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Nombre completo</div>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input class="input-field" placeholder="Tu nombre" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Email</div>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input class="input-field" placeholder="tu@email.com" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Contraseña</div>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input class="input-field" placeholder="Mínimo 6 caracteres" />
+            </div>
+          </div>
+          <!-- Role selector A -->
+          <div>
+            <div class="role-label">Soy...</div>
+            <div class="role-cards">
+              <div class="role-card selected">
+                <div class="role-card-icon">👤</div>
+                <div class="role-card-name">Cliente</div>
+                <div class="role-card-desc">Busco profesionales para mi hogar</div>
+              </div>
+              <div class="role-card">
+                <div class="role-card-icon">🔧</div>
+                <div class="role-card-name">Profesional</div>
+                <div class="role-card-desc">Ofrezco mis servicios</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary">Crear cuenta</button>
+          <div class="login-row">¿Ya tenés cuenta? <a href="#">Iniciá sesión</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPCIÓN B: Toggle pill -->
+  <div class="screen-wrap">
+    <div class="screen-label">B — Toggle compacto</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar"><span>9:41</span><span>●●● 🔋</span></div>
+        <div class="hero">
+          <div class="hero-logo">Oficio<span>Ya</span></div>
+          <div class="hero-tagline">Creá tu cuenta gratis</div>
+        </div>
+        <div class="form-area">
+          <div>
+            <div class="form-title">Empezá ahora</div>
+            <div class="form-sub">Solo te lleva 1 minuto</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Nombre completo</div>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input class="input-field" placeholder="Tu nombre" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Email</div>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input class="input-field" placeholder="tu@email.com" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Contraseña</div>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input class="input-field" placeholder="Mínimo 6 caracteres" />
+            </div>
+          </div>
+          <!-- Role selector B -->
+          <div>
+            <div class="role-label">Soy...</div>
+            <div class="role-toggle">
+              <div class="role-pill selected">👤 Cliente</div>
+              <div class="role-pill">🔧 Profesional</div>
+            </div>
+          </div>
+          <button class="btn-primary">Crear cuenta</button>
+          <div class="login-row">¿Ya tenés cuenta? <a href="#">Iniciá sesión</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPCIÓN C: Lista con descripción -->
+  <div class="screen-wrap">
+    <div class="screen-label">C — Lista descriptiva</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="statusbar"><span>9:41</span><span>●●● 🔋</span></div>
+        <div class="hero">
+          <div class="hero-logo">Oficio<span>Ya</span></div>
+          <div class="hero-tagline">Creá tu cuenta gratis</div>
+        </div>
+        <div class="form-area">
+          <div>
+            <div class="form-title">Empezá ahora</div>
+            <div class="form-sub">Solo te lleva 1 minuto</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Nombre completo</div>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input class="input-field" placeholder="Tu nombre" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Email</div>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input class="input-field" placeholder="tu@email.com" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Contraseña</div>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input class="input-field" placeholder="Mínimo 6 caracteres" />
+            </div>
+          </div>
+          <!-- Role selector C -->
+          <div>
+            <div class="role-label">Soy...</div>
+            <div class="role-list">
+              <div class="role-list-item selected">
+                <div class="role-list-icon">👤</div>
+                <div class="role-list-info">
+                  <div class="role-list-name">Cliente</div>
+                  <div class="role-list-desc">Busco profesionales para mi hogar</div>
+                </div>
+                <div class="role-check">✓</div>
+              </div>
+              <div class="role-list-item">
+                <div class="role-list-icon">🔧</div>
+                <div class="role-list-info">
+                  <div class="role-list-name">Profesional</div>
+                  <div class="role-list-desc">Ofrezco mis servicios y consigo clientes</div>
+                </div>
+                <div class="role-check"></div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary">Crear cuenta</button>
+          <div class="login-row">¿Ya tenés cuenta? <a href="#">Iniciá sesión</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

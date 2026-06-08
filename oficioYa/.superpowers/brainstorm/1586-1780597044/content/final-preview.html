@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficioYa — Preview Final</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 32px 16px 60px;
+  }
+
+  h1.page-title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 800;
+    color: #334155;
+    margin-bottom: 6px;
+    letter-spacing: .3px;
+  }
+  p.page-sub {
+    text-align: center;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 32px;
+  }
+
+  .screens {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .screen-label {
+    font-size: 11px; font-weight: 700; color: #64748b;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+
+  /* Phone */
+  .phone {
+    width: 320px;
+    background: #f4f4f2;
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    border: 8px solid #1e293b;
+  }
+  .phone-scroll {
+    max-height: 680px;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .phone-scroll::-webkit-scrollbar { display: none; }
+
+  /* ── STATUS BAR ── */
+  .status { display:flex; justify-content:space-between; padding: 7px 18px 3px; }
+  .status span { font-size: 10px; font-weight: 600; color: white; }
+
+  /* ── HEADER VERDE ── */
+  .hdr-green { background: #0F6E56; padding: 12px 16px 16px; }
+  .hdr-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .logo { font-size: 20px; font-weight: 900; color: white; line-height: 1; }
+  .logo span { color: #9FE1CB; }
+  .logo-sub { font-size: 10px; color: rgba(255,255,255,.6); margin-top: 1px; }
+  .avatar-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  .searchbar {
+    background: white; border-radius: 14px; padding: 11px 14px;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.18);
+  }
+  .searchbar span:first-child { font-size: 15px; color: #0F6E56; }
+  .searchbar .ph { font-size: 13px; color: #b0b0b0; }
+
+  /* ── CONTENT ── */
+  .content { padding: 14px; display: flex; flex-direction: column; gap: 16px; }
+  .sec-label {
+    font-size: 10px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px;
+  }
+
+  /* ── CATEGORIES ── */
+  .cat-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+  .cat-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .cat-btn {
+    background: white; border-radius: 14px; padding: 12px 4px; text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.07); border: 1.5px solid transparent;
+    cursor: pointer;
+  }
+  .cat-btn:hover { border-color: #9FE1CB; box-shadow: 0 4px 10px rgba(0,0,0,.12); }
+  .cat-emoji { font-size: 24px; line-height: 1; }
+  .cat-name { font-size: 9px; font-weight: 700; color: #1a1a1a; margin-top: 4px; text-transform: uppercase; letter-spacing: .3px; }
+
+  /* ── PRO CARD ── */
+  .pro-card {
+    background: white; border-radius: 14px; padding: 11px 12px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.07); margin-bottom: 6px; cursor: pointer;
+  }
+  .pro-card:last-child { margin-bottom: 0; }
+  .pro-av {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 16px;
+  }
+  .pro-name { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+  .pro-badge {
+    background: #0F6E56; color: white; font-size: 8px; font-weight: 700;
+    padding: 1px 5px; border-radius: 4px; margin-left: 4px;
+  }
+  .pro-meta { font-size: 10px; color: #94a3b8; margin-top: 1px; }
+  .pro-chev { color: #d1d5db; font-size: 16px; margin-left: auto; }
+
+  /* ── URGENCIAS BANNER ── */
+  .urg-banner {
+    border-radius: 16px; padding: 14px;
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    box-shadow: 0 6px 20px rgba(220,38,38,.28); cursor: pointer;
+  }
+  .urg-live { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .dot-green {
+    width: 8px; height: 8px; background: #4ade80; border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(74,222,128,.25);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,.25); }
+    50% { box-shadow: 0 0 0 6px rgba(74,222,128,.1); }
+  }
+  .urg-live-txt { color: rgba(255,255,255,.85); font-size: 9px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
+  .urg-title { color: white; font-size: 17px; font-weight: 900; margin-bottom: 3px; }
+  .urg-sub { color: rgba(255,255,255,.72); font-size: 11px; line-height: 1.4; margin-bottom: 12px; }
+  .urg-cta {
+    background: white; border-radius: 10px; padding: 9px;
+    text-align: center; font-size: 12px; font-weight: 800; color: #dc2626;
+  }
+
+  /* ── CTA PRO ── */
+  .cta-pro {
+    background: white; border-radius: 14px; border: 1.5px solid #f1f5f9; padding: 12px 14px;
+  }
+  .cta-title { font-size: 12px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+  .cta-sub { font-size: 10px; color: #94a3b8; margin-bottom: 10px; }
+  .cta-btn {
+    border: 2px solid #0F6E56; border-radius: 10px; padding: 8px;
+    text-align: center; font-size: 11px; font-weight: 700; color: #0F6E56; cursor: pointer;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    background: white; border-top: 1px solid #f1f5f9;
+    display: flex; padding: 7px 0 12px; position: sticky; bottom: 0;
+  }
+  .nav-item { flex: 1; text-align: center; cursor: pointer; }
+  .nav-icon { font-size: 19px; }
+  .nav-lbl { font-size: 8px; font-weight: 700; margin-top: 1px; }
+  .nav-item.active .nav-lbl { color: #0F6E56; }
+  .nav-item:not(.active) .nav-lbl { color: #94a3b8; }
+
+  /* ── URGENCIAS PAGE ── */
+  .hdr-red {
+    background: linear-gradient(160deg, #dc2626 0%, #991b1b 100%);
+    padding: 36px 16px 16px; position: sticky; top: 0; z-index: 10;
+  }
+  .back-btn { color: rgba(255,255,255,.75); font-size: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+  .urg-page-title { color: white; font-size: 20px; font-weight: 900; margin-bottom: 2px; }
+  .urg-page-sub { color: rgba(255,255,255,.72); font-size: 11px; margin-bottom: 10px; }
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 10px;
+  }
+  .live-badge span { color: white; font-size: 10px; font-weight: 700; }
+
+  /* ── URGENT CARD ── */
+  .urgent-card {
+    background: white; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08); margin-bottom: 8px;
+  }
+  .urgent-card:last-child { margin-bottom: 0; }
+  .uc-header {
+    display: flex; align-items: center; gap: 6px; padding: 5px 12px;
+    background: linear-gradient(90deg, #dc2626, #b91c1c);
+  }
+  .dot-green-sm { width: 7px; height: 7px; background: #4ade80; border-radius: 50%; animation: pulse 2s ease-in-out infinite; flex-shrink: 0; }
+  .uc-header span { color: white; font-size: 8px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+  .uc-body { padding: 10px 12px; }
+  .uc-profile { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .uc-name { font-size: 13px; font-weight: 800; color: #1a1a1a; }
+  .uc-spec { font-size: 10px; color: #0F6E56; font-weight: 600; margin-top: 1px; }
+  .uc-stats { display: flex; gap: 10px; font-size: 10px; color: #94a3b8; margin-bottom: 6px; }
+  .uc-time {
+    background: #fef2f2; border-radius: 6px; padding: 5px 8px;
+    font-size: 9px; color: #dc2626; font-weight: 700; margin-bottom: 8px;
+  }
+  .uc-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .btn-call {
+    background: #0F6E56; color: white; border-radius: 10px; padding: 8px;
+    text-align: center; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+  .btn-wa {
+    background: #25D366; color: white; border-radius: 10px; padding: 8px;
+    text-align: center; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">OficioYa — Resultado Final</h1>
+<p class="page-sub">Podés ver la app en vivo en http://localhost:5174</p>
+
+<div class="screens">
+
+  <!-- PHONE 1: HOME -->
+  <div class="screen-wrap">
+    <div class="screen-label">Home</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="status" style="background:#0F6E56"><span>9:41</span><span>●●● 🔋</span></div>
+        <div class="hdr-green">
+          <div class="hdr-top">
+            <div>
+              <div class="logo">Oficio<span>Ya</span></div>
+              <div class="logo-sub">📍 Montevideo</div>
+            </div>
+            <div class="avatar-btn">👤</div>
+          </div>
+          <div class="searchbar">
+            <span>🔍</span>
+            <span class="ph">Electricista, plomero, cerrajero...</span>
+          </div>
+        </div>
+
+        <div class="content">
+
+          <!-- Categorías -->
+          <section>
+            <div class="sec-label">¿Qué necesitás?</div>
+            <div class="cat-grid-3">
+              <div class="cat-btn"><div class="cat-emoji">⚡</div><div class="cat-name">Electricista</div></div>
+              <div class="cat-btn"><div class="cat-emoji">🚿</div><div class="cat-name">Sanitario</div></div>
+              <div class="cat-btn"><div class="cat-emoji">❄️</div><div class="cat-name">Aire Ac.</div></div>
+            </div>
+            <div class="cat-grid-2">
+              <div class="cat-btn"><div class="cat-emoji">🔑</div><div class="cat-name">Cerrajero</div></div>
+              <div class="cat-btn"><div class="cat-emoji">🧱</div><div class="cat-name">Albañil</div></div>
+            </div>
+          </section>
+
+          <!-- Destacados -->
+          <section>
+            <div class="sec-label">Profesionales destacados</div>
+            <div class="pro-card">
+              <div class="pro-av" style="background:#0F6E56">C</div>
+              <div style="flex:1;min-width:0">
+                <div class="pro-name">Carlos Méndez<span class="pro-badge">✓</span></div>
+                <div class="pro-meta">⭐ 4.8 · Pocitos · 127 trabajos</div>
+              </div>
+              <div class="pro-chev">›</div>
+            </div>
+            <div class="pro-card">
+              <div class="pro-av" style="background:#1d4ed8">R</div>
+              <div style="flex:1;min-width:0">
+                <div class="pro-name">Roberto Silva<span class="pro-badge">✓</span></div>
+                <div class="pro-meta">⭐ 4.5 · Malvín · 83 trabajos</div>
+              </div>
+              <div class="pro-chev">›</div>
+            </div>
+            <div class="pro-card" style="margin-bottom:0">
+              <div class="pro-av" style="background:#7c3aed">A</div>
+              <div style="flex:1;min-width:0">
+                <div class="pro-name">Ana Rodríguez<span class="pro-badge">✓</span></div>
+                <div class="pro-meta">⭐ 4.9 · Centro · 89 trabajos</div>
+              </div>
+              <div class="pro-chev">›</div>
+            </div>
+          </section>
+
+          <!-- Urgencias banner -->
+          <section>
+            <div class="urg-banner">
+              <div class="urg-live">
+                <div class="dot-green"></div>
+                <span class="urg-live-txt">3 disponibles ahora</span>
+              </div>
+              <div class="urg-title">🚨 Urgencias 24H</div>
+              <div class="urg-sub">Profesionales verificados que responden en menos de 30 minutos</div>
+              <div class="urg-cta">Ver profesionales disponibles →</div>
+            </div>
+          </section>
+
+          <!-- CTA pro -->
+          <section>
+            <div class="cta-pro">
+              <div class="cta-title">¿Sos profesional?</div>
+              <div class="cta-sub">Unite a OficiosYa y conseguí clientes en tu zona.</div>
+              <div class="cta-btn">Registrarme como profesional</div>
+            </div>
+          </section>
+
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-lbl">Inicio</div></div>
+          <div class="nav-item"><div class="nav-icon">🔍</div><div class="nav-lbl">Buscar</div></div>
+          <div class="nav-item"><div class="nav-icon">📋</div><div class="nav-lbl">Solicitudes</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 2: URGENCIAS PAGE -->
+  <div class="screen-wrap">
+    <div class="screen-label">Urgencias 24H</div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="status" style="background:#991b1b"><span>9:41</span><span>●●● 🔋</span></div>
+
+        <div class="hdr-red">
+          <div class="back-btn">← Volver</div>
+          <div class="urg-page-title">🚨 Urgencias 24H</div>
+          <div class="urg-page-sub">Profesionales disponibles ahora mismo</div>
+          <div class="live-badge">
+            <div class="dot-green"></div>
+            <span>3 disponibles ahora</span>
+          </div>
+        </div>
+
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+
+          <!-- Card 1 -->
+          <div class="urgent-card">
+            <div class="uc-header">
+              <div class="dot-green-sm"></div>
+              <span>Disponible ahora · 24H</span>
+            </div>
+            <div class="uc-body">
+              <div class="uc-profile">
+                <div class="pro-av" style="background:#0F6E56;width:42px;height:42px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;flex-shrink:0;">C</div>
+                <div>
+                  <div class="uc-name">Carlos Méndez</div>
+                  <div class="uc-spec">Electricista · ✓ Verificado/a</div>
+                </div>
+              </div>
+              <div class="uc-stats"><span>⭐ 4.8</span><span>📍 Pocitos</span><span>🔧 127 trabajos</span></div>
+              <div class="uc-time">⏱ Responde en ~15 minutos</div>
+              <div class="uc-btns">
+                <div class="btn-call">📞 Llamar</div>
+                <div class="btn-wa">💬 WhatsApp</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="urgent-card">
+            <div class="uc-header">
+              <div class="dot-green-sm"></div>
+              <span>Disponible ahora · 24H</span>
+            </div>
+            <div class="uc-body">
+              <div class="uc-profile">
+                <div class="pro-av" style="background:#7c3aed;width:42px;height:42px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;flex-shrink:0;">A</div>
+                <div>
+                  <div class="uc-name">Ana Rodríguez</div>
+                  <div class="uc-spec">Cerrajero/a · ✓ Verificado/a</div>
+                </div>
+              </div>
+              <div class="uc-stats"><span>⭐ 4.9</span><span>📍 Centro</span><span>🔧 89 trabajos</span></div>
+              <div class="uc-time">⏱ Responde en ~10 minutos</div>
+              <div class="uc-btns">
+                <div class="btn-call">📞 Llamar</div>
+                <div class="btn-wa">💬 WhatsApp</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="urgent-card">
+            <div class="uc-header">
+              <div class="dot-green-sm"></div>
+              <span>Disponible ahora · 24H</span>
+            </div>
+            <div class="uc-body">
+              <div class="uc-profile">
+                <div class="pro-av" style="background:#1d4ed8;width:42px;height:42px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;flex-shrink:0;">R</div>
+                <div>
+                  <div class="uc-name">Roberto Silva</div>
+                  <div class="uc-spec">Sanitario · ✓ Verificado/a</div>
+                </div>
+              </div>
+              <div class="uc-stats"><span>⭐ 4.5</span><span>📍 Malvín</span><span>🔧 83 trabajos</span></div>
+              <div class="uc-time">⏱ Responde en ~20 minutos</div>
+              <div class="uc-btns">
+                <div class="btn-call">📞 Llamar</div>
+                <div class="btn-wa">💬 WhatsApp</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center;margin-top:28px;font-size:12px;color:#94a3b8;">
+  App en vivo → <strong>http://localhost:5174</strong> &nbsp;·&nbsp; GitHub → <strong>fedebasso/OficiosYa</strong>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<h2>¿Qué estilo de Home querés?</h2>
+<p class="subtitle">Las 3 direcciones mantienen el verde #0F6E56 y el mismo stack. Elegí el feeling que más te convence.</p>
+
+<div class="cards">
+
+  <!-- OPCIÓN A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f4f2; padding: 12px; font-family: system-ui;">
+      <!-- Mockup A: Hero bold + search prominente -->
+      <div style="background:#0F6E56; border-radius:12px; padding:16px 12px 20px; color:white; margin-bottom:8px;">
+        <div style="font-size:11px;opacity:.7;margin-bottom:2px;">Montevideo</div>
+        <div style="font-size:18px;font-weight:800;line-height:1.1;margin-bottom:4px;">Oficio<span style="color:#9FE1CB">Ya</span></div>
+        <div style="font-size:12px;opacity:.8;margin-bottom:10px;">Encontrá el profesional que necesitás</div>
+        <div style="background:white;border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;">🔍</span>
+          <span style="font-size:12px;color:#aaa;">Electricista, plomero...</span>
+        </div>
+      </div>
+      <!-- Urgencias -->
+      <div style="background:linear-gradient(135deg,#dc2626,#991b1b);border-radius:10px;padding:10px 12px;color:white;margin-bottom:8px;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px;">🚨</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;">Urgencias 24H</div>
+          <div style="font-size:10px;opacity:.85;">Profesionales disponibles ahora</div>
+        </div>
+        <div style="margin-left:auto;background:rgba(255,255,255,.2);border-radius:6px;padding:4px 8px;font-size:10px;font-weight:600;">Ver →</div>
+      </div>
+      <!-- Categorías -->
+      <div style="font-size:10px;font-weight:700;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">Categorías</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div style="background:white;border-radius:8px;padding:8px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+          <div style="font-size:18px;">⚡</div><div style="font-size:9px;font-weight:600;color:#333;margin-top:2px;">Electricista</div>
+        </div>
+        <div style="background:white;border-radius:8px;padding:8px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+          <div style="font-size:18px;">🚿</div><div style="font-size:9px;font-weight:600;color:#333;margin-top:2px;">Sanitario</div>
+        </div>
+        <div style="background:white;border-radius:8px;padding:8px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+          <div style="font-size:18px;">❄️</div><div style="font-size:9px;font-weight:600;color:#333;margin-top:2px;">Aire Ac.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Hero Compacto</h3>
+      <p>Header verde con search integrado + banner de urgencias llamativo. Foco en la acción inmediata. Estilo PedidosYa/Uber.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f4f2; padding: 12px; font-family: system-ui;">
+      <!-- Mockup B: Clean con greeting -->
+      <div style="background:white;border-radius:12px;padding:14px 12px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;color:#999;">Buenos días 👋</div>
+            <div style="font-size:16px;font-weight:800;color:#1a1a1a;">Oficio<span style="color:#0F6E56">Ya</span></div>
+          </div>
+          <div style="width:32px;height:32px;background:#0F6E56;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;">M</div>
+        </div>
+        <div style="background:#f4f4f2;border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;color:#0F6E56;">🔍</span>
+          <span style="font-size:12px;color:#aaa;">¿Qué necesitás hoy?</span>
+        </div>
+      </div>
+      <!-- Urgencias card -->
+      <div style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;background:#ea580c;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🚨</div>
+        <div style="flex:1;">
+          <div style="font-size:11px;font-weight:700;color:#9a3412;">Urgencias 24H — 3 disponibles</div>
+          <div style="font-size:10px;color:#c2410c;">Responden en menos de 30 min</div>
+        </div>
+      </div>
+      <!-- Grid categorías 2x3 -->
+      <div style="font-size:10px;font-weight:700;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">Servicios</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:white;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+          <span style="font-size:20px;">⚡</span><span style="font-size:11px;font-weight:600;color:#333;">Electricista</span>
+        </div>
+        <div style="background:white;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+          <span style="font-size:20px;">🚿</span><span style="font-size:11px;font-weight:600;color:#333;">Sanitario</span>
+        </div>
+        <div style="background:white;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+          <span style="font-size:20px;">❄️</span><span style="font-size:11px;font-weight:600;color:#333;">Aire Ac.</span>
+        </div>
+        <div style="background:white;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+          <span style="font-size:20px;">🔧</span><span style="font-size:11px;font-weight:600;color:#333;">Carpintería</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Minimalista Premium</h3>
+      <p>Saludo personalizado, search limpio, urgencias como card sutil. Más espacio, más respiración. Estilo Airbnb/Stripe.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f4f2; padding: 12px; font-family: system-ui;">
+      <!-- Mockup C: Header verde extendido con wave -->
+      <div style="background:linear-gradient(160deg,#0F6E56 70%,#0d5c47);border-radius:12px;padding:16px 12px 28px;color:white;margin-bottom:-12px;position:relative;z-index:1;">
+        <div style="font-size:12px;opacity:.7;margin-bottom:4px;">📍 Montevideo</div>
+        <div style="font-size:20px;font-weight:900;margin-bottom:2px;">Oficio<span style="color:#9FE1CB">Ya</span></div>
+        <div style="font-size:11px;opacity:.75;margin-bottom:14px;">Profesionales verificados cerca tuyo</div>
+        <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;">🔍</span>
+          <span style="font-size:12px;color:rgba(255,255,255,.8);">Buscar servicio...</span>
+        </div>
+      </div>
+      <div style="background:white;border-radius:12px;padding:20px 12px 12px;margin-bottom:6px;box-shadow:0 4px 16px rgba(0,0,0,.08);position:relative;z-index:2;">
+        <!-- Urgencias highlight -->
+        <div style="background:linear-gradient(90deg,#dc2626,#b91c1c);border-radius:8px;padding:8px 10px;color:white;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px;">⚡</span>
+          <div style="flex:1;"><div style="font-size:11px;font-weight:700;">URGENCIAS 24H</div><div style="font-size:9px;opacity:.85;">Disponibles ahora mismo</div></div>
+          <div style="font-size:10px;background:rgba(255,255,255,.2);border-radius:4px;padding:2px 6px;">3 →</div>
+        </div>
+        <!-- Categorías scrollable hint -->
+        <div style="font-size:10px;font-weight:700;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">Categorías</div>
+        <div style="display:flex;gap:8px;overflow:hidden;">
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:10px 10px;text-align:center;min-width:60px;">
+            <div style="font-size:20px;">⚡</div><div style="font-size:9px;font-weight:700;color:#0F6E56;margin-top:2px;">Electricista</div>
+          </div>
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:10px 10px;text-align:center;min-width:60px;">
+            <div style="font-size:20px;">🚿</div><div style="font-size:9px;font-weight:700;color:#0F6E56;margin-top:2px;">Sanitario</div>
+          </div>
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:10px 10px;text-align:center;min-width:60px;">
+            <div style="font-size:20px;">❄️</div><div style="font-size:9px;font-weight:700;color:#0F6E56;margin-top:2px;">Aire Ac.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Hero Gradient + Cards Flotantes</h3>
+      <p>Header verde extendido con glassmorphism en el search. Cards blancas que "flotan" sobre el hero. Urgencias muy visible. Estilo MercadoPago.</p>
+    </div>
+  </div>
+
+</div>
