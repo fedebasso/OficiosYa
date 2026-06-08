@@ -12,8 +12,8 @@ export function FeaturedProfessionals() {
 
   return (
     <section>
-      <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-[.6px] mb-2.5">
-        Profesionales destacados
+      <h2 className="text-[11px] font-bold text-text-secondary uppercase tracking-[.6px] mb-2.5">
+        Más recomendados
       </h2>
       <div className="flex flex-col gap-2">
         {featured.map((pro) => (
