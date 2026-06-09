@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Mix A+C</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #e5e7eb; padding: 24px 16px; }
+
+  h2 { font-size: 18px; font-weight: 800; color: #111827; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 24px; }
+
+  .phone {
+    max-width: 390px; margin: 0 auto;
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,.2);
+    background: #fff;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; height: 340px; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+  }
+  .hero-bg img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  /* overlay: oscuro arriba para nav, verde abajo */
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,.35) 0%,
+      rgba(0,0,0,.1) 35%,
+      rgba(20,83,45,.7) 70%,
+      rgba(20,83,45,.92) 100%
+    );
+  }
+
+  /* NAV */
+  .hero-nav {
+    position: absolute; top: 16px; left: 16px; right: 16px;
+    display: flex; justify-content: space-between; align-items: center; z-index: 10;
+  }
+  .cbtn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,.18); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 17px; cursor: pointer;
+  }
+  .nav-actions { display: flex; gap: 8px; }
+
+  /* CENTERED CONTENT */
+  .hero-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding-bottom: 24px; z-index: 10;
+  }
+
+  /* AVATAR CIRCULAR con foto real */
+  .avatar-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    border: 4px solid rgba(255,255,255,.9);
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,.35);
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #86efac, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 800; color: #fff;
+  }
+  .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+  .avail-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,.2); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .3px;
+    padding: 4px 11px; border-radius: 20px; margin-bottom: 8px;
+  }
+  .avail-dot { width: 6px; height: 6px; background: #86efac; border-radius: 50%; }
+
+  .hero-name {
+    font-size: 26px; font-weight: 900; color: #fff;
+    letter-spacing: -.6px; text-align: center; line-height: 1.1;
+  }
+  .hero-trade {
+    font-size: 13px; color: rgba(255,255,255,.8);
+    font-weight: 500; margin-top: 4px; text-align: center;
+  }
+
+  /* STATS PILL — integrado en el hero */
+  .stats-pill {
+    display: flex; margin-top: 16px;
+    background: rgba(0,0,0,.25); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 16px; overflow: hidden;
+  }
+  .sp { padding: 10px 18px; text-align: center; }
+  .sp + .sp { border-left: 1px solid rgba(255,255,255,.15); }
+  .sp-n { font-size: 16px; font-weight: 800; color: #fff; }
+  .sp-l { font-size: 9px; color: rgba(255,255,255,.6); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+
+  /* ── BODY ── */
+  .body { padding: 20px 20px 32px; }
+
+  /* BADGES */
+  .badge-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 22px; }
+  .bdg { font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
+  .bdg-b { background: #dbeafe; color: #1d4ed8; }
+  .bdg-y { background: #fef9c3; color: #92400e; }
+  .bdg-loc { background: #f3f4f6; color: #374151; }
+
+  /* ABOUT */
+  .sec { margin-bottom: 24px; }
+  .sec-title { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 10px; letter-spacing: -.2px; }
+  .about-text { font-size: 13px; color: #4b5563; line-height: 1.75; }
+
+  /* SERVICES */
+  .services-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .svc {
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 10px; padding: 8px 13px;
+    font-size: 12px; font-weight: 600; color: #15803d;
+  }
+
+  /* PHOTOS */
+  .photos { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+  .ph { aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: #e5e7eb; }
+  .ph img { width: 100%; height: 100%; object-fit: cover; }
+  .ph-more { background: #111827; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 700; border-radius: 10px; }
+
+  /* CTA */
+  .cta { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 28px; }
+  .btn-ghost {
+    border: 2px solid #e5e7eb; background: #fff; border-radius: 14px;
+    padding: 14px; font-size: 14px; font-weight: 600; color: #374151;
+    cursor: pointer; font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .btn-main {
+    background: #16a34a; color: #fff; border: none; border-radius: 14px;
+    padding: 14px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    box-shadow: 0 4px 14px rgba(22,163,74,.3);
+  }
+</style>
+</head>
+<body>
+
+<h2>Mix A + C — Foto real + avatar circular centrado</h2>
+<p class="subtitle">Foto de trabajo de fondo (Opción A) con el layout centrado y stats integrados de la Opción C.</p>
+
+<div class="phone">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=800&q=80" alt="trabajo plomería">
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-nav">
+      <div class="cbtn">←</div>
+      <div class="nav-actions">
+        <div class="cbtn">♡</div>
+        <div class="cbtn">⋯</div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="avatar-circle">CR</div>
+      <div class="avail-pill"><span class="avail-dot"></span> Disponible ahora</div>
+      <div class="hero-name">Carlos Ramírez</div>
+      <div class="hero-trade">🔧 Plomero · Palermo, CABA</div>
+      <div class="stats-pill">
+        <div class="sp"><div class="sp-n">⭐ 4.9</div><div class="sp-l">Rating</div></div>
+        <div class="sp"><div class="sp-n">127</div><div class="sp-l">Trabajos</div></div>
+        <div class="sp"><div class="sp-n">6 años</div><div class="sp-l">Exp.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <div class="badge-row">
+      <span class="bdg bdg-b">✓ Verificado</span>
+      <span class="bdg bdg-y">★ Top Pro</span>
+      <span class="bdg bdg-loc">📍 2km de vos</span>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Sobre mí</div>
+      <div class="about-text">Plomero matriculado con 6 años de experiencia en CABA. Me especializo en cañerías, termotanques y filtraciones. Garantía en todos mis trabajos.</div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Servicios</div>
+      <div class="services-wrap">
+        <div class="svc">🚿 Cañerías</div>
+        <div class="svc">🔥 Termotanques</div>
+        <div class="svc">💧 Filtraciones</div>
+        <div class="svc">🪠 Destapes</div>
+        <div class="svc">🚽 Sanitarios</div>
+        <div class="svc">⚡ Urgencias 24hs</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Trabajos realizados</div>
+      <div class="photos">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=200&q=80" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=200&q=80" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200&q=80" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=200&q=80" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt=""></div>
+        <div class="ph ph-more">+18</div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <button class="btn-ghost">💬 Chat</button>
+      <button class="btn-main">✅ Solicitar trabajo</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

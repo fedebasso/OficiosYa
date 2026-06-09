@@ -47,7 +47,7 @@ export default function ProProfile() {
   return (
     <PageShell header={<Header title="Mi perfil" />}>
       <div className="p-4 flex flex-col gap-4 pb-8">
-        <div className="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center gap-3">
+        <div className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col items-center gap-3">
           <div className="relative">
             <Avatar src={user?.avatar_url ?? null} name={user?.full_name ?? ''} size="lg" />
             <button className="absolute bottom-0 right-0 bg-primary text-white rounded-full p-1">
@@ -57,30 +57,30 @@ export default function ProProfile() {
           <p className="font-semibold text-text-main">{user?.full_name}</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-3">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Descripción</h3>
+        <div className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col gap-3">
+          <h3 className="text-sm font-medium text-text-secondary uppercase tracking-wide">Descripción</h3>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={3}
             placeholder="Contá brevemente tu experiencia y especialidades..."
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+            className="border border-border-dark rounded-lg px-3 py-2 text-sm text-text-main bg-bg-elevated placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-none"
           />
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-3">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">WhatsApp</h3>
+        <div className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col gap-3">
+          <h3 className="text-sm font-medium text-text-secondary uppercase tracking-wide">WhatsApp</h3>
           <input
             type="tel"
             value={whatsapp ?? ''}
             onChange={(e) => setWhatsapp(e.target.value)}
             placeholder="598 9X XXX XXX"
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border border-border-dark rounded-lg px-3 py-2 text-sm text-text-main bg-bg-elevated placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-3">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Servicios</h3>
+        <div className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col gap-3">
+          <h3 className="text-sm font-medium text-text-secondary uppercase tracking-wide">Servicios</h3>
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map((cat) => (
               <button
@@ -89,7 +89,7 @@ export default function ProProfile() {
                 className={`px-3 py-1 rounded-full text-sm border transition-colors ${
                   selectedCategories.includes(cat.id)
                     ? 'bg-primary text-white border-primary'
-                    : 'bg-white text-gray-600 border-gray-300'
+                    : 'bg-bg-elevated text-text-secondary border-border-dark'
                 }`}
               >
                 {cat.label}
@@ -98,12 +98,12 @@ export default function ProProfile() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-3">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Zona de trabajo</h3>
+        <div className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col gap-3">
+          <h3 className="text-sm font-medium text-text-secondary uppercase tracking-wide">Zona de trabajo</h3>
           <select
             value={zone}
             onChange={(e) => setZone(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border border-border-dark rounded-lg px-3 py-2 text-sm text-text-main bg-bg-elevated focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">Seleccioná un barrio</option>
             {ZONES.map((z) => (

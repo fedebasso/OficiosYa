@@ -20,7 +20,7 @@ export default function ProfessionalDetail() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background gap-3 px-6 text-center">
         <div className="text-4xl">😕</div>
         <p className="font-bold text-text-main">Profesional no encontrado</p>
-        <p className="text-sm text-gray-400">{error ?? 'No pudimos cargar este perfil'}</p>
+        <p className="text-sm text-text-muted">{error ?? 'No pudimos cargar este perfil'}</p>
       </div>
     )
   }

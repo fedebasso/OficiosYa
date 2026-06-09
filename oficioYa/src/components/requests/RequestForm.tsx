@@ -34,7 +34,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
           {...register('description')}
           rows={4}
           placeholder="Ej: Se cortó la luz en el baño, el tomacorriente no funciona..."
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+          className="border border-border-dark rounded-lg px-3 py-2 text-sm text-text-main bg-bg-elevated placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-none"
         />
         {errors.description && (
           <p className="text-xs text-red-500">{errors.description.message}</p>
@@ -47,7 +47,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
           {...register('contact_phone')}
           type="tel"
           placeholder="Ej: 099 123 456"
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="border border-border-dark rounded-lg px-3 py-2 text-sm text-text-main bg-bg-elevated placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary"
         />
         {errors.contact_phone && (
           <p className="text-xs text-red-500">{errors.contact_phone.message}</p>

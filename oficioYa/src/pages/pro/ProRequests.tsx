@@ -22,22 +22,22 @@ export default function ProRequests() {
         {error && <p className="text-center text-red-500 py-8">{error}</p>}
 
         {!loading && pending.length === 0 && others.length === 0 && (
-          <p className="text-center text-gray-400 py-8">No hay solicitudes aún</p>
+          <p className="text-center text-text-muted py-8">No hay solicitudes aún</p>
         )}
 
         {pending.length > 0 && (
           <section>
-            <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Nuevas</h2>
+            <h2 className="text-sm font-medium text-text-secondary uppercase tracking-wide mb-2">Nuevas</h2>
             <div className="flex flex-col gap-3">
               {pending.map((req) => (
-                <div key={req.id} className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-3">
+                <div key={req.id} className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     <Badge variant="pending">Pendiente</Badge>
                     <UrgencyBadge urgency={req.urgency} />
                   </div>
                   <p className="text-sm text-text-main">{req.description}</p>
                   {req.contact_phone && (
-                    <p className="text-xs text-gray-500">Contacto: {req.contact_phone}</p>
+                    <p className="text-xs text-text-muted">Contacto: {req.contact_phone}</p>
                   )}
                   <div className="flex gap-2">
                     <Button
@@ -82,15 +82,15 @@ export default function ProRequests() {
 
         {others.length > 0 && (
           <section>
-            <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Historial</h2>
+            <h2 className="text-sm font-medium text-text-secondary uppercase tracking-wide mb-2">Historial</h2>
             <div className="flex flex-col gap-2">
               {others.map((req) => (
-                <div key={req.id} className="bg-white rounded-xl shadow-sm p-3 flex flex-col gap-1">
+                <div key={req.id} className="bg-bg-card rounded-xl border border-border-dark p-3 flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <Badge variant={req.status}>{req.status}</Badge>
                     <UrgencyBadge urgency={req.urgency} />
                   </div>
-                  <p className="text-xs text-gray-500 line-clamp-1">{req.description}</p>
+                  <p className="text-xs text-text-muted line-clamp-1">{req.description}</p>
                 </div>
               ))}
             </div>

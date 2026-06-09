@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficiosYa — Nueva dirección visual</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #0f0f0f; color: #f5f0e8; padding: 20px 12px; }
+
+  h2 { font-size: 17px; font-weight: 600; color: #f5f0e8; margin-bottom: 4px; letter-spacing: -.3px; }
+  .subtitle { font-size: 12px; color: #888; margin-bottom: 28px; }
+
+  /* ── LAYOUT ── */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .full { margin-bottom: 32px; }
+
+  .label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #666; margin-bottom: 10px;
+  }
+
+  /* ══════════════════════════════
+     DIRECCIÓN: OSCURA / PREMIUM
+     Paleta: negro + naranja quemado + crema
+     Tipo: DM Sans + DM Serif Display
+  ══════════════════════════════ */
+
+  /* HOME SCREEN */
+  .phone {
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    border: 1px solid #222;
+  }
+
+  /* NAV */
+  .dark-nav {
+    background: #0f0f0f;
+    padding: 14px 18px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .dark-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; color: #f5f0e8; letter-spacing: -.5px;
+  }
+  .dark-logo span { color: #e8683a; }
+  .dark-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #e8683a; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff;
+  }
+  .notif-dot {
+    width: 8px; height: 8px; background: #e8683a; border-radius: 50%;
+    border: 2px solid #0f0f0f;
+    position: absolute; top: 0; right: 0;
+  }
+
+  /* HERO BANNER */
+  .dark-hero {
+    background: linear-gradient(135deg, #1a1008 0%, #2d1f0e 50%, #1a1008 100%);
+    padding: 20px 18px 22px; position: relative; overflow: hidden;
+  }
+  .dark-hero::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,104,58,.15) 0%, transparent 70%);
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(232,104,58,.15);
+    border: 1px solid rgba(232,104,58,.3); color: #e8683a;
+    font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 10px; letter-spacing: .5px; text-transform: uppercase;
+  }
+  .dark-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px; color: #f5f0e8; line-height: 1.15; letter-spacing: -.5px;
+    margin-bottom: 6px;
+  }
+  .dark-hero h1 em { color: #e8683a; font-style: normal; }
+  .dark-hero p { font-size: 12px; color: #888; line-height: 1.5; margin-bottom: 16px; }
+  .search-bar-dark {
+    display: flex; align-items: center; gap: 10px;
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 14px;
+    padding: 10px 14px;
+  }
+  .search-icon { color: #e8683a; font-size: 14px; }
+  .search-text { font-size: 13px; color: #555; flex: 1; }
+  .search-btn {
+    background: #e8683a; color: #fff; border: none;
+    border-radius: 10px; padding: 6px 12px; font-size: 11px; font-weight: 700;
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+  }
+
+  /* CATEGORIES */
+  .dark-section { background: #0f0f0f; padding: 16px 18px; }
+  .dark-section-title {
+    font-size: 13px; font-weight: 600; color: #f5f0e8; margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .dark-section-title a { font-size: 11px; color: #e8683a; font-weight: 500; }
+
+  .cat-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .cat-chip {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    flex-shrink: 0; cursor: pointer;
+  }
+  .cat-icon {
+    width: 52px; height: 52px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .ci-orange { background: rgba(232,104,58,.15); border: 1px solid rgba(232,104,58,.2); }
+  .ci-amber  { background: rgba(245,158,11,.1);  border: 1px solid rgba(245,158,11,.2); }
+  .ci-blue   { background: rgba(59,130,246,.1);  border: 1px solid rgba(59,130,246,.2); }
+  .ci-purple { background: rgba(139,92,246,.1);  border: 1px solid rgba(139,92,246,.2); }
+  .ci-teal   { background: rgba(20,184,166,.1);  border: 1px solid rgba(20,184,166,.2); }
+  .cat-name { font-size: 10px; color: #888; font-weight: 500; }
+
+  /* PRO CARD DARK */
+  .pro-cards { display: flex; flex-direction: column; gap: 1px; }
+  .pro-card-dark {
+    background: #141414; border: 1px solid #1e1e1e;
+    border-radius: 18px; overflow: hidden; margin-bottom: 10px;
+    display: flex; align-items: stretch;
+  }
+  .pcd-accent { width: 4px; background: #e8683a; flex-shrink: 0; border-radius: 0; }
+  .pcd-accent.amber { background: #f59e0b; }
+  .pcd-accent.blue  { background: #3b82f6; }
+  .pcd-cover {
+    width: 72px; height: 72px; flex-shrink: 0; overflow: hidden;
+    margin: 10px 0 10px 10px; border-radius: 12px;
+    background: #1a1a1a;
+  }
+  .pcd-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .pcd-body { flex: 1; padding: 12px 14px; }
+  .pcd-name { font-size: 14px; font-weight: 600; color: #f5f0e8; }
+  .pcd-trade { font-size: 11px; color: #e8683a; font-weight: 500; margin: 1px 0 6px; }
+  .pcd-trade.amber { color: #f59e0b; }
+  .pcd-trade.blue  { color: #60a5fa; }
+  .pcd-stats { display: flex; gap: 10px; }
+  .pcd-stat { font-size: 10px; color: #666; }
+  .pcd-stat strong { color: #aaa; }
+  .pcd-right { padding: 12px 14px 12px 0; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
+  .pcd-badge {
+    font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .badge-avail { background: rgba(232,104,58,.15); color: #e8683a; border: 1px solid rgba(232,104,58,.2); }
+  .badge-busy  { background: rgba(255,255,255,.05); color: #555; border: 1px solid #222; }
+  .pcd-rating { font-size: 14px; font-weight: 700; color: #f5f0e8; }
+  .pcd-rating span { color: #f59e0b; }
+
+  /* BOTTOM NAV */
+  .dark-bottom-nav {
+    background: #0f0f0f; border-top: 1px solid #1a1a1a;
+    padding: 10px 0 14px;
+    display: flex; justify-content: space-around;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .nav-icon { font-size: 18px; }
+  .nav-label { font-size: 9px; color: #555; font-weight: 500; letter-spacing: .3px; }
+  .nav-item.active .nav-icon { color: #e8683a; }
+  .nav-item.active .nav-label { color: #e8683a; }
+
+  /* PROFILE DARK */
+  .profile-dark { background: #0f0f0f; }
+  .pd-hero {
+    height: 220px; position: relative; overflow: hidden;
+    background: #1a1008;
+  }
+  .pd-hero img { width: 100%; height: 100%; object-fit: cover; opacity: .4; }
+  .pd-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(15,15,15,.3) 0%, rgba(15,15,15,.85) 100%);
+  }
+  .pd-hero-nav {
+    position: absolute; top: 14px; left: 14px; right: 14px;
+    display: flex; justify-content: space-between;
+  }
+  .pd-cbtn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    display: flex; align-items: center; justify-content: center;
+    color: #f5f0e8; font-size: 15px;
+  }
+  .pd-hero-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; flex-direction: column; align-items: center; padding-bottom: 16px;
+  }
+  .pd-avatar {
+    width: 76px; height: 76px; border-radius: 50%;
+    border: 3px solid rgba(232,104,58,.6);
+    overflow: hidden; margin-bottom: 10px;
+    box-shadow: 0 0 0 6px rgba(232,104,58,.08);
+  }
+  .pd-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pd-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; color: #f5f0e8; text-align: center; letter-spacing: -.3px;
+  }
+  .pd-trade { font-size: 12px; color: #e8683a; font-weight: 500; margin-top: 2px; }
+  .pd-stats-row {
+    display: flex; gap: 0; margin-top: 14px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px; overflow: hidden;
+  }
+  .pds { padding: 10px 16px; text-align: center; }
+  .pds + .pds { border-left: 1px solid rgba(255,255,255,.08); }
+  .pds-n { font-size: 15px; font-weight: 700; color: #f5f0e8; }
+  .pds-l { font-size: 9px; color: #555; margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+
+  .pd-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .pd-card {
+    background: #141414; border: 1px solid #1e1e1e; border-radius: 16px; padding: 14px;
+  }
+  .pd-card-title { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
+  .pd-card p { font-size: 13px; color: #aaa; line-height: 1.65; }
+  .pd-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .pd-pill {
+    background: rgba(232,104,58,.1); border: 1px solid rgba(232,104,58,.2);
+    color: #e8683a; font-size: 11px; font-weight: 600;
+    padding: 5px 12px; border-radius: 10px;
+  }
+  .pd-cta {
+    display: grid; grid-template-columns: 1fr 2fr; gap: 10px;
+    padding: 0 16px 20px;
+  }
+  .pd-btn-ghost {
+    border: 1px solid #2a2a2a; background: #141414; border-radius: 14px;
+    padding: 14px; font-size: 13px; font-weight: 600; color: #888;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .pd-btn-main {
+    background: #e8683a; color: #fff; border: none; border-radius: 14px;
+    padding: 14px; font-size: 14px; font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    box-shadow: 0 4px 20px rgba(232,104,58,.3);
+  }
+
+  /* SELECTOR LABEL */
+  .section-header {
+    font-size: 15px; font-weight: 700; color: #f5f0e8; margin-bottom: 12px;
+    letter-spacing: -.2px;
+  }
+  .section-sub { font-size: 12px; color: #666; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<h2>Nueva dirección visual — Dark Premium</h2>
+<p class="subtitle">Tipografía DM Sans + DM Serif Display · Paleta oscura con naranja quemado · Layout horizontal en cards</p>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div class="full">
+  <div class="label">Pantalla principal</div>
+  <div class="phone">
+
+    <div class="dark-nav" style="position:relative">
+      <div class="dark-logo">Oficios<span>Ya</span></div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="position:relative">
+          <span style="font-size:18px">🔔</span>
+          <div class="notif-dot"></div>
+        </div>
+        <div class="dark-avatar">JG</div>
+      </div>
+    </div>
+
+    <div class="dark-hero">
+      <div class="hero-tag">📍 Montevideo</div>
+      <h1>Tu <em>oficio</em>,<br>cuando lo necesitás</h1>
+      <p>Electricistas, plomeros, albañiles y más — verificados y disponibles ahora.</p>
+      <div class="search-bar-dark">
+        <span class="search-icon">🔍</span>
+        <span class="search-text">¿Qué necesitás?</span>
+        <button class="search-btn">Buscar</button>
+      </div>
+    </div>
+
+    <div class="dark-section">
+      <div class="dark-section-title">
+        Categorías <a href="#">Ver todas</a>
+      </div>
+      <div class="cat-row">
+        <div class="cat-chip">
+          <div class="cat-icon ci-orange">⚡</div>
+          <span class="cat-name">Electricista</span>
+        </div>
+        <div class="cat-chip">
+          <div class="cat-icon ci-blue">🔧</div>
+          <span class="cat-name">Plomero</span>
+        </div>
+        <div class="cat-chip">
+          <div class="cat-icon ci-amber">🏗️</div>
+          <span class="cat-name">Albañil</span>
+        </div>
+        <div class="cat-chip">
+          <div class="cat-icon ci-purple">🔑</div>
+          <span class="cat-name">Cerrajero</span>
+        </div>
+        <div class="cat-chip">
+          <div class="cat-icon ci-teal">❄️</div>
+          <span class="cat-name">Aire Ac.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dark-section" style="border-top:1px solid #1a1a1a">
+      <div class="dark-section-title">Disponibles ahora</div>
+
+      <div class="pro-card-dark">
+        <div class="pcd-accent"></div>
+        <div class="pcd-cover">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" alt="">
+        </div>
+        <div class="pcd-body">
+          <div class="pcd-name">Carlos Méndez</div>
+          <div class="pcd-trade">⚡ Electricista</div>
+          <div class="pcd-stats">
+            <div class="pcd-stat"><strong>127</strong> trabajos</div>
+            <div class="pcd-stat"><strong>Pocitos</strong></div>
+          </div>
+        </div>
+        <div class="pcd-right">
+          <div class="pcd-badge badge-avail">● Online</div>
+          <div class="pcd-rating"><span>★</span> 4.8</div>
+        </div>
+      </div>
+
+      <div class="pro-card-dark">
+        <div class="pcd-accent amber"></div>
+        <div class="pcd-cover">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&q=80" alt="">
+        </div>
+        <div class="pcd-body">
+          <div class="pcd-name">Roberto Silva</div>
+          <div class="pcd-trade amber">🔧 Plomero</div>
+          <div class="pcd-stats">
+            <div class="pcd-stat"><strong>83</strong> trabajos</div>
+            <div class="pcd-stat"><strong>Malvín</strong></div>
+          </div>
+        </div>
+        <div class="pcd-right">
+          <div class="pcd-badge badge-avail">● Online</div>
+          <div class="pcd-rating"><span>★</span> 4.5</div>
+        </div>
+      </div>
+
+      <div class="pro-card-dark">
+        <div class="pcd-accent blue"></div>
+        <div class="pcd-cover">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80" alt="">
+        </div>
+        <div class="pcd-body">
+          <div class="pcd-name">Ana Rodríguez</div>
+          <div class="pcd-trade blue">🏗️ Albañil</div>
+          <div class="pcd-stats">
+            <div class="pcd-stat"><strong>89</strong> trabajos</div>
+            <div class="pcd-stat"><strong>Centro</strong></div>
+          </div>
+        </div>
+        <div class="pcd-right">
+          <div class="pcd-badge badge-busy">Ocupada</div>
+          <div class="pcd-rating"><span>★</span> 4.9</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dark-bottom-nav">
+      <div class="nav-item active">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-label">Inicio</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🔍</span>
+        <span class="nav-label">Buscar</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">Solicitudes</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">Perfil</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PERFIL ═══════════ -->
+<div class="full">
+  <div class="label">Perfil del profesional</div>
+  <div class="phone">
+    <div class="profile-dark">
+      <div class="pd-hero">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="">
+        <div class="pd-hero-overlay"></div>
+        <div class="pd-hero-nav">
+          <div class="pd-cbtn">←</div>
+          <div style="display:flex;gap:8px"><div class="pd-cbtn">♡</div></div>
+        </div>
+        <div class="pd-hero-content">
+          <div class="pd-avatar">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="">
+          </div>
+          <div class="pd-name">Carlos Méndez</div>
+          <div class="pd-trade">⚡ Electricista · Pocitos</div>
+          <div class="pd-stats-row">
+            <div class="pds"><div class="pds-n">★ 4.8</div><div class="pds-l">Rating</div></div>
+            <div class="pds"><div class="pds-n">127</div><div class="pds-l">Trabajos</div></div>
+            <div class="pds"><div class="pds-n">~15m</div><div class="pds-l">Respuesta</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pd-body">
+        <div class="pd-card">
+          <div class="pd-card-title">Sobre mí</div>
+          <p>Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales. Atención de urgencias 24hs.</p>
+        </div>
+        <div class="pd-card">
+          <div class="pd-card-title">Servicios</div>
+          <div class="pd-pills">
+            <span class="pd-pill">⚡ Instalaciones</span>
+            <span class="pd-pill">🔌 Tableros</span>
+            <span class="pd-pill">💡 Iluminación</span>
+            <span class="pd-pill">🚨 Urgencias 24hs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pd-cta">
+        <button class="pd-btn-ghost">💬 Chat</button>
+        <button class="pd-btn-main">Solicitar trabajo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

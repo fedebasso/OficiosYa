@@ -27,7 +27,7 @@ export default function MisSolicitudes() {
           </div>
         )}
         {!loading && requests.length === 0 && (
-          <p className="text-center text-gray-400 py-8">No tenés solicitudes aún</p>
+          <p className="text-center text-text-muted py-8">No tenés solicitudes aún</p>
         )}
         {requests.map((req) => (
           <div key={req.id} className="flex flex-col gap-2">
@@ -47,7 +47,7 @@ export default function MisSolicitudes() {
 
       {reviewingId && (
         <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
-          <div className="bg-white rounded-t-2xl p-6 w-full max-w-md">
+          <div className="bg-bg-card rounded-t-2xl border-t border-border-dark p-6 w-full max-w-md">
             <ReviewForm
               requestId={reviewingId}
               onSubmit={handleReviewSubmit}

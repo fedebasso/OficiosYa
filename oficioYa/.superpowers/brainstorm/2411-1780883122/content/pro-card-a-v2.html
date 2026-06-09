@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficiosYa — Card A sin precio</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6fa; padding: 24px; }
+  h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .subtitle { color: #666; font-size: 14px; margin-bottom: 28px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+  .photo {
+    width: 100%; height: 160px;
+    position: relative; overflow: hidden;
+  }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .badge {
+    position: absolute; top: 10px; right: 10px;
+    font-size: 10px; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; display: flex; align-items: center; gap: 4px;
+  }
+  .badge-green { background: #16a34a; color: #fff; }
+  .badge-yellow { background: #f59e0b; color: #fff; }
+  .badge-blue { background: #2563eb; color: #fff; }
+  .badge-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+
+  .avatar-wrap {
+    display: flex; justify-content: center;
+    margin-top: -32px; position: relative; z-index: 2;
+  }
+  .avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 3px solid #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .av-green { background: linear-gradient(135deg, #86efac, #16a34a); }
+  .av-yellow { background: linear-gradient(135deg, #fbbf24, #d97706); }
+  .av-blue { background: linear-gradient(135deg, #60a5fa, #2563eb); }
+
+  .body { padding: 12px 16px 16px; text-align: center; }
+  .name { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .trade { font-size: 13px; font-weight: 600; margin: 2px 0 10px; }
+  .trade-green { color: #16a34a; }
+  .trade-yellow { color: #d97706; }
+  .trade-blue { color: #2563eb; }
+
+  .stats { display: flex; justify-content: center; gap: 0; margin-bottom: 12px; }
+  .stat { text-align: center; padding: 0 14px; }
+  .stat + .stat { border-left: 1px solid #e5e7eb; }
+  .stat-val { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .stat-lbl { font-size: 10px; color: #9ca3af; margin-top: 1px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 14px; }
+  .tag {
+    background: #f3f4f6; color: #555; font-size: 11px;
+    padding: 4px 10px; border-radius: 20px;
+  }
+
+  .btn {
+    display: block;
+    border: none; border-radius: 10px;
+    padding: 11px; font-size: 14px; font-weight: 600;
+    cursor: pointer; width: 100%; color: #fff;
+  }
+  .btn-green { background: #16a34a; }
+  .btn-yellow { background: #d97706; }
+  .btn-blue { background: #2563eb; }
+
+  .note {
+    margin-top: 32px;
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 12px; padding: 16px 20px;
+    font-size: 13px; color: #166534; line-height: 1.6;
+  }
+  .note strong { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h2>Opción A — Sin precio (pago por trabajo)</h2>
+<p class="subtitle">El precio se define al momento de cotizar el trabajo, no aparece en la card.</p>
+
+<div class="grid">
+
+  <!-- Card 1 -->
+  <div class="card">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=400&q=80" alt="plomero">
+      <div class="badge badge-green"><span class="badge-dot"></span> Disponible</div>
+    </div>
+    <div class="avatar-wrap"><div class="avatar av-green">CR</div></div>
+    <div class="body">
+      <div class="name">Carlos Ramírez</div>
+      <div class="trade trade-green">🔧 Plomero</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val">⭐ 4.9</div>
+          <div class="stat-lbl">Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">127</div>
+          <div class="stat-lbl">Trabajos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">2km</div>
+          <div class="stat-lbl">Distancia</div>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Cañerías</span>
+        <span class="tag">Termotanques</span>
+        <span class="tag">Filtraciones</span>
+      </div>
+      <button class="btn btn-green">Solicitar trabajo</button>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="electricista">
+      <div class="badge badge-yellow"><span class="badge-dot"></span> Urgencias 24hs</div>
+    </div>
+    <div class="avatar-wrap"><div class="avatar av-yellow">ML</div></div>
+    <div class="body">
+      <div class="name">Martín López</div>
+      <div class="trade trade-yellow">⚡ Electricista</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val">⭐ 4.8</div>
+          <div class="stat-lbl">Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">89</div>
+          <div class="stat-lbl">Trabajos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">5km</div>
+          <div class="stat-lbl">Distancia</div>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Instalaciones</span>
+        <span class="tag">Tableros</span>
+        <span class="tag">24hs</span>
+      </div>
+      <button class="btn btn-yellow">Solicitar trabajo</button>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" alt="albañil">
+      <div class="badge badge-blue">✓ Verificado</div>
+    </div>
+    <div class="avatar-wrap"><div class="avatar av-blue">RP</div></div>
+    <div class="body">
+      <div class="name">Roberto Pérez</div>
+      <div class="trade trade-blue">🏗️ Albañil</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val">⭐ 4.7</div>
+          <div class="stat-lbl">Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">203</div>
+          <div class="stat-lbl">Trabajos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">8km</div>
+          <div class="stat-lbl">Distancia</div>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Revoque</span>
+        <span class="tag">Demolición</span>
+        <span class="tag">Pisos</span>
+      </div>
+      <button class="btn btn-blue">Solicitar trabajo</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="note">
+  <strong>Sin precio en la card</strong> — el cliente ve rating, distancia y trabajos completados para elegir al profesional. El precio se acuerda al cotizar el trabajo específico.
+</div>
+
+</body>
+</html>

@@ -47,7 +47,7 @@ export default function RequestService() {
         {!sent ? (
           <>
             {professional && (
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-text-secondary mb-4">
                 Enviando solicitud a <strong>{professional.profiles.full_name}</strong>
               </p>
             )}
@@ -57,7 +57,7 @@ export default function RequestService() {
           <div className="flex flex-col items-center gap-4 py-8 text-center">
             <CheckCircle size={56} className="text-primary" />
             <h2 className="font-semibold text-lg text-text-main">¡Solicitud enviada!</h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-text-secondary">
               El profesional recibirá tu solicitud. También podés contactarlo directamente por WhatsApp.
             </p>
             <Button variant="primary" fullWidth onClick={() => window.open(whatsappUrl, '_blank')}>

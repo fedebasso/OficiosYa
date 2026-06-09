@@ -37,7 +37,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-gray-500 text-center">¿Cómo fue el servicio?</p>
+      <p className="text-sm text-text-secondary text-center">¿Cómo fue el servicio?</p>
       <div className="flex justify-center gap-2">
         {[1, 2, 3, 4, 5].map((i) => (
           <button
@@ -48,7 +48,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
           >
             <Star
               size={32}
-              className={i <= (hovered || rating) ? 'text-yellow-400' : 'text-gray-300'}
+              className={i <= (hovered || rating) ? 'text-yellow-400' : 'text-text-muted'}
               fill={i <= (hovered || rating) ? 'currentColor' : 'none'}
             />
           </button>
@@ -59,7 +59,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
         onChange={(e) => setComment(e.target.value)}
         rows={3}
         placeholder="Comentario opcional..."
-        className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+        className="border border-border-dark rounded-lg px-3 py-2 text-sm text-text-main bg-bg-elevated placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-none"
       />
       <div className="flex gap-2">
         <Button variant="ghost" onClick={onClose}>Cancelar</Button>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficiosYa — Perfil del Profesional</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6fa; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(160deg, #14532d 0%, #16a34a 60%, #22c55e 100%);
+    padding: 0 0 0 0;
+    position: relative;
+  }
+  .header-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 0;
+  }
+  .back-btn {
+    width: 36px; height: 36px; background: rgba(255,255,255,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 18px; cursor: pointer; backdrop-filter: blur(4px);
+  }
+  .header-actions { display: flex; gap: 10px; }
+  .icon-btn {
+    width: 36px; height: 36px; background: rgba(255,255,255,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 16px; cursor: pointer; backdrop-filter: blur(4px);
+  }
+
+  /* COVER PHOTO */
+  .cover {
+    width: 100%; height: 200px; position: relative; overflow: hidden;
+    margin-top: 12px;
+  }
+  .cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+  .cover-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(20,83,45,0.8) 100%);
+  }
+
+  /* PROFILE CARD */
+  .profile-card {
+    background: #fff;
+    margin: 0 16px;
+    margin-top: -60px;
+    border-radius: 20px;
+    padding: 0 20px 20px;
+    position: relative; z-index: 10;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  }
+  .avatar-row {
+    display: flex; align-items: flex-end; gap: 14px;
+    margin-top: -36px; padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    border: 4px solid #fff;
+    background: linear-gradient(135deg, #86efac, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 700; color: #fff;
+    box-shadow: 0 4px 16px rgba(22,163,74,0.3);
+    flex-shrink: 0;
+  }
+  .profile-info { flex: 1; padding-top: 36px; }
+  .profile-name { font-size: 20px; font-weight: 800; color: #1a1a2e; }
+  .profile-trade { font-size: 14px; color: #16a34a; font-weight: 600; margin: 2px 0; }
+  .profile-location { font-size: 12px; color: #9ca3af; display: flex; align-items: center; gap: 4px; }
+
+  .badges-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .badge {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+  }
+  .badge-available { background: #dcfce7; color: #16a34a; }
+  .badge-verified { background: #dbeafe; color: #2563eb; }
+  .badge-premium { background: #fef9c3; color: #854d0e; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex; margin: 16px 0 0;
+    background: #f9fafb; border-radius: 14px; overflow: hidden;
+  }
+  .stat-item {
+    flex: 1; padding: 14px 8px; text-align: center;
+    border-right: 1px solid #e5e7eb;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-size: 20px; font-weight: 800; color: #1a1a2e; }
+  .stat-label { font-size: 10px; color: #9ca3af; margin-top: 2px; font-weight: 500; }
+  .stat-star { color: #f59e0b; }
+
+  /* SECTIONS */
+  .section { margin: 20px 16px 0; }
+  .section-title {
+    font-size: 15px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 1px; background: #e5e7eb;
+  }
+
+  /* ABOUT */
+  .about-text {
+    font-size: 13px; color: #4b5563; line-height: 1.7;
+    background: #f9fafb; border-radius: 12px; padding: 14px;
+  }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .service-item {
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 12px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .service-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: #16a34a; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .service-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .service-desc { font-size: 11px; color: #6b7280; margin-top: 1px; }
+
+  /* PHOTOS */
+  .photos-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .photo-thumb {
+    aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+    background: #e5e7eb;
+  }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-thumb.more {
+    display: flex; align-items: center; justify-content: center;
+    background: #1a1a2e; color: #fff; font-size: 16px; font-weight: 700;
+  }
+
+  /* REVIEWS */
+  .review-card {
+    background: #f9fafb; border-radius: 14px; padding: 14px;
+    margin-bottom: 10px;
+  }
+  .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .reviewer-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .reviewer-name { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .review-date { font-size: 11px; color: #9ca3af; }
+  .review-stars { color: #f59e0b; font-size: 13px; }
+  .review-text { font-size: 13px; color: #4b5563; line-height: 1.6; }
+
+  /* CTA BUTTON */
+  .cta-wrap {
+    margin: 24px 16px 16px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .btn-primary {
+    background: #16a34a; color: #fff;
+    border: none; border-radius: 14px;
+    padding: 15px; font-size: 15px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-secondary {
+    background: #fff; color: #16a34a;
+    border: 2px solid #16a34a; border-radius: 14px;
+    padding: 15px; font-size: 15px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* RATING BREAKDOWN */
+  .rating-breakdown { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
+  .big-rating { text-align: center; }
+  .big-num { font-size: 48px; font-weight: 800; color: #1a1a2e; line-height: 1; }
+  .big-stars { color: #f59e0b; font-size: 18px; margin: 4px 0; }
+  .big-count { font-size: 11px; color: #9ca3af; }
+  .bars { flex: 1; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .bar-label { font-size: 11px; color: #6b7280; width: 8px; }
+  .bar-track { flex: 1; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; background: #f59e0b; border-radius: 3px; }
+  .bar-count { font-size: 11px; color: #9ca3af; width: 20px; text-align: right; }
+
+  /* PAGE TITLE */
+  .page-title {
+    font-size: 13px; font-weight: 700; color: #fff;
+    text-align: center; opacity: 0.9; padding-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-nav">
+    <div class="back-btn">←</div>
+    <div class="page-title" style="padding-bottom:0">Perfil del Profesional</div>
+    <div class="header-actions">
+      <div class="icon-btn">♡</div>
+      <div class="icon-btn">⋯</div>
+    </div>
+  </div>
+  <div class="cover">
+    <img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=800&q=80" alt="trabajo de plomería">
+    <div class="cover-overlay"></div>
+  </div>
+</div>
+
+<!-- PROFILE CARD -->
+<div class="profile-card">
+  <div class="avatar-row">
+    <div class="avatar">CR</div>
+    <div class="profile-info">
+      <div class="profile-name">Carlos Ramírez</div>
+      <div class="profile-trade">🔧 Plomero</div>
+      <div class="profile-location">📍 Palermo, CABA · 2km de vos</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge badge-available">● Disponible ahora</div>
+    <div class="badge badge-verified">✓ Identidad verificada</div>
+    <div class="badge badge-premium">★ Top Pro</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num"><span class="stat-star">★</span> 4.9</div>
+      <div class="stat-label">Rating</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">127</div>
+      <div class="stat-label">Trabajos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Respuesta</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">6 años</div>
+      <div class="stat-label">Experiencia</div>
+    </div>
+  </div>
+</div>
+
+<!-- SOBRE MÍ -->
+<div class="section">
+  <div class="section-title">Sobre mí</div>
+  <div class="about-text">
+    Soy plomero matriculado con más de 6 años de experiencia en CABA. Especializado en instalaciones domiciliarias, reparación de cañerías, termotanques y filtraciones. Trabajo con garantía en todos mis servicios y llego en el horario acordado.
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<div class="section">
+  <div class="section-title">Servicios que ofrezco</div>
+  <div class="services-grid">
+    <div class="service-item">
+      <div class="service-icon">🚿</div>
+      <div>
+        <div class="service-name">Cañerías</div>
+        <div class="service-desc">Reparación e instalación</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">🔥</div>
+      <div>
+        <div class="service-name">Termotanques</div>
+        <div class="service-desc">Cambio y reparación</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">💧</div>
+      <div>
+        <div class="service-name">Filtraciones</div>
+        <div class="service-desc">Detección y solución</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">🪠</div>
+      <div>
+        <div class="service-name">Destapes</div>
+        <div class="service-desc">Cloacas y piletas</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">🚽</div>
+      <div>
+        <div class="service-name">Sanitarios</div>
+        <div class="service-desc">Inodoros y bidet</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">⚡</div>
+      <div>
+        <div class="service-name">Urgencias 24hs</div>
+        <div class="service-desc">Disponible los 7 días</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOTOS DE TRABAJOS -->
+<div class="section">
+  <div class="section-title">Trabajos realizados</div>
+  <div class="photos-grid">
+    <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=200&q=80" alt=""></div>
+    <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=200&q=80" alt=""></div>
+    <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200&q=80" alt=""></div>
+    <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt=""></div>
+    <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=200&q=80" alt=""></div>
+    <div class="photo-thumb more">+18</div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<div class="section">
+  <div class="section-title">Reseñas</div>
+  <div class="rating-breakdown">
+    <div class="big-rating">
+      <div class="big-num">4.9</div>
+      <div class="big-stars">★★★★★</div>
+      <div class="big-count">127 reseñas</div>
+    </div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-label">5</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><span class="bar-count">112</span></div>
+      <div class="bar-row"><span class="bar-label">4</span><div class="bar-track"><div class="bar-fill" style="width:10%"></div></div><span class="bar-count">13</span></div>
+      <div class="bar-row"><span class="bar-label">3</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="bar-count">2</span></div>
+      <div class="bar-row"><span class="bar-label">2</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div><span class="bar-count">0</span></div>
+      <div class="bar-row"><span class="bar-label">1</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div><span class="bar-count">0</span></div>
+    </div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-header">
+      <div class="reviewer-avatar" style="background:#16a34a">AM</div>
+      <div>
+        <div class="reviewer-name">Ana Martínez</div>
+        <div class="review-date">hace 3 días · <span class="review-stars">★★★★★</span></div>
+      </div>
+    </div>
+    <div class="review-text">Excelente profesional. Llegó puntual, resolvió el problema de la cañería rápido y dejó todo limpio. Lo recomiendo 100%.</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-header">
+      <div class="reviewer-avatar" style="background:#2563eb">JG</div>
+      <div>
+        <div class="reviewer-name">Juan González</div>
+        <div class="review-date">hace 1 semana · <span class="review-stars">★★★★★</span></div>
+      </div>
+    </div>
+    <div class="review-text">Me instaló el termotanque nuevo. Muy prolijo el trabajo y el precio fue justo. Ya lo tengo agendado para el próximo trabajo.</div>
+  </div>
+</div>
+
+<!-- CTA BUTTONS -->
+<div class="cta-wrap">
+  <button class="btn-secondary">💬 Consultar</button>
+  <button class="btn-primary">✅ Solicitar trabajo</button>
+</div>
+
+</body>
+</html>

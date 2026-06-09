@@ -12,15 +12,15 @@ export default function ProWorkHistory() {
   return (
     <PageShell header={<Header title="Trabajos completados" />}>
       <div className="p-4 flex flex-col gap-3">
-        {loading && <p className="text-center text-gray-500 py-8">Cargando...</p>}
+        {loading && <p className="text-center text-text-secondary py-8">Cargando...</p>}
         {!loading && completed.length === 0 && (
-          <p className="text-center text-gray-400 py-8">No hay trabajos completados aún</p>
+          <p className="text-center text-text-muted py-8">No hay trabajos completados aún</p>
         )}
         {completed.map((req) => (
-          <div key={req.id} className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-2">
+          <div key={req.id} className="bg-bg-card rounded-xl border border-border-dark p-4 flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Badge variant="completed">Completado</Badge>
-              <span className="text-xs text-gray-400 ml-auto">
+              <span className="text-xs text-text-muted ml-auto">
                 {new Date(req.created_at).toLocaleDateString('es-UY')}
               </span>
             </div>

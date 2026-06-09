@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficiosYa — Estilo Professional Card</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6fa; padding: 24px; }
+  h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .subtitle { color: #666; font-size: 14px; margin-bottom: 28px; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 14px; }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+
+  /* OPCIÓN A — Handyman clásico */
+  .card-a {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    border: 2px solid transparent;
+  }
+  .card-a:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .card-a.selected { border-color: #16a34a; }
+
+  .card-a .photo {
+    width: 100%; height: 160px; object-fit: cover;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .card-a .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .card-a .badge-disponible {
+    position: absolute; top: 10px; right: 10px;
+    background: #16a34a; color: #fff;
+    font-size: 10px; font-weight: 700; padding: 3px 8px;
+    border-radius: 20px; display: flex; align-items: center; gap: 4px;
+  }
+  .badge-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+  .card-a .avatar-wrap {
+    display: flex; justify-content: center; margin-top: -32px; position: relative; z-index: 2;
+  }
+  .card-a .avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 3px solid #fff;
+    background: linear-gradient(135deg, #86efac, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 700; color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .card-a .body { padding: 12px 16px 16px; text-align: center; }
+  .card-a .name { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .card-a .trade {
+    font-size: 13px; color: #16a34a; font-weight: 600; margin: 2px 0 8px;
+  }
+  .card-a .stats { display: flex; justify-content: center; gap: 16px; margin-bottom: 10px; }
+  .card-a .stat { text-align: center; }
+  .card-a .stat-val { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .card-a .stat-lbl { font-size: 10px; color: #999; }
+  .card-a .divider { width: 1px; background: #e5e7eb; align-self: stretch; }
+  .card-a .price {
+    background: #f0fdf4; border-radius: 8px;
+    padding: 6px 12px; font-size: 13px; color: #16a34a; font-weight: 600;
+    display: inline-block; margin-bottom: 10px;
+  }
+  .card-a .tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+  .card-a .tag {
+    background: #f3f4f6; color: #555; font-size: 11px;
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .card-a .btn {
+    display: block; margin-top: 12px;
+    background: #16a34a; color: #fff;
+    border: none; border-radius: 10px;
+    padding: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; width: 100%;
+  }
+
+  /* OPCIÓN B — Urban Company style */
+  .card-b {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    border: 2px solid transparent;
+    display: flex; flex-direction: column;
+  }
+  .card-b:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .card-b.selected { border-color: #16a34a; }
+
+  .card-b .cover {
+    height: 120px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%);
+    position: relative; overflow: hidden;
+  }
+  .card-b .cover-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+  .card-b .cover-avatar {
+    position: absolute; bottom: -24px; left: 16px;
+    width: 56px; height: 56px; border-radius: 14px;
+    border: 3px solid #fff;
+    background: linear-gradient(135deg, #86efac, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .card-b .verified {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    color: #fff; font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .card-b .body { padding: 32px 16px 16px; }
+  .card-b .name { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .card-b .trade { font-size: 12px; color: #16a34a; font-weight: 600; margin: 2px 0 10px; }
+  .card-b .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .card-b .rating { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .star { color: #f59e0b; }
+  .card-b .price { font-size: 14px; font-weight: 700; color: #16a34a; }
+  .card-b .location { font-size: 12px; color: #888; display: flex; align-items: center; gap: 3px; }
+  .card-b .services { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .card-b .service-pill {
+    background: #f0fdf4; color: #16a34a; font-size: 11px; font-weight: 600;
+    padding: 3px 8px; border-radius: 20px; border: 1px solid #bbf7d0;
+  }
+  .card-b .btn {
+    display: block; margin-top: 12px;
+    background: #fff; color: #16a34a;
+    border: 2px solid #16a34a; border-radius: 10px;
+    padding: 9px; font-size: 13px; font-weight: 600;
+    cursor: pointer; width: 100%; text-align: center;
+  }
+
+  /* OPCIÓN C — TaskRabbit style con fondo de foto completa */
+  .card-c {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    border: 2px solid transparent;
+    position: relative; height: 280px;
+    background: #1a1a2e;
+  }
+  .card-c:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .card-c.selected { border-color: #16a34a; }
+
+  .card-c .bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px;
+  }
+  .card-c .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);
+  }
+  .card-c .top-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: #16a34a; color: #fff;
+    font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  }
+  .card-c .rating-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+    color: #fff; font-size: 12px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .card-c .content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px;
+  }
+  .card-c .name { font-size: 17px; font-weight: 700; color: #fff; }
+  .card-c .trade { font-size: 12px; color: #86efac; font-weight: 600; margin: 2px 0 8px; }
+  .card-c .bottom-row { display: flex; align-items: center; justify-content: space-between; }
+  .card-c .price-badge {
+    background: #16a34a; color: #fff;
+    font-size: 13px; font-weight: 700;
+    padding: 5px 12px; border-radius: 20px;
+  }
+  .card-c .jobs { color: rgba(255,255,255,0.7); font-size: 12px; }
+
+  /* Selection overlay */
+  .card-a.selected::after,
+  .card-b.selected::after,
+  .card-c.selected::after {
+    content: '✓ Seleccionado';
+    position: absolute; inset: 0;
+    background: rgba(22,163,74,0.08);
+    display: flex; align-items: flex-start; justify-content: flex-end;
+    padding: 10px; color: #16a34a; font-weight: 700; font-size: 12px;
+    pointer-events: none; border-radius: 14px;
+  }
+  .card-a, .card-b, .card-c { position: relative; }
+
+  .option-letter {
+    position: absolute; top: 10px; left: 10px; z-index: 10;
+    width: 26px; height: 26px; background: rgba(0,0,0,0.6);
+    color: #fff; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 700;
+  }
+  .card-a .option-letter { background: rgba(0,0,0,0.3); }
+</style>
+</head>
+<body>
+
+<h2>¿Qué estilo de Professional Card preferís?</h2>
+<p class="subtitle">Inspirados en apps de Handyman. Clickeá el que más te guste.</p>
+
+<div class="section-label">Opción A — Avatar flotante sobre foto de trabajo</div>
+<div class="grid">
+
+  <!-- CARD A1 -->
+  <div class="card-a" onclick="select(this,'a')">
+    <div class="option-letter">A</div>
+    <div class="photo" style="background: linear-gradient(135deg,#1a1a2e,#374151)">
+      <img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=400&q=80" alt="plomero trabajando">
+      <div class="badge-disponible"><span class="badge-dot"></span> Disponible</div>
+    </div>
+    <div class="avatar-wrap"><div class="avatar">CR</div></div>
+    <div class="body">
+      <div class="name">Carlos Ramírez</div>
+      <div class="trade">🔧 Plomero</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-val">⭐ 4.9</div><div class="stat-lbl">Rating</div></div>
+        <div class="divider"></div>
+        <div class="stat"><div class="stat-val">127</div><div class="stat-lbl">Trabajos</div></div>
+        <div class="divider"></div>
+        <div class="stat"><div class="stat-val">2km</div><div class="stat-lbl">Distancia</div></div>
+      </div>
+      <div class="price">$3.500/hora</div>
+      <div class="tags">
+        <span class="tag">Cañerías</span>
+        <span class="tag">Termotanques</span>
+        <span class="tag">Filtraciones</span>
+      </div>
+      <button class="btn">Contratar</button>
+    </div>
+  </div>
+
+  <!-- CARD A2 -->
+  <div class="card-a" onclick="select(this,'a')">
+    <div class="option-letter">A</div>
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="electricista trabajando">
+      <div class="badge-disponible" style="background:#f59e0b"><span class="badge-dot"></span> Urgencias</div>
+    </div>
+    <div class="avatar-wrap"><div class="avatar" style="background:linear-gradient(135deg,#fbbf24,#d97706)">ML</div></div>
+    <div class="body">
+      <div class="name">Martín López</div>
+      <div class="trade" style="color:#d97706">⚡ Electricista</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-val">⭐ 4.8</div><div class="stat-lbl">Rating</div></div>
+        <div class="divider"></div>
+        <div class="stat"><div class="stat-val">89</div><div class="stat-lbl">Trabajos</div></div>
+        <div class="divider"></div>
+        <div class="stat"><div class="stat-val">5km</div><div class="stat-lbl">Distancia</div></div>
+      </div>
+      <div class="price" style="color:#d97706;background:#fffbeb">$4.200/hora</div>
+      <div class="tags">
+        <span class="tag">Instalaciones</span>
+        <span class="tag">Tableros</span>
+        <span class="tag">24hs</span>
+      </div>
+      <button class="btn" style="background:#d97706">Contratar</button>
+    </div>
+  </div>
+
+  <!-- CARD A3 -->
+  <div class="card-a" onclick="select(this,'a')">
+    <div class="option-letter">A</div>
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" alt="albañil trabajando">
+    </div>
+    <div class="avatar-wrap"><div class="avatar" style="background:linear-gradient(135deg,#60a5fa,#2563eb)">RP</div></div>
+    <div class="body">
+      <div class="name">Roberto Pérez</div>
+      <div class="trade" style="color:#2563eb">🏗️ Albañil</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-val">⭐ 4.7</div><div class="stat-lbl">Rating</div></div>
+        <div class="divider"></div>
+        <div class="stat"><div class="stat-val">203</div><div class="stat-lbl">Trabajos</div></div>
+        <div class="divider"></div>
+        <div class="stat"><div class="stat-val">8km</div><div class="stat-lbl">Distancia</div></div>
+      </div>
+      <div class="price" style="color:#2563eb;background:#eff6ff">$2.800/hora</div>
+      <div class="tags">
+        <span class="tag">Revoque</span>
+        <span class="tag">Demolición</span>
+        <span class="tag">Pisos</span>
+      </div>
+      <button class="btn" style="background:#2563eb">Contratar</button>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:8px">Opción B — Avatar cuadrado redondeado sobre banner oscuro</div>
+<div class="grid">
+  <!-- CARD B1 -->
+  <div class="card-b" onclick="select(this,'b')">
+    <div class="option-letter">B</div>
+    <div class="cover">
+      <img class="cover-img" src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=400&q=80" alt="">
+      <div class="cover-avatar">CR</div>
+      <div class="verified">✓ Verificado</div>
+    </div>
+    <div class="body">
+      <div class="name">Carlos Ramírez</div>
+      <div class="trade">🔧 Plomero</div>
+      <div class="row">
+        <div class="rating"><span class="star">★</span> 4.9 <span style="color:#999;font-weight:400">(127)</span></div>
+        <div class="price">$3.500/h</div>
+      </div>
+      <div class="location">📍 Palermo · 2km</div>
+      <div class="services">
+        <span class="service-pill">Cañerías</span>
+        <span class="service-pill">Termotanques</span>
+        <span class="service-pill">+3</span>
+      </div>
+      <div class="btn">Ver perfil</div>
+    </div>
+  </div>
+
+  <!-- CARD B2 -->
+  <div class="card-b" onclick="select(this,'b')">
+    <div class="option-letter">B</div>
+    <div class="cover" style="background:linear-gradient(135deg,#78350f,#d97706)">
+      <img class="cover-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="">
+      <div class="cover-avatar" style="background:linear-gradient(135deg,#fbbf24,#d97706)">ML</div>
+      <div class="verified" style="background:rgba(217,119,6,0.4)">⚡ Urgencias</div>
+    </div>
+    <div class="body">
+      <div class="name">Martín López</div>
+      <div class="trade" style="color:#d97706">⚡ Electricista</div>
+      <div class="row">
+        <div class="rating"><span class="star">★</span> 4.8 <span style="color:#999;font-weight:400">(89)</span></div>
+        <div class="price" style="color:#d97706">$4.200/h</div>
+      </div>
+      <div class="location">📍 Caballito · 5km</div>
+      <div class="services">
+        <span class="service-pill" style="background:#fffbeb;color:#d97706;border-color:#fde68a">Tableros</span>
+        <span class="service-pill" style="background:#fffbeb;color:#d97706;border-color:#fde68a">24hs</span>
+      </div>
+      <div class="btn" style="border-color:#d97706;color:#d97706">Ver perfil</div>
+    </div>
+  </div>
+
+  <!-- CARD B3 -->
+  <div class="card-b" onclick="select(this,'b')">
+    <div class="option-letter">B</div>
+    <div class="cover" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)">
+      <img class="cover-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" alt="">
+      <div class="cover-avatar" style="background:linear-gradient(135deg,#60a5fa,#2563eb)">RP</div>
+      <div class="verified">✓ Verificado</div>
+    </div>
+    <div class="body">
+      <div class="name">Roberto Pérez</div>
+      <div class="trade" style="color:#2563eb">🏗️ Albañil</div>
+      <div class="row">
+        <div class="rating"><span class="star">★</span> 4.7 <span style="color:#999;font-weight:400">(203)</span></div>
+        <div class="price" style="color:#2563eb">$2.800/h</div>
+      </div>
+      <div class="location">📍 Flores · 8km</div>
+      <div class="services">
+        <span class="service-pill" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe">Revoque</span>
+        <span class="service-pill" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe">Pisos</span>
+      </div>
+      <div class="btn" style="border-color:#2563eb;color:#2563eb">Ver perfil</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:8px">Opción C — Foto de fondo completa estilo TaskRabbit</div>
+<div class="grid">
+  <!-- CARD C1 -->
+  <div class="card-c" onclick="select(this,'c')">
+    <div class="option-letter">C</div>
+    <div class="bg"><img src="https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=400&q=80" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" alt=""></div>
+    <div class="overlay"></div>
+    <div class="top-badge">● Disponible</div>
+    <div class="rating-badge"><span class="star">★</span> 4.9</div>
+    <div class="content">
+      <div class="name">Carlos Ramírez</div>
+      <div class="trade">🔧 Plomero · Palermo</div>
+      <div class="bottom-row">
+        <div class="price-badge">$3.500/h</div>
+        <div class="jobs">127 trabajos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD C2 -->
+  <div class="card-c" onclick="select(this,'c')">
+    <div class="option-letter">C</div>
+    <div class="bg"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" alt=""></div>
+    <div class="overlay" style="background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.1) 60%)"></div>
+    <div class="top-badge" style="background:#f59e0b">⚡ Urgencias 24hs</div>
+    <div class="rating-badge"><span class="star">★</span> 4.8</div>
+    <div class="content">
+      <div class="name">Martín López</div>
+      <div class="trade" style="color:#fde68a">⚡ Electricista · Caballito</div>
+      <div class="bottom-row">
+        <div class="price-badge" style="background:#f59e0b">$4.200/h</div>
+        <div class="jobs">89 trabajos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD C3 -->
+  <div class="card-c" onclick="select(this,'c')">
+    <div class="option-letter">C</div>
+    <div class="bg"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" alt=""></div>
+    <div class="overlay"></div>
+    <div class="top-badge" style="background:#2563eb">✓ Verificado</div>
+    <div class="rating-badge"><span class="star">★</span> 4.7</div>
+    <div class="content">
+      <div class="name">Roberto Pérez</div>
+      <div class="trade" style="color:#93c5fd">🏗️ Albañil · Flores</div>
+      <div class="bottom-row">
+        <div class="price-badge" style="background:#2563eb">$2.800/h</div>
+        <div class="jobs">203 trabajos</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selected = null;
+function select(el, group) {
+  document.querySelectorAll('.card-a,.card-b,.card-c').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selected = group;
+  if (window.__brainstorm_select) window.__brainstorm_select(group, el.querySelector('.name')?.textContent || group);
+}
+</script>
+</body>
+</html>

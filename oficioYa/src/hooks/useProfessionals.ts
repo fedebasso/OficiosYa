@@ -50,7 +50,7 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     jobs_count: 127,
     response_time_min: 15,
     available_now: true,
-    profiles: { id: '1', role: 'professional', full_name: 'Carlos Méndez', phone: '598912345678', avatar_url: null, city: 'Montevideo', created_at: '' },
+    profiles: { id: '1', role: 'professional', full_name: 'Carlos Méndez', phone: '598912345678', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
     id: '2',
@@ -64,7 +64,7 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     jobs_count: 83,
     response_time_min: 20,
     available_now: true,
-    profiles: { id: '2', role: 'professional', full_name: 'Roberto Silva', phone: '598923456789', avatar_url: null, city: 'Montevideo', created_at: '' },
+    profiles: { id: '2', role: 'professional', full_name: 'Roberto Silva', phone: '598923456789', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
     id: '3',
@@ -78,7 +78,7 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     jobs_count: 41,
     response_time_min: 45,
     available_now: false,
-    profiles: { id: '3', role: 'professional', full_name: 'Diego Fernández', phone: '598934567890', avatar_url: null, city: 'Montevideo', created_at: '' },
+    profiles: { id: '3', role: 'professional', full_name: 'Diego Fernández', phone: '598934567890', avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
     id: '4',
@@ -92,7 +92,7 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     jobs_count: 89,
     response_time_min: 10,
     available_now: true,
-    profiles: { id: '4', role: 'professional', full_name: 'Ana Rodríguez', phone: '598945678901', avatar_url: null, city: 'Montevideo', created_at: '' },
+    profiles: { id: '4', role: 'professional', full_name: 'Ana Rodríguez', phone: '598945678901', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
     id: '5',
@@ -106,7 +106,7 @@ const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     jobs_count: 64,
     response_time_min: 30,
     available_now: false,
-    profiles: { id: '5', role: 'professional', full_name: 'Pablo Torres', phone: '598956789012', avatar_url: null, city: 'Montevideo', created_at: '' },
+    profiles: { id: '5', role: 'professional', full_name: 'Pablo Torres', phone: '598956789012', avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
 ]
 
