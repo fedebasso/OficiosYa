@@ -15,7 +15,7 @@ export function UrgenciasBanner() {
       style={{ background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)', boxShadow: '0 6px 20px rgba(220,38,38,.3)' }}
     >
       <div className="flex items-center gap-1.5 mb-2">
-        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+        <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
         <span className="text-white/85 text-[10px] font-bold tracking-[.6px] uppercase">
           {count > 0 ? `${count} disponibles ahora` : 'Servicio activo'}
         </span>

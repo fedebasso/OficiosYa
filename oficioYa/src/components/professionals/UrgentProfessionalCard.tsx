@@ -30,13 +30,13 @@ export function UrgentProfessionalCard({ professional }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-md">
+    <div className="bg-bg-card rounded-2xl overflow-hidden shadow-md">
       {/* Header rojo */}
       <div
         className="flex items-center gap-2 px-3 py-1.5"
         style={{ background: 'linear-gradient(90deg, #dc2626, #b91c1c)' }}
       >
-        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
+        <span className="w-2 h-2 bg-white rounded-full animate-pulse flex-shrink-0" />
         <span className="text-white text-[9px] font-bold tracking-[.5px] uppercase">
           Disponible ahora · 24H
         </span>
@@ -62,14 +62,14 @@ export function UrgentProfessionalCard({ professional }: Props) {
         </button>
 
         {/* Stats */}
-        <div className="flex gap-3 text-[11px] text-gray-500 mb-2">
+        <div className="flex gap-3 text-[11px] text-text-secondary mb-2">
           {avg_rating != null && <span>⭐ {avg_rating}</span>}
           <span>📍 {zone}</span>
           <span>🔧 {jobs_count} trabajos</span>
         </div>
 
         {/* Tiempo respuesta */}
-        <div className="bg-red-50 rounded-lg px-2.5 py-1.5 text-[10px] font-semibold text-danger mb-3">
+        <div className="bg-danger/10 rounded-lg px-2.5 py-1.5 text-[10px] font-semibold text-danger mb-3">
           ⏱ Responde en ~{response_time_min} minutos
         </div>
 

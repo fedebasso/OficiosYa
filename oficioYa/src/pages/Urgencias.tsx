@@ -27,7 +27,7 @@ export default function Urgencias() {
       <p className="text-white/75 text-sm mb-3">Profesionales disponibles ahora mismo</p>
       {!loading && (
         <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-3 py-1.5">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+          <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
           <span className="text-white text-[11px] font-bold">
             {professionals.length} disponibles ahora
           </span>
@@ -47,8 +47,8 @@ export default function Urgencias() {
         {!loading && professionals.length === 0 && (
           <div className="text-center py-12">
             <div className="text-4xl mb-3">😴</div>
-            <p className="text-gray-500 font-medium">No hay profesionales disponibles ahora</p>
-            <p className="text-gray-400 text-sm mt-1">Intentá de nuevo en unos minutos</p>
+            <p className="text-text-secondary font-medium">No hay profesionales disponibles ahora</p>
+            <p className="text-text-muted text-sm mt-1">Intentá de nuevo en unos minutos</p>
           </div>
         )}
         {professionals.map((pro) => (

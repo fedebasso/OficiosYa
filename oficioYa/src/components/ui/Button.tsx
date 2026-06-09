@@ -16,8 +16,8 @@ interface ButtonProps {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-white hover:bg-opacity-90 active:bg-opacity-80',
-  secondary: 'border border-primary text-primary bg-white hover:bg-accent hover:bg-opacity-20 active:bg-opacity-30',
-  ghost: 'text-primary bg-transparent hover:bg-accent hover:bg-opacity-20 active:bg-opacity-30',
+  secondary: 'bg-bg-elevated border border-border-dark text-text-main hover:bg-border-dark active:opacity-80',
+  ghost: 'text-primary bg-transparent hover:bg-bg-elevated active:opacity-80',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
