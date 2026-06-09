@@ -35,7 +35,7 @@ export default function Home() {
   const ctaRef     = useReveal()
 
   const homeHeader = (
-    <header className="border-b border-border-dark px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#0f0f0f' }}>
+    <header className="border-b border-[#1e1e1e] px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#0f0f0f' }}>
       <div className="flex items-center justify-between mb-3">
         <h1 className="text-[32px] font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-1px' }}>
           Oficio<span style={{ color: '#e8683a' }}>Ya</span>
@@ -81,10 +81,10 @@ export default function Home() {
           >
             Disponible ahora
           </div>
-          <h2 className="font-display text-2xl text-text-main leading-tight mb-2">
-            Tu <span className="text-primary">oficio</span>,<br />cuando lo necesitás
+          <h2 className="text-2xl font-black text-[#f5f0e8] leading-tight mb-2">
+            Tu <span className="text-[#e8683a]">oficio</span>,<br />cuando lo necesitás
           </h2>
-          <p className="text-text-secondary text-xs leading-relaxed">
+          <p className="text-[#888] text-xs leading-relaxed">
             Electricistas, plomeros, albañiles y más — verificados y disponibles en tu zona.
           </p>
         </section>
@@ -99,7 +99,7 @@ export default function Home() {
 
         {/* Categorías */}
         <section ref={catsRef as React.RefObject<HTMLElement>} className="reveal">
-          <h2 className="text-[11px] font-bold text-text-secondary uppercase tracking-[.6px] mb-2.5">
+          <h2 className="text-[11px] font-bold text-[#888] uppercase tracking-[.6px] mb-2.5">
             ¿Qué necesitás?
           </h2>
           <CategoryGrid />
@@ -122,15 +122,15 @@ export default function Home() {
           style={{ background: '#141414', border: '1px solid #1e1e1e' }}
         >
           <div>
-            <h2 className="text-[13px] font-bold text-text-main">¿Sos profesional?</h2>
-            <p className="text-xs text-text-secondary mt-0.5">
+            <h2 className="text-[13px] font-bold text-[#f5f0e8]">¿Sos profesional?</h2>
+            <p className="text-xs text-[#888] mt-0.5">
               Unite a OficiosYa y conseguí clientes en tu zona.
             </p>
           </div>
           <button
             type="button"
             onClick={() => navigate('/pro/registro')}
-            className="w-full rounded-xl py-3 text-sm font-bold text-text-main transition-opacity active:opacity-70"
+            className="w-full rounded-xl py-3 text-sm font-bold text-[#f5f0e8] transition-opacity active:opacity-70"
             style={{ background: '#1e1e1e', border: '1px solid #2a2a2a' }}
           >
             Registrarme como profesional

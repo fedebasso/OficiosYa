@@ -8,9 +8,9 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  verified: 'bg-accent text-primary',
+  verified: 'bg-[rgba(59,130,246,.1)] text-[#60a5fa]',
   pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-primary/10 text-primary',
+  confirmed: 'bg-[rgba(232,104,58,.1)] text-[#e8683a]',
   in_progress: 'bg-purple-100 text-purple-800',
   completed: 'bg-blue-100 text-blue-800',
   cancelled: 'bg-red-100 text-red-800',

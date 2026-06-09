@@ -32,7 +32,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
       {/* Info */}
       <div className="flex-1 py-3 pr-2 min-w-0">
         <div className="flex items-center gap-1.5 mb-0.5">
-          <span className="font-semibold text-text-main text-sm truncate">{profiles.full_name}</span>
+          <span className="font-semibold text-[#f5f0e8] text-sm truncate">{profiles.full_name}</span>
           {verified && (
             <span
               className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
@@ -51,11 +51,11 @@ export function ProfessionalCard({ professional, onClick }: Props) {
         </div>
         <div className="flex gap-3">
           {jobs_count > 0 && (
-            <span className="text-[10px] text-text-muted">
-              <span className="text-text-secondary font-semibold">{jobs_count}</span> trabajos
+            <span className="text-[10px] text-[#555]">
+              <span className="text-[#888] font-semibold">{jobs_count}</span> trabajos
             </span>
           )}
-          <span className="text-[10px] text-text-muted">{zone}</span>
+          <span className="text-[10px] text-[#555]">{zone}</span>
         </div>
       </div>
 
@@ -73,8 +73,8 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           >Ocupado</span>
         )}
         {avg_rating != null && (
-          <span className="text-sm font-bold text-text-main">
-            <span className="text-star">★</span> {avg_rating}
+          <span className="text-sm font-bold text-[#f5f0e8]">
+            <span className="text-[#f59e0b]">★</span> {avg_rating}
           </span>
         )}
       </div>

@@ -33,7 +33,7 @@ function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number 
 
   return (
     <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
-      <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Reseñas</h3>
+      <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-4">Reseñas</h3>
 
       {/* Rating overview */}
       <div className="flex gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid #1e1e1e' }}>
@@ -121,7 +121,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             type="button"
             onClick={() => navigate(-1)}
             aria-label="Volver"
-            className="w-9 h-9 rounded-full flex items-center justify-center text-text-main text-base"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-[#f5f0e8] text-base"
             style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.12)' }}
           >
             ←
@@ -129,7 +129,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
           <button
             type="button"
             aria-label="Guardar"
-            className="w-9 h-9 rounded-full flex items-center justify-center text-text-main text-base"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-[#f5f0e8] text-base"
             style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.12)' }}
           >
             ♡
@@ -146,7 +146,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             {profiles.avatar_url ? (
               <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-text-main text-2xl font-black"
+              <div className="w-full h-full flex items-center justify-center text-[#f5f0e8] text-2xl font-black"
                 style={{ background: 'rgba(232,104,58,.2)' }}>
                 {initials}
               </div>
@@ -155,21 +155,21 @@ export function ProfessionalProfile({ professional, photos }: Props) {
 
           {available_now && (
             <div
-              className="flex items-center gap-1.5 text-text-main text-[10px] font-bold px-3 py-1.5 rounded-full mb-2"
+              className="flex items-center gap-1.5 text-[#f5f0e8] text-[10px] font-bold px-3 py-1.5 rounded-full mb-2"
               style={{ background: 'rgba(232,104,58,.15)', border: '1px solid rgba(232,104,58,.25)' }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#e8683a]" />
               Disponible ahora
             </div>
           )}
 
           <h1
-            className="font-display text-2xl text-text-main text-center leading-tight px-4"
+            className="text-2xl font-black text-[#f5f0e8] text-center leading-tight px-4"
             style={{ letterSpacing: '-0.5px' }}
           >
             {profiles.full_name}
           </h1>
-          <p className="text-text-secondary text-sm font-medium mt-1">{specialty} · {zone}</p>
+          <p className="text-[#888] text-sm font-medium mt-1">{specialty} · {zone}</p>
 
           {/* Stats pill */}
           <div
@@ -177,20 +177,20 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             style={{ background: 'rgba(0,0,0,.35)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,.08)' }}
           >
             <div className="px-5 py-2.5 text-center border-r" style={{ borderColor: 'rgba(255,255,255,.08)' }}>
-              <div className="text-sm font-black text-text-main">
-                {avg_rating != null ? <><span className="text-star">★</span> {avg_rating}</> : '–'}
+              <div className="text-sm font-black text-[#f5f0e8]">
+                {avg_rating != null ? <><span className="text-[#f59e0b]">★</span> {avg_rating}</> : '–'}
               </div>
-              <div className="text-[9px] text-text-muted mt-0.5 uppercase tracking-wider">Rating</div>
+              <div className="text-[9px] text-[#555] mt-0.5 uppercase tracking-wider">Rating</div>
             </div>
             <div className="px-5 py-2.5 text-center border-r" style={{ borderColor: 'rgba(255,255,255,.08)' }}>
-              <div className="text-sm font-black text-text-main">{jobs_count}</div>
-              <div className="text-[9px] text-text-muted mt-0.5 uppercase tracking-wider">Trabajos</div>
+              <div className="text-sm font-black text-[#f5f0e8]">{jobs_count}</div>
+              <div className="text-[9px] text-[#555] mt-0.5 uppercase tracking-wider">Trabajos</div>
             </div>
             <div className="px-5 py-2.5 text-center">
-              <div className="text-sm font-black text-text-main">
+              <div className="text-sm font-black text-[#f5f0e8]">
                 {available_now ? `~${response_time_min}m` : '–'}
               </div>
-              <div className="text-[9px] text-text-muted mt-0.5 uppercase tracking-wider">Respuesta</div>
+              <div className="text-[9px] text-[#555] mt-0.5 uppercase tracking-wider">Respuesta</div>
             </div>
           </div>
         </div>
@@ -228,14 +228,14 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         {/* Sobre mí */}
         {bio && (
           <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
-            <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-2">Sobre mí</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{bio}</p>
+            <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-2">Sobre mí</h3>
+            <p className="text-sm text-[#888] leading-relaxed">{bio}</p>
           </div>
         )}
 
         {/* Servicios */}
         <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
-          <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-3">Servicios</h3>
+          <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Servicios</h3>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
               <span
@@ -252,7 +252,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         {/* Fotos */}
         {photos.length > 0 && (
           <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
-            <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-3">Trabajos realizados</h3>
+            <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
             <WorkPhotoGallery photos={photos} />
           </div>
         )}
@@ -272,7 +272,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         <button
           type="button"
           onClick={() => window.open(`https://wa.me/${whatsapp}`, '_blank', 'noopener,noreferrer')}
-          className="rounded-2xl py-3.5 text-sm font-bold text-text-secondary flex items-center justify-center gap-1.5 active:opacity-70 transition-opacity"
+          className="rounded-2xl py-3.5 text-sm font-bold text-[#888] flex items-center justify-center gap-1.5 active:opacity-70 transition-opacity"
           style={{ border: '1px solid #2a2a2a', background: '#141414' }}
         >
           💬 Chat

@@ -6,7 +6,7 @@ interface Props {
 
 export function WorkPhotoGallery({ photos }: Props) {
   if (photos.length === 0)
-    return <p className="text-sm text-text-muted text-center py-4">Sin fotos aún</p>
+    return <p className="text-sm text-center py-4" style={{ color: '#555' }}>Sin fotos aún</p>
 
   return (
     <div className="grid grid-cols-2 gap-2">
@@ -18,7 +18,7 @@ export function WorkPhotoGallery({ photos }: Props) {
             className="w-full h-28 object-cover rounded-lg"
           />
           {photo.caption && (
-            <p className="text-xs text-text-muted px-1">{photo.caption}</p>
+            <p className="text-xs px-1" style={{ color: '#555' }}>{photo.caption}</p>
           )}
         </div>
       ))}
