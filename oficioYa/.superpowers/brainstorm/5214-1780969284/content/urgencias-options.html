@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urgencias Banner — Opciones</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #0a0a0a; color: #f5f0e8; padding: 20px 14px 60px; }
+  h2 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #666; margin-bottom: 28px; }
+  .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #e8683a; margin-bottom: 10px; }
+
+  .option-wrap { margin-bottom: 32px; cursor: pointer; }
+  .option-wrap .phone {
+    max-width: 340px; margin: 0 auto;
+    border-radius: 20px; overflow: hidden;
+    border: 2px solid transparent;
+    box-shadow: 0 12px 40px rgba(0,0,0,.5);
+    transition: border-color .2s, transform .15s;
+  }
+  .option-wrap:hover .phone { transform: translateY(-3px); }
+  .option-wrap.selected .phone { border-color: #e8683a; }
+  .option-wrap.selected .label { color: #fff; }
+  .option-wrap.selected .label::after { content: ' — ✓ Seleccionado'; color: #e8683a; }
+
+  /* HOME HEADER simulado */
+  .home-header {
+    background: #0f0f0f; border-bottom: 1px solid #1e1e1e;
+    padding: 14px 16px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-size: 20px; font-weight: 900; color: #f5f0e8; }
+  .logo span { color: #e8683a; }
+  .searchbar {
+    margin: 8px 16px 12px;
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+    padding: 9px 14px; display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: #555;
+  }
+
+  /* ── OPCIÓN A: Barra fija roja con pulso ── */
+  .urgency-a {
+    background: linear-gradient(90deg, #7f1d1d 0%, #991b1b 50%, #7f1d1d 100%);
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+  }
+  .urgency-a .left { display: flex; align-items: center; gap: 8px; }
+  .pulse-dot {
+    width: 9px; height: 9px; background: #fca5a5; border-radius: 50%;
+    flex-shrink: 0; animation: pulsar 1.4s ease-in-out infinite;
+  }
+  @keyframes pulsar {
+    0%,100% { box-shadow: 0 0 0 0 rgba(252,165,165,.5); }
+    50% { box-shadow: 0 0 0 6px rgba(252,165,165,0); }
+  }
+  .urgency-a .text { font-size: 12px; font-weight: 700; color: #fff; }
+  .urgency-a .text span { color: #fca5a5; }
+  .urgency-a .cta {
+    background: #fff; color: #991b1b;
+    font-size: 10px; font-weight: 900; padding: 5px 10px;
+    border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+    text-transform: uppercase; letter-spacing: .3px;
+  }
+
+  /* ── OPCIÓN B: Card oscura con borde rojo y fondo sutil ── */
+  .urgency-b-wrap { padding: 10px 14px 0; }
+  .urgency-b {
+    background: linear-gradient(135deg, #1a0505 0%, #2d0a0a 100%);
+    border: 1px solid rgba(239,68,68,.3);
+    border-radius: 16px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    position: relative; overflow: hidden;
+  }
+  .urgency-b::before {
+    content: ''; position: absolute; top: -20px; right: -20px;
+    width: 80px; height: 80px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(239,68,68,.15) 0%, transparent 70%);
+  }
+  .ub-icon {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.3);
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .ub-text { flex: 1; }
+  .ub-title { font-size: 13px; font-weight: 800; color: #f5f0e8; }
+  .ub-sub { font-size: 10px; color: #888; margin-top: 2px; }
+  .ub-badge {
+    background: #ef4444; color: #fff;
+    font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: .5px; flex-shrink: 0;
+    animation: pulsar2 2s ease-in-out infinite;
+  }
+  @keyframes pulsar2 {
+    0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.4); }
+    50% { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+  }
+
+  /* ── OPCIÓN C: Hero section dedicada con degradado dramático ── */
+  .urgency-c {
+    margin: 10px 14px 0;
+    background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 40%, #450a0a 100%);
+    border-radius: 18px; padding: 16px;
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(239,68,68,.2);
+  }
+  .urgency-c::after {
+    content: '🚨'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 48px; opacity: .15;
+  }
+  .uc-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(239,68,68,.2); border: 1px solid rgba(239,68,68,.4);
+    color: #fca5a5; font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .8px; padding: 3px 9px; border-radius: 20px; margin-bottom: 8px;
+  }
+  .uc-pd { width: 6px; height: 6px; background: #ef4444; border-radius: 50%; animation: pulsar 1.4s infinite; }
+  .uc-title { font-size: 17px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 4px; }
+  .uc-sub { font-size: 11px; color: rgba(255,255,255,.6); margin-bottom: 12px; }
+  .uc-row { display: flex; gap: 8px; }
+  .uc-btn {
+    background: #fff; color: #7f1d1d;
+    font-size: 11px; font-weight: 900; padding: 8px 14px; border-radius: 10px;
+    text-transform: uppercase; letter-spacing: .3px;
+  }
+  .uc-pro { display: flex; align-items: center; gap: 4px; }
+  .uc-avs { display: flex; }
+  .uc-av {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid #7f1d1d; margin-left: -6px; font-size: 10px;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+  }
+  .uc-av:first-child { margin-left: 0; }
+  .uc-av1 { background: #374151; }
+  .uc-av2 { background: #1f2937; }
+  .uc-av3 { background: #111827; }
+  .uc-count { font-size: 10px; color: rgba(255,255,255,.6); }
+
+  /* HOME body */
+  .home-body { background: #0f0f0f; padding: 12px 14px; }
+  .sec-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: #555; margin-bottom: 8px; }
+  .cat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+  .cat-item {
+    aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative;
+    background: #1a1a1a;
+  }
+  .cat-img { width: 100%; height: 100%; object-fit: cover; opacity: .7; }
+  .cat-name {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 4px;
+    font-size: 7px; font-weight: 800; color: #fff; text-transform: uppercase;
+    background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+  }
+</style>
+</head>
+<body>
+
+<h2>Banner de Urgencias 🚨</h2>
+<p class="sub">Tres estilos — mismo mensaje, diferente impacto. Clickeá el que más te gusta.</p>
+
+<!-- OPCIÓN A -->
+<div class="option-wrap" onclick="pick(this,'A')">
+  <div class="label">Opción A — Barra fija roja con pulso</div>
+  <div class="phone">
+    <div class="home-header">
+      <div class="logo">Oficio<span>Ya</span></div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2a1f10,#3d2c16);border:2px solid #e8683a;display:flex;align-items:center;justify-content:center;font-size:15px">👤</div>
+    </div>
+    <!-- URGENCY BAR -->
+    <div class="urgency-a">
+      <div class="left">
+        <div class="pulse-dot"></div>
+        <div class="text">Urgencias <span>24hs</span> — Llegamos en &lt;30min</div>
+      </div>
+      <div class="cta">Llamar ahora</div>
+    </div>
+    <div class="searchbar">🔍 Electricistas, plomeros...</div>
+    <div class="home-body">
+      <div class="sec-lbl">¿Qué necesitás?</div>
+      <div class="cat-grid">
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=100&q=70"><div class="cat-name">Electricista</div></div>
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&q=70"><div class="cat-name">Sanitario</div></div>
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=100&q=70"><div class="cat-name">Albañil</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPCIÓN B -->
+<div class="option-wrap" onclick="pick(this,'B')">
+  <div class="label">Opción B — Card oscura integrada con borde rojo</div>
+  <div class="phone">
+    <div class="home-header">
+      <div class="logo">Oficio<span>Ya</span></div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2a1f10,#3d2c16);border:2px solid #e8683a;display:flex;align-items:center;justify-content:center;font-size:15px">👤</div>
+    </div>
+    <div class="searchbar">🔍 Electricistas, plomeros...</div>
+    <!-- URGENCY CARD -->
+    <div class="urgency-b-wrap">
+      <div class="urgency-b">
+        <div class="ub-icon">🚨</div>
+        <div class="ub-text">
+          <div class="ub-title">Emergencias 24hs</div>
+          <div class="ub-sub">Profesionales disponibles ahora mismo</div>
+        </div>
+        <div class="ub-badge">● En vivo</div>
+      </div>
+    </div>
+    <div class="home-body" style="padding-top:10px">
+      <div class="sec-lbl">¿Qué necesitás?</div>
+      <div class="cat-grid">
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=100&q=70"><div class="cat-name">Electricista</div></div>
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&q=70"><div class="cat-name">Sanitario</div></div>
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=100&q=70"><div class="cat-name">Albañil</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPCIÓN C -->
+<div class="option-wrap" onclick="pick(this,'C')">
+  <div class="label">Opción C — Hero section dramático integrado al Home</div>
+  <div class="phone">
+    <div class="home-header">
+      <div class="logo">Oficio<span>Ya</span></div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2a1f10,#3d2c16);border:2px solid #e8683a;display:flex;align-items:center;justify-content:center;font-size:15px">👤</div>
+    </div>
+    <div class="searchbar">🔍 Electricistas, plomeros...</div>
+    <div class="home-body">
+      <!-- URGENCY HERO -->
+      <div class="urgency-c" style="margin:0 0 10px">
+        <div class="uc-tag"><span class="uc-pd"></span> Activo ahora</div>
+        <div class="uc-title">¿Necesitás ayuda<br>de urgencia?</div>
+        <div class="uc-sub">Profesionales disponibles &lt;30 minutos</div>
+        <div class="uc-row">
+          <div class="uc-btn">Llamar urgencias</div>
+          <div class="uc-pro">
+            <div class="uc-avs">
+              <div class="uc-av uc-av1">👷</div>
+              <div class="uc-av uc-av2">👨‍🔧</div>
+              <div class="uc-av uc-av3">👩‍🔧</div>
+            </div>
+            <div class="uc-count">+12 listos</div>
+          </div>
+        </div>
+      </div>
+      <div class="sec-lbl">¿Qué necesitás?</div>
+      <div class="cat-grid">
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=100&q=70"><div class="cat-name">Electricista</div></div>
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&q=70"><div class="cat-name">Sanitario</div></div>
+        <div class="cat-item"><img class="cat-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=100&q=70"><div class="cat-name">Albañil</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function pick(el, choice) {
+  document.querySelectorAll('.option-wrap').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  if (window.__brainstorm_select) window.__brainstorm_select(choice, 'Opción ' + choice);
+}
+</script>
+</body>
+</html>

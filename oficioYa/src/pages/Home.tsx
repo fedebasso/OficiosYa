@@ -1,16 +1,39 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { SearchBar } from '../components/home/SearchBar'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
+import { UrgenciasBanner } from '../components/home/UrgenciasBanner'
+
+function useReveal() {
+  const ref = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect() } },
+      { threshold: 0.12 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return ref
+}
 
 export default function Home() {
   const navigate = useNavigate()
 
+  const heroRef    = useReveal()
+  const catsRef    = useReveal()
+  const urgRef     = useReveal()
+  const featRef    = useReveal()
+  const ctaRef     = useReveal()
+
   const homeHeader = (
     <header className="border-b border-border-dark px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#0f0f0f' }}>
       <div className="flex items-center justify-between mb-3">
-        <h1 className="text-[32px] font-black leading-none tracking-tight" style={{ color: '#f5f0e8', letterSpacing: '-1px' }}>
+        <h1 className="text-[32px] font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-1px' }}>
           Oficio<span style={{ color: '#e8683a' }}>Ya</span>
         </h1>
         <button
@@ -37,7 +60,8 @@ export default function Home() {
 
         {/* Hero */}
         <section
-          className="rounded-2xl overflow-hidden px-5 py-6 relative"
+          ref={heroRef as React.RefObject<HTMLElement>}
+          className="reveal rounded-2xl overflow-hidden px-5 py-6 relative"
           style={{
             background: 'linear-gradient(135deg, #1a1008 0%, #2d1f0e 50%, #1a1008 100%)',
             border: '1px solid #2a1f10',
@@ -49,11 +73,7 @@ export default function Home() {
           />
           <div
             className="inline-block text-[10px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3"
-            style={{
-              background: 'rgba(232,104,58,.15)',
-              border: '1px solid rgba(232,104,58,.3)',
-              color: '#e8683a',
-            }}
+            style={{ background: 'rgba(232,104,58,.15)', border: '1px solid rgba(232,104,58,.3)', color: '#e8683a' }}
           >
             Disponible ahora
           </div>
@@ -65,8 +85,16 @@ export default function Home() {
           </p>
         </section>
 
+        {/* Urgencias Banner */}
+        <section
+          ref={urgRef as React.RefObject<HTMLElement>}
+          className="reveal"
+        >
+          <UrgenciasBanner />
+        </section>
+
         {/* Categorías */}
-        <section>
+        <section ref={catsRef as React.RefObject<HTMLElement>} className="reveal">
           <h2 className="text-[11px] font-bold text-text-secondary uppercase tracking-[.6px] mb-2.5">
             ¿Qué necesitás?
           </h2>
@@ -74,11 +102,14 @@ export default function Home() {
         </section>
 
         {/* Más recomendados */}
-        <FeaturedProfessionals />
+        <section ref={featRef as React.RefObject<HTMLElement>} className="reveal">
+          <FeaturedProfessionals />
+        </section>
 
         {/* CTA profesional */}
         <section
-          className="rounded-2xl p-4 flex flex-col gap-3"
+          ref={ctaRef as React.RefObject<HTMLElement>}
+          className="reveal rounded-2xl p-4 flex flex-col gap-3"
           style={{ background: '#141414', border: '1px solid #1e1e1e' }}
         >
           <div>

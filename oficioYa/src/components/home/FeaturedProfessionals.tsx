@@ -16,12 +16,13 @@ export function FeaturedProfessionals() {
         Más recomendados
       </h2>
       <div className="flex flex-col gap-2">
-        {featured.map((pro) => (
-          <ProfessionalCard
-            key={pro.id}
-            professional={pro}
-            onClick={() => navigate(`/profesional/${pro.id}`)}
-          />
+        {featured.map((pro, i) => (
+          <div key={pro.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.08}s` }}>
+            <ProfessionalCard
+              professional={pro}
+              onClick={() => navigate(`/profesional/${pro.id}`)}
+            />
+          </div>
         ))}
       </div>
     </section>

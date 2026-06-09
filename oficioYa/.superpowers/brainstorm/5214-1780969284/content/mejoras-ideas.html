@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficiosYa — Ideas de mejora visual</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #0a0a0a; color: #f5f0e8; padding: 24px 16px 48px; }
+
+  h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; letter-spacing: -.5px; }
+  .sub { font-size: 13px; color: #888; margin-bottom: 32px; }
+
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #e8683a; margin-bottom: 16px;
+  }
+
+  .ideas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .idea {
+    background: #141414; border: 1px solid #222;
+    border-radius: 16px; padding: 16px;
+    cursor: pointer; transition: border-color .2s, transform .15s;
+    position: relative;
+  }
+  .idea:hover { border-color: #e8683a; transform: translateY(-2px); }
+  .idea.selected { border-color: #e8683a; background: rgba(232,104,58,.06); }
+  .idea.selected::after {
+    content: '✓'; position: absolute; top: 10px; right: 12px;
+    color: #e8683a; font-weight: 800; font-size: 14px;
+  }
+  .idea-icon { font-size: 28px; margin-bottom: 8px; }
+  .idea-title { font-size: 14px; font-weight: 700; color: #f5f0e8; margin-bottom: 4px; }
+  .idea-desc { font-size: 11px; color: #666; line-height: 1.5; }
+  .idea-tag {
+    display: inline-block; margin-top: 8px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .tag-impact { background: rgba(232,104,58,.15); color: #e8683a; }
+  .tag-quick  { background: rgba(20,184,166,.1); color: #14b8a6; }
+  .tag-wow    { background: rgba(139,92,246,.1); color: #a78bfa; }
+
+  /* PREVIEW strips */
+  .preview-strip {
+    background: #141414; border: 1px solid #1e1e1e; border-radius: 16px;
+    overflow: hidden; margin-bottom: 12px;
+  }
+  .preview-header {
+    padding: 10px 14px; border-bottom: 1px solid #1e1e1e;
+    font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .8px;
+  }
+  .preview-body { padding: 14px; }
+
+  /* Mini phone mockup */
+  .phone-mini {
+    width: 160px; border-radius: 18px; overflow: hidden;
+    border: 1px solid #2a2a2a; margin: 0 auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  }
+
+  /* Urgency banner mockup */
+  .urgency-bar {
+    background: linear-gradient(90deg, #7f1d1d, #b91c1c);
+    padding: 8px 14px; display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; color: #fff;
+  }
+  .pulse { width: 8px; height: 8px; background: #fca5a5; border-radius: 50%; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .6; transform: scale(1.3); } }
+
+  /* Rating stars mockup */
+  .stars { color: #f59e0b; font-size: 16px; letter-spacing: 2px; }
+
+  /* Notification badge */
+  .notif-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, #e8683a, #c2511e);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 6px 12px; border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(232,104,58,.4);
+  }
+</style>
+</head>
+<body>
+
+<h2>¿Qué mejoramos a continuación?</h2>
+<p class="sub">Hacé click en las ideas que más te interesan — podés elegir varias.</p>
+
+<!-- IMPACTO VISUAL -->
+<div class="section">
+  <div class="section-title">🔥 Alto impacto visual</div>
+  <div class="ideas">
+
+    <div class="idea" onclick="toggle(this,'animations')">
+      <div class="idea-icon">✨</div>
+      <div class="idea-title">Animaciones de entrada</div>
+      <div class="idea-desc">Cards que aparecen con fade+slide al scrollear. Hero con efecto typewriter en el título.</div>
+      <span class="idea-tag tag-wow">Wow factor</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'urgency')">
+      <div class="idea-icon">🚨</div>
+      <div class="idea-title">Banner de Urgencias</div>
+      <div class="idea-desc">Barra roja pulsante en el top del Home para servicios 24hs. Alta visibilidad.</div>
+      <span class="idea-tag tag-impact">Alto impacto</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'ratings')">
+      <div class="idea-icon">⭐</div>
+      <div class="idea-title">Reseñas y reviews</div>
+      <div class="idea-desc">Cards de reviews reales con foto, nombre y estrellas en el perfil del profesional.</div>
+      <span class="idea-tag tag-impact">Alto impacto</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'photos')">
+      <div class="idea-icon">📸</div>
+      <div class="idea-title">Galería de trabajos</div>
+      <div class="idea-desc">Fotos de trabajos realizados en el perfil. Grid 3x con lightbox al tocar.</div>
+      <span class="idea-tag tag-impact">Alto impacto</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- FUNCIONALES -->
+<div class="section">
+  <div class="section-title">⚡ Mejoras funcionales</div>
+  <div class="ideas">
+
+    <div class="idea" onclick="toggle(this,'chat')">
+      <div class="idea-icon">💬</div>
+      <div class="idea-title">Chat en tiempo real</div>
+      <div class="idea-desc">Mensajería entre cliente y profesional antes de confirmar el trabajo.</div>
+      <span class="idea-tag tag-wow">Wow factor</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'tracking')">
+      <div class="idea-icon">📍</div>
+      <div class="idea-title">Estado del trabajo</div>
+      <div class="idea-desc">Tracker: "Pendiente → Confirmado → En camino → Completado". Como delivery.</div>
+      <span class="idea-tag tag-impact">Alto impacto</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'notifs')">
+      <div class="idea-icon">🔔</div>
+      <div class="idea-title">Notificaciones push</div>
+      <div class="idea-desc">Alertas cuando un pro confirma, llega, o envía mensaje. Badge en el avatar.</div>
+      <span class="idea-tag tag-quick">Rápido de hacer</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'filters')">
+      <div class="idea-icon">🎛️</div>
+      <div class="idea-title">Filtros de búsqueda</div>
+      <div class="idea-desc">Filtrar por zona, rating mínimo, disponibilidad y precio. Chips en Search.</div>
+      <span class="idea-tag tag-quick">Rápido de hacer</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONFIANZA -->
+<div class="section">
+  <div class="section-title">🏆 Confianza y conversión</div>
+  <div class="ideas">
+
+    <div class="idea" onclick="toggle(this,'verified')">
+      <div class="idea-icon">✅</div>
+      <div class="idea-title">Badge "Top Pro"</div>
+      <div class="idea-desc">Insignia especial para pros con +50 trabajos y rating 4.8+. Destaca en la lista.</div>
+      <span class="idea-tag tag-quick">Rápido de hacer</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'stats')">
+      <div class="idea-icon">📊</div>
+      <div class="idea-title">Stats en el Home</div>
+      <div class="idea-desc">Contador animado: "1.200+ trabajos completados · 98% satisfacción". Social proof.</div>
+      <span class="idea-tag tag-impact">Alto impacto</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'onboarding')">
+      <div class="idea-icon">🎯</div>
+      <div class="idea-title">Onboarding mejorado</div>
+      <div class="idea-desc">3 pantallas de bienvenida animadas la primera vez. Explica el valor de la app.</div>
+      <span class="idea-tag tag-wow">Wow factor</span>
+    </div>
+
+    <div class="idea" onclick="toggle(this,'map')">
+      <div class="idea-icon">🗺️</div>
+      <div class="idea-title">Vista mapa</div>
+      <div class="idea-desc">Ver profesionales cercanos en un mapa con pins. Alternativa a la lista.</div>
+      <span class="idea-tag tag-wow">Wow factor</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const selected = new Set();
+function toggle(el, key) {
+  el.classList.toggle('selected');
+  if (selected.has(key)) selected.delete(key);
+  else selected.add(key);
+  if (window.__brainstorm_select) {
+    window.__brainstorm_select([...selected].join(', '), [...selected].join(', '));
+  }
+}
+</script>
+</body>
+</html>

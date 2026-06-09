@@ -10,22 +10,50 @@ export function UrgenciasBanner() {
     <button
       type="button"
       onClick={() => navigate('/urgencias')}
-      aria-label="Ver profesionales en urgencias 24H"
-      className="w-full text-left rounded-2xl p-4 shadow-lg active:scale-[.99] transition-transform duration-150"
-      style={{ background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)', boxShadow: '0 6px 20px rgba(220,38,38,.3)' }}
+      aria-label="Ver profesionales de urgencias 24H"
+      className="w-full text-left rounded-2xl active:scale-[.99] transition-transform duration-150 flex items-center gap-3 p-3.5 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #1a0505 0%, #2d0a0a 100%)',
+        border: '1px solid rgba(239,68,68,.25)',
+        boxShadow: '0 4px 20px rgba(239,68,68,.1)',
+      }}
     >
-      <div className="flex items-center gap-1.5 mb-2">
-        <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-        <span className="text-white/85 text-[10px] font-bold tracking-[.6px] uppercase">
-          {count > 0 ? `${count} disponibles ahora` : 'Servicio activo'}
-        </span>
+      {/* Glow decorativo */}
+      <div
+        className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(239,68,68,.12) 0%, transparent 70%)' }}
+      />
+
+      {/* Ícono */}
+      <div
+        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
+        style={{ background: 'rgba(239,68,68,.15)', border: '1px solid rgba(239,68,68,.25)' }}
+      >
+        🚨
       </div>
-      <div className="text-white text-lg font-black mb-1">🚨 Urgencias 24H</div>
-      <div className="text-white/75 text-xs mb-3 leading-snug">
-        Profesionales verificados que responden en menos de 30 minutos
+
+      {/* Texto */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className="text-sm font-black" style={{ color: '#f5f0e8' }}>
+            Emergencias 24hs
+          </span>
+        </div>
+        <p className="text-xs" style={{ color: '#888' }}>
+          {count > 0 ? `${count} profesionales disponibles ahora mismo` : 'Profesionales disponibles ahora mismo'}
+        </p>
       </div>
-      <div className="bg-white rounded-xl py-2.5 text-center text-[13px] font-extrabold text-danger">
-        Ver profesionales disponibles →
+
+      {/* Badge pulsante */}
+      <div
+        className="flex-shrink-0 text-[9px] font-black uppercase tracking-wide px-2.5 py-1.5 rounded-full"
+        style={{
+          background: '#ef4444',
+          color: '#fff',
+          animation: 'urgency-pulse 2s ease-in-out infinite',
+        }}
+      >
+        ● En vivo
       </div>
     </button>
   )
