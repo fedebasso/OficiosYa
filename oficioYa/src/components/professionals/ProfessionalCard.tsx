@@ -1,54 +1,17 @@
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
+import { getCategoryMeta } from '../../lib/categories'
+import { getInitials } from '../../lib/utils'
 
 interface Props {
   professional: ProfessionalWithProfile
   onClick: () => void
 }
 
-const CATEGORY_COVER: Record<string, string> = {
-  electricista:       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=75',
-  plomero:            'https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=400&q=75',
-  albanil:            'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=75',
-  cerrajero:          'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=75',
-  aire_acondicionado: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=75',
-}
-
-const CATEGORY_EMOJI: Record<string, string> = {
-  electricista:       '⚡',
-  plomero:            '🔧',
-  albanil:            '🏗️',
-  cerrajero:          '🔑',
-  aire_acondicionado: '❄️',
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  electricista:       'Electricista',
-  plomero:            'Plomero',
-  albanil:            'Albañil',
-  cerrajero:          'Cerrajero',
-  aire_acondicionado: 'Aire Acondicionado',
-}
-
-const CATEGORY_ACCENT: Record<string, string> = {
-  electricista:       '#e8683a',
-  plomero:            '#3b82f6',
-  albanil:            '#f59e0b',
-  cerrajero:          '#8b5cf6',
-  aire_acondicionado: '#14b8a6',
-}
-
-function getInitials(name: string): string {
-  return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('')
-}
-
 export function ProfessionalCard({ professional, onClick }: Props) {
   const { profiles, verified, avg_rating, zone, jobs_count, available_now, categories } = professional
-  const cat    = categories[0] ?? ''
-  const cover  = CATEGORY_COVER[cat]  ?? 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=75'
-  const emoji  = CATEGORY_EMOJI[cat]  ?? '🛠️'
-  const label  = CATEGORY_LABELS[cat] ?? cat
-  const accent = CATEGORY_ACCENT[cat] ?? '#e8683a'
+  const { label, emoji, coverThumb, accent } = getCategoryMeta(categories[0] ?? '')
   const initials = getInitials(profiles.full_name)
+  const isTopPro = jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8
 
   return (
     <button
@@ -64,7 +27,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
         {profiles.avatar_url ? (
           <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
         ) : (
-          <img src={cover} alt={label} className="w-full h-full object-cover" />
+          <img src={coverThumb} alt={label} className="w-full h-full object-cover" />
         )}
       </div>
 
@@ -78,7 +41,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
               style={{ background: 'rgba(232,104,58,.15)', color: '#e8683a' }}
             >✓</span>
           )}
-          {jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8 && (
+          {isTopPro && (
             <span
               className="text-[8px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0 uppercase tracking-wide"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#fff' }}

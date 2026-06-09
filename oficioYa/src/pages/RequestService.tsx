@@ -1,23 +1,11 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useNavigate as useNav } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { RequestForm } from '../components/requests/RequestForm'
 import { useProfessionalById } from '../hooks/useProfessionals'
 import { useRequestStore } from '../store/requestStore'
-
-const CATEGORY_EMOJI: Record<string, string> = {
-  electricista: '⚡', plomero: '🔧', albanil: '🏗️',
-  cerrajero: '🔑', aire_acondicionado: '❄️',
-}
-const CATEGORY_LABELS: Record<string, string> = {
-  electricista: 'Electricista', plomero: 'Plomero', albanil: 'Albañil',
-  cerrajero: 'Cerrajero', aire_acondicionado: 'Aire Acondicionado',
-}
-
-function getInitials(name: string) {
-  return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('')
-}
+import { getCategoryMeta } from '../lib/categories'
+import { getInitials } from '../lib/utils'
 
 export default function RequestService() {
   const { id } = useParams<{ id: string }>()
@@ -49,9 +37,7 @@ export default function RequestService() {
     }
   }
 
-  const cat = professional?.categories[0] ?? ''
-  const emoji = CATEGORY_EMOJI[cat] ?? '🛠️'
-  const label = CATEGORY_LABELS[cat] ?? cat
+  const { emoji, label } = getCategoryMeta(professional?.categories[0] ?? '')
 
   const header = (
     <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#0f0f0f', borderBottom: '1px solid #1e1e1e' }}>

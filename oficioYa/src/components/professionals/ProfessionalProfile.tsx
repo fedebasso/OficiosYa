@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
+import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
+import { getInitials } from '../../lib/utils'
 
 /* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
 const MOCK_REVIEWS: Record<string, { name: string; initials: string; color: string; rating: number; date: string; text: string }[]> = {
@@ -90,33 +92,6 @@ interface Props {
   photos: WorkPhoto[]
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  electricista:       'Electricista',
-  plomero:            'Plomero',
-  aire_acondicionado: 'Aire Acondicionado',
-  cerrajero:          'Cerrajero/a',
-  albanil:            'Albañil',
-}
-
-const CATEGORY_EMOJI: Record<string, string> = {
-  electricista:       '⚡',
-  plomero:            '🔧',
-  albanil:            '🏗️',
-  cerrajero:          '🔑',
-  aire_acondicionado: '❄️',
-}
-
-const CATEGORY_COVER: Record<string, string> = {
-  electricista:       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-  plomero:            'https://images.unsplash.com/photo-1621905251189-08b45249a5c5?w=800&q=80',
-  albanil:            'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80',
-  cerrajero:          'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=80',
-  aire_acondicionado: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80',
-}
-
-function getInitials(name: string): string {
-  return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('')
-}
 
 export function ProfessionalProfile({ professional, photos }: Props) {
   const navigate = useNavigate()
@@ -125,9 +100,8 @@ export function ProfessionalProfile({ professional, photos }: Props) {
     whatsapp, id, jobs_count, response_time_min, available_now,
   } = professional
 
-  const cat      = categories[0] ?? ''
-  const specialty = `${CATEGORY_EMOJI[cat] ?? '🛠️'} ${CATEGORY_LABELS[cat] ?? cat}`
-  const cover    = CATEGORY_COVER[cat] ?? 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80'
+  const { label, emoji, cover } = getCategoryMeta(categories[0] ?? '')
+  const specialty = `${emoji} ${label}`
   const initials = getInitials(profiles.full_name)
 
   return (

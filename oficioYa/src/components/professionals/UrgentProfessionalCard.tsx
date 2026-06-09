@@ -1,33 +1,16 @@
 import { useNavigate } from 'react-router-dom'
 import { Avatar } from '../ui/Avatar'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
+import { getCategoryMeta } from '../../lib/categories'
 
 interface Props {
   professional: ProfessionalWithProfile
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  electricista: 'Electricista',
-  plomero: 'Sanitario',
-  aire_acondicionado: 'Aire Acondicionado',
-  cerrajero: 'Cerrajero/a',
-  albanil: 'Albañil',
-}
-
-const CATEGORY_EMOJI: Record<string, string> = {
-  electricista: '⚡',
-  plomero: '🔧',
-  albanil: '🏗️',
-  cerrajero: '🔑',
-  aire_acondicionado: '❄️',
-}
-
 export function UrgentProfessionalCard({ professional }: Props) {
   const navigate = useNavigate()
   const { profiles, verified, avg_rating, zone, jobs_count, response_time_min, whatsapp, categories } = professional
-  const cat = categories[0] ?? ''
-  const specialty = CATEGORY_LABELS[cat] ?? cat
-  const emoji = CATEGORY_EMOJI[cat] ?? '🛠️'
+  const { label: specialty, emoji } = getCategoryMeta(categories[0] ?? '')
 
   function handleCall(e: React.MouseEvent) {
     e.stopPropagation()
