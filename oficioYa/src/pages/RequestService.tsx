@@ -131,9 +131,17 @@ export default function RequestService() {
             </button>
             <button
               type="button"
+              onClick={() => navigate('/mis-solicitudes')}
+              className="w-full rounded-2xl py-3.5 text-sm font-bold active:opacity-70 transition-opacity"
+              style={{ background: '#1a1a1a', color: '#f5f0e8', border: '1px solid #2a2a2a' }}
+            >
+              Ver mis solicitudes
+            </button>
+            <button
+              type="button"
               onClick={() => navigate('/')}
               className="text-sm font-bold active:opacity-70"
-              style={{ color: '#e8683a' }}
+              style={{ color: '#555' }}
             >
               Volver al inicio
             </button>
