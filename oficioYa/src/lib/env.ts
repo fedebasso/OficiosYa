@@ -7,11 +7,17 @@
  */
 
 const url = import.meta.env.VITE_SUPABASE_URL ?? ''
+const key = import.meta.env.VITE_SUPABASE_ANON_KEY ?? ''
 
-export const IS_DEMO_MODE = !url.startsWith('https://')
+// Demo mode si la URL está vacía, es placeholder, o la key es placeholder
+export const IS_DEMO_MODE =
+  !url.startsWith('https://') ||
+  url.includes('placeholder') ||
+  key.includes('placeholder') ||
+  key === ''
 
 export const env = {
   supabaseUrl:  url,
-  supabaseKey:  import.meta.env.VITE_SUPABASE_ANON_KEY ?? '',
+  supabaseKey:  key,
   isDemoMode:   IS_DEMO_MODE,
 } as const
