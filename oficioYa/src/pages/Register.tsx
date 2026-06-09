@@ -148,7 +148,7 @@ export default function Register() {
                       key={opt.value}
                       type="button"
                       onClick={() => setRole(opt.value)}
-                      className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-all duration-150 active:scale-[.98]"
+                      className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-[transform,opacity] duration-200 active:scale-[0.97]"
                       style={{
                         border: active ? '2px solid #e8683a' : '2px solid #2a2a2a',
                         background: active ? 'rgba(232,104,58,.1)' : '#1a1a1a',
@@ -172,7 +172,7 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60 text-white"
+              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-[transform,opacity] duration-200 active:scale-[0.97] disabled:opacity-60 text-white"
               style={{ background: '#e8683a', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
             >
               {loading ? (

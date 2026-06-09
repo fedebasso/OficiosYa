@@ -16,7 +16,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left rounded-2xl overflow-hidden active:scale-[.99] transition-all duration-150 flex items-stretch"
+      className="w-full text-left rounded-2xl overflow-hidden active:scale-[0.97] transition-[transform,opacity] duration-200 flex items-stretch"
       style={{ background: '#141414', border: '1px solid #1e1e1e' }}
     >
       {/* Barra de color lateral por categoría */}

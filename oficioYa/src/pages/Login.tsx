@@ -120,7 +120,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60"
+              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-[transform,opacity] duration-200 active:scale-[0.97] disabled:opacity-60"
               style={{ background: '#e8683a', color: '#fff', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
             >
               {loading ? (
