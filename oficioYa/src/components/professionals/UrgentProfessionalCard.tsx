@@ -14,10 +14,20 @@ const CATEGORY_LABELS: Record<string, string> = {
   albanil: 'Albañil',
 }
 
+const CATEGORY_EMOJI: Record<string, string> = {
+  electricista: '⚡',
+  plomero: '🔧',
+  albanil: '🏗️',
+  cerrajero: '🔑',
+  aire_acondicionado: '❄️',
+}
+
 export function UrgentProfessionalCard({ professional }: Props) {
   const navigate = useNavigate()
   const { profiles, verified, avg_rating, zone, jobs_count, response_time_min, whatsapp, categories } = professional
-  const specialty = CATEGORY_LABELS[categories[0]] ?? categories[0]
+  const cat = categories[0] ?? ''
+  const specialty = CATEGORY_LABELS[cat] ?? cat
+  const emoji = CATEGORY_EMOJI[cat] ?? '🛠️'
 
   function handleCall(e: React.MouseEvent) {
     e.stopPropagation()
@@ -30,62 +40,85 @@ export function UrgentProfessionalCard({ professional }: Props) {
   }
 
   return (
-    <div className="bg-bg-card rounded-2xl overflow-hidden shadow-md">
-      {/* Header rojo */}
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+    >
+      {/* Franja de urgencia — sutil, oscura con acento rojo */}
       <div
-        className="flex items-center gap-2 px-3 py-1.5"
-        style={{ background: 'linear-gradient(90deg, #dc2626, #b91c1c)' }}
+        className="flex items-center justify-between px-4 py-2"
+        style={{ background: 'linear-gradient(90deg, #1a0505, #2a0808)', borderBottom: '1px solid rgba(239,68,68,.15)' }}
       >
-        <span className="w-2 h-2 bg-white rounded-full animate-pulse flex-shrink-0" />
-        <span className="text-white text-[9px] font-bold tracking-[.5px] uppercase">
-          Disponible ahora · 24H
+        <div className="flex items-center gap-2">
+          <span
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ background: '#ef4444', animation: 'urgency-pulse 2s ease-in-out infinite' }}
+          />
+          <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#ef4444' }}>
+            Disponible ahora · 24hs
+          </span>
+        </div>
+        <span className="text-[9px] font-bold" style={{ color: '#555' }}>
+          ⏱ ~{response_time_min} min
         </span>
       </div>
 
       {/* Body */}
-      <div className="p-3">
-        {/* Perfil — toca aquí para ir al perfil */}
+      <div className="p-4">
+        {/* Perfil */}
         <button
           type="button"
           onClick={() => navigate(`/profesional/${professional.id}`)}
-          className="w-full text-left flex items-center gap-2.5 mb-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg"
+          className="w-full text-left flex items-center gap-3 mb-4 focus:outline-none"
         >
           <Avatar src={profiles.avatar_url} name={profiles.full_name} size="md" />
-          <div className="min-w-0 flex-1">
-            <div className="text-[13px] font-extrabold text-text-main leading-tight">
-              {profiles.full_name}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span className="text-sm font-bold truncate" style={{ color: '#f5f0e8' }}>
+                {profiles.full_name}
+              </span>
+              {verified && (
+                <span
+                  className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                  style={{ background: 'rgba(232,104,58,.15)', color: '#e8683a' }}
+                >✓</span>
+              )}
             </div>
-            <div className="text-[11px] text-primary font-semibold mt-0.5">
-              {specialty}{verified && ' · ✓ Verificado/a'}
+            <div className="text-[11px] font-semibold" style={{ color: '#e8683a' }}>
+              {emoji} {specialty}
             </div>
+          </div>
+          <div className="text-right flex-shrink-0">
+            {avg_rating != null && (
+              <div className="text-sm font-bold" style={{ color: '#f5f0e8' }}>
+                <span style={{ color: '#f59e0b' }}>★</span> {avg_rating}
+              </div>
+            )}
+            <div className="text-[10px]" style={{ color: '#555' }}>{jobs_count} trabajos</div>
           </div>
         </button>
 
-        {/* Stats */}
-        <div className="flex gap-3 text-[11px] text-text-secondary mb-2">
-          {avg_rating != null && <span>⭐ {avg_rating}</span>}
-          <span>📍 {zone}</span>
-          <span>🔧 {jobs_count} trabajos</span>
+        {/* Zona */}
+        <div className="flex items-center gap-1.5 mb-4 text-[11px]" style={{ color: '#666' }}>
+          <span>📍</span>
+          <span>{zone}</span>
         </div>
 
-        {/* Tiempo respuesta */}
-        <div className="bg-danger/10 rounded-lg px-2.5 py-1.5 text-[10px] font-semibold text-danger mb-3">
-          ⏱ Responde en ~{response_time_min} minutos
-        </div>
-
-        {/* Botones de acción */}
+        {/* Botones */}
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={handleCall}
-            className="bg-primary text-white rounded-xl py-2.5 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+            className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
+            style={{ background: '#e8683a', boxShadow: '0 4px 12px rgba(232,104,58,.25)' }}
           >
             📞 Llamar
           </button>
           <button
             type="button"
             onClick={handleWhatsApp}
-            className="bg-whatsapp text-white rounded-xl py-2.5 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-1"
+            className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
+            style={{ background: '#25D366', boxShadow: '0 4px 12px rgba(37,211,102,.2)' }}
           >
             💬 WhatsApp
           </button>
