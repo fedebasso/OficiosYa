@@ -31,13 +31,15 @@ export default function Register() {
     <PageShell showBottomNav={false}>
       <div className="flex flex-col min-h-screen">
 
-        {/* Hero verde */}
-        <div className="bg-primary px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative">
-          <h1 className="text-4xl font-black text-white tracking-tight leading-none">
-            Oficio<span className="text-accent">Ya</span>
+        {/* Hero oscuro */}
+        <div
+          className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative"
+          style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
+        >
+          <h1 className="font-display text-4xl text-text-main tracking-tight leading-none">
+            Oficio<span className="text-primary">Ya</span>
           </h1>
-          <p className="text-white/60 text-sm">Creá tu cuenta gratis</p>
-          {/* Wave */}
+          <p className="text-text-muted text-sm">Creá tu cuenta gratis</p>
           <div className="absolute bottom-0 left-0 right-0 h-8 bg-background rounded-t-[32px]" />
         </div>
 
@@ -46,7 +48,7 @@ export default function Register() {
 
           <div>
             <h2 className="text-xl font-black text-text-main">Empezá ahora</h2>
-            <p className="text-sm text-gray-400 mt-0.5">Solo te lleva 1 minuto</p>
+            <p className="text-sm text-text-secondary mt-0.5">Solo te lleva 1 minuto</p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -64,11 +66,11 @@ export default function Register() {
 
             {/* Nombre */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
                 Nombre completo
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-base pointer-events-none">
                   👤
                 </span>
                 <input
@@ -78,18 +80,18 @@ export default function Register() {
                   placeholder="Tu nombre"
                   required
                   aria-describedby={error ? 'register-error' : undefined}
-                  className="w-full bg-white border-[1.5px] border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-text-main placeholder:text-gray-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-150"
+                  className="w-full bg-bg-elevated border border-border-dark rounded-2xl px-4 py-3 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-primary transition-colors pl-11"
                 />
               </div>
             </div>
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
                 Email
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-base pointer-events-none">
                   ✉️
                 </span>
                 <input
@@ -99,18 +101,18 @@ export default function Register() {
                   placeholder="tu@email.com"
                   required
                   aria-describedby={error ? 'register-error' : undefined}
-                  className="w-full bg-white border-[1.5px] border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-text-main placeholder:text-gray-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-150"
+                  className="w-full bg-bg-elevated border border-border-dark rounded-2xl px-4 py-3 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-primary transition-colors pl-11"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
                 Contraseña
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-base pointer-events-none">
                   🔒
                 </span>
                 <input
@@ -121,14 +123,14 @@ export default function Register() {
                   required
                   minLength={6}
                   aria-describedby={error ? 'register-error' : undefined}
-                  className="w-full bg-white border-[1.5px] border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-text-main placeholder:text-gray-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-150"
+                  className="w-full bg-bg-elevated border border-border-dark rounded-2xl px-4 py-3 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-primary transition-colors pl-11"
                 />
               </div>
             </div>
 
             {/* Role selector — Cards visuales */}
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
                 Soy...
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -143,8 +145,8 @@ export default function Register() {
                     className={[
                       'flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all duration-150 active:scale-[.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
                       role === opt.value
-                        ? 'border-primary bg-green-50'
-                        : 'border-gray-200 bg-white',
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border-dark bg-bg-elevated text-text-secondary',
                     ].join(' ')}
                     aria-pressed={role === opt.value}
                   >
@@ -152,7 +154,7 @@ export default function Register() {
                     <span className={`text-sm font-black ${role === opt.value ? 'text-primary' : 'text-text-main'}`}>
                       {opt.name}
                     </span>
-                    <span className="text-[10px] text-gray-400 text-center leading-tight">
+                    <span className="text-[10px] text-text-muted text-center leading-tight">
                       {opt.desc}
                     </span>
                   </button>
@@ -184,13 +186,13 @@ export default function Register() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-300 font-medium">o</span>
-            <div className="flex-1 h-px bg-gray-200" />
+            <div className="flex-1 h-px bg-border-dark" />
+            <span className="text-xs text-text-muted font-medium">o</span>
+            <div className="flex-1 h-px bg-border-dark" />
           </div>
 
           {/* Login link */}
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-text-secondary">
             ¿Ya tenés cuenta?{' '}
             <Link to="/login" className="text-primary font-bold">
               Iniciá sesión
