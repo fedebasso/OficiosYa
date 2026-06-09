@@ -25,28 +25,39 @@ export default function Login() {
     }
   }
 
+  const inputStyle = {
+    background: '#1a1a1a',
+    border: '1px solid #2a2a2a',
+    color: '#f5f0e8',
+    borderRadius: '16px',
+    padding: '12px 16px 12px 44px',
+    fontSize: '14px',
+    width: '100%',
+    outline: 'none',
+  }
+
   return (
     <PageShell showBottomNav={false}>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen" style={{ background: '#0f0f0f' }}>
 
         {/* Hero oscuro */}
         <div
           className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative"
           style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
         >
-          <h1 className="font-display text-4xl text-text-main tracking-tight leading-none">
-            Oficio<span className="text-primary">Ya</span>
+          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#f5f0e8' }}>
+            Oficio<span style={{ color: '#e8683a' }}>Ya</span>
           </h1>
-          <p className="text-text-muted text-sm">Profesionales de confianza en Montevideo</p>
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-background rounded-t-[32px]" />
+          <p className="text-sm" style={{ color: '#555' }}>Profesionales de confianza en Montevideo</p>
+          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#0f0f0f' }} />
         </div>
 
         {/* Form */}
         <div className="flex flex-col gap-5 px-6 pt-6 pb-10">
 
           <div>
-            <h2 className="text-xl font-black text-text-main">Bienvenido de vuelta</h2>
-            <p className="text-sm text-text-secondary mt-0.5">Ingresá a tu cuenta para continuar</p>
+            <h2 className="text-xl font-black" style={{ color: '#f5f0e8' }}>Bienvenido de vuelta</h2>
+            <p className="text-sm mt-0.5" style={{ color: '#888' }}>Ingresá a tu cuenta para continuar</p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -56,7 +67,8 @@ export default function Login() {
                 id="login-error"
                 role="alert"
                 aria-live="polite"
-                className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-sm text-red-600"
+                className="rounded-2xl px-4 py-3 text-sm"
+                style={{ background: 'rgba(220,38,38,.1)', border: '1px solid rgba(220,38,38,.3)', color: '#f87171' }}
               >
                 {error}
               </div>
@@ -64,11 +76,11 @@ export default function Login() {
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
                 Email
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>
                   ✉️
                 </span>
                 <input
@@ -78,18 +90,18 @@ export default function Login() {
                   placeholder="tu@email.com"
                   required
                   aria-describedby={error ? 'login-error' : undefined}
-                  className="w-full bg-bg-elevated border border-border-dark rounded-2xl px-4 py-3 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-primary transition-colors pl-11"
+                  style={inputStyle}
                 />
               </div>
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
                 Contraseña
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-base pointer-events-none">
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>
                   🔒
                 </span>
                 <input
@@ -99,7 +111,7 @@ export default function Login() {
                   placeholder="••••••••"
                   required
                   aria-describedby={error ? 'login-error' : undefined}
-                  className="w-full bg-bg-elevated border border-border-dark rounded-2xl px-4 py-3 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-primary transition-colors pl-11"
+                  style={inputStyle}
                 />
               </div>
             </div>
@@ -108,8 +120,8 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-white rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              style={{ boxShadow: '0 4px 14px rgba(15,110,86,.3)' }}
+              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60"
+              style={{ background: '#e8683a', color: '#fff', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -128,35 +140,35 @@ export default function Login() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-border-dark" />
-            <span className="text-xs text-text-muted font-medium">o</span>
-            <div className="flex-1 h-px bg-border-dark" />
+            <div className="flex-1 h-px" style={{ background: '#2a2a2a' }} />
+            <span className="text-xs font-medium" style={{ color: '#555' }}>o</span>
+            <div className="flex-1 h-px" style={{ background: '#2a2a2a' }} />
           </div>
 
           {/* Register link */}
-          <p className="text-center text-sm text-text-secondary">
+          <p className="text-center text-sm" style={{ color: '#888' }}>
             ¿No tenés cuenta?{' '}
-            <Link to="/registro" className="text-primary font-bold">
+            <Link to="/registro" className="font-bold" style={{ color: '#e8683a' }}>
               Registrate gratis
             </Link>
           </p>
 
           {/* Demo card */}
-          <div className="bg-bg-elevated border border-border-dark rounded-2xl p-4">
+          <div className="rounded-2xl p-4" style={{ background: '#1a1a1a', border: '1px solid #2a2a2a' }}>
             <div className="flex items-center gap-2 mb-3">
-              <span className="bg-primary text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full">
+              <span className="text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: '#e8683a' }}>
                 DEMO
               </span>
-              <span className="text-xs font-bold text-text-main">Accesos de prueba</span>
+              <span className="text-xs font-bold" style={{ color: '#f5f0e8' }}>Accesos de prueba</span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between py-1.5 border-b border-border-dark">
-                <span className="text-xs font-bold text-primary">👤 Cliente</span>
-                <span className="text-[11px] text-text-secondary font-mono">cliente@demo.com / demo123</span>
+              <div className="flex items-center justify-between py-1.5" style={{ borderBottom: '1px solid #2a2a2a' }}>
+                <span className="text-xs font-bold" style={{ color: '#e8683a' }}>👤 Cliente</span>
+                <span className="text-[11px] font-mono" style={{ color: '#888' }}>cliente@demo.com / demo123</span>
               </div>
               <div className="flex items-center justify-between py-1.5">
-                <span className="text-xs font-bold text-primary">🔧 Profesional</span>
-                <span className="text-[11px] text-text-secondary font-mono">pro@demo.com / demo123</span>
+                <span className="text-xs font-bold" style={{ color: '#e8683a' }}>🔧 Profesional</span>
+                <span className="text-[11px] font-mono" style={{ color: '#888' }}>pro@demo.com / demo123</span>
               </div>
             </div>
           </div>

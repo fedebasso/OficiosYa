@@ -167,7 +167,7 @@ export default function Register() {
               type="submit"
               disabled={loading}
               className="w-full bg-primary text-white rounded-2xl py-4 text-base font-bold tracking-wide transition-all duration-150 active:scale-[.99] disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              style={{ boxShadow: '0 4px 14px rgba(15,110,86,.3)' }}
+              style={{ boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

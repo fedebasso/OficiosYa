@@ -56,7 +56,7 @@ export default function Search() {
 
   return (
     <PageShell header={header}>
-      <div className="p-4 flex flex-col gap-3">
+      <div className="p-4 flex flex-col gap-3" style={{ background: '#0f0f0f', minHeight: '100%' }}>
         {loading && (
           <div className="flex justify-center py-12">
             <LoadingSpinner />
