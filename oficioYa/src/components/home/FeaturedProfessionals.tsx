@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { ProfessionalCard } from '../professionals/ProfessionalCard'
+import { FeaturedSkeleton } from '../ui/Skeleton'
 import { useProfessionals } from '../../hooks/useProfessionals'
 
 export function FeaturedProfessionals() {
@@ -8,7 +9,16 @@ export function FeaturedProfessionals() {
 
   const featured = professionals.filter((p) => p.featured)
 
-  if (loading || featured.length === 0) return null
+  if (loading) return (
+    <section>
+      <h2 className="text-[11px] font-bold text-text-secondary uppercase tracking-[.6px] mb-2.5">
+        Más recomendados
+      </h2>
+      <FeaturedSkeleton />
+    </section>
+  )
+
+  if (featured.length === 0) return null
 
   return (
     <section>

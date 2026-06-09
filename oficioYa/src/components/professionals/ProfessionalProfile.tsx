@@ -2,6 +2,89 @@ import { useNavigate } from 'react-router-dom'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
 
+/* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
+const MOCK_REVIEWS: Record<string, { name: string; initials: string; color: string; rating: number; date: string; text: string }[]> = {
+  default: [
+    { name: 'Ana Martínez', initials: 'AM', color: '#e8683a', rating: 5, date: 'hace 2 días', text: 'Excelente profesional. Llegó puntual, resolvió el problema rápido y dejó todo limpio. 100% recomendado.' },
+    { name: 'Juan González', initials: 'JG', color: '#3b82f6', rating: 5, date: 'hace 1 semana', text: 'Muy prolijo el trabajo y el precio fue justo. Ya lo tengo agendado para el próximo arreglo.' },
+    { name: 'Laura Pérez', initials: 'LP', color: '#8b5cf6', rating: 4, date: 'hace 2 semanas', text: 'Buen trabajo, explicó todo lo que hacía. Llegó 10 minutos tarde pero avisó con anticipación.' },
+  ],
+}
+
+function StarRow({ rating }: { rating: number }) {
+  return (
+    <span>
+      {[1,2,3,4,5].map(i => (
+        <span key={i} style={{ color: i <= rating ? '#f59e0b' : '#333', fontSize: 12 }}>★</span>
+      ))}
+    </span>
+  )
+}
+
+function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number | null; jobsCount: number; professionalId: string }) {
+  const reviews = MOCK_REVIEWS[professionalId] ?? MOCK_REVIEWS.default
+  if (!rating) return null
+
+  const fullStars = Math.round(rating)
+  const bars = [5,4,3,2,1]
+  const fakeCounts = [Math.round(jobsCount * .75), Math.round(jobsCount * .15), Math.round(jobsCount * .06), Math.round(jobsCount * .02), Math.round(jobsCount * .02)]
+
+  return (
+    <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+      <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Reseñas</h3>
+
+      {/* Rating overview */}
+      <div className="flex gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid #1e1e1e' }}>
+        <div className="text-center flex-shrink-0">
+          <div className="text-4xl font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-2px' }}>
+            {rating}
+          </div>
+          <div className="mt-1.5"><StarRow rating={fullStars} /></div>
+          <div className="text-[9px] mt-1" style={{ color: '#555' }}>{jobsCount} reseñas</div>
+        </div>
+        <div className="flex-1 flex flex-col justify-center gap-1">
+          {bars.map((star, i) => {
+            const pct = jobsCount > 0 ? Math.round((fakeCounts[i] / jobsCount) * 100) : 0
+            return (
+              <div key={star} className="flex items-center gap-2">
+                <span className="text-[10px] w-2" style={{ color: '#555' }}>{star}</span>
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#2a2a2a' }}>
+                  <div className="h-full rounded-full" style={{ width: `${pct}%`, background: '#f59e0b' }} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Review cards */}
+      <div className="flex flex-col gap-3">
+        {reviews.map((r, i) => (
+          <div key={i} className="flex flex-col gap-2">
+            <div className="flex items-center gap-2.5">
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-black flex-shrink-0"
+                style={{ background: r.color }}
+              >
+                {r.initials}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-bold leading-tight" style={{ color: '#f5f0e8' }}>{r.name}</div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <StarRow rating={r.rating} />
+                  <span className="text-[10px]" style={{ color: '#555' }}>{r.date}</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-sm leading-relaxed" style={{ color: '#888', paddingLeft: 44 }}>{r.text}</p>
+            {i < reviews.length - 1 && <div style={{ height: 1, background: '#1e1e1e', marginTop: 4 }} />}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 interface Props {
   professional: ProfessionalWithProfile
   photos: WorkPhoto[]
@@ -199,6 +282,9 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             <WorkPhotoGallery photos={photos} />
           </div>
         )}
+
+        {/* Reseñas */}
+        <ReviewsSection rating={avg_rating} jobsCount={jobs_count} professionalId={id} />
       </div>
 
       {/* ── CTA FIJO ── */}

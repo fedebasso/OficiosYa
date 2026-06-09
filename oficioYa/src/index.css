@@ -63,6 +63,13 @@ input:-webkit-autofill:focus {
 
 /* ── ANIMATIONS ──────────────────────────────────────────────── */
 
+/* Shimmer para skeletons */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
 /* Urgencias badge pulse */
 @keyframes urgency-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,.5); }

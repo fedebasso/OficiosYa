@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
-import { LoadingSpinner } from '../components/ui/LoadingSpinner'
+import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
 import { useProfessionals } from '../hooks/useProfessionals'
 
@@ -106,8 +106,8 @@ export default function Search() {
     <PageShell header={header}>
       <div className="p-4 flex flex-col gap-3" style={{ background: '#0f0f0f', minHeight: '100%' }}>
         {loading && (
-          <div className="flex justify-center py-12">
-            <LoadingSpinner />
+          <div className="flex flex-col gap-3">
+            {[0,1,2,3].map(i => <ProfessionalCardSkeleton key={i} />)}
           </div>
         )}
         {error && (
