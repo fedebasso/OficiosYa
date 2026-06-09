@@ -83,6 +83,22 @@ export function useProfessionalById(id: string) {
   return { professional, loading, error }
 }
 
+export function useProfessionalPhotos(professionalId: string) {
+  const [photos, setPhotos] = useState<WorkPhoto[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!professionalId) return
+    setLoading(true)
+    professionalService.getPhotos(professionalId)
+      .then(setPhotos)
+      .catch(() => setPhotos([]))
+      .finally(() => setLoading(false))
+  }, [professionalId])
+
+  return { photos, loading }
+}
+
 export function useUrgentProfessionals() {
   const [professionals, setProfessionals] = useState<ProfessionalWithProfile[]>([])
   const [loading, setLoading] = useState(true)

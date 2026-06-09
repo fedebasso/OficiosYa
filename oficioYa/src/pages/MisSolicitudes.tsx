@@ -30,10 +30,10 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 }
 
 export default function MisSolicitudes() {
-  const { requests, loading, loadRequests } = useRequestStore()
+  const { requests, loading, loadRequests, submitReview } = useRequestStore()
   const [reviewingId, setReviewingId] = useState<string | null>(null)
 
-  useEffect(() => { loadRequests() }, [])
+  useEffect(() => { loadRequests() }, [loadRequests])
 
   const header = (
     <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#0f0f0f', borderBottom: '1px solid #1e1e1e' }}>
@@ -115,7 +115,7 @@ export default function MisSolicitudes() {
             <ReviewForm
               requestId={reviewingId}
               onSubmit={async (rating, comment) => {
-                console.log('Review:', { rating, comment, requestId: reviewingId })
+                await submitReview(reviewingId, rating, comment)
               }}
               onClose={() => setReviewingId(null)}
             />

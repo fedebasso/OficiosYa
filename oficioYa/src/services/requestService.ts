@@ -37,4 +37,22 @@ export const requestService = {
     if (error) throw error
     return data as ServiceRequest
   },
+
+  async updateStatus(id: string, status: ServiceRequest['status']): Promise<void> {
+    if (IS_DEMO_MODE) {
+      mockRequests = mockRequests.map((r) => r.id === id ? { ...r, status } : r)
+      return
+    }
+    const { error } = await supabase.from('requests').update({ status }).eq('id', id)
+    if (error) throw error
+  },
+
+  async submitReview(requestId: string, rating: number, comment: string): Promise<void> {
+    if (IS_DEMO_MODE) {
+      mockRequests = mockRequests.map((r) => r.id === requestId ? { ...r, status: 'completed' } : r)
+      return
+    }
+    const { error } = await supabase.from('reviews').insert({ request_id: requestId, rating, comment })
+    if (error) throw error
+  },
 }

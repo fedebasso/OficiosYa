@@ -1,6 +1,5 @@
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
 import { getCategoryMeta } from '../../lib/categories'
-import { getInitials } from '../../lib/utils'
 
 interface Props {
   professional: ProfessionalWithProfile
@@ -10,7 +9,6 @@ interface Props {
 export function ProfessionalCard({ professional, onClick }: Props) {
   const { profiles, verified, avg_rating, zone, jobs_count, available_now, categories } = professional
   const { label, emoji, coverThumb, accent } = getCategoryMeta(categories[0] ?? '')
-  const initials = getInitials(profiles.full_name)
   const isTopPro = jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8
 
   return (

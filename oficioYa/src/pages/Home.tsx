@@ -6,6 +6,7 @@ import { CategoryGrid } from '../components/home/CategoryGrid'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { UrgenciasBanner } from '../components/home/UrgenciasBanner'
 import { StatsBar } from '../components/home/StatsBar'
+import { useAuthStore } from '../store/authStore'
 
 function useReveal() {
   const ref = useRef<HTMLElement>(null)
@@ -24,6 +25,7 @@ function useReveal() {
 
 export default function Home() {
   const navigate = useNavigate()
+  const user = useAuthStore((s) => s.user)
 
   const heroRef    = useReveal()
   const urgRef     = useReveal()
@@ -40,7 +42,7 @@ export default function Home() {
         </h1>
         <button
           type="button"
-          onClick={() => navigate('/login')}
+          onClick={() => navigate(user ? (user.role === 'professional' ? '/pro/perfil' : '/mis-solicitudes') : '/login')}
           className="w-11 h-11 rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"
           style={{
             background: 'linear-gradient(135deg, #2a1f10 0%, #3d2c16 100%)',
