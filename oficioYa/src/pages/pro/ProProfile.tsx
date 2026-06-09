@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { PageShell } from '../../components/layout/PageShell'
-import { Camera, Check } from 'lucide-react'
+import { Camera, Check, LogOut } from 'lucide-react'
 import { getInitials } from '../../lib/utils'
 
 const CATEGORIES = [
@@ -38,6 +39,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function ProProfile() {
   const user = useAuthStore((s) => s.user)
+  const signOut = useAuthStore((s) => s.signOut)
+  const navigate = useNavigate()
   const [bio, setBio]                           = useState('')
   const [whatsapp, setWhatsapp]                 = useState(user?.phone ?? '')
   const [zone, setZone]                         = useState('')
@@ -187,6 +190,17 @@ export default function ProProfile() {
             ))}
           </select>
         </Section>
+
+        {/* Cerrar sesión */}
+        <button
+          type="button"
+          onClick={async () => { await signOut(); navigate('/login') }}
+          className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 active:opacity-70 transition-opacity"
+          style={{ background: 'transparent', color: '#555', border: '1px solid #1e1e1e' }}
+        >
+          <LogOut size={14} />
+          Cerrar sesión
+        </button>
 
         {/* Guardar */}
         <button

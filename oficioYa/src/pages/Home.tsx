@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { SearchBar } from '../components/home/SearchBar'
@@ -26,6 +26,8 @@ function useReveal() {
 export default function Home() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
+  const signOut = useAuthStore((s) => s.signOut)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const heroRef    = useReveal()
   const urgRef     = useReveal()
@@ -40,21 +42,56 @@ export default function Home() {
         <h1 className="text-[32px] font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-1px' }}>
           Oficio<span style={{ color: '#e8683a' }}>Ya</span>
         </h1>
-        <button
-          type="button"
-          onClick={() => navigate(user ? (user.role === 'professional' ? '/pro/perfil' : '/mis-solicitudes') : '/login')}
-          className="w-11 h-11 rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"
-          style={{
-            background: 'linear-gradient(135deg, #2a1f10 0%, #3d2c16 100%)',
-            border: '2px solid #e8683a',
-            boxShadow: '0 0 12px rgba(232,104,58,.25)',
-          }}
-          aria-label="Mi cuenta"
-        >
-          <span style={{ fontSize: 18 }}>👤</span>
-        </button>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => user ? setMenuOpen(v => !v) : navigate('/login')}
+            className="w-11 h-11 rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, #2a1f10 0%, #3d2c16 100%)',
+              border: `2px solid ${user ? '#e8683a' : '#2a2a2a'}`,
+              boxShadow: user ? '0 0 12px rgba(232,104,58,.25)' : 'none',
+            }}
+            aria-label="Mi cuenta"
+          >
+            <span style={{ fontSize: 18 }}>👤</span>
+          </button>
+
+          {menuOpen && user && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+              <div
+                className="absolute right-0 top-13 z-50 rounded-2xl overflow-hidden min-w-[160px]"
+                style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', boxShadow: '0 8px 24px rgba(0,0,0,.4)', top: '52px' }}
+              >
+                <div className="px-4 py-3" style={{ borderBottom: '1px solid #242424' }}>
+                  <p className="text-xs font-bold truncate" style={{ color: '#f5f0e8' }}>{user.full_name}</p>
+                  <p className="text-[10px] mt-0.5" style={{ color: '#555' }}>
+                    {user.role === 'professional' ? 'Profesional' : 'Cliente'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setMenuOpen(false); navigate(user.role === 'professional' ? '/pro/perfil' : '/mis-solicitudes') }}
+                  className="w-full px-4 py-3 text-left text-sm font-medium active:opacity-70"
+                  style={{ color: '#f5f0e8', borderBottom: '1px solid #242424' }}
+                >
+                  Mi cuenta
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => { setMenuOpen(false); await signOut(); navigate('/login') }}
+                  className="w-full px-4 py-3 text-left text-sm font-medium active:opacity-70"
+                  style={{ color: '#ef4444' }}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-      <SearchBar onSearch={() => navigate('/buscar')} />
+      <SearchBar onSearch={(q) => navigate(q ? `/buscar?q=${encodeURIComponent(q)}` : '/buscar')} />
     </header>
   )
 
