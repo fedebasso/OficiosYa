@@ -48,7 +48,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const initials = getInitials(profiles.full_name)
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen" style={{ background: '#0f0f0f' }}>
 
       {/* ── HERO ── */}
       <div className="relative h-72 overflow-hidden flex-shrink-0" style={{ background: '#111' }}>
@@ -214,8 +214,8 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         <button
           type="button"
           onClick={() => navigate(`/solicitar/${id}`)}
-          className="bg-primary text-white rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity"
-          style={{ boxShadow: '0 4px 16px rgba(232,104,58,.3)' }}
+          className="rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
+          style={{ background: '#e8683a', boxShadow: '0 4px 16px rgba(232,104,58,.3)' }}
         >
           Solicitar trabajo
         </button>

@@ -3,9 +3,60 @@
 @tailwind utilities;
 
 @layer base {
-  body {
+  html, body, #root {
     background-color: #0f0f0f;
     color: #f5f0e8;
     font-family: 'DM Sans', system-ui, sans-serif;
   }
 }
+
+/* ── DARK THEME OVERRIDES ─────────────────────────────────────
+   Force correct token values regardless of Tailwind JIT cache.
+   These declarations sit after the utilities layer and win the cascade.
+──────────────────────────────────────────────────────────────── */
+
+/* Primary = burnt orange */
+.bg-primary            { background-color: #e8683a !important; }
+.text-primary          { color: #e8683a !important; }
+.border-primary        { border-color: #e8683a !important; }
+.ring-primary          { --tw-ring-color: #e8683a !important; }
+.focus-visible\:ring-primary:focus-visible { --tw-ring-color: #e8683a !important; }
+.hover\:bg-primary:hover { background-color: #e8683a !important; }
+.bg-primary\/10        { background-color: rgba(232,104,58,.10) !important; }
+.bg-primary\/20        { background-color: rgba(232,104,58,.20) !important; }
+.focus\:border-primary:focus { border-color: #e8683a !important; }
+.focus-visible\:ring-offset-primary { --tw-ring-offset-color: #e8683a !important; }
+
+/* Background = near-black */
+.bg-background         { background-color: #0f0f0f !important; }
+.bg-bg-card            { background-color: #141414 !important; }
+.bg-bg-elevated        { background-color: #1a1a1a !important; }
+.hover\:bg-bg-elevated:hover { background-color: #1a1a1a !important; }
+.active\:bg-bg-elevated:active { background-color: #1a1a1a !important; }
+
+/* Text tokens */
+.text-text-main        { color: #f5f0e8 !important; }
+.text-text-secondary   { color: #888888 !important; }
+.text-text-muted       { color: #555555 !important; }
+.placeholder-text-muted::placeholder { color: #555555 !important; }
+.text-star             { color: #f59e0b !important; }
+.text-accent           { color: #f5b99a !important; }
+
+/* Border tokens */
+.border-border-dark    { border-color: #1e1e1e !important; }
+.border-b-border-dark  { border-bottom-color: #1e1e1e !important; }
+.border-t-border-dark  { border-top-color: #1e1e1e !important; }
+.bg-border-dark        { background-color: #1e1e1a !important; }
+.divide-border-dark > * + * { border-color: #1e1e1e !important; }
+
+/* Autofill override — prevent browser white autofill on dark inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+  -webkit-text-fill-color: #f5f0e8 !important;
+  caret-color: #f5f0e8;
+}
+
+/* WhatsApp */
+.bg-whatsapp           { background-color: #25D366 !important; }
