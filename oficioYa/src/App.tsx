@@ -14,6 +14,7 @@ import ProProfile from './pages/pro/ProProfile'
 import ProRequests from './pages/pro/ProRequests'
 import ProWorkHistory from './pages/pro/ProWorkHistory'
 import Urgencias from './pages/Urgencias'
+import NotFound from './pages/NotFound'
 
 function ProtectedRoute({
   children,
@@ -48,6 +49,7 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Register />} />
+        <Route path="*" element={<NotFound />} />
         <Route path="/pro/registro" element={<ProOnboarding />} />
         <Route
           path="/pro/perfil"

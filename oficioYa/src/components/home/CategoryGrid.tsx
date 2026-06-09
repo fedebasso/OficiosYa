@@ -48,7 +48,7 @@ function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="relative aspect-square rounded-2xl overflow-hidden active:scale-[.97] transition-transform duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      className="relative aspect-square rounded-2xl overflow-hidden active:scale-[.97] transition-transform duration-150 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8683a]"
     >
       {/* Foto real */}
       <img

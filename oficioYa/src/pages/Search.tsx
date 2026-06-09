@@ -1,5 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { Search as SearchIcon } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
@@ -18,8 +19,10 @@ type Filter = 'disponible' | 'top' | 'rating'
 export default function Search() {
   const { categoria } = useParams<{ categoria: string }>()
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const textQuery = searchParams.get('q') ?? ''
+  const [inputValue, setInputValue] = useState(textQuery)
+  const inputRef = useRef<HTMLInputElement>(null)
   const { professionals, loading, error } = useProfessionals(categoria)
   const [activeFilters, setActiveFilters] = useState<Set<Filter>>(new Set())
 
@@ -68,15 +71,28 @@ export default function Search() {
         >
           ←
         </button>
-        <div
+        <form
           className="flex-1 flex items-center gap-2 rounded-xl px-3 py-2"
           style={{ background: '#1a1a1a', border: '1px solid #2a2a2a' }}
+          onSubmit={(e) => {
+            e.preventDefault()
+            const q = inputValue.trim()
+            if (q) setSearchParams({ q })
+            else setSearchParams({})
+            inputRef.current?.blur()
+          }}
         >
-          <span style={{ color: '#e8683a' }} className="text-sm">🔍</span>
-          <span className="text-sm truncate" style={{ color: textQuery ? '#f5f0e8' : '#555' }}>
-            {textQuery || `${label}...`}
-          </span>
-        </div>
+          <SearchIcon size={14} style={{ color: '#e8683a', flexShrink: 0 }} />
+          <input
+            ref={inputRef}
+            type="search"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder={`${label}...`}
+            className="flex-1 bg-transparent text-sm focus:outline-none min-w-0"
+            style={{ color: '#f5f0e8', caretColor: '#e8683a' }}
+          />
+        </form>
       </div>
 
       {/* Filtros */}
