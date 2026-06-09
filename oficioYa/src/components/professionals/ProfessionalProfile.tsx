@@ -150,6 +150,12 @@ export function ProfessionalProfile({ professional, photos }: Props) {
               ✓ Verificado
             </span>
           )}
+          {jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8 && (
+            <span className="rounded-full text-[11px] font-black px-3 py-1"
+              style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#fff' }}>
+              ★ Top Pro
+            </span>
+          )}
           {available_now && (
             <span className="rounded-full text-[11px] font-semibold px-3 py-1"
               style={{ background: 'rgba(232,104,58,.1)', color: '#e8683a', border: '1px solid rgba(232,104,58,.2)' }}>

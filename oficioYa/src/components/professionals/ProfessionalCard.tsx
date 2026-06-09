@@ -78,6 +78,12 @@ export function ProfessionalCard({ professional, onClick }: Props) {
               style={{ background: 'rgba(232,104,58,.15)', color: '#e8683a' }}
             >✓</span>
           )}
+          {jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8 && (
+            <span
+              className="text-[8px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0 uppercase tracking-wide"
+              style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#fff' }}
+            >★ Top</span>
+          )}
         </div>
         <div className="text-[11px] font-medium mb-1.5" style={{ color: accent }}>
           {emoji} {label}

@@ -5,6 +5,7 @@ import { SearchBar } from '../components/home/SearchBar'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { UrgenciasBanner } from '../components/home/UrgenciasBanner'
+import { StatsBar } from '../components/home/StatsBar'
 
 function useReveal() {
   const ref = useRef<HTMLElement>(null)
@@ -25,8 +26,9 @@ export default function Home() {
   const navigate = useNavigate()
 
   const heroRef    = useReveal()
-  const catsRef    = useReveal()
   const urgRef     = useReveal()
+  const catsRef    = useReveal()
+  const statsRef   = useReveal()
   const featRef    = useReveal()
   const ctaRef     = useReveal()
 
@@ -99,6 +101,11 @@ export default function Home() {
             ¿Qué necesitás?
           </h2>
           <CategoryGrid />
+        </section>
+
+        {/* Stats */}
+        <section ref={statsRef as React.RefObject<HTMLElement>} className="reveal">
+          <StatsBar />
         </section>
 
         {/* Más recomendados */}
