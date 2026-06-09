@@ -60,7 +60,7 @@ function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }
       {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
       {/* Fallback si no carga */}
-      <div className="absolute inset-0 -z-10 bg-primary/20 flex items-center justify-center">
+      <div className="absolute inset-0 -z-10 flex items-center justify-center" style={{ background: 'rgba(232,104,58,.15)' }}>
         <span style={{ fontSize: 28 }}>{cat.emoji}</span>
       </div>
       {/* Nombre */}

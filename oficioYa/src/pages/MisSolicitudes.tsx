@@ -30,8 +30,9 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 }
 
 export default function MisSolicitudes() {
-  const { requests, loading, loadRequests, submitReview } = useRequestStore()
+  const { requests, loading, loadRequests, submitReview, updateStatus } = useRequestStore()
   const [reviewingId, setReviewingId] = useState<string | null>(null)
+  const [cancellingId, setCancellingId] = useState<string | null>(null)
 
   useEffect(() => { loadRequests() }, [loadRequests])
 
@@ -103,6 +104,16 @@ export default function MisSolicitudes() {
                   ★ Dejar reseña
                 </button>
               )}
+              {req.status === 'pending' && (
+                <button
+                  type="button"
+                  onClick={() => setCancellingId(req.id)}
+                  className="w-full rounded-2xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
+                  style={{ background: 'rgba(239,68,68,.06)', color: '#ef4444', border: '1px solid rgba(239,68,68,.15)' }}
+                >
+                  Cancelar solicitud
+                </button>
+              )}
             </div>
           )
         })}
@@ -119,6 +130,39 @@ export default function MisSolicitudes() {
               }}
               onClose={() => setReviewingId(null)}
             />
+          </div>
+        </div>
+      )}
+
+      {cancellingId && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,.7)' }}>
+          <div className="w-full max-w-md rounded-t-2xl p-6 flex flex-col gap-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#ef4444' }}>Cancelar solicitud</p>
+              <p className="text-base font-black" style={{ color: '#f5f0e8' }}>¿Confirmás la cancelación?</p>
+              <p className="text-sm mt-1" style={{ color: '#555' }}>El profesional será notificado.</p>
+            </div>
+            <div className="flex gap-2.5">
+              <button
+                type="button"
+                onClick={() => setCancellingId(null)}
+                className="flex-1 rounded-xl py-3 text-sm font-bold active:opacity-70"
+                style={{ background: '#1a1a1a', color: '#888', border: '1px solid #2a2a2a' }}
+              >
+                Volver
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await updateStatus(cancellingId, 'cancelled')
+                  setCancellingId(null)
+                }}
+                className="flex-1 rounded-xl py-3 text-sm font-bold text-white active:opacity-80"
+                style={{ background: '#ef4444' }}
+              >
+                Sí, cancelar
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import type { ProfessionalWithProfile } from '../hooks/useProfessionals'
 
 export const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
+  // ── Electricistas ──
   {
     id: '1',
     bio: 'Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales.',
@@ -16,6 +17,36 @@ export const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     profiles: { id: '1', role: 'professional', full_name: 'Carlos Méndez', phone: '598912345678', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
+    id: '6',
+    bio: 'Especialista en automatización de hogares, domótica y eficiencia energética.',
+    categories: ['electricista'],
+    avg_rating: 4.6,
+    verified: true,
+    whatsapp: '598911111111',
+    zone: 'Carrasco',
+    featured: false,
+    jobs_count: 58,
+    response_time_min: 25,
+    available_now: false,
+    profiles: { id: '6', role: 'professional', full_name: 'Martín Suárez', phone: '598911111111', avatar_url: null, city: 'Montevideo', created_at: '' },
+  },
+  {
+    id: '7',
+    bio: 'Tableros eléctricos, puesta a tierra, instalaciones trifásicas. 8 años de trayectoria.',
+    categories: ['electricista'],
+    avg_rating: 4.4,
+    verified: false,
+    whatsapp: '598922222222',
+    zone: 'Cordón',
+    featured: false,
+    jobs_count: 34,
+    response_time_min: 40,
+    available_now: true,
+    profiles: { id: '7', role: 'professional', full_name: 'Luis Cabrera', phone: '598922222222', avatar_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80', city: 'Montevideo', created_at: '' },
+  },
+
+  // ── Plomeros ──
+  {
     id: '2',
     bio: 'Sanitarista con experiencia en destapes, pérdidas y remodelaciones de baños.',
     categories: ['plomero'],
@@ -29,6 +60,22 @@ export const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     available_now: true,
     profiles: { id: '2', role: 'professional', full_name: 'Roberto Silva', phone: '598923456789', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
+  {
+    id: '8',
+    bio: 'Plomero con certificación Gas Natural. Instalaciones nuevas y reparaciones urgentes.',
+    categories: ['plomero'],
+    avg_rating: 4.7,
+    verified: true,
+    whatsapp: '598933333333',
+    zone: 'Punta Carretas',
+    featured: true,
+    jobs_count: 102,
+    response_time_min: 18,
+    available_now: true,
+    profiles: { id: '8', role: 'professional', full_name: 'Andrés Pereira', phone: '598933333333', avatar_url: null, city: 'Montevideo', created_at: '' },
+  },
+
+  // ── Aire acondicionado ──
   {
     id: '3',
     bio: 'Técnico en aire acondicionado, instalación y mantenimiento de equipos split.',
@@ -44,6 +91,22 @@ export const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     profiles: { id: '3', role: 'professional', full_name: 'Diego Fernández', phone: '598934567890', avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
+    id: '9',
+    bio: 'Técnico certificado Daikin y LG. Limpieza, recarga de gas, instalación en altura.',
+    categories: ['aire_acondicionado'],
+    avg_rating: 4.9,
+    verified: true,
+    whatsapp: '598944444444',
+    zone: 'Buceo',
+    featured: true,
+    jobs_count: 76,
+    response_time_min: 30,
+    available_now: true,
+    profiles: { id: '9', role: 'professional', full_name: 'Fabián Moreira', phone: '598944444444', avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&q=80', city: 'Montevideo', created_at: '' },
+  },
+
+  // ── Cerrajeros ──
+  {
     id: '4',
     bio: 'Cerrajera con disponibilidad 24 horas. Apertura de puertas, cambio de cerraduras, duplicado de llaves.',
     categories: ['cerrajero'],
@@ -58,6 +121,22 @@ export const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     profiles: { id: '4', role: 'professional', full_name: 'Ana Rodríguez', phone: '598945678901', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
   {
+    id: '10',
+    bio: 'Cerrajero industrial y residencial. Cajas fuertes, rejas y portones automáticos.',
+    categories: ['cerrajero'],
+    avg_rating: 4.3,
+    verified: false,
+    whatsapp: '598955555555',
+    zone: 'La Blanqueada',
+    featured: false,
+    jobs_count: 27,
+    response_time_min: 20,
+    available_now: false,
+    profiles: { id: '10', role: 'professional', full_name: 'Sergio Núñez', phone: '598955555555', avatar_url: null, city: 'Montevideo', created_at: '' },
+  },
+
+  // ── Albañiles ──
+  {
     id: '5',
     bio: 'Albañil con más de 15 años en obras civiles, reparaciones y remodelaciones.',
     categories: ['albanil'],
@@ -70,5 +149,19 @@ export const MOCK_PROFESSIONALS: ProfessionalWithProfile[] = [
     response_time_min: 30,
     available_now: false,
     profiles: { id: '5', role: 'professional', full_name: 'Pablo Torres', phone: '598956789012', avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80', city: 'Montevideo', created_at: '' },
+  },
+  {
+    id: '11',
+    bio: 'Especialista en remodelaciones de cocina y baño. Colocación de pisos, azulejos y revestimientos.',
+    categories: ['albanil'],
+    avg_rating: 4.7,
+    verified: true,
+    whatsapp: '598966666666',
+    zone: 'Parque Batlle',
+    featured: true,
+    jobs_count: 91,
+    response_time_min: 0,
+    available_now: false,
+    profiles: { id: '11', role: 'professional', full_name: 'Gabriel Ríos', phone: '598966666666', avatar_url: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&q=80', city: 'Montevideo', created_at: '' },
   },
 ]

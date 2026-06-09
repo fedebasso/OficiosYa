@@ -53,6 +53,12 @@ export default function ProProfile() {
     )
 
   const handleSave = async () => {
+    // En demo actualiza el store local; en prod conectará a Supabase
+    if (whatsapp && whatsapp !== user?.phone) {
+      useAuthStore.setState((s) => ({
+        user: s.user ? { ...s.user, phone: whatsapp ?? null } : null,
+      }))
+    }
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
