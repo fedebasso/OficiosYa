@@ -8,22 +8,23 @@ export default function Home() {
   const navigate = useNavigate()
 
   const homeHeader = (
-    <header className="bg-background border-b border-border-dark px-4 pt-10 pb-5 sticky top-0 z-50">
+    <header className="border-b border-border-dark px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#0f0f0f' }}>
       <div className="flex items-center justify-between mb-3">
-        <div>
-          <h1 className="text-[22px] font-display text-text-main leading-none">
-            Oficio<span className="text-primary">Ya</span>
-          </h1>
-          <p className="text-text-muted text-[11px] mt-0.5">📍 Montevideo</p>
-        </div>
+        <h1 className="text-[32px] font-black leading-none tracking-tight" style={{ color: '#f5f0e8', letterSpacing: '-1px' }}>
+          Oficio<span style={{ color: '#e8683a' }}>Ya</span>
+        </h1>
         <button
           type="button"
           onClick={() => navigate('/login')}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-text-main text-lg focus:outline-none"
-          style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)' }}
+          className="w-11 h-11 rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"
+          style={{
+            background: 'linear-gradient(135deg, #2a1f10 0%, #3d2c16 100%)',
+            border: '2px solid #e8683a',
+            boxShadow: '0 0 12px rgba(232,104,58,.25)',
+          }}
           aria-label="Mi cuenta"
         >
-          👤
+          <span style={{ fontSize: 18 }}>👤</span>
         </button>
       </div>
       <SearchBar onSearch={() => navigate('/buscar')} />
