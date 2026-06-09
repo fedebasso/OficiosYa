@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { requestService } from '../services/requestService'
 
 export interface ServiceRequest {
   id: string
@@ -8,7 +8,7 @@ export interface ServiceRequest {
   category: string
   description: string
   urgency: boolean
-  status: 'pending' | 'accepted' | 'completed' | 'rejected'
+  status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
   created_at: string
   contact_phone?: string
 }
@@ -21,52 +21,21 @@ interface RequestStore {
   loadRequests: () => Promise<void>
 }
 
-// Mock storage para demo (cuando Supabase no está configurado)
-let mockRequests: ServiceRequest[] = []
-let mockIdCounter = 100
-
-const isPlaceholder = () =>
-  (import.meta.env.VITE_SUPABASE_URL ?? '').includes('placeholder')
-
-export const useRequestStore = create<RequestStore>((set, _get) => ({
+export const useRequestStore = create<RequestStore>((set) => ({
   requests: [],
   loading: false,
   error: null,
 
   addRequest: async (req) => {
-    if (isPlaceholder()) {
-      const newReq: ServiceRequest = {
-        ...req,
-        id: String(++mockIdCounter),
-        client_id: null,
-        status: 'pending',
-        created_at: new Date().toISOString(),
-      }
-      mockRequests = [...mockRequests, newReq]
-      set({ requests: mockRequests })
-      return newReq
-    }
-    const { data, error } = await supabase
-      .from('requests')
-      .insert({ ...req, status: 'pending' })
-      .select()
-      .single()
-    if (error) throw error
-    const newReq = data as ServiceRequest
-    set((s) => ({ requests: [...s.requests, newReq] }))
+    const newReq = await requestService.create(req)
+    set((s) => ({ requests: [newReq, ...s.requests] }))
     return newReq
   },
 
   loadRequests: async () => {
     set({ loading: true, error: null })
     try {
-      if (isPlaceholder()) {
-        set({ requests: mockRequests, loading: false })
-        return
-      }
-      const { data, error } = await supabase.from('requests').select('*').order('created_at', { ascending: false })
-      if (error) throw error
-      set({ requests: (data as ServiceRequest[]) ?? [], loading: false })
+      set({ requests: await requestService.getAll(), loading: false })
     } catch (e) {
       set({ error: e instanceof Error ? e.message : 'Error', loading: false })
     }
