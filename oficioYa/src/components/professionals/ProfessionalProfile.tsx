@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
+import { BottomNav } from '../layout/BottomNav'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
 import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
@@ -197,7 +198,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
       </div>
 
       {/* ── BODY ── */}
-      <div className="flex flex-col gap-3 px-4 pt-4 pb-28">
+      <div className="flex flex-col gap-3 px-4 pt-4 pb-36">
 
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
@@ -263,7 +264,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
 
       {/* ── CTA FIJO ── */}
       <div
-        className="fixed bottom-0 left-0 right-0 px-4 pb-6 pt-3 grid gap-3"
+        className="fixed bottom-16 left-0 right-0 px-4 pb-4 pt-3 grid gap-3"
         style={{
           gridTemplateColumns: '1fr 2fr',
           background: 'linear-gradient(to top, #0f0f0f 70%, transparent)',
@@ -287,6 +288,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         </button>
       </div>
 
+      <BottomNav />
     </div>
   )
 }

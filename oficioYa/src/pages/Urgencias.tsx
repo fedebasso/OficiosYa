@@ -69,7 +69,7 @@ export default function Urgencias() {
   )
 
   return (
-    <PageShell header={header} showBottomNav={false}>
+    <PageShell header={header}>
       <div className="p-4 flex flex-col gap-3" style={{ background: '#0f0f0f', minHeight: '100%' }}>
         {loading && (
           <div className="flex justify-center py-12">

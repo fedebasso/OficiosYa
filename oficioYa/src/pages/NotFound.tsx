@@ -5,9 +5,9 @@ export default function NotFound() {
   const navigate = useNavigate()
 
   return (
-    <PageShell showBottomNav={false}>
+    <PageShell showBottomNav>
       <div
-        className="flex flex-col items-center justify-center min-h-screen gap-6 px-6 text-center"
+        className="flex flex-col items-center justify-center min-h-screen gap-6 px-6 pb-16 text-center"
         style={{ background: '#0f0f0f' }}
       >
         {/* Número grande */}
