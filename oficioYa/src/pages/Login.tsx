@@ -2,14 +2,28 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
+import { Eye, EyeOff } from 'lucide-react'
+
+const INPUT_STYLE = {
+  background: '#FFFFFF',
+  border: '1.5px solid #E8E0D4',
+  color: '#111111',
+  borderRadius: '14px',
+  padding: '14px 16px 14px 48px',
+  fontSize: '15px',
+  width: '100%',
+  outline: 'none',
+  caretColor: '#E8683A',
+}
 
 export default function Login() {
   const navigate = useNavigate()
   const signIn = useAuthStore((s) => s.signIn)
-  const [email, setEmail] = useState('')
+  const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [showPw, setShowPw]     = useState(false)
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,62 +39,70 @@ export default function Login() {
     }
   }
 
-  const inputStyle = {
-    background: '#EDE8DE',
-    border: '1.5px solid #E8E0D4',
-    color: '#111111',
-    borderRadius: '16px',
-    padding: '12px 16px 12px 44px',
-    fontSize: '14px',
-    width: '100%',
-    outline: 'none',
+  const fillDemo = (role: 'client' | 'professional') => {
+    setEmail(role === 'client' ? 'cliente@demo.com' : 'pro@demo.com')
+    setPassword('demo123')
   }
 
   return (
     <PageShell showBottomNav={false}>
       <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
-        {/* Hero oscuro */}
+        {/* Hero naranja */}
         <div
-          className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative"
-          style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
+          className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative overflow-hidden"
+          style={{ background: 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' }}
         >
-          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#111111' }}>
-            Oficio<span style={{ color: '#e8683a' }}>Ya</span>
+          <div
+            className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute -bottom-1 -left-8 w-32 h-32 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%)' }}
+          />
+          <h1 className="text-[40px] font-black tracking-tight leading-none" style={{ color: '#FFFFFF', letterSpacing: '-2px' }}>
+            Oficio<span style={{ color: 'rgba(255,255,255,.7)' }}>Ya</span>
           </h1>
-          <p className="text-sm" style={{ color: '#999999' }}>Profesionales de confianza en Montevideo</p>
-          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
+          <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,.8)' }}>
+            Profesionales de confianza en Montevideo
+          </p>
+          <div
+            className="absolute bottom-0 left-0 right-0 h-10 rounded-t-[32px]"
+            style={{ background: '#F5F0E8' }}
+          />
         </div>
 
         {/* Form */}
-        <div className="flex flex-col gap-5 px-6 pt-6 pb-10">
+        <div className="flex flex-col gap-5 px-5 pt-6 pb-10">
 
           <div>
-            <h2 className="text-xl font-black" style={{ color: '#111111' }}>Bienvenido de vuelta</h2>
-            <p className="text-sm mt-0.5" style={{ color: '#555555' }}>Ingresá a tu cuenta para continuar</p>
+            <h2 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
+              Bienvenido de vuelta
+            </h2>
+            <p className="text-sm mt-1" style={{ color: '#999999' }}>Ingresá a tu cuenta para continuar</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {error && (
+            <div
+              role="alert"
+              aria-live="polite"
+              className="rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2"
+              style={{ background: '#FEF2F2', border: '1.5px solid #FECACA', color: '#DC2626' }}
+            >
+              ⚠️ {error}
+            </div>
+          )}
 
-            {error && (
-              <div
-                id="login-error"
-                role="alert"
-                aria-live="polite"
-                className="rounded-2xl px-4 py-3 text-sm"
-                style={{ background: 'rgba(220,38,38,.1)', border: '1px solid rgba(220,38,38,.3)', color: '#f87171' }}
-              >
-                {error}
-              </div>
-            )}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
+              <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Email
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>
                   ✉️
                 </span>
                 <input
@@ -89,30 +111,36 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
                   required
-                  aria-describedby={error ? 'login-error' : undefined}
-                  style={inputStyle}
+                  style={INPUT_STYLE}
                 />
               </div>
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
+              <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Contraseña
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>
                   🔒
                 </span>
                 <input
-                  type="password"
+                  type={showPw ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  aria-describedby={error ? 'login-error' : undefined}
-                  style={inputStyle}
+                  style={{ ...INPUT_STYLE, paddingRight: 48 }}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPw(v => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 active:opacity-60"
+                  style={{ color: '#CCCCCC' }}
+                >
+                  {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -120,8 +148,12 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-[transform,opacity] duration-200 active:scale-[0.97] disabled:opacity-60"
-              style={{ background: '#e8683a', color: '#fff', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+              className="w-full rounded-2xl py-4 text-base font-black tracking-wide transition-[transform,opacity] duration-150 active:scale-[0.97] disabled:opacity-50 mt-1"
+              style={{
+                background: '#E8683A',
+                color: '#FFFFFF',
+                boxShadow: '0 4px 14px rgba(232,104,58,.35)',
+              }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -131,46 +163,63 @@ export default function Login() {
                   </svg>
                   Ingresando...
                 </span>
-              ) : (
-                'Ingresar'
-              )}
+              ) : 'Ingresar'}
             </button>
 
           </form>
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
-            <span className="text-xs font-medium" style={{ color: '#999999' }}>o</span>
-            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
+            <div className="flex-1 h-px" style={{ background: '#E8E0D4' }} />
+            <span className="text-xs font-medium" style={{ color: '#CCCCCC' }}>o</span>
+            <div className="flex-1 h-px" style={{ background: '#E8E0D4' }} />
           </div>
 
           {/* Register link */}
-          <p className="text-center text-sm" style={{ color: '#555555' }}>
+          <p className="text-center text-sm" style={{ color: '#999999' }}>
             ¿No tenés cuenta?{' '}
-            <Link to="/registro" className="font-bold" style={{ color: '#e8683a' }}>
+            <Link to="/registro" className="font-bold" style={{ color: '#E8683A' }}>
               Registrate gratis
             </Link>
           </p>
 
-          {/* Demo card */}
-          <div className="rounded-2xl p-4" style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4' }}>
+          {/* Demo card — clickeable */}
+          <div
+            className="rounded-2xl p-4"
+            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 1px 3px rgba(0,0,0,.04)' }}
+          >
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: '#e8683a' }}>
+              <span
+                className="text-white text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full"
+                style={{ background: '#E8683A' }}
+              >
                 DEMO
               </span>
               <span className="text-xs font-bold" style={{ color: '#111111' }}>Accesos de prueba</span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between py-1.5" style={{ borderBottom: '1px solid #2a2a2a' }}>
-                <span className="text-xs font-bold" style={{ color: '#e8683a' }}>👤 Cliente</span>
-                <span className="text-[11px] font-mono" style={{ color: '#555555' }}>cliente@demo.com / demo123</span>
-              </div>
-              <div className="flex items-center justify-between py-1.5">
-                <span className="text-xs font-bold" style={{ color: '#e8683a' }}>🔧 Profesional</span>
-                <span className="text-[11px] font-mono" style={{ color: '#555555' }}>pro@demo.com / demo123</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => fillDemo('client')}
+                className="flex items-center justify-between py-2.5 px-3 rounded-xl active:opacity-70 transition-opacity w-full text-left"
+                style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
+              >
+                <span className="text-xs font-bold" style={{ color: '#E8683A' }}>👤 Cliente</span>
+                <span className="text-[11px] font-mono" style={{ color: '#999999' }}>cliente@demo.com</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillDemo('professional')}
+                className="flex items-center justify-between py-2.5 px-3 rounded-xl active:opacity-70 transition-opacity w-full text-left"
+                style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
+              >
+                <span className="text-xs font-bold" style={{ color: '#E8683A' }}>🔧 Profesional</span>
+                <span className="text-[11px] font-mono" style={{ color: '#999999' }}>pro@demo.com</span>
+              </button>
             </div>
+            <p className="text-[10px] mt-2 text-center" style={{ color: '#CCCCCC' }}>
+              Toca un acceso para auto-completar
+            </p>
           </div>
 
         </div>

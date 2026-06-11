@@ -2,27 +2,30 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
+import { Eye, EyeOff } from 'lucide-react'
 
 const INPUT_STYLE = {
-  background: '#EDE8DE',
+  background: '#FFFFFF',
   border: '1.5px solid #E8E0D4',
   color: '#111111',
-  borderRadius: '16px',
-  padding: '12px 16px 12px 44px',
-  fontSize: '14px',
+  borderRadius: '14px',
+  padding: '14px 16px 14px 48px',
+  fontSize: '15px',
   width: '100%',
   outline: 'none',
+  caretColor: '#E8683A',
 }
 
 export default function Register() {
-  const navigate = useNavigate()
-  const signUp = useAuthStore((s) => s.signUp)
-  const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [role, setRole] = useState<'client' | 'professional'>('client')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const navigate  = useNavigate()
+  const signUp    = useAuthStore((s) => s.signUp)
+  const [fullName, setFullName]   = useState('')
+  const [email, setEmail]         = useState('')
+  const [password, setPassword]   = useState('')
+  const [showPw, setShowPw]       = useState(false)
+  const [role, setRole]           = useState<'client' | 'professional'>('client')
+  const [loading, setLoading]     = useState(false)
+  const [error, setError]         = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,54 +45,97 @@ export default function Register() {
     <PageShell showBottomNav={false}>
       <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
-        {/* Hero oscuro */}
+        {/* Hero naranja */}
         <div
-          className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative"
-          style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
+          className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative overflow-hidden"
+          style={{ background: 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' }}
         >
-          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#111111' }}>
-            Oficio<span style={{ color: '#e8683a' }}>Ya</span>
+          <div
+            className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
+          />
+          <h1 className="text-[40px] font-black tracking-tight leading-none" style={{ color: '#FFFFFF', letterSpacing: '-2px' }}>
+            Oficio<span style={{ color: 'rgba(255,255,255,.7)' }}>Ya</span>
           </h1>
-          <p className="text-sm" style={{ color: '#999999' }}>Creá tu cuenta gratis</p>
-          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
+          <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,.8)' }}>
+            Creá tu cuenta gratis
+          </p>
+          <div className="absolute bottom-0 left-0 right-0 h-10 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
         </div>
 
         {/* Form */}
-        <div className="flex flex-col gap-5 px-6 pt-6 pb-10">
+        <div className="flex flex-col gap-5 px-5 pt-6 pb-10">
 
           <div>
-            <h2 className="text-xl font-black" style={{ color: '#111111' }}>Empezá ahora</h2>
-            <p className="text-sm mt-0.5" style={{ color: '#555555' }}>Solo te lleva 1 minuto</p>
+            <h2 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
+              Empezá ahora
+            </h2>
+            <p className="text-sm mt-1" style={{ color: '#999999' }}>Solo te lleva 1 minuto</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {error && (
+            <div
+              role="alert"
+              aria-live="polite"
+              className="rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2"
+              style={{ background: '#FEF2F2', border: '1.5px solid #FECACA', color: '#DC2626' }}
+            >
+              ⚠️ {error}
+            </div>
+          )}
 
-            {error && (
-              <div
-                id="register-error"
-                role="alert"
-                aria-live="polite"
-                className="rounded-2xl px-4 py-3 text-sm"
-                style={{ background: 'rgba(220,38,38,.1)', border: '1px solid rgba(220,38,38,.3)', color: '#f87171' }}
-              >
-                {error}
-              </div>
-            )}
+          {/* Selector de rol — primero para contexto */}
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
+              Soy...
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              {([
+                { value: 'client',       icon: '👤', name: 'Cliente',      desc: 'Busco profesionales para mi hogar' },
+                { value: 'professional', icon: '🔧', name: 'Profesional',  desc: 'Ofrezco mis servicios y consigo clientes' },
+              ] as const).map((opt) => {
+                const active = role === opt.value
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setRole(opt.value)}
+                    className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-all duration-150 active:scale-[0.97]"
+                    style={{
+                      background: active ? '#FEF0EA' : '#FFFFFF',
+                      border: active ? '2px solid #E8683A' : '1.5px solid #E8E0D4',
+                      boxShadow: active ? '0 2px 8px rgba(232,104,58,.15)' : '0 1px 3px rgba(0,0,0,.04)',
+                    }}
+                    aria-pressed={active}
+                  >
+                    <span style={{ fontSize: 28, lineHeight: 1 }}>{opt.icon}</span>
+                    <span className="text-sm font-black" style={{ color: active ? '#E8683A' : '#111111' }}>
+                      {opt.name}
+                    </span>
+                    <span className="text-[10px] text-center leading-tight" style={{ color: '#999999' }}>
+                      {opt.desc}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
 
             {/* Nombre */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
+              <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Nombre completo
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>👤</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>👤</span>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Tu nombre"
                   required
-                  aria-describedby={error ? 'register-error' : undefined}
                   style={INPUT_STYLE}
                 />
               </div>
@@ -97,18 +143,17 @@ export default function Register() {
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
+              <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Email
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>✉️</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>✉️</span>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
                   required
-                  aria-describedby={error ? 'register-error' : undefined}
                   style={INPUT_STYLE}
                 />
               </div>
@@ -116,55 +161,28 @@ export default function Register() {
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
+              <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Contraseña
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>🔒</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>🔒</span>
                 <input
-                  type="password"
+                  type={showPw ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Mínimo 6 caracteres"
                   required
                   minLength={6}
-                  aria-describedby={error ? 'register-error' : undefined}
-                  style={INPUT_STYLE}
+                  style={{ ...INPUT_STYLE, paddingRight: 48 }}
                 />
-              </div>
-            </div>
-
-            {/* Role selector */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>Soy...</label>
-              <div className="grid grid-cols-2 gap-3">
-                {([
-                  { value: 'client', icon: '👤', name: 'Cliente', desc: 'Busco profesionales para mi hogar' },
-                  { value: 'professional', icon: '🔧', name: 'Profesional', desc: 'Ofrezco mis servicios y consigo clientes' },
-                ] as const).map((opt) => {
-                  const active = role === opt.value
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => setRole(opt.value)}
-                      className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-[transform,opacity] duration-200 active:scale-[0.97]"
-                      style={{
-                        border: active ? '2px solid #e8683a' : '2px solid #2a2a2a',
-                        background: active ? 'rgba(232,104,58,.1)' : '#1a1a1a',
-                      }}
-                      aria-pressed={active}
-                    >
-                      <span aria-hidden="true" style={{ fontSize: 28, lineHeight: 1 }}>{opt.icon}</span>
-                      <span className="text-sm font-black" style={{ color: active ? '#e8683a' : '#f5f0e8' }}>
-                        {opt.name}
-                      </span>
-                      <span className="text-[10px] text-center leading-tight" style={{ color: '#999999' }}>
-                        {opt.desc}
-                      </span>
-                    </button>
-                  )
-                })}
+                <button
+                  type="button"
+                  onClick={() => setShowPw(v => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 active:opacity-60"
+                  style={{ color: '#CCCCCC' }}
+                >
+                  {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -172,8 +190,12 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-2xl py-4 text-base font-bold tracking-wide transition-[transform,opacity] duration-200 active:scale-[0.97] disabled:opacity-60 text-white"
-              style={{ background: '#e8683a', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+              className="w-full rounded-2xl py-4 text-base font-black tracking-wide transition-[transform,opacity] duration-150 active:scale-[0.97] disabled:opacity-50 mt-1"
+              style={{
+                background: '#E8683A',
+                color: '#FFFFFF',
+                boxShadow: '0 4px 14px rgba(232,104,58,.35)',
+              }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -190,15 +212,15 @@ export default function Register() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
-            <span className="text-xs font-medium" style={{ color: '#999999' }}>o</span>
-            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
+            <div className="flex-1 h-px" style={{ background: '#E8E0D4' }} />
+            <span className="text-xs font-medium" style={{ color: '#CCCCCC' }}>o</span>
+            <div className="flex-1 h-px" style={{ background: '#E8E0D4' }} />
           </div>
 
           {/* Login link */}
-          <p className="text-center text-sm" style={{ color: '#555555' }}>
+          <p className="text-center text-sm" style={{ color: '#999999' }}>
             ¿Ya tenés cuenta?{' '}
-            <Link to="/login" className="font-bold" style={{ color: '#e8683a' }}>
+            <Link to="/login" className="font-bold" style={{ color: '#E8683A' }}>
               Iniciá sesión
             </Link>
           </p>
