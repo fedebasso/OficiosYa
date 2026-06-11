@@ -25,7 +25,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
   return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
     >
       {/* Franja de urgencia — sutil, oscura con acento rojo */}
       <div
@@ -41,7 +41,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
             Disponible ahora · 24hs
           </span>
         </div>
-        <span className="text-[9px] font-bold" style={{ color: '#555' }}>
+        <span className="text-[9px] font-bold" style={{ color: '#999999' }}>
           ⏱ ~{response_time_min} min
         </span>
       </div>
@@ -57,7 +57,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
           <Avatar src={profiles.avatar_url} name={profiles.full_name} size="md" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-0.5">
-              <span className="text-sm font-bold truncate" style={{ color: '#f5f0e8' }}>
+              <span className="text-sm font-bold truncate" style={{ color: '#111111' }}>
                 {profiles.full_name}
               </span>
               {verified && (
@@ -73,11 +73,11 @@ export function UrgentProfessionalCard({ professional }: Props) {
           </div>
           <div className="text-right flex-shrink-0">
             {avg_rating != null && (
-              <div className="text-sm font-bold" style={{ color: '#f5f0e8' }}>
+              <div className="text-sm font-bold" style={{ color: '#111111' }}>
                 <span style={{ color: '#f59e0b' }}>★</span> {avg_rating}
               </div>
             )}
-            <div className="text-[10px]" style={{ color: '#555' }}>{jobs_count} trabajos</div>
+            <div className="text-[10px]" style={{ color: '#999999' }}>{jobs_count} trabajos</div>
           </div>
         </button>
 

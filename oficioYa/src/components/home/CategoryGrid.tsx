@@ -48,7 +48,8 @@ function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="relative aspect-square rounded-2xl overflow-hidden active:scale-[.97] transition-transform duration-150 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8683a]"
+      className="relative rounded-2xl overflow-hidden active:scale-[.97] transition-transform duration-150 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E8683A]"
+      style={{ aspectRatio: '4/3', boxShadow: '0 2px 8px rgba(0,0,0,.08)' }}
     >
       {/* Foto real */}
       <img
@@ -66,7 +67,7 @@ function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }
       {/* Nombre */}
       <div className="absolute bottom-0 left-0 right-0 p-2">
         <span
-          className="text-white text-[9px] font-black uppercase tracking-wider leading-tight block"
+          className="text-white text-[13px] font-black leading-tight block"
           style={{ textShadow: '0 1px 3px rgba(0,0,0,.6)' }}
         >
           {cat.label}

@@ -4,9 +4,9 @@ import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
 
 const INPUT_STYLE = {
-  background: '#1a1a1a',
-  border: '1px solid #2a2a2a',
-  color: '#f5f0e8',
+  background: '#EDE8DE',
+  border: '1.5px solid #E8E0D4',
+  color: '#111111',
   borderRadius: '16px',
   padding: '12px 16px 12px 44px',
   fontSize: '14px',
@@ -40,26 +40,26 @@ export default function Register() {
 
   return (
     <PageShell showBottomNav={false}>
-      <div className="flex flex-col min-h-screen" style={{ background: '#0f0f0f' }}>
+      <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
         {/* Hero oscuro */}
         <div
           className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative"
           style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
         >
-          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#f5f0e8' }}>
+          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#111111' }}>
             Oficio<span style={{ color: '#e8683a' }}>Ya</span>
           </h1>
-          <p className="text-sm" style={{ color: '#555' }}>Creá tu cuenta gratis</p>
-          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#0f0f0f' }} />
+          <p className="text-sm" style={{ color: '#999999' }}>Creá tu cuenta gratis</p>
+          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
         </div>
 
         {/* Form */}
         <div className="flex flex-col gap-5 px-6 pt-6 pb-10">
 
           <div>
-            <h2 className="text-xl font-black" style={{ color: '#f5f0e8' }}>Empezá ahora</h2>
-            <p className="text-sm mt-0.5" style={{ color: '#888' }}>Solo te lleva 1 minuto</p>
+            <h2 className="text-xl font-black" style={{ color: '#111111' }}>Empezá ahora</h2>
+            <p className="text-sm mt-0.5" style={{ color: '#555555' }}>Solo te lleva 1 minuto</p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -78,11 +78,11 @@ export default function Register() {
 
             {/* Nombre */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
                 Nombre completo
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>👤</span>
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>👤</span>
                 <input
                   type="text"
                   value={fullName}
@@ -97,11 +97,11 @@ export default function Register() {
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
                 Email
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>✉️</span>
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>✉️</span>
                 <input
                   type="email"
                   value={email}
@@ -116,11 +116,11 @@ export default function Register() {
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
                 Contraseña
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>🔒</span>
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>🔒</span>
                 <input
                   type="password"
                   value={password}
@@ -136,7 +136,7 @@ export default function Register() {
 
             {/* Role selector */}
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>Soy...</label>
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>Soy...</label>
               <div className="grid grid-cols-2 gap-3">
                 {([
                   { value: 'client', icon: '👤', name: 'Cliente', desc: 'Busco profesionales para mi hogar' },
@@ -159,7 +159,7 @@ export default function Register() {
                       <span className="text-sm font-black" style={{ color: active ? '#e8683a' : '#f5f0e8' }}>
                         {opt.name}
                       </span>
-                      <span className="text-[10px] text-center leading-tight" style={{ color: '#555' }}>
+                      <span className="text-[10px] text-center leading-tight" style={{ color: '#999999' }}>
                         {opt.desc}
                       </span>
                     </button>
@@ -190,13 +190,13 @@ export default function Register() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px" style={{ background: '#2a2a2a' }} />
-            <span className="text-xs font-medium" style={{ color: '#555' }}>o</span>
-            <div className="flex-1 h-px" style={{ background: '#2a2a2a' }} />
+            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
+            <span className="text-xs font-medium" style={{ color: '#999999' }}>o</span>
+            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
           </div>
 
           {/* Login link */}
-          <p className="text-center text-sm" style={{ color: '#888' }}>
+          <p className="text-center text-sm" style={{ color: '#555555' }}>
             ¿Ya tenés cuenta?{' '}
             <Link to="/login" className="font-bold" style={{ color: '#e8683a' }}>
               Iniciá sesión

@@ -4,8 +4,8 @@
 
 @layer base {
   html, body, #root {
-    background-color: #0f0f0f;
-    color: #f5f0e8;
+    background-color: #F5F0E8;
+    color: #111111;
     font-family: 'DM Sans', system-ui, sans-serif;
   }
 }
@@ -45,9 +45,9 @@
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
-  -webkit-text-fill-color: #f5f0e8 !important;
-  caret-color: #f5f0e8;
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  -webkit-text-fill-color: #111111 !important;
+  caret-color: #E8683A;
 }
 
 /* ── EASING TOKENS (Emil Kowalski) ───────────────────────────────

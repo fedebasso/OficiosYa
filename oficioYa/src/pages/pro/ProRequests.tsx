@@ -59,7 +59,7 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
             </span>
           )}
         </div>
-        <span className="flex items-center gap-1 text-[10px]" style={{ color: '#555' }}>
+        <span className="flex items-center gap-1 text-[10px]" style={{ color: '#999999' }}>
           <Clock size={9} />
           {timeAgo(req.created_at)}
         </span>
@@ -74,10 +74,10 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
         {req.contact_phone && (
           <div
             className="flex items-center gap-2 rounded-xl px-3 py-2"
-            style={{ background: '#1a1a1a', border: '1px solid #242424' }}
+            style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4' }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#555' }}>Tel</span>
-            <span className="text-sm font-semibold" style={{ color: '#f5f0e8' }}>{req.contact_phone}</span>
+            <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#999999' }}>Tel</span>
+            <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
           </div>
         )}
 
@@ -123,7 +123,7 @@ function HistoryCard({ req }: { req: ServiceRequest }) {
   return (
     <div
       className="flex items-center gap-3 rounded-xl px-3.5 py-3"
-      style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
     >
       <div
         className="w-2 h-2 rounded-full flex-shrink-0"
@@ -139,7 +139,7 @@ function HistoryCard({ req }: { req: ServiceRequest }) {
         >
           {meta.label}
         </span>
-        <span className="text-[9px]" style={{ color: '#444' }}>{timeAgo(req.created_at)}</span>
+        <span className="text-[9px]" style={{ color: '#AAAAAA' }}>{timeAgo(req.created_at)}</span>
       </div>
     </div>
   )
@@ -161,14 +161,14 @@ export default function ProRequests() {
   const header = (
     <div
       className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
     >
       <div className="flex items-end justify-between">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#e8683a' }}>
             Panel profesional
           </p>
-          <h1 className="text-2xl font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-0.5px' }}>
+          <h1 className="text-2xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
             Solicitudes
           </h1>
         </div>
@@ -235,13 +235,13 @@ export default function ProRequests() {
           <div className="flex flex-col items-center gap-4 py-20 text-center">
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
               <Inbox size={24} style={{ color: '#333' }} />
             </div>
             <div>
-              <p className="font-black text-sm" style={{ color: '#f5f0e8' }}>Sin solicitudes aún</p>
-              <p className="text-xs mt-1" style={{ color: '#444' }}>Las nuevas solicitudes aparecerán acá</p>
+              <p className="font-black text-sm" style={{ color: '#111111' }}>Sin solicitudes aún</p>
+              <p className="text-xs mt-1" style={{ color: '#AAAAAA' }}>Las nuevas solicitudes aparecerán acá</p>
             </div>
           </div>
         )}
@@ -249,7 +249,7 @@ export default function ProRequests() {
         {/* Pendientes */}
         {pending.length > 0 && (
           <section className="flex flex-col gap-2.5">
-            <p className="text-[10px] font-bold uppercase tracking-widest px-0.5" style={{ color: '#444' }}>
+            <p className="text-[10px] font-bold uppercase tracking-widest px-0.5" style={{ color: '#AAAAAA' }}>
               Por responder · {pending.length}
             </p>
             {pending.map((req, i) => (
@@ -273,12 +273,12 @@ export default function ProRequests() {
               onClick={() => setHistoryOpen((v) => !v)}
               className="flex items-center justify-between px-0.5 active:opacity-70 transition-opacity"
             >
-              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#444' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
                 Historial · {others.length}
               </p>
               {historyOpen
-                ? <ChevronUp size={13} style={{ color: '#444' }} />
-                : <ChevronDown size={13} style={{ color: '#444' }} />
+                ? <ChevronUp size={13} style={{ color: '#AAAAAA' }} />
+                : <ChevronDown size={13} style={{ color: '#AAAAAA' }} />
               }
             </button>
             {historyOpen && (

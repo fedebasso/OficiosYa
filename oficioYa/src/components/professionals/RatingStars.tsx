@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function RatingStars({ rating, size = 'md' }: Props) {
-  if (rating === null) return <span className="text-xs" style={{ color: '#555' }}>Sin calificación</span>
+  if (rating === null) return <span className="text-xs" style={{ color: '#999999' }}>Sin calificación</span>
 
   const px = size === 'sm' ? 12 : 16
   const full = Math.round(rating)
@@ -23,7 +23,7 @@ export function RatingStars({ rating, size = 'md' }: Props) {
       ))}
       <span
         className={`ml-1 ${size === 'sm' ? 'text-xs' : 'text-sm'}`}
-        style={{ color: '#888' }}
+        style={{ color: '#555555' }}
       >
         {rating.toFixed(1)}
       </span>

@@ -35,8 +35,8 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
           ★
         </div>
         <div>
-          <p className="font-black text-base" style={{ color: '#f5f0e8' }}>¡Gracias por tu reseña!</p>
-          <p className="text-xs mt-1" style={{ color: '#555' }}>Tu opinión ayuda a otros clientes</p>
+          <p className="font-black text-base" style={{ color: '#111111' }}>¡Gracias por tu reseña!</p>
+          <p className="text-xs mt-1" style={{ color: '#999999' }}>Tu opinión ayuda a otros clientes</p>
         </div>
         <button
           type="button"
@@ -58,15 +58,15 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
           <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#e8683a' }}>
             Calificar servicio
           </p>
-          <h3 className="text-base font-black" style={{ color: '#f5f0e8' }}>¿Cómo fue el trabajo?</h3>
+          <h3 className="text-base font-black" style={{ color: '#111111' }}>¿Cómo fue el trabajo?</h3>
         </div>
         <button
           type="button"
           onClick={onClose}
           className="w-8 h-8 rounded-full flex items-center justify-center active:opacity-60 transition-opacity"
-          style={{ background: '#1e1e1e', border: '1px solid #2a2a2a' }}
+          style={{ background: '#1e1e1e', border: '1.5px solid #E8E0D4' }}
         >
-          <X size={14} style={{ color: '#888' }} />
+          <X size={14} style={{ color: '#555555' }} />
         </button>
       </div>
 
@@ -109,9 +109,9 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
         placeholder="Comentario opcional..."
         className="w-full rounded-xl px-3.5 py-3 text-sm resize-none focus:outline-none"
         style={{
-          background: '#1a1a1a',
-          border: '1px solid #2a2a2a',
-          color: '#f5f0e8',
+          background: '#EDE8DE',
+          border: '1.5px solid #E8E0D4',
+          color: '#111111',
           caretColor: '#e8683a',
         }}
       />
@@ -122,7 +122,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
           type="button"
           onClick={onClose}
           className="flex-1 rounded-xl py-3 text-sm font-bold active:opacity-70 transition-opacity"
-          style={{ background: '#1a1a1a', color: '#888', border: '1px solid #2a2a2a' }}
+          style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #E8E0D4' }}
         >
           Cancelar
         </button>

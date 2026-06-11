@@ -8,7 +8,7 @@ export default function NotFound() {
     <PageShell showBottomNav>
       <div
         className="flex flex-col items-center justify-center min-h-screen gap-6 px-6 pb-16 text-center"
-        style={{ background: '#0f0f0f' }}
+        style={{ background: '#F5F0E8' }}
       >
         {/* Número grande */}
         <div className="relative select-none">
@@ -30,10 +30,10 @@ export default function NotFound() {
         </div>
 
         <div>
-          <h1 className="text-xl font-black mb-2" style={{ color: '#f5f0e8' }}>
+          <h1 className="text-xl font-black mb-2" style={{ color: '#111111' }}>
             Página no encontrada
           </h1>
-          <p className="text-sm leading-relaxed" style={{ color: '#555' }}>
+          <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
             Esta página no existe o fue movida.<br />
             Volvé al inicio para continuar.
           </p>
@@ -52,7 +52,7 @@ export default function NotFound() {
             type="button"
             onClick={() => navigate(-1)}
             className="w-full rounded-2xl py-3.5 text-sm font-bold active:opacity-70 transition-opacity"
-            style={{ background: '#141414', color: '#888', border: '1px solid #1e1e1e' }}
+            style={{ background: '#FFFFFF', color: '#555555', border: '1.5px solid #E8E0D4' }}
           >
             Página anterior
           </button>

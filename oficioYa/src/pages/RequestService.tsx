@@ -40,20 +40,20 @@ export default function RequestService() {
   const { emoji, label } = getCategoryMeta(professional?.categories[0] ?? '')
 
   const header = (
-    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#0f0f0f', borderBottom: '1px solid #1e1e1e' }}>
+    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => navigate(-1)}
           className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-base"
-          style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: '#f5f0e8' }}
+          style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4', color: '#111111' }}
         >
           ←
         </button>
         <div>
-          <h1 className="text-base font-black leading-tight" style={{ color: '#f5f0e8' }}>Solicitar servicio</h1>
+          <h1 className="text-base font-black leading-tight" style={{ color: '#111111' }}>Solicitar servicio</h1>
           {professional && (
-            <p className="text-xs mt-0.5" style={{ color: '#888' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#555555' }}>
               {emoji} {label} · {professional.profiles.full_name}
             </p>
           )}
@@ -64,7 +64,7 @@ export default function RequestService() {
 
   return (
     <PageShell showBottomNav={false} header={header}>
-      <div className="p-4 flex flex-col gap-4" style={{ background: '#0f0f0f', minHeight: '100%' }}>
+      <div className="p-4 flex flex-col gap-4" style={{ minHeight: '100%' }}>
 
         {!sent ? (
           <>
@@ -72,7 +72,7 @@ export default function RequestService() {
             {professional && (
               <div
                 className="flex items-center gap-3 rounded-2xl p-3.5"
-                style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+                style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
               >
                 {professional.profiles.avatar_url ? (
                   <img
@@ -89,7 +89,7 @@ export default function RequestService() {
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-bold truncate" style={{ color: '#f5f0e8' }}>
+                  <div className="text-sm font-bold truncate" style={{ color: '#111111' }}>
                     {professional.profiles.full_name}
                   </div>
                   <div className="text-xs font-medium mt-0.5" style={{ color: '#e8683a' }}>
@@ -97,7 +97,7 @@ export default function RequestService() {
                   </div>
                 </div>
                 {professional.avg_rating != null && (
-                  <div className="text-sm font-black flex-shrink-0" style={{ color: '#f5f0e8' }}>
+                  <div className="text-sm font-black flex-shrink-0" style={{ color: '#111111' }}>
                     <span style={{ color: '#f59e0b' }}>★</span> {professional.avg_rating}
                   </div>
                 )}
@@ -116,8 +116,8 @@ export default function RequestService() {
               ✅
             </div>
             <div>
-              <h2 className="text-xl font-black mb-2" style={{ color: '#f5f0e8' }}>¡Solicitud enviada!</h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#888' }}>
+              <h2 className="text-xl font-black mb-2" style={{ color: '#111111' }}>¡Solicitud enviada!</h2>
+              <p className="text-sm leading-relaxed" style={{ color: '#555555' }}>
                 El profesional recibirá tu solicitud. También podés contactarlo directamente por WhatsApp.
               </p>
             </div>
@@ -133,7 +133,7 @@ export default function RequestService() {
               type="button"
               onClick={() => navigate('/mis-solicitudes')}
               className="w-full rounded-2xl py-3.5 text-sm font-bold active:opacity-70 transition-opacity"
-              style={{ background: '#1a1a1a', color: '#f5f0e8', border: '1px solid #2a2a2a' }}
+              style={{ background: '#EDE8DE', color: '#111111', border: '1.5px solid #E8E0D4' }}
             >
               Ver mis solicitudes
             </button>
@@ -141,7 +141,7 @@ export default function RequestService() {
               type="button"
               onClick={() => navigate('/')}
               className="text-sm font-bold active:opacity-70"
-              style={{ color: '#555' }}
+              style={{ color: '#999999' }}
             >
               Volver al inicio
             </button>

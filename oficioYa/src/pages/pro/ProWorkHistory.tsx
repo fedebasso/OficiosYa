@@ -18,7 +18,7 @@ function WorkSkeleton() {
   return (
     <div
       className="rounded-2xl p-4 flex items-center gap-3"
-      style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
     >
       <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ background: '#1e1e1e' }} />
       <div className="flex-1 flex flex-col gap-2">
@@ -37,17 +37,17 @@ export default function ProWorkHistory() {
   const header = (
     <div
       className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
     >
       <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#e8683a' }}>
         Panel profesional
       </p>
       <div className="flex items-end justify-between">
-        <h1 className="text-2xl font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-0.5px' }}>
+        <h1 className="text-2xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
           Trabajos
         </h1>
         {!loading && completed.length > 0 && (
-          <span className="text-xs font-bold mb-0.5" style={{ color: '#555' }}>
+          <span className="text-xs font-bold mb-0.5" style={{ color: '#999999' }}>
             {completed.length} completado{completed.length !== 1 ? 's' : ''}
           </span>
         )}
@@ -65,13 +65,13 @@ export default function ProWorkHistory() {
           <div className="flex flex-col items-center gap-4 py-20 text-center">
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
               <Briefcase size={24} style={{ color: '#333' }} />
             </div>
             <div>
-              <p className="font-black text-sm" style={{ color: '#f5f0e8' }}>Sin trabajos aún</p>
-              <p className="text-xs mt-1" style={{ color: '#444' }}>
+              <p className="font-black text-sm" style={{ color: '#111111' }}>Sin trabajos aún</p>
+              <p className="text-xs mt-1" style={{ color: '#AAAAAA' }}>
                 Los trabajos completados aparecerán acá
               </p>
             </div>
@@ -85,8 +85,8 @@ export default function ProWorkHistory() {
               key={req.id}
               className="rounded-2xl p-4 flex items-start gap-3"
               style={{
-                background: '#141414',
-                border: '1px solid #1e1e1e',
+                background: '#FFFFFF',
+                border: '1.5px solid #E8E0D4',
                 animation: `fadeUp .25s ease both`,
                 animationDelay: `${i * 0.05}s`,
               }}
@@ -103,7 +103,7 @@ export default function ProWorkHistory() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <span className="text-xs font-bold" style={{ color: accent }}>{label}</span>
-                  <span className="text-[10px] flex-shrink-0" style={{ color: '#444' }}>
+                  <span className="text-[10px] flex-shrink-0" style={{ color: '#AAAAAA' }}>
                     {timeAgo(req.created_at)}
                   </span>
                 </div>

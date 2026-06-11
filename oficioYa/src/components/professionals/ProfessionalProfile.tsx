@@ -33,25 +33,25 @@ function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number 
   const fakeCounts = [Math.round(jobsCount * .75), Math.round(jobsCount * .15), Math.round(jobsCount * .06), Math.round(jobsCount * .02), Math.round(jobsCount * .02)]
 
   return (
-    <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
       <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-4">Reseñas</h3>
 
       {/* Rating overview */}
-      <div className="flex gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid #1e1e1e' }}>
+      <div className="flex gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid #E8E0D4' }}>
         <div className="text-center flex-shrink-0">
-          <div className="text-4xl font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-2px' }}>
+          <div className="text-4xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-2px' }}>
             {rating}
           </div>
           <div className="mt-1.5"><StarRow rating={fullStars} /></div>
-          <div className="text-[9px] mt-1" style={{ color: '#555' }}>{jobsCount} reseñas</div>
+          <div className="text-[9px] mt-1" style={{ color: '#999999' }}>{jobsCount} reseñas</div>
         </div>
         <div className="flex-1 flex flex-col justify-center gap-1">
           {bars.map((star, i) => {
             const pct = jobsCount > 0 ? Math.round((fakeCounts[i] / jobsCount) * 100) : 0
             return (
               <div key={star} className="flex items-center gap-2">
-                <span className="text-[10px] w-2" style={{ color: '#555' }}>{star}</span>
-                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#2a2a2a' }}>
+                <span className="text-[10px] w-2" style={{ color: '#999999' }}>{star}</span>
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#E8E0D4' }}>
                   <div className="h-full rounded-full" style={{ width: `${pct}%`, background: '#f59e0b' }} />
                 </div>
               </div>
@@ -72,14 +72,14 @@ function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number 
                 {r.initials}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-bold leading-tight" style={{ color: '#f5f0e8' }}>{r.name}</div>
+                <div className="text-sm font-bold leading-tight" style={{ color: '#111111' }}>{r.name}</div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <StarRow rating={r.rating} />
-                  <span className="text-[10px]" style={{ color: '#555' }}>{r.date}</span>
+                  <span className="text-[10px]" style={{ color: '#999999' }}>{r.date}</span>
                 </div>
               </div>
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: '#888', paddingLeft: 44 }}>{r.text}</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#555555', paddingLeft: 44 }}>{r.text}</p>
             {i < reviews.length - 1 && <div style={{ height: 1, background: '#1e1e1e', marginTop: 4 }} />}
           </div>
         ))}
@@ -106,10 +106,10 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const initials = getInitials(profiles.full_name)
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: '#0f0f0f' }}>
+    <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
       {/* ── HERO ── */}
-      <div className="relative h-72 overflow-hidden flex-shrink-0" style={{ background: '#111' }}>
+      <div className="relative h-72 overflow-hidden flex-shrink-0" style={{ background: '#1a1a1a' }}>
         <img src={cover} alt={specialty} className="w-full h-full object-cover opacity-40" />
         <div
           className="absolute inset-0"
@@ -221,21 +221,21 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             </span>
           )}
           <span className="rounded-full text-[11px] font-semibold px-3 py-1"
-            style={{ background: '#1a1a1a', color: '#888', border: '1px solid #2a2a2a' }}>
+            style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #E8E0D4' }}>
             📍 {zone}
           </span>
         </div>
 
         {/* Sobre mí */}
         {bio && (
-          <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+          <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-2">Sobre mí</h3>
             <p className="text-sm text-[#888] leading-relaxed">{bio}</p>
           </div>
         )}
 
         {/* Servicios */}
-        <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+        <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
           <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Servicios</h3>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
@@ -252,7 +252,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
 
         {/* Fotos */}
         {photos.length > 0 && (
-          <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+          <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
             <WorkPhotoGallery photos={photos} />
           </div>
@@ -274,7 +274,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
           type="button"
           onClick={() => window.open(`https://wa.me/${whatsapp}`, '_blank', 'noopener,noreferrer')}
           className="rounded-2xl py-3.5 text-sm font-bold text-[#888] flex items-center justify-center gap-1.5 active:opacity-70 transition-opacity"
-          style={{ border: '1px solid #2a2a2a', background: '#141414' }}
+          style={{ border: '1.5px solid #E8E0D4', background: '#FFFFFF' }}
         >
           💬 Chat
         </button>

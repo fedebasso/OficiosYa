@@ -26,9 +26,9 @@ export default function Login() {
   }
 
   const inputStyle = {
-    background: '#1a1a1a',
-    border: '1px solid #2a2a2a',
-    color: '#f5f0e8',
+    background: '#EDE8DE',
+    border: '1.5px solid #E8E0D4',
+    color: '#111111',
     borderRadius: '16px',
     padding: '12px 16px 12px 44px',
     fontSize: '14px',
@@ -38,26 +38,26 @@ export default function Login() {
 
   return (
     <PageShell showBottomNav={false}>
-      <div className="flex flex-col min-h-screen" style={{ background: '#0f0f0f' }}>
+      <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
         {/* Hero oscuro */}
         <div
           className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative"
           style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
         >
-          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#f5f0e8' }}>
+          <h1 className="text-4xl font-black tracking-tight leading-none" style={{ color: '#111111' }}>
             Oficio<span style={{ color: '#e8683a' }}>Ya</span>
           </h1>
-          <p className="text-sm" style={{ color: '#555' }}>Profesionales de confianza en Montevideo</p>
-          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#0f0f0f' }} />
+          <p className="text-sm" style={{ color: '#999999' }}>Profesionales de confianza en Montevideo</p>
+          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
         </div>
 
         {/* Form */}
         <div className="flex flex-col gap-5 px-6 pt-6 pb-10">
 
           <div>
-            <h2 className="text-xl font-black" style={{ color: '#f5f0e8' }}>Bienvenido de vuelta</h2>
-            <p className="text-sm mt-0.5" style={{ color: '#888' }}>Ingresá a tu cuenta para continuar</p>
+            <h2 className="text-xl font-black" style={{ color: '#111111' }}>Bienvenido de vuelta</h2>
+            <p className="text-sm mt-0.5" style={{ color: '#555555' }}>Ingresá a tu cuenta para continuar</p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -76,11 +76,11 @@ export default function Login() {
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
                 Email
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>
                   ✉️
                 </span>
                 <input
@@ -97,11 +97,11 @@ export default function Login() {
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#888' }}>
+              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#555555' }}>
                 Contraseña
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#555' }}>
+                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none" style={{ color: '#999999' }}>
                   🔒
                 </span>
                 <input
@@ -140,13 +140,13 @@ export default function Login() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px" style={{ background: '#2a2a2a' }} />
-            <span className="text-xs font-medium" style={{ color: '#555' }}>o</span>
-            <div className="flex-1 h-px" style={{ background: '#2a2a2a' }} />
+            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
+            <span className="text-xs font-medium" style={{ color: '#999999' }}>o</span>
+            <div className="flex-1 h-px" style={{ background: '#EDE8DE' }} />
           </div>
 
           {/* Register link */}
-          <p className="text-center text-sm" style={{ color: '#888' }}>
+          <p className="text-center text-sm" style={{ color: '#555555' }}>
             ¿No tenés cuenta?{' '}
             <Link to="/registro" className="font-bold" style={{ color: '#e8683a' }}>
               Registrate gratis
@@ -154,21 +154,21 @@ export default function Login() {
           </p>
 
           {/* Demo card */}
-          <div className="rounded-2xl p-4" style={{ background: '#1a1a1a', border: '1px solid #2a2a2a' }}>
+          <div className="rounded-2xl p-4" style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4' }}>
             <div className="flex items-center gap-2 mb-3">
               <span className="text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: '#e8683a' }}>
                 DEMO
               </span>
-              <span className="text-xs font-bold" style={{ color: '#f5f0e8' }}>Accesos de prueba</span>
+              <span className="text-xs font-bold" style={{ color: '#111111' }}>Accesos de prueba</span>
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between py-1.5" style={{ borderBottom: '1px solid #2a2a2a' }}>
                 <span className="text-xs font-bold" style={{ color: '#e8683a' }}>👤 Cliente</span>
-                <span className="text-[11px] font-mono" style={{ color: '#888' }}>cliente@demo.com / demo123</span>
+                <span className="text-[11px] font-mono" style={{ color: '#555555' }}>cliente@demo.com / demo123</span>
               </div>
               <div className="flex items-center justify-between py-1.5">
                 <span className="text-xs font-bold" style={{ color: '#e8683a' }}>🔧 Profesional</span>
-                <span className="text-[11px] font-mono" style={{ color: '#888' }}>pro@demo.com / demo123</span>
+                <span className="text-[11px] font-mono" style={{ color: '#555555' }}>pro@demo.com / demo123</span>
               </div>
             </div>
           </div>

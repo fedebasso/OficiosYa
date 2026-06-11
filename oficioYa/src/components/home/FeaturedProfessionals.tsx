@@ -11,7 +11,7 @@ export function FeaturedProfessionals() {
 
   if (loading) return (
     <section>
-      <h2 className="text-[11px] font-bold uppercase tracking-[.6px] mb-2.5" style={{ color: '#555' }}>
+      <h2 className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5" style={{ color: '#999999' }}>
         Más recomendados
       </h2>
       <FeaturedSkeleton />
@@ -22,7 +22,7 @@ export function FeaturedProfessionals() {
 
   return (
     <section>
-      <h2 className="text-[11px] font-bold uppercase tracking-[.6px] mb-2.5" style={{ color: '#555' }}>
+      <h2 className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5" style={{ color: '#999999' }}>
         Más recomendados
       </h2>
       <div className="flex flex-col gap-2">

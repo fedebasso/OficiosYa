@@ -6,11 +6,11 @@ import { useRequestStore } from '../store/requestStore'
 
 function SolicitudSkeleton() {
   return (
-    <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-xl" style={{ background: '#242424', animation: 'shimmer 1.4s ease-in-out infinite', backgroundSize: '200% 100%', backgroundImage: 'linear-gradient(90deg,#1a1a1a 25%,#242424 50%,#1a1a1a 75%)' }} />
+        <div className="w-10 h-10 rounded-xl" style={{ background: '#F0EBE1', animation: 'shimmer 1.4s ease-in-out infinite', backgroundSize: '200% 100%', backgroundImage: 'linear-gradient(90deg,#EDE8DE 25%,#F5F0E8 50%,#EDE8DE 75%)' }} />
         <div className="flex-1 flex flex-col gap-2">
-          <div className="h-3 rounded" style={{ width: '50%', background: '#242424' }} />
+          <div className="h-3 rounded" style={{ width: '50%', background: '#F0EBE1' }} />
           <div className="h-2.5 rounded" style={{ width: '35%', background: '#1e1e1e' }} />
         </div>
         <div className="h-6 w-16 rounded-full" style={{ background: '#1e1e1e' }} />
@@ -37,12 +37,12 @@ export default function MisSolicitudes() {
   useEffect(() => { loadRequests() }, [loadRequests])
 
   const header = (
-    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#0f0f0f', borderBottom: '1px solid #1e1e1e' }}>
-      <h1 className="text-xl font-black" style={{ color: '#f5f0e8', letterSpacing: '-0.5px' }}>
+    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
+      <h1 className="text-xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
         Mis solicitudes
       </h1>
       {!loading && requests.length > 0 && (
-        <p className="text-xs mt-0.5" style={{ color: '#555' }}>
+        <p className="text-xs mt-0.5" style={{ color: '#999999' }}>
           {requests.length} solicitud{requests.length !== 1 ? 'es' : ''}
         </p>
       )}
@@ -51,7 +51,7 @@ export default function MisSolicitudes() {
 
   return (
     <PageShell header={header}>
-      <div className="p-4 flex flex-col gap-3" style={{ background: '#0f0f0f', minHeight: '100%' }}>
+      <div className="p-4 flex flex-col gap-3" style={{ minHeight: '100%' }}>
 
         {loading && [0,1,2].map(i => <SolicitudSkeleton key={i} />)}
 
@@ -59,13 +59,13 @@ export default function MisSolicitudes() {
           <div className="flex flex-col items-center gap-4 py-16 text-center">
             <div
               className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
-              style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
               📋
             </div>
             <div>
-              <p className="font-black text-base" style={{ color: '#f5f0e8' }}>Sin solicitudes aún</p>
-              <p className="text-sm mt-1" style={{ color: '#555' }}>
+              <p className="font-black text-base" style={{ color: '#111111' }}>Sin solicitudes aún</p>
+              <p className="text-sm mt-1" style={{ color: '#999999' }}>
                 Tus trabajos solicitados aparecerán acá
               </p>
             </div>
@@ -76,7 +76,7 @@ export default function MisSolicitudes() {
           const status = STATUS_CONFIG[req.status] ?? STATUS_CONFIG.pending
           return (
             <div key={req.id} className="flex flex-col gap-2 animate-fade-up">
-              <div className="rounded-2xl overflow-hidden" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+              <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
                 {/* Status bar */}
                 <div className="flex items-center justify-between px-4 py-2.5" style={{ background: status.bg, borderBottom: `1px solid ${status.color}22` }}>
                   <div className="flex items-center gap-2">
@@ -85,7 +85,7 @@ export default function MisSolicitudes() {
                       {status.label}
                     </span>
                   </div>
-                  <span className="text-[10px]" style={{ color: '#555' }}>
+                  <span className="text-[10px]" style={{ color: '#999999' }}>
                     {new Date(req.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short' })}
                   </span>
                 </div>
@@ -122,7 +122,7 @@ export default function MisSolicitudes() {
 
       {reviewingId && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,.7)' }}>
-          <div className="w-full max-w-md rounded-t-2xl p-6" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+          <div className="w-full max-w-md rounded-t-2xl p-6" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <ReviewForm
               requestId={reviewingId}
               onSubmit={async (rating, comment) => {
@@ -136,18 +136,18 @@ export default function MisSolicitudes() {
 
       {cancellingId && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,.7)' }}>
-          <div className="w-full max-w-md rounded-t-2xl p-6 flex flex-col gap-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+          <div className="w-full max-w-md rounded-t-2xl p-6 flex flex-col gap-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#ef4444' }}>Cancelar solicitud</p>
-              <p className="text-base font-black" style={{ color: '#f5f0e8' }}>¿Confirmás la cancelación?</p>
-              <p className="text-sm mt-1" style={{ color: '#555' }}>El profesional será notificado.</p>
+              <p className="text-base font-black" style={{ color: '#111111' }}>¿Confirmás la cancelación?</p>
+              <p className="text-sm mt-1" style={{ color: '#999999' }}>El profesional será notificado.</p>
             </div>
             <div className="flex gap-2.5">
               <button
                 type="button"
                 onClick={() => setCancellingId(null)}
                 className="flex-1 rounded-xl py-3 text-sm font-bold active:opacity-70"
-                style={{ background: '#1a1a1a', color: '#888', border: '1px solid #2a2a2a' }}
+                style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #E8E0D4' }}
               >
                 Volver
               </button>

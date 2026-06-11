@@ -10,13 +10,13 @@ export default function Urgencias() {
   const { professionals, loading } = useUrgentProfessionals()
 
   const header = (
-    <div className="px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#0f0f0f', borderBottom: '1px solid #1e1e1e' }}>
+    <div className="px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
       <button
         type="button"
         onClick={() => navigate(-1)}
         aria-label="Volver atrás"
         className="flex items-center gap-1.5 text-sm mb-4 active:opacity-60 transition-opacity"
-        style={{ color: '#888' }}
+        style={{ color: '#555555' }}
       >
         <ArrowLeft size={15} />
         Volver
@@ -37,7 +37,7 @@ export default function Urgencias() {
               🚨 Emergencias
             </span>
             {!loading && (
-              <span className="flex items-center gap-1.5 text-[10px] font-bold" style={{ color: '#888' }}>
+              <span className="flex items-center gap-1.5 text-[10px] font-bold" style={{ color: '#555555' }}>
                 <span
                   className="w-1.5 h-1.5 rounded-full"
                   style={{ background: '#ef4444', animation: 'urgency-pulse 2s ease-in-out infinite' }}
@@ -46,10 +46,10 @@ export default function Urgencias() {
               </span>
             )}
           </div>
-          <h1 className="text-2xl font-black leading-tight" style={{ color: '#f5f0e8', letterSpacing: '-0.5px' }}>
+          <h1 className="text-2xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
             Servicio 24hs
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#888' }}>
+          <p className="text-sm mt-1" style={{ color: '#555555' }}>
             Profesionales que responden en menos de 30 min
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function Urgencias() {
 
   return (
     <PageShell header={header}>
-      <div className="p-4 flex flex-col gap-3" style={{ background: '#0f0f0f', minHeight: '100%' }}>
+      <div className="p-4 flex flex-col gap-3" style={{ minHeight: '100%' }}>
         {loading && (
           <div className="flex justify-center py-12">
             <LoadingSpinner />
@@ -79,8 +79,8 @@ export default function Urgencias() {
         {!loading && professionals.length === 0 && (
           <div className="text-center py-12">
             <div className="text-4xl mb-3">😴</div>
-            <p className="font-medium" style={{ color: '#888' }}>No hay profesionales disponibles ahora</p>
-            <p className="text-sm mt-1" style={{ color: '#555' }}>Intentá de nuevo en unos minutos</p>
+            <p className="font-medium" style={{ color: '#555555' }}>No hay profesionales disponibles ahora</p>
+            <p className="text-sm mt-1" style={{ color: '#999999' }}>Intentá de nuevo en unos minutos</p>
           </div>
         )}
         {professionals.map((pro, i) => (

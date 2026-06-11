@@ -11,47 +11,30 @@ export function UrgenciasBanner() {
       type="button"
       onClick={() => navigate('/urgencias')}
       aria-label="Ver profesionales de urgencias 24H"
-      className="w-full text-left rounded-2xl active:scale-[0.97] transition-transform duration-150 flex items-center gap-3 p-3.5 relative overflow-hidden"
+      className="w-full text-left rounded-2xl flex items-center gap-3 p-3.5 active:scale-[0.98] transition-transform duration-150"
       style={{
-        background: 'linear-gradient(135deg, #1a0505 0%, #2d0a0a 100%)',
-        border: '1px solid rgba(239,68,68,.25)',
-        boxShadow: '0 4px 20px rgba(239,68,68,.1)',
+        background: '#FFF5F5',
+        border: '1.5px solid #FECACA',
+        boxShadow: '0 2px 8px rgba(239,68,68,.06)',
       }}
     >
-      {/* Glow decorativo */}
       <div
-        className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(239,68,68,.12) 0%, transparent 70%)' }}
-      />
-
-      {/* Ícono */}
-      <div
-        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
-        style={{ background: 'rgba(239,68,68,.15)', border: '1px solid rgba(239,68,68,.25)' }}
+        className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+        style={{ background: '#FEE2E2' }}
       >
         🚨
       </div>
-
-      {/* Texto */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1.5 mb-0.5">
-          <span className="text-sm font-black" style={{ color: '#f5f0e8' }}>
-            Emergencias 24hs
-          </span>
+        <div className="text-[14px] font-black" style={{ color: '#991B1B' }}>
+          Emergencias 24hs
         </div>
-        <p className="text-xs" style={{ color: '#888' }}>
-          {count > 0 ? `${count} profesionales disponibles ahora mismo` : 'Profesionales disponibles ahora mismo'}
-        </p>
+        <div className="text-[12px] mt-0.5" style={{ color: '#B91C1C' }}>
+          {count > 0 ? `${count} profesionales disponibles ahora` : 'Profesionales disponibles ahora'}
+        </div>
       </div>
-
-      {/* Badge pulsante */}
       <div
-        className="flex-shrink-0 text-[9px] font-black uppercase tracking-wide px-2.5 py-1.5 rounded-full"
-        style={{
-          background: '#ef4444',
-          color: '#fff',
-          animation: 'urgency-pulse 2s ease-in-out infinite',
-        }}
+        className="text-[9px] font-black uppercase tracking-wide px-2.5 py-1.5 rounded-full flex-shrink-0"
+        style={{ background: '#EF4444', color: '#FFFFFF', animation: 'urgency-pulse 2s ease-in-out infinite' }}
       >
         ● En vivo
       </div>

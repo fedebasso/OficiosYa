@@ -19,10 +19,10 @@ export function ProfessionalCardSkeleton() {
   return (
     <div
       className="w-full rounded-2xl overflow-hidden flex items-stretch"
-      style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
     >
       {/* Barra lateral */}
-      <div className="w-1 flex-shrink-0" style={{ background: '#242424' }} />
+      <div className="w-1 flex-shrink-0" style={{ background: '#EDE8DE' }} />
 
       {/* Foto */}
       <div className="m-3 flex-shrink-0">
@@ -59,7 +59,7 @@ export function FeaturedSkeleton() {
 /* Skeleton de Review card */
 export function ReviewSkeleton() {
   return (
-    <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
+    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
       <div className="flex items-center gap-3 mb-3">
         <Shimmer style={{ width: 38, height: 38, borderRadius: '50%' }} />
         <div className="flex flex-col gap-1.5 flex-1">

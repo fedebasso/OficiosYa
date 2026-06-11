@@ -60,20 +60,27 @@ export default function Search() {
   ]
 
   const header = (
-    <div className="border-b px-4 py-3 sticky top-0 z-50" style={{ background: '#0f0f0f', borderColor: '#1e1e1e' }}>
-      <div className="flex items-center gap-2 mb-2">
+    <div
+      className="px-4 pt-12 pb-3 sticky top-0 z-50"
+      style={{
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E8E0D4',
+        boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)',
+      }}
+    >
+      <div className="flex items-center gap-2 mb-3">
         <button
           type="button"
           onClick={() => navigate(-1)}
           aria-label="Volver"
-          className="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0 active:opacity-70 transition-opacity"
-          style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: '#f5f0e8' }}
+          className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 active:opacity-70 transition-opacity"
+          style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4', color: '#111111' }}
         >
           ←
         </button>
         <form
-          className="flex-1 flex items-center gap-2 rounded-xl px-3 py-2"
-          style={{ background: '#1a1a1a', border: '1px solid #2a2a2a' }}
+          className="flex-1 flex items-center gap-2 rounded-2xl px-3.5"
+          style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', height: 44 }}
           onSubmit={(e) => {
             e.preventDefault()
             const q = inputValue.trim()
@@ -82,7 +89,7 @@ export default function Search() {
             inputRef.current?.blur()
           }}
         >
-          <SearchIcon size={14} style={{ color: '#e8683a', flexShrink: 0 }} />
+          <SearchIcon size={14} style={{ color: '#E8683A', flexShrink: 0 }} />
           <input
             ref={inputRef}
             type="search"
@@ -90,7 +97,7 @@ export default function Search() {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={`${label}...`}
             className="flex-1 bg-transparent text-sm focus:outline-none min-w-0"
-            style={{ color: '#f5f0e8', caretColor: '#e8683a' }}
+            style={{ color: '#111111', caretColor: '#E8683A' }}
           />
         </form>
       </div>
@@ -106,13 +113,13 @@ export default function Search() {
               onClick={() => toggleFilter(f.key)}
               className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all duration-150 active:scale-[.97]"
               style={active ? {
-                background: '#e8683a',
-                color: '#fff',
-                border: '1px solid #e8683a',
+                background: '#E8683A',
+                color: '#FFFFFF',
+                border: '1.5px solid #E8683A',
               } : {
-                background: '#1a1a1a',
-                color: '#888',
-                border: '1px solid #2a2a2a',
+                background: '#F5F0E8',
+                color: '#555555',
+                border: '1.5px solid #E8E0D4',
               }}
             >
               <span style={{ fontSize: 9 }}>{f.icon}</span>
@@ -123,9 +130,9 @@ export default function Search() {
       </div>
 
       {!loading && !error && (
-        <p className="text-[10px] mt-1.5" style={{ color: '#555' }}>
-          <span style={{ color: '#f5f0e8', fontWeight: 700 }}>{filtered.length}</span> profesionales
-          {activeFilters.size > 0 && <span style={{ color: '#e8683a' }}> · filtrado</span>}
+        <p className="text-[10px] mt-1.5" style={{ color: '#999999' }}>
+          <span style={{ color: '#111111', fontWeight: 700 }}>{filtered.length}</span> profesionales
+          {activeFilters.size > 0 && <span style={{ color: '#E8683A' }}> · filtrado</span>}
         </p>
       )}
     </div>
@@ -133,7 +140,7 @@ export default function Search() {
 
   return (
     <PageShell header={header}>
-      <div className="p-4 flex flex-col gap-3" style={{ background: '#0f0f0f', minHeight: '100%' }}>
+      <div className="p-4 flex flex-col gap-3" style={{ minHeight: '100%' }}>
         {loading && (
           <div className="flex flex-col gap-3">
             {[0,1,2,3].map(i => <ProfessionalCardSkeleton key={i} />)}
@@ -145,8 +152,8 @@ export default function Search() {
         {!loading && !error && filtered.length === 0 && (
           <div className="flex flex-col items-center gap-3 py-16 text-center">
             <div className="text-4xl">🔍</div>
-            <p className="font-bold" style={{ color: '#f5f0e8' }}>No encontramos profesionales</p>
-            <p className="text-sm" style={{ color: '#555' }}>
+            <p className="font-bold" style={{ color: '#111111' }}>No encontramos profesionales</p>
+            <p className="text-sm" style={{ color: '#999999' }}>
               {activeFilters.size > 0 ? 'Probá quitando algún filtro' : 'Intentá con otra categoría'}
             </p>
             {activeFilters.size > 0 && (

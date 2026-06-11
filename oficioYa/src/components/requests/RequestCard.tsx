@@ -38,7 +38,7 @@ export function RequestCard({ request }: Props) {
             </span>
           )}
         </div>
-        <span className="text-[10px]" style={{ color: '#444' }}>
+        <span className="text-[10px]" style={{ color: '#AAAAAA' }}>
           {new Date(request.created_at).toLocaleDateString('es-UY', {
             day: '2-digit', month: 'short',
           })}
@@ -50,8 +50,8 @@ export function RequestCard({ request }: Props) {
       </p>
 
       {request.contact_phone && (
-        <p className="text-[11px] font-medium" style={{ color: '#555' }}>
-          Tel: <span style={{ color: '#888' }}>{request.contact_phone}</span>
+        <p className="text-[11px] font-medium" style={{ color: '#999999' }}>
+          Tel: <span style={{ color: '#555555' }}>{request.contact_phone}</span>
         </p>
       )}
     </div>

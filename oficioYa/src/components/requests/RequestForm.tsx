@@ -16,9 +16,9 @@ interface Props {
 }
 
 const INPUT_STYLE = {
-  background: '#1a1a1a',
-  border: '1px solid #2a2a2a',
-  color: '#f5f0e8',
+  background: '#EDE8DE',
+  border: '1.5px solid #E8E0D4',
+  color: '#111111',
   borderRadius: 16,
   padding: '12px 16px',
   fontSize: 14,
@@ -40,7 +40,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
 
       {/* Descripción */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-bold uppercase tracking-wide" style={{ color: '#888' }}>
+        <label className="text-xs font-bold uppercase tracking-wide" style={{ color: '#555555' }}>
           Descripción del problema
         </label>
         <textarea
@@ -56,7 +56,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
 
       {/* Teléfono */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-bold uppercase tracking-wide" style={{ color: '#888' }}>
+        <label className="text-xs font-bold uppercase tracking-wide" style={{ color: '#555555' }}>
           Teléfono de contacto
         </label>
         <input
@@ -97,7 +97,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
           <p className="text-sm font-bold" style={{ color: urgency ? '#ef4444' : '#f5f0e8' }}>
             🚨 Es urgente
           </p>
-          <p className="text-xs mt-0.5" style={{ color: '#555' }}>
+          <p className="text-xs mt-0.5" style={{ color: '#999999' }}>
             El profesional priorizará tu solicitud
           </p>
         </div>

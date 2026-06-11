@@ -15,7 +15,7 @@ export default function ProOnboarding() {
 
   return (
     <PageShell showBottomNav={false}>
-      <div className="flex flex-col min-h-screen" style={{ background: '#0f0f0f' }}>
+      <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
         {/* Hero dark */}
         <div
@@ -32,22 +32,22 @@ export default function ProOnboarding() {
           >
             🔧
           </div>
-          <h1 className="text-2xl font-black" style={{ color: '#f5f0e8', letterSpacing: '-0.5px' }}>
+          <h1 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
             Oficio<span style={{ color: '#e8683a' }}>Ya</span>
           </h1>
-          <p className="text-sm" style={{ color: '#888' }}>Portal de profesionales</p>
-          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#0f0f0f' }} />
+          <p className="text-sm" style={{ color: '#555555' }}>Portal de profesionales</p>
+          <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
         </div>
 
         {/* Contenido */}
         <div className="flex flex-col gap-4 px-5 pt-6 pb-10">
 
           {/* Bienvenida */}
-          <div className="rounded-2xl p-4" style={{ background: '#141414', border: '1px solid #1e1e1e' }}>
-            <h2 className="font-black text-base mb-1" style={{ color: '#f5f0e8' }}>
+          <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+            <h2 className="font-black text-base mb-1" style={{ color: '#111111' }}>
               ¡Bienvenido, {firstName}! 👋
             </h2>
-            <p className="text-sm leading-relaxed" style={{ color: '#888' }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#555555' }}>
               Completá tu perfil para aparecer en los resultados de búsqueda y recibir solicitudes de clientes.
             </p>
           </div>
@@ -58,7 +58,7 @@ export default function ProOnboarding() {
               <div
                 key={step.title}
                 className="flex items-center gap-3 rounded-2xl p-4"
-                style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+                style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
               >
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
@@ -67,12 +67,12 @@ export default function ProOnboarding() {
                   {step.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold" style={{ color: '#f5f0e8' }}>{step.title}</p>
-                  <p className="text-xs mt-0.5" style={{ color: '#555' }}>{step.desc}</p>
+                  <p className="text-sm font-bold" style={{ color: '#111111' }}>{step.title}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#999999' }}>{step.desc}</p>
                 </div>
                 <div
                   className="w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 text-[10px] font-black"
-                  style={{ borderColor: '#2a2a2a', color: '#555' }}
+                  style={{ borderColor: '#2a2a2a', color: '#999999' }}
                 >
                   {i + 1}
                 </div>

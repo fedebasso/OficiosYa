@@ -22,13 +22,13 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
     >
       <div
         className="px-4 py-2.5"
-        style={{ borderBottom: '1px solid #1e1e1e', background: '#111' }}
+        style={{ borderBottom: '1px solid #E8E0D4', background: '#111' }}
       >
-        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#444' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
           {title}
         </p>
       </div>
@@ -66,12 +66,12 @@ export default function ProProfile() {
   const header = (
     <div
       className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
     >
       <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#e8683a' }}>
         Panel profesional
       </p>
-      <h1 className="text-2xl font-black leading-none" style={{ color: '#f5f0e8', letterSpacing: '-0.5px' }}>
+      <h1 className="text-2xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
         Mi perfil
       </h1>
     </div>
@@ -84,7 +84,7 @@ export default function ProProfile() {
         {/* Avatar */}
         <div
           className="rounded-2xl p-5 flex flex-col items-center gap-3"
-          style={{ background: '#141414', border: '1px solid #1e1e1e' }}
+          style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
         >
           <div className="relative">
             <div
@@ -110,8 +110,8 @@ export default function ProProfile() {
             </button>
           </div>
           <div className="text-center">
-            <p className="font-black text-base" style={{ color: '#f5f0e8' }}>{user?.full_name}</p>
-            <p className="text-xs mt-0.5" style={{ color: '#555' }}>{user?.city ?? 'Montevideo'}</p>
+            <p className="font-black text-base" style={{ color: '#111111' }}>{user?.full_name}</p>
+            <p className="text-xs mt-0.5" style={{ color: '#999999' }}>{user?.city ?? 'Montevideo'}</p>
           </div>
         </div>
 
@@ -124,9 +124,9 @@ export default function ProProfile() {
             placeholder="Contá tu experiencia y especialidades..."
             className="w-full rounded-xl px-3.5 py-3 text-sm resize-none focus:outline-none"
             style={{
-              background: '#1a1a1a',
-              border: '1px solid #2a2a2a',
-              color: '#f5f0e8',
+              background: '#EDE8DE',
+              border: '1.5px solid #E8E0D4',
+              color: '#111111',
               caretColor: '#e8683a',
             }}
           />
@@ -148,9 +148,9 @@ export default function ProProfile() {
                     color: '#e8683a',
                     border: '1px solid rgba(232,104,58,.35)',
                   } : {
-                    background: '#1a1a1a',
+                    background: '#EDE8DE',
                     color: '#666',
-                    border: '1px solid #2a2a2a',
+                    border: '1.5px solid #E8E0D4',
                   }}
                 >
                   <span>{cat.emoji}</span>
@@ -170,9 +170,9 @@ export default function ProProfile() {
             placeholder="598 9X XXX XXX"
             className="w-full rounded-xl px-3.5 py-3 text-sm focus:outline-none"
             style={{
-              background: '#1a1a1a',
-              border: '1px solid #2a2a2a',
-              color: '#f5f0e8',
+              background: '#EDE8DE',
+              border: '1.5px solid #E8E0D4',
+              color: '#111111',
               caretColor: '#e8683a',
             }}
           />
@@ -185,14 +185,14 @@ export default function ProProfile() {
             onChange={(e) => setZone(e.target.value)}
             className="w-full rounded-xl px-3.5 py-3 text-sm focus:outline-none appearance-none"
             style={{
-              background: '#1a1a1a',
-              border: '1px solid #2a2a2a',
+              background: '#EDE8DE',
+              border: '1.5px solid #E8E0D4',
               color: zone ? '#f5f0e8' : '#555',
             }}
           >
             <option value="">Seleccioná un barrio</option>
             {ZONES.map((z) => (
-              <option key={z} value={z} style={{ background: '#1a1a1a', color: '#f5f0e8' }}>{z}</option>
+              <option key={z} value={z} style={{ background: '#EDE8DE', color: '#111111' }}>{z}</option>
             ))}
           </select>
         </Section>
@@ -202,7 +202,7 @@ export default function ProProfile() {
           type="button"
           onClick={async () => { await signOut(); navigate('/login') }}
           className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 active:opacity-70 transition-opacity"
-          style={{ background: 'transparent', color: '#555', border: '1px solid #1e1e1e' }}
+          style={{ background: 'transparent', color: '#999999', border: '1.5px solid #E8E0D4' }}
         >
           <LogOut size={14} />
           Cerrar sesión
