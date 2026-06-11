@@ -7,22 +7,20 @@ interface BadgeProps {
   children: ReactNode
 }
 
-const variantClasses: Record<BadgeVariant, string> = {
-  verified: 'bg-[rgba(59,130,246,.1)] text-[#60a5fa]',
-  pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-[rgba(232,104,58,.1)] text-[#e8683a]',
-  in_progress: 'bg-purple-100 text-purple-800',
-  completed: 'bg-blue-100 text-blue-800',
-  cancelled: 'bg-red-100 text-red-800',
+const variantStyles: Record<BadgeVariant, React.CSSProperties> = {
+  verified:    { background: '#FEF0EA', color: '#E8683A', border: '1px solid #FDDCC8' },
+  pending:     { background: '#FFFBEB', color: '#D97706', border: '1px solid #FDE68A' },
+  confirmed:   { background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' },
+  in_progress: { background: '#F3E8FF', color: '#7C3AED', border: '1px solid #DDD6FE' },
+  completed:   { background: '#DBEAFE', color: '#2563EB', border: '1px solid #BFDBFE' },
+  cancelled:   { background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' },
 }
 
 export function Badge({ variant, children }: BadgeProps) {
   return (
     <span
-      className={[
-        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-        variantClasses[variant],
-      ].join(' ')}
+      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
+      style={variantStyles[variant]}
     >
       {children}
     </span>

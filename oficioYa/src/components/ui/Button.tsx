@@ -14,16 +14,16 @@ interface ButtonProps {
   fullWidth?: boolean
 }
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-opacity-90 active:bg-opacity-80',
-  secondary: 'bg-bg-elevated border border-border-dark text-text-main hover:bg-border-dark active:opacity-80',
-  ghost: 'text-primary bg-transparent hover:bg-bg-elevated active:opacity-80',
+const variantStyles: Record<ButtonVariant, React.CSSProperties> = {
+  primary:   { background: '#E8683A', color: '#FFFFFF', boxShadow: '0 2px 8px rgba(232,104,58,.25)' },
+  secondary: { background: '#F5F0E8', color: '#111111', border: '1.5px solid #E8E0D4' },
+  ghost:     { background: 'transparent', color: '#E8683A' },
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm rounded-lg',
+  sm: 'px-3 py-2 text-sm rounded-xl',
   md: 'px-4 py-2.5 text-base rounded-xl',
-  lg: 'px-6 py-3 text-lg rounded-xl',
+  lg: 'px-6 py-3 text-lg rounded-2xl',
 }
 
 export function Button({
@@ -42,15 +42,13 @@ export function Button({
       onClick={onClick}
       disabled={disabled}
       className={[
-        'inline-flex items-center justify-center font-medium transition-[transform,opacity] duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-        variantClasses[variant],
+        'inline-flex items-center justify-center font-bold transition-[transform,opacity] duration-150 active:scale-[0.97] active:opacity-80 focus:outline-none',
         sizeClasses[size],
         fullWidth ? 'w-full' : '',
-        disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
+        disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      ].filter(Boolean).join(' ')}
+      style={variantStyles[variant]}
     >
       {children}
     </button>
