@@ -10,13 +10,13 @@ function SolicitudSkeleton() {
       <div className="flex items-center gap-3 mb-3">
         <div className="w-10 h-10 rounded-xl" style={{ background: '#F0EBE1', animation: 'shimmer 1.4s ease-in-out infinite', backgroundSize: '200% 100%', backgroundImage: 'linear-gradient(90deg,#EDE8DE 25%,#F5F0E8 50%,#EDE8DE 75%)' }} />
         <div className="flex-1 flex flex-col gap-2">
-          <div className="h-3 rounded" style={{ width: '50%', background: '#F0EBE1' }} />
-          <div className="h-2.5 rounded" style={{ width: '35%', background: '#1e1e1e' }} />
+          <div className="h-3 rounded" style={{ width: '50%', background: '#EDE8DE' }} />
+          <div className="h-2.5 rounded" style={{ width: '35%', background: '#F0EBE1' }} />
         </div>
-        <div className="h-6 w-16 rounded-full" style={{ background: '#1e1e1e' }} />
+        <div className="h-6 w-16 rounded-full" style={{ background: '#F0EBE1' }} />
       </div>
-      <div className="h-2.5 rounded mb-2" style={{ width: '80%', background: '#1e1e1e' }} />
-      <div className="h-2.5 rounded" style={{ width: '60%', background: '#1e1e1e' }} />
+      <div className="h-2.5 rounded mb-2" style={{ width: '80%', background: '#EDE8DE' }} />
+      <div className="h-2.5 rounded" style={{ width: '60%', background: '#F0EBE1' }} />
     </div>
   )
 }
@@ -37,8 +37,11 @@ export default function MisSolicitudes() {
   useEffect(() => { loadRequests() }, [loadRequests])
 
   const header = (
-    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
-      <h1 className="text-xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
+    <div
+      className="px-4 pt-10 pb-4 sticky top-0 z-50"
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}
+    >
+      <h1 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
         Mis solicitudes
       </h1>
       {!loading && requests.length > 0 && (

@@ -45,7 +45,7 @@ export function RequestCard({ request }: Props) {
         </span>
       </div>
 
-      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: '#c8c3bc' }}>
+      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: '#555555' }}>
         {request.description}
       </p>
 

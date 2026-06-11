@@ -16,15 +16,16 @@ interface Props {
 }
 
 const INPUT_STYLE = {
-  background: '#EDE8DE',
+  background: '#FFFFFF',
   border: '1.5px solid #E8E0D4',
   color: '#111111',
-  borderRadius: 16,
-  padding: '12px 16px',
-  fontSize: 14,
+  borderRadius: 14,
+  padding: '14px 16px',
+  fontSize: 15,
   width: '100%',
   outline: 'none',
   resize: 'none' as const,
+  caretColor: '#E8683A',
 }
 
 export function RequestForm({ onSubmit, loading }: Props) {
@@ -40,7 +41,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
 
       {/* Descripción */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-bold uppercase tracking-wide" style={{ color: '#555555' }}>
+        <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
           Descripción del problema
         </label>
         <textarea
@@ -56,7 +57,7 @@ export function RequestForm({ onSubmit, loading }: Props) {
 
       {/* Teléfono */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-bold uppercase tracking-wide" style={{ color: '#555555' }}>
+        <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
           Teléfono de contacto
         </label>
         <input
@@ -79,22 +80,23 @@ export function RequestForm({ onSubmit, loading }: Props) {
         }}
         className="flex items-center gap-3 rounded-2xl p-4 text-left active:opacity-80 transition-opacity"
         style={{
-          background: urgency ? 'rgba(239,68,68,.08)' : '#141414',
-          border: `1px solid ${urgency ? 'rgba(239,68,68,.3)' : '#2a2a2a'}`,
+          background: urgency ? '#FEF2F2' : '#FFFFFF',
+          border: `1.5px solid ${urgency ? '#FECACA' : '#E8E0D4'}`,
+          boxShadow: urgency ? '0 2px 8px rgba(239,68,68,.06)' : '0 1px 3px rgba(0,0,0,.04)',
         }}
       >
         <div
           className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0"
           style={{
-            background: urgency ? '#ef4444' : 'transparent',
-            border: `2px solid ${urgency ? '#ef4444' : '#3a3a3a'}`,
+            background: urgency ? '#EF4444' : '#FFFFFF',
+            border: `2px solid ${urgency ? '#EF4444' : '#E8E0D4'}`,
           }}
         >
           {urgency && <span style={{ color: '#fff', fontSize: 11, fontWeight: 900 }}>✓</span>}
         </div>
         <input id="urgency-cb" type="checkbox" {...register('urgency')} className="hidden" />
         <div>
-          <p className="text-sm font-bold" style={{ color: urgency ? '#ef4444' : '#f5f0e8' }}>
+          <p className="text-sm font-bold" style={{ color: urgency ? '#DC2626' : '#111111' }}>
             🚨 Es urgente
           </p>
           <p className="text-xs mt-0.5" style={{ color: '#999999' }}>

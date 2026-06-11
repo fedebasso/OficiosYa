@@ -40,7 +40,7 @@ export default function RequestService() {
   const { emoji, label } = getCategoryMeta(professional?.categories[0] ?? '')
 
   const header = (
-    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
+    <div className="px-4 pt-10 pb-4 sticky top-0 z-50" style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}>
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -83,7 +83,7 @@ export default function RequestService() {
                 ) : (
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black flex-shrink-0"
-                    style={{ background: 'linear-gradient(135deg,#2a1f10,#e8683a)' }}
+                    style={{ background: 'linear-gradient(135deg,#E8683A,#c44d1f)' }}
                   >
                     {getInitials(professional.profiles.full_name)}
                   </div>
