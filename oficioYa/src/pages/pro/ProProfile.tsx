@@ -26,9 +26,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     >
       <div
         className="px-4 py-2.5"
-        style={{ borderBottom: '1px solid #E8E0D4', background: '#111' }}
+        style={{ borderBottom: '1px solid #E8E0D4', background: '#F5F0E8' }}
       >
-        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#999999' }}>
           {title}
         </p>
       </div>
@@ -104,7 +104,7 @@ export default function ProProfile() {
             <button
               type="button"
               className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full flex items-center justify-center"
-              style={{ background: '#e8683a', border: '2px solid #0f0f0f' }}
+              style={{ background: '#E8683A', border: '2px solid #FFFFFF' }}
             >
               <Camera size={12} color="#fff" />
             </button>
@@ -187,7 +187,7 @@ export default function ProProfile() {
             style={{
               background: '#EDE8DE',
               border: '1.5px solid #E8E0D4',
-              color: zone ? '#f5f0e8' : '#555',
+              color: zone ? '#111111' : '#999999',
             }}
           >
             <option value="">Seleccioná un barrio</option>

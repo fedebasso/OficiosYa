@@ -20,10 +20,10 @@ function WorkSkeleton() {
       className="rounded-2xl p-4 flex items-center gap-3"
       style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
     >
-      <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ background: '#1e1e1e' }} />
+      <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ background: '#EDE8DE' }} />
       <div className="flex-1 flex flex-col gap-2">
-        <div className="h-3 rounded w-2/3" style={{ background: '#1e1e1e' }} />
-        <div className="h-2.5 rounded w-1/2" style={{ background: '#181818' }} />
+        <div className="h-3 rounded w-2/3" style={{ background: '#EDE8DE' }} />
+        <div className="h-2.5 rounded w-1/2" style={{ background: '#F0EBE1' }} />
       </div>
     </div>
   )
@@ -67,7 +67,7 @@ export default function ProWorkHistory() {
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
               style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
-              <Briefcase size={24} style={{ color: '#333' }} />
+              <Briefcase size={24} style={{ color: '#CCCCCC' }} />
             </div>
             <div>
               <p className="font-black text-sm" style={{ color: '#111111' }}>Sin trabajos aún</p>
@@ -107,7 +107,7 @@ export default function ProWorkHistory() {
                     {timeAgo(req.created_at)}
                   </span>
                 </div>
-                <p className="text-sm line-clamp-2 leading-relaxed" style={{ color: '#c8c3bc' }}>
+                <p className="text-sm line-clamp-2 leading-relaxed" style={{ color: '#555555' }}>
                   {req.description}
                 </p>
               </div>

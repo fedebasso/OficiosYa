@@ -33,9 +33,11 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
     <div
       className="rounded-2xl overflow-hidden"
       style={{
-        background: 'linear-gradient(160deg, #161616 0%, #111 100%)',
-        border: req.urgency ? '1px solid rgba(239,68,68,.4)' : '1px solid #242424',
-        boxShadow: req.urgency ? '0 0 20px rgba(239,68,68,.08)' : 'none',
+        background: '#FFFFFF',
+        border: req.urgency ? '1.5px solid #FECACA' : '1.5px solid #E8E0D4',
+        boxShadow: req.urgency
+          ? '0 2px 12px rgba(239,68,68,.08), 0 1px 3px rgba(0,0,0,.04)'
+          : '0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04)',
         animation: 'slideIn .28s cubic-bezier(.22,.68,0,1.2) both',
       }}
     >
@@ -43,23 +45,23 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
       <div
         className="flex items-center justify-between px-4 py-2.5"
         style={{
-          background: req.urgency ? 'rgba(239,68,68,.08)' : 'rgba(232,104,58,.06)',
-          borderBottom: `1px solid ${req.urgency ? 'rgba(239,68,68,.18)' : 'rgba(232,104,58,.12)'}`,
+          background: req.urgency ? '#FFF5F5' : '#FEF0EA',
+          borderBottom: `1px solid ${req.urgency ? '#FECACA' : '#FDDCC8'}`,
         }}
       >
         <div className="flex items-center gap-2">
           {req.urgency ? (
-            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest" style={{ color: '#ef4444' }}>
+            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest" style={{ color: '#DC2626' }}>
               <Zap size={10} fill="currentColor" />
               Urgente
             </span>
           ) : (
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#e8683a' }}>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#E8683A' }}>
               Nueva solicitud
             </span>
           )}
         </div>
-        <span className="flex items-center gap-1 text-[10px]" style={{ color: '#999999' }}>
+        <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAAAAA' }}>
           <Clock size={9} />
           {timeAgo(req.created_at)}
         </span>
@@ -67,16 +69,16 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
 
       {/* Body */}
       <div className="px-4 pt-3.5 pb-4 flex flex-col gap-3.5">
-        <p className="text-sm leading-relaxed" style={{ color: '#d4cfc8' }}>
+        <p className="text-sm leading-relaxed" style={{ color: '#333333' }}>
           {req.description}
         </p>
 
         {req.contact_phone && (
           <div
             className="flex items-center gap-2 rounded-xl px-3 py-2"
-            style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#999999' }}>Tel</span>
+            <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
             <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
           </div>
         )}
@@ -86,8 +88,8 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
           <button
             type="button"
             onClick={onAccept}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-bold active:scale-[.97] transition-transform"
-            style={{ background: 'rgba(34,197,94,.12)', color: '#22c55e', border: '1px solid rgba(34,197,94,.2)' }}
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold active:scale-[.97] transition-transform"
+            style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
           >
             <CheckCircle size={14} />
             Aceptar
@@ -95,8 +97,8 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
           <button
             type="button"
             onClick={onReject}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-bold active:scale-[.97] transition-transform"
-            style={{ background: 'rgba(239,68,68,.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,.15)' }}
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold active:scale-[.97] transition-transform"
+            style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}
           >
             <XCircle size={14} />
             Rechazar
@@ -105,8 +107,8 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
             <button
               type="button"
               onClick={onWhatsApp}
-              className="w-11 flex items-center justify-center rounded-xl active:scale-[.97] transition-transform flex-shrink-0"
-              style={{ background: 'rgba(37,211,102,.1)', color: '#25D366', border: '1px solid rgba(37,211,102,.2)' }}
+              className="w-12 flex items-center justify-center rounded-xl active:scale-[.97] transition-transform flex-shrink-0"
+              style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
               aria-label="WhatsApp"
             >
               <MessageCircle size={15} />
@@ -212,10 +214,11 @@ export default function ProRequests() {
                 key={i}
                 className="h-40 rounded-2xl"
                 style={{
-                  background: 'linear-gradient(90deg,#141414 25%,#1a1a1a 50%,#141414 75%)',
+                  background: 'linear-gradient(90deg,#EDE8DE 25%,#F5F0E8 50%,#EDE8DE 75%)',
                   backgroundSize: '200% 100%',
                   animation: `shimmer 1.4s ease-in-out ${i * .15}s infinite`,
                   animationDelay: `${i * 0.15}s`,
+                  border: '1.5px solid #E8E0D4',
                 }}
               />
             ))}
@@ -237,7 +240,7 @@ export default function ProRequests() {
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
               style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
-              <Inbox size={24} style={{ color: '#333' }} />
+              <Inbox size={24} style={{ color: '#CCCCCC' }} />
             </div>
             <div>
               <p className="font-black text-sm" style={{ color: '#111111' }}>Sin solicitudes aún</p>

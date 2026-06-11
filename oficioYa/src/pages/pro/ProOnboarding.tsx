@@ -17,25 +17,25 @@ export default function ProOnboarding() {
     <PageShell showBottomNav={false}>
       <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
-        {/* Hero dark */}
+        {/* Hero */}
         <div
           className="px-6 pt-14 pb-12 flex flex-col items-center gap-2 relative"
-          style={{ background: 'linear-gradient(160deg, #1a1008 0%, #2d1f0e 100%)' }}
+          style={{ background: 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' }}
         >
           <div
             className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(232,104,58,.1) 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
           />
           <div
             className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-2"
-            style={{ background: 'rgba(232,104,58,.15)', border: '1px solid rgba(232,104,58,.25)' }}
+            style={{ background: 'rgba(255,255,255,.2)', border: '1px solid rgba(255,255,255,.3)' }}
           >
             🔧
           </div>
-          <h1 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
-            Oficio<span style={{ color: '#e8683a' }}>Ya</span>
+          <h1 className="text-2xl font-black" style={{ color: '#FFFFFF', letterSpacing: '-0.5px' }}>
+            Oficio<span style={{ color: 'rgba(255,255,255,.8)' }}>Ya</span>
           </h1>
-          <p className="text-sm" style={{ color: '#555555' }}>Portal de profesionales</p>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,.75)' }}>Portal de profesionales</p>
           <div className="absolute bottom-0 left-0 right-0 h-8 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
         </div>
 
@@ -72,7 +72,7 @@ export default function ProOnboarding() {
                 </div>
                 <div
                   className="w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 text-[10px] font-black"
-                  style={{ borderColor: '#2a2a2a', color: '#999999' }}
+                  style={{ borderColor: '#E8E0D4', color: '#AAAAAA' }}
                 >
                   {i + 1}
                 </div>
