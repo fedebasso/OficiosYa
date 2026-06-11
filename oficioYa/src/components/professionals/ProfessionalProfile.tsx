@@ -120,7 +120,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         />
 
         {/* Nav */}
-        <div className="absolute top-10 left-4 right-4 flex justify-between items-center z-10">
+        <div className="absolute top-10 left-4 right-4 flex justify-between items-center z-20">
           <button
             type="button"
             onClick={goBack}
