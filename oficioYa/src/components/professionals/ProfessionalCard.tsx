@@ -1,6 +1,8 @@
+import { Heart } from 'lucide-react'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
 import { getCategoryMeta } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
+import { useFavoritesStore } from '../../store/favoritesStore'
 
 interface Props {
   professional: ProfessionalWithProfile
@@ -34,10 +36,12 @@ function TopBadge() {
 }
 
 export function ProfessionalCard({ professional, onClick }: Props) {
-  const { profiles, verified, avg_rating, zone, jobs_count, available_now, categories } = professional
+  const { profiles, verified, avg_rating, zone, jobs_count, available_now, categories, id } = professional
   const { label, emoji, accent } = getCategoryMeta(categories[0] ?? '')
   const isTopPro = jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8
   const initials = getInitials(profiles.full_name)
+  const { toggle, isFavorite } = useFavoritesStore()
+  const favorite = isFavorite(id)
 
   return (
     <button
@@ -99,17 +103,36 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           </div>
         </div>
 
-        {/* Derecha: rating + badges */}
+        {/* Derecha: rating + corazón + badges */}
         <div className="flex flex-col items-end justify-between min-h-[72px] flex-shrink-0 py-0.5">
-          {/* Rating */}
-          {avg_rating != null && (
-            <div className="flex items-center gap-1">
-              <span style={{ color: '#F59E0B', fontSize: 15 }}>★</span>
-              <span className="font-black" style={{ color: '#111111', fontSize: 18, lineHeight: 1 }}>
-                {avg_rating}
-              </span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {/* Rating */}
+            {avg_rating != null && (
+              <div className="flex items-center gap-1">
+                <span style={{ color: '#F59E0B', fontSize: 15 }}>★</span>
+                <span className="font-black" style={{ color: '#111111', fontSize: 18, lineHeight: 1 }}>
+                  {avg_rating}
+                </span>
+              </div>
+            )}
+            {/* Favorito */}
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); toggle(id) }}
+              aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+              className="w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-transform"
+              style={{
+                background: favorite ? '#FEF2F2' : '#F5F0E8',
+                border: `1px solid ${favorite ? '#FECACA' : '#E8E0D4'}`,
+              }}
+            >
+              <Heart
+                size={13}
+                style={{ color: favorite ? '#EF4444' : '#CCCCCC' }}
+                fill={favorite ? '#EF4444' : 'none'}
+              />
+            </button>
+          </div>
 
           {/* Badges — max 2 */}
           <div className="flex flex-col items-end gap-1 mt-1">

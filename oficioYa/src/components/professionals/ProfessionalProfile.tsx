@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
+import { ArrowLeft, Heart } from 'lucide-react'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import { BottomNav } from '../layout/BottomNav'
+import { useFavoritesStore } from '../../store/favoritesStore'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
 import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
@@ -101,6 +103,8 @@ export function ProfessionalProfile({ professional, photos }: Props) {
     whatsapp, id, jobs_count, response_time_min, available_now,
   } = professional
 
+  const { toggle, isFavorite } = useFavoritesStore()
+  const favorite = isFavorite(id)
   const { label, emoji, cover } = getCategoryMeta(categories[0] ?? '')
   const specialty = `${emoji} ${label}`
   const initials = getInitials(profiles.full_name)
@@ -122,18 +126,27 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             type="button"
             onClick={() => navigate(-1)}
             aria-label="Volver"
-            className="w-9 h-9 rounded-full flex items-center justify-center text-[#f5f0e8] text-base"
-            style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.12)' }}
+            className="w-10 h-10 rounded-full flex items-center justify-center active:opacity-70 transition-opacity"
+            style={{ background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.2)' }}
           >
-            ←
+            <ArrowLeft size={20} color="#FFFFFF" />
           </button>
           <button
             type="button"
-            aria-label="Guardar"
-            className="w-9 h-9 rounded-full flex items-center justify-center text-[#f5f0e8] text-base"
-            style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.12)' }}
+            onClick={() => toggle(id)}
+            aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+            className="w-10 h-10 rounded-full flex items-center justify-center active:scale-90 transition-transform"
+            style={{
+              background: favorite ? 'rgba(239,68,68,.85)' : 'rgba(255,255,255,.15)',
+              backdropFilter: 'blur(10px)',
+              border: `1px solid ${favorite ? 'rgba(239,68,68,.5)' : 'rgba(255,255,255,.2)'}`,
+            }}
           >
-            ♡
+            <Heart
+              size={18}
+              color={favorite ? '#FFFFFF' : '#FFFFFF'}
+              fill={favorite ? '#FFFFFF' : 'none'}
+            />
           </button>
         </div>
 

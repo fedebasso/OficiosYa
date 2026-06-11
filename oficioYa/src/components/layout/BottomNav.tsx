@@ -1,18 +1,24 @@
+import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { House, Search, FileText, Briefcase, UserCircle } from 'lucide-react'
+import { House, Search, FileText, Briefcase, UserCircle, Heart } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { useFavoritesStore } from '../../store/favoritesStore'
+
+interface NavTab { label: string; to: string; icon: ReactNode; badge?: number | null }
 
 export function BottomNav() {
   const { pathname } = useLocation()
   const user = useAuthStore((s) => s.user)
+  const favCount = useFavoritesStore((s) => s.ids.length)
 
-  const clientTabs = [
+  const clientTabs: NavTab[] = [
     { label: 'Inicio',      to: '/',               icon: <House size={22} /> },
     { label: 'Buscar',      to: '/buscar',          icon: <Search size={22} /> },
+    { label: 'Favoritos',   to: '/favoritos',       icon: <Heart size={22} />, badge: favCount > 0 ? favCount : null },
     { label: 'Solicitudes', to: '/mis-solicitudes', icon: <FileText size={22} /> },
   ]
 
-  const proTabs = [
+  const proTabs: NavTab[] = [
     { label: 'Inicio',      to: '/',                icon: <House size={22} /> },
     { label: 'Solicitudes', to: '/pro/solicitudes', icon: <FileText size={22} /> },
     { label: 'Trabajos',    to: '/pro/trabajos',    icon: <Briefcase size={22} /> },
@@ -45,7 +51,17 @@ export function BottomNav() {
             style={{ color: active ? '#E8683A' : '#AAAAAA' }}
             aria-current={active ? 'page' : undefined}
           >
-            {tab.icon}
+            <div className="relative">
+              {tab.icon}
+              {'badge' in tab && tab.badge && (
+                <span
+                  className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black text-white"
+                  style={{ background: '#EF4444' }}
+                >
+                  {tab.badge}
+                </span>
+              )}
+            </div>
             <span className="text-[10px] font-bold">{tab.label}</span>
             {active && (
               <span
