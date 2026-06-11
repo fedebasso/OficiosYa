@@ -80,7 +80,7 @@ function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number 
               </div>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: '#555555', paddingLeft: 44 }}>{r.text}</p>
-            {i < reviews.length - 1 && <div style={{ height: 1, background: '#1e1e1e', marginTop: 4 }} />}
+            {i < reviews.length - 1 && <div style={{ height: 1, background: '#E8E0D4', marginTop: 4 }} />}
           </div>
         ))}
       </div>
@@ -267,7 +267,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         className="fixed bottom-16 left-0 right-0 px-4 pb-4 pt-3 grid gap-3"
         style={{
           gridTemplateColumns: '1fr 2fr',
-          background: 'linear-gradient(to top, #0f0f0f 70%, transparent)',
+          background: 'linear-gradient(to top, #F5F0E8 60%, rgba(245,240,232,0))',
         }}
       >
         <button

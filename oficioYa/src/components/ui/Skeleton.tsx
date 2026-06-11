@@ -4,7 +4,7 @@ function Shimmer({ className, style }: { className?: string; style?: React.CSSPr
     <div
       className={className}
       style={{
-        background: 'linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%)',
+        background: 'linear-gradient(90deg, #EDE8DE 25%, #F5F0E8 50%, #EDE8DE 75%)',
         backgroundSize: '200% 100%',
         animation: 'shimmer 1.4s ease-in-out infinite',
         borderRadius: 8,

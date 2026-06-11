@@ -16,7 +16,7 @@ export default function NotFound() {
             className="text-[120px] font-black leading-none"
             style={{
               color: 'transparent',
-              WebkitTextStroke: '2px #1e1e1e',
+              WebkitTextStroke: '2px #E8E0D4',
               letterSpacing: '-4px',
             }}
           >

@@ -64,7 +64,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
           type="button"
           onClick={onClose}
           className="w-8 h-8 rounded-full flex items-center justify-center active:opacity-60 transition-opacity"
-          style={{ background: '#1e1e1e', border: '1.5px solid #E8E0D4' }}
+          style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
         >
           <X size={14} style={{ color: '#555555' }} />
         </button>
@@ -86,7 +86,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
             >
               <span
                 className="text-3xl"
-                style={{ color: active ? '#e8683a' : '#2a2a2a', transition: 'color .12s ease' }}
+                style={{ color: active ? '#E8683A' : '#E8E0D4', transition: 'color .12s ease' }}
               >
                 ★
               </span>
@@ -131,7 +131,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
           onClick={handleSubmit}
           disabled={rating === 0 || loading}
           className="flex-1 rounded-xl py-3 text-sm font-bold text-white active:opacity-80 transition-opacity disabled:opacity-40"
-          style={{ background: rating > 0 ? '#e8683a' : '#2a2a2a', boxShadow: rating > 0 ? '0 4px 14px rgba(232,104,58,.25)' : 'none' }}
+          style={{ background: rating > 0 ? '#E8683A' : '#E8E0D4', boxShadow: rating > 0 ? '0 4px 14px rgba(232,104,58,.25)' : 'none' }}
         >
           {loading ? 'Enviando...' : 'Enviar reseña'}
         </button>

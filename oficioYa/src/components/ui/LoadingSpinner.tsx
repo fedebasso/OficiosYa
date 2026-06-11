@@ -8,7 +8,7 @@ export function LoadingSpinner({ size = 'md', className = '' }: Props) {
   return (
     <div
       className={`animate-spin rounded-full ${className}`}
-      style={{ width: px, height: px, borderWidth: 2, borderStyle: 'solid', borderColor: '#2a2a2a', borderTopColor: '#e8683a' }}
+      style={{ width: px, height: px, borderWidth: 2, borderStyle: 'solid', borderColor: '#E8E0D4', borderTopColor: '#E8683A' }}
       role="status"
       aria-label="Cargando"
     />

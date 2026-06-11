@@ -40,10 +40,11 @@ export function Avatar({ src, name, size = 'md' }: AvatarProps) {
   return (
     <div
       className={[
-        'rounded-full bg-primary text-white flex items-center justify-center font-semibold flex-shrink-0',
+        'rounded-full text-white flex items-center justify-center font-semibold flex-shrink-0',
         sizeClasses[size],
       ].join(' ')}
       aria-label={name}
+      style={{ background: 'linear-gradient(135deg, #E8683A, #c44d1f)' }}
     >
       {initials}
     </div>
