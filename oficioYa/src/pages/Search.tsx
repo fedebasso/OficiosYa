@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
-import { Search as SearchIcon } from 'lucide-react'
+import { useBack } from '../hooks/useBack'
+import { Search as SearchIcon, ArrowLeft } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
@@ -19,6 +20,7 @@ type Filter = 'disponible' | 'top' | 'rating'
 export default function Search() {
   const { categoria } = useParams<{ categoria: string }>()
   const navigate = useNavigate()
+  const goBack = useBack('/') 
   const [searchParams, setSearchParams] = useSearchParams()
   const textQuery = searchParams.get('q') ?? ''
   const [inputValue, setInputValue] = useState(textQuery)
@@ -71,12 +73,12 @@ export default function Search() {
       <div className="flex items-center gap-2 mb-3">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={goBack}
           aria-label="Volver"
           className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 active:opacity-70 transition-opacity"
           style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4', color: '#111111' }}
         >
-          ←
+          <ArrowLeft size={18} />
         </button>
         <form
           className="flex-1 flex items-center gap-2 rounded-2xl px-3.5"

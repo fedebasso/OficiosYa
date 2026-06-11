@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { ArrowLeft } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useBack } from '../hooks/useBack'
 import { PageShell } from '../components/layout/PageShell'
 import { RequestForm } from '../components/requests/RequestForm'
 import { useProfessionalById } from '../hooks/useProfessionals'
@@ -10,6 +12,7 @@ import { getInitials } from '../lib/utils'
 export default function RequestService() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const goBack = useBack('/profesional/' + (id ?? '')) 
   const { professional } = useProfessionalById(id ?? '')
   const addRequest = useRequestStore((s) => s.addRequest)
   const [loading, setLoading] = useState(false)
@@ -44,11 +47,11 @@ export default function RequestService() {
       <div className="flex items-center gap-3">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={goBack}
           className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-base"
           style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4', color: '#111111' }}
         >
-          ←
+          <ArrowLeft size={18} />
         </button>
         <div>
           <h1 className="text-base font-black leading-tight" style={{ color: '#111111' }}>Solicitar servicio</h1>

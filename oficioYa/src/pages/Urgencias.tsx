@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useBack } from '../hooks/useBack'
 import { ArrowLeft } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { UrgentProfessionalCard } from '../components/professionals/UrgentProfessionalCard'
@@ -6,14 +6,14 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { useUrgentProfessionals } from '../hooks/useProfessionals'
 
 export default function Urgencias() {
-  const navigate = useNavigate()
+  const goBack = useBack('/') 
   const { professionals, loading } = useUrgentProfessionals()
 
   const header = (
     <div className="px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
       <button
         type="button"
-        onClick={() => navigate(-1)}
+        onClick={goBack}
         aria-label="Volver atrás"
         className="flex items-center gap-1.5 text-sm mb-4 active:opacity-60 transition-opacity"
         style={{ color: '#555555' }}

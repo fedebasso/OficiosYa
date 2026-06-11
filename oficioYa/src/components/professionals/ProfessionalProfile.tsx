@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import { useBack } from '../../hooks/useBack'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import { BottomNav } from '../layout/BottomNav'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
@@ -97,6 +98,7 @@ interface Props {
 
 export function ProfessionalProfile({ professional, photos }: Props) {
   const navigate = useNavigate()
+  const goBack = useBack('/buscar')
   const {
     profiles, bio, avg_rating, verified, zone, categories,
     whatsapp, id, jobs_count, response_time_min, available_now,
@@ -121,7 +123,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         <div className="absolute top-10 left-4 right-4 flex justify-between items-center z-10">
           <button
             type="button"
-            onClick={() => navigate(-1)}
+            onClick={goBack}
             aria-label="Volver"
             className="w-10 h-10 rounded-full flex items-center justify-center active:opacity-70 transition-opacity"
             style={{ background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.2)' }}
