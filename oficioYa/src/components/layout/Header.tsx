@@ -9,11 +9,16 @@ interface HeaderProps {
 export function Header({ title, showBack = false, onBack }: HeaderProps) {
   return (
     <header
-      className="px-4 py-3 flex items-center gap-3 sticky top-0 z-50"
+      className="flex items-center gap-3 sticky top-0 z-50"
       style={{
         background: '#FFFFFF',
         borderBottom: '1px solid #E8E0D4',
         boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)',
+        paddingTop: 'calc(12px + var(--safe-top))',
+        paddingBottom: '12px',
+        paddingLeft: 'var(--px-container)',
+        paddingRight: 'var(--px-container)',
+        minHeight: 'calc(56px + var(--safe-top))',
       }}
     >
       {showBack && (
@@ -27,17 +32,30 @@ export function Header({ title, showBack = false, onBack }: HeaderProps) {
       )}
 
       {!showBack && (
-        <span className="text-xl font-black tracking-tight" style={{ color: '#111111' }}>
+        <span
+          className="font-black tracking-tight"
+          style={{ color: '#111111', fontSize: 'var(--text-xl)' }}
+        >
           Oficio<span style={{ color: '#E8683A' }}>Ya</span>
         </span>
       )}
 
       {title && showBack && (
-        <span className="text-base font-bold truncate" style={{ color: '#111111' }}>{title}</span>
+        <span
+          className="font-bold truncate"
+          style={{ color: '#111111', fontSize: 'var(--text-base)' }}
+        >
+          {title}
+        </span>
       )}
 
       {!showBack && title && (
-        <span className="ml-auto text-base font-bold truncate" style={{ color: '#111111' }}>{title}</span>
+        <span
+          className="ml-auto font-bold truncate"
+          style={{ color: '#111111', fontSize: 'var(--text-base)' }}
+        >
+          {title}
+        </span>
       )}
     </header>
   )
