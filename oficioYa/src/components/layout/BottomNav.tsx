@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { House, Search, FileText, Briefcase, UserCircle, Menu } from 'lucide-react'
+import { House, FileText, Briefcase, UserCircle, Menu } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { MoreMenu } from './MoreMenu'
 
@@ -19,7 +19,6 @@ export function BottomNav() {
 
   const clientTabs: NavTab[] = [
     { label: 'Inicio',      to: '/',               icon: <House size={22} /> },
-    { label: 'Buscar',      to: '/buscar',          icon: <Search size={22} /> },
     { label: 'Solicitudes', to: '/mis-solicitudes', icon: <FileText size={22} /> },
     { label: 'Más',         to: '',                 icon: <Menu size={22} />, onPress: () => setMoreOpen(v => !v) },
   ]
