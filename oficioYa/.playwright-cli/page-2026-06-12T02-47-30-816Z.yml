@@ -1,0 +1,93 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - img "⚡ Electricista" [ref=e5]
+    - button "Volver" [ref=e8] [cursor=pointer]:
+      - img [ref=e9]
+    - generic [ref=e12]:
+      - img "Carlos Méndez" [ref=e14]
+      - generic [ref=e15]: Disponible ahora
+      - heading "Carlos Méndez" [level=1] [ref=e17]
+      - paragraph [ref=e18]: ⚡ Electricista · Pocitos
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: ★ 4.8
+          - generic [ref=e22]: Rating
+        - generic [ref=e23]:
+          - generic [ref=e24]: "127"
+          - generic [ref=e25]: Trabajos
+        - generic [ref=e26]:
+          - generic [ref=e27]: ~15m
+          - generic [ref=e28]: Respuesta
+  - generic [ref=e29]:
+    - generic [ref=e30]:
+      - generic [ref=e31]: ✓ Verificado
+      - generic [ref=e32]: ★ Top Pro
+      - generic [ref=e33]: ● Disponible
+      - generic [ref=e34]: 📍 Pocitos
+    - generic [ref=e35]:
+      - heading "Sobre mí" [level=3] [ref=e36]
+      - paragraph [ref=e37]: Electricista matriculado con 10 años de experiencia. Instalaciones residenciales y comerciales.
+    - generic [ref=e38]:
+      - heading "Servicios" [level=3] [ref=e39]
+      - generic [ref=e41]: ⚡ Electricista
+    - generic [ref=e42]:
+      - heading "Reseñas" [level=3] [ref=e43]
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e46]: "4.8"
+          - generic [ref=e48]: ★★★★★
+          - generic [ref=e49]: 127 reseñas
+        - generic [ref=e50]:
+          - generic [ref=e52]: "5"
+          - generic [ref=e56]: "4"
+          - generic [ref=e60]: "3"
+          - generic [ref=e64]: "2"
+          - generic [ref=e68]: "1"
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - generic [ref=e74]: AM
+            - generic [ref=e75]:
+              - generic [ref=e76]: Ana Martínez
+              - generic [ref=e77]:
+                - generic [ref=e78]: ★★★★★
+                - generic [ref=e79]: hace 2 días
+          - paragraph [ref=e80]: Excelente profesional. Llegó puntual, resolvió el problema rápido y dejó todo limpio. 100% recomendado.
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e84]: JG
+            - generic [ref=e85]:
+              - generic [ref=e86]: Juan González
+              - generic [ref=e87]:
+                - generic [ref=e88]: ★★★★★
+                - generic [ref=e89]: hace 1 semana
+          - paragraph [ref=e90]: Muy prolijo el trabajo y el precio fue justo. Ya lo tengo agendado para el próximo arreglo.
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - generic [ref=e94]: LP
+            - generic [ref=e95]:
+              - generic [ref=e96]: Laura Pérez
+              - generic [ref=e97]:
+                - generic [ref=e98]: ★★★★★
+                - generic [ref=e99]: hace 2 semanas
+          - paragraph [ref=e100]: Buen trabajo, explicó todo lo que hacía. Llegó 10 minutos tarde pero avisó con anticipación.
+  - generic [ref=e101]:
+    - button "💬 Chat" [ref=e102] [cursor=pointer]
+    - button "Solicitar trabajo" [ref=e103] [cursor=pointer]
+  - navigation [ref=e104]:
+    - link "Inicio" [ref=e105] [cursor=pointer]:
+      - /url: /
+      - img [ref=e107]
+      - generic [ref=e110]: Inicio
+    - link "Buscar" [ref=e111] [cursor=pointer]:
+      - /url: /buscar
+      - img [ref=e113]
+      - generic [ref=e116]: Buscar
+    - link "Favoritos" [ref=e117] [cursor=pointer]:
+      - /url: /favoritos
+      - img [ref=e119]
+      - generic [ref=e121]: Favoritos
+    - link "Solicitudes" [ref=e122] [cursor=pointer]:
+      - /url: /mis-solicitudes
+      - img [ref=e124]
+      - generic [ref=e127]: Solicitudes

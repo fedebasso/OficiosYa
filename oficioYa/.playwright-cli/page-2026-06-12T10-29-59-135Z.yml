@@ -1,0 +1,40 @@
+- main [ref=e5]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - heading "OficioYa" [level=1] [ref=e8]
+      - paragraph [ref=e9]: Profesionales de confianza en Montevideo
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - heading "Bienvenido de vuelta" [level=2] [ref=e13]
+        - paragraph [ref=e14]: Ingresá a tu cuenta para continuar
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: Email
+          - generic [ref=e18]:
+            - generic: ✉️
+            - textbox "tu@email.com" [ref=e19]: cliente@demo.com
+        - generic [ref=e20]:
+          - generic [ref=e21]: Contraseña
+          - generic [ref=e22]:
+            - generic: 🔒
+            - textbox "••••••••" [ref=e23]: demo123
+            - button [ref=e24] [cursor=pointer]:
+              - img [ref=e25]
+        - button "Ingresar" [ref=e28] [cursor=pointer]
+      - generic [ref=e31]: o
+      - paragraph [ref=e33]:
+        - text: ¿No tenés cuenta?
+        - link "Registrate gratis" [ref=e34] [cursor=pointer]:
+          - /url: /registro
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]: DEMO
+          - generic [ref=e38]: Accesos de prueba
+        - generic [ref=e39]:
+          - button "👤 Cliente cliente@demo.com" [active] [ref=e40] [cursor=pointer]:
+            - generic [ref=e41]: 👤 Cliente
+            - generic [ref=e42]: cliente@demo.com
+          - button "🔧 Profesional pro@demo.com" [ref=e43] [cursor=pointer]:
+            - generic [ref=e44]: 🔧 Profesional
+            - generic [ref=e45]: pro@demo.com
+        - paragraph [ref=e46]: Toca un acceso para auto-completar

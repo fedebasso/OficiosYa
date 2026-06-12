@@ -1,0 +1,25 @@
+- generic [ref=e4]:
+  - heading "Mis solicitudes" [level=1] [ref=e6]
+  - main [ref=e7]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: 📋
+      - generic [ref=e11]:
+        - paragraph [ref=e12]: Sin solicitudes aún
+        - paragraph [ref=e13]: Tus trabajos solicitados aparecerán acá
+  - navigation [ref=e14]:
+    - link "Inicio" [ref=e15] [cursor=pointer]:
+      - /url: /
+      - img [ref=e17]
+      - generic [ref=e20]: Inicio
+    - link "Buscar" [ref=e21] [cursor=pointer]:
+      - /url: /buscar
+      - img [ref=e23]
+      - generic [ref=e26]: Buscar
+    - link "Favoritos" [ref=e27] [cursor=pointer]:
+      - /url: /favoritos
+      - img [ref=e29]
+      - generic [ref=e31]: Favoritos
+    - link "Solicitudes" [ref=e32] [cursor=pointer]:
+      - /url: /mis-solicitudes
+      - img [ref=e34]
+      - generic [ref=e37]: Solicitudes

@@ -1,0 +1,62 @@
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - button "Volver" [ref=e6] [cursor=pointer]:
+      - img [ref=e7]
+    - generic [ref=e9]: Mi perfil
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: MG
+        - heading "María González" [level=1] [ref=e14]
+        - generic [ref=e15]: Cliente
+      - generic [ref=e16]:
+        - heading "Mi actividad" [level=2] [ref=e17]
+        - button "Mis favoritos" [ref=e18] [cursor=pointer]:
+          - img [ref=e20]
+          - generic [ref=e22]: Mis favoritos
+          - img [ref=e23]
+        - button "Mis solicitudes" [ref=e25] [cursor=pointer]:
+          - img [ref=e27]
+          - generic [ref=e30]: Mis solicitudes
+          - img [ref=e31]
+      - generic [ref=e33]:
+        - heading "Ajustes" [level=2] [ref=e34]
+        - button "Quiero ser profesional" [ref=e35] [cursor=pointer]:
+          - img [ref=e37]
+          - generic [ref=e39]: Quiero ser profesional
+          - img [ref=e40]
+        - button "Cerrar sesión" [ref=e42] [cursor=pointer]:
+          - img [ref=e44]
+          - generic [ref=e47]: Cerrar sesión
+  - generic [ref=e50]:
+    - button "Mis favoritos" [ref=e51] [cursor=pointer]:
+      - img [ref=e52]
+      - generic [ref=e54]: Mis favoritos
+      - img [ref=e55]
+    - button "Mi perfil" [ref=e57] [cursor=pointer]:
+      - img [ref=e58]
+      - generic [ref=e61]: Mi perfil
+      - img [ref=e62]
+    - button "Quiero ser profesional" [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - generic [ref=e68]: Quiero ser profesional
+      - img [ref=e69]
+    - button "Cerrar sesión" [ref=e71] [cursor=pointer]:
+      - img [ref=e72]
+      - generic [ref=e75]: Cerrar sesión
+  - navigation [ref=e76]:
+    - link "Inicio" [ref=e77] [cursor=pointer]:
+      - /url: /
+      - img [ref=e79]
+      - generic [ref=e82]: Inicio
+    - link "Buscar" [ref=e83] [cursor=pointer]:
+      - /url: /buscar
+      - img [ref=e85]
+      - generic [ref=e88]: Buscar
+    - link "Solicitudes" [ref=e89] [cursor=pointer]:
+      - /url: /mis-solicitudes
+      - img [ref=e91]
+      - generic [ref=e94]: Solicitudes
+    - button "Más" [ref=e95] [cursor=pointer]:
+      - img [ref=e97]
+      - generic [ref=e98]: Más

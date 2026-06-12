@@ -1,0 +1,158 @@
+<h2>¿Dónde va el acceso a tu cuenta?</h2>
+<p class="subtitle">Sacar el botón del header. ¿Dónde lo ponemos para que quede natural?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:1rem;background:#f9f9f9;display:flex;justify-content:center;">
+      <div style="width:200px;height:300px;background:#F5F0E8;border-radius:16px;position:relative;border:1.5px solid #E8E0D4;overflow:hidden;">
+        <!-- Header limpio sin botón -->
+        <div style="height:44px;background:#fff;border-bottom:1px solid #E8E0D4;display:flex;align-items:center;padding:0 12px;">
+          <span style="font-weight:900;font-size:14px;color:#111">Oficio<span style="color:#E8683A">Ya</span></span>
+        </div>
+        <!-- Contenido -->
+        <div style="padding:8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="height:26px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;">
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+          </div>
+          <div style="height:36px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+          <div style="height:50px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+        </div>
+        <!-- BottomNav con tab Perfil -->
+        <div style="position:absolute;bottom:0;left:0;right:0;height:52px;background:#fff;border-top:1px solid #E8E0D4;display:flex;align-items:center;justify-content:space-around;padding:0 4px;">
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#E8683A;border-radius:3px;margin:0 auto 2px;opacity:.6"></div>
+            <div style="font-size:6px;color:#E8683A;font-weight:700">Inicio</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:6px;color:#aaa">Buscar</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:6px;color:#aaa">Solicitudes</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:6px;color:#aaa;font-weight:700">Perfil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Tab "Perfil" en el BottomNav</h3>
+      <p>Reemplaza "Favoritos" por "Perfil" en el BottomNav del cliente. El header queda completamente limpio. Desde Perfil se accede a ajustes, cambiar rol, cerrar sesión. Como Airbnb, Instagram, Uber.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:1rem;background:#f9f9f9;display:flex;justify-content:center;">
+      <div style="width:200px;height:300px;background:#F5F0E8;border-radius:16px;position:relative;border:1.5px solid #E8E0D4;overflow:hidden;">
+        <!-- Header con avatar pequeño a la derecha del logo -->
+        <div style="height:44px;background:#fff;border-bottom:1px solid #E8E0D4;display:flex;align-items:center;justify-content:space-between;padding:0 12px;">
+          <span style="font-weight:900;font-size:14px;color:#111">Oficio<span style="color:#E8683A">Ya</span></span>
+          <div style="width:28px;height:28px;background:#E8683A;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:12px;color:#fff;font-weight:900">FB</span>
+          </div>
+        </div>
+        <!-- Contenido -->
+        <div style="padding:8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="height:26px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;">
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+          </div>
+          <div style="height:36px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+        </div>
+        <!-- BottomNav normal -->
+        <div style="position:absolute;bottom:0;left:0;right:0;height:52px;background:#fff;border-top:1px solid #E8E0D4;display:flex;align-items:center;justify-content:space-around;">
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#E8683A;border-radius:3px;margin:0 auto 2px;opacity:.6"></div>
+            <div style="font-size:6px;color:#E8683A;font-weight:700">Inicio</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:6px;color:#aaa">Buscar</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:6px;color:#aaa">Favoritos</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:16px;height:14px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:6px;color:#aaa">Solicitudes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Avatar pequeño en el header</h3>
+      <p>Reemplazar el botón 👤 genérico por un avatar circular con iniciales del usuario (ej: "FB"). Más pequeño, más premium. El BottomNav queda igual.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:1rem;background:#f9f9f9;display:flex;justify-content:center;">
+      <div style="width:200px;height:300px;background:#F5F0E8;border-radius:16px;position:relative;border:1.5px solid #E8E0D4;overflow:hidden;">
+        <!-- Header limpio sin botón -->
+        <div style="height:44px;background:#fff;border-bottom:1px solid #E8E0D4;display:flex;align-items:center;padding:0 12px;">
+          <span style="font-weight:900;font-size:14px;color:#111">Oficio<span style="color:#E8683A">Ya</span></span>
+        </div>
+        <!-- Contenido -->
+        <div style="padding:8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="height:26px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;">
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+            <div style="height:38px;background:#ddd;border-radius:8px"></div>
+          </div>
+          <div style="height:36px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+          <div style="height:50px;background:#fff;border-radius:8px;border:1px solid #E8E0D4"></div>
+        </div>
+        <!-- BottomNav con Perfil + Favoritos -->
+        <div style="position:absolute;bottom:0;left:0;right:0;height:52px;background:#fff;border-top:1px solid #E8E0D4;display:flex;align-items:center;justify-content:space-around;padding:0 2px;">
+          <div style="text-align:center">
+            <div style="width:14px;height:12px;background:#E8683A;border-radius:3px;margin:0 auto 2px;opacity:.6"></div>
+            <div style="font-size:5.5px;color:#E8683A;font-weight:700">Inicio</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:14px;height:12px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:5.5px;color:#aaa">Buscar</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:14px;height:12px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:5.5px;color:#aaa">Favoritos</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:14px;height:12px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:5.5px;color:#aaa">Solicitudes</div>
+          </div>
+          <div style="text-align:center">
+            <div style="width:14px;height:12px;background:#ccc;border-radius:3px;margin:0 auto 2px"></div>
+            <div style="font-size:5.5px;color:#aaa">Perfil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — 5 tabs: mantener Favoritos + agregar Perfil</h3>
+      <p>Header limpio, y el BottomNav pasa a tener 5 tabs: Inicio, Buscar, Favoritos, Solicitudes, Perfil. Más completo pero más cargado visualmente en el nav.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem">💡 Mi recomendación: <strong>A</strong> — Tab Perfil en BottomNav. Header limpio, navegación consistente. Favoritos puede vivir dentro de Perfil o en Buscar. Como Airbnb.</p>
