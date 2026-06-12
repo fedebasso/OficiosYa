@@ -50,12 +50,6 @@ input:-webkit-autofill:focus {
   caret-color: #E8683A;
 }
 
-/* ── EASING TOKENS (Emil Kowalski) ───────────────────────────────
-   ease-out-strong : interactions (taps, button press)
-   ease-in-out-onscreen : elements already visible moving
-   ease-spring : natural/bouncy feel for entrances
-   ease-ios    : iOS-style drawer / sheet
-──────────────────────────────────────────────────────────────── */
 :root {
   /* ── EASING TOKENS (Emil Kowalski) ─────────────── */
   --ease-out:       cubic-bezier(0.23, 1, 0.32, 1);
