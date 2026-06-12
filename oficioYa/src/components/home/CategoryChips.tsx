@@ -33,7 +33,7 @@ export function CategoryChips() {
           key={chip.id}
           type="button"
           onClick={() => handleChip(chip.id)}
-          className="flex-shrink-0 flex items-center gap-1.5 active:opacity-70 transition-opacity"
+          className="flex-shrink-0 flex items-center gap-1.5 active:opacity-70 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E8683A]"
           style={{
             height: 28,
             padding: '0 10px',

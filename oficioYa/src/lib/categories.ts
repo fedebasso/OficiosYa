@@ -51,7 +51,7 @@ export const CATEGORY_ACCENT: Record<string, string> = {
   pintor:             '#ef4444',
 }
 
-export const CATEGORY_GRADIENT: Record<string, string> = {
+export const CATEGORY_GRADIENT: Record<CategoryKey, string> = {
   electricista:       'linear-gradient(135deg, #FFF3C4, #FDE68A)',
   plomero:            'linear-gradient(135deg, #DBEAFE, #BFDBFE)',
   albanil:            'linear-gradient(135deg, #FEF3C7, #FDE68A)',
@@ -60,7 +60,7 @@ export const CATEGORY_GRADIENT: Record<string, string> = {
   pintor:             'linear-gradient(135deg, #FEE2E2, #FECACA)',
 }
 
-export const CATEGORY_AVATAR_GRADIENT: Record<string, string> = {
+export const CATEGORY_AVATAR_GRADIENT: Record<CategoryKey, string> = {
   electricista:       'linear-gradient(135deg, #FEF0EA, #FDDCC8)',
   plomero:            'linear-gradient(135deg, #DBEAFE, #BFDBFE)',
   albanil:            'linear-gradient(135deg, #FEF9C3, #FDE68A)',
@@ -79,7 +79,7 @@ export function getCategoryMeta(cat: string) {
     cover:          CATEGORY_COVER[cat]           ?? FALLBACK_COVER,
     coverThumb:     CATEGORY_COVER_THUMB[cat]     ?? FALLBACK_COVER_THUMB,
     accent:         CATEGORY_ACCENT[cat]          ?? '#e8683a',
-    gradient:       CATEGORY_GRADIENT[cat]        ?? 'linear-gradient(135deg, #F5F0E8, #EDE8DE)',
-    avatarGradient: CATEGORY_AVATAR_GRADIENT[cat] ?? 'linear-gradient(135deg, #FEF0EA, #FDDCC8)',
+    gradient:       CATEGORY_GRADIENT[cat as CategoryKey]        ?? 'linear-gradient(135deg, #F5F0E8, #EDE8DE)',
+    avatarGradient: CATEGORY_AVATAR_GRADIENT[cat as CategoryKey] ?? 'linear-gradient(135deg, #FEF0EA, #FDDCC8)',
   }
 }
