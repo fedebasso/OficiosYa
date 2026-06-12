@@ -40,9 +40,6 @@ const CATEGORIES: Category[] = [
   },
 ]
 
-const ROW_ONE = CATEGORIES.slice(0, 3)
-const ROW_TWO = CATEGORIES.slice(3)
-
 function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }) {
   return (
     <button
@@ -51,24 +48,20 @@ function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }
       className="relative rounded-2xl overflow-hidden active:scale-[.97] transition-transform duration-150 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E8683A]"
       style={{ aspectRatio: '4/3', boxShadow: '0 2px 8px rgba(0,0,0,.08)' }}
     >
-      {/* Foto real */}
       <img
         src={cat.photo}
         alt={cat.label}
         loading="lazy"
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-105"
       />
-      {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      {/* Fallback si no carga */}
       <div className="absolute inset-0 -z-10 flex items-center justify-center" style={{ background: 'rgba(232,104,58,.15)' }}>
         <span style={{ fontSize: 28 }}>{cat.emoji}</span>
       </div>
-      {/* Nombre */}
       <div className="absolute bottom-0 left-0 right-0 p-2">
         <span
-          className="text-white text-[13px] font-black leading-tight block"
-          style={{ textShadow: '0 1px 3px rgba(0,0,0,.6)' }}
+          className="text-white font-black leading-tight block truncate"
+          style={{ fontSize: 'var(--text-sm)', textShadow: '0 1px 3px rgba(0,0,0,.6)' }}
         >
           {cat.label}
         </span>
@@ -82,17 +75,10 @@ export function CategoryGrid() {
   const go = (id: string) => navigate(`/buscar/${id}`)
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-3 gap-2">
-        {ROW_ONE.map((cat) => (
-          <CategoryButton key={cat.id} cat={cat} onClick={() => go(cat.id)} />
-        ))}
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        {ROW_TWO.map((cat) => (
-          <CategoryButton key={cat.id} cat={cat} onClick={() => go(cat.id)} />
-        ))}
-      </div>
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      {CATEGORIES.map((cat) => (
+        <CategoryButton key={cat.id} cat={cat} onClick={() => go(cat.id)} />
+      ))}
     </div>
   )
 }
