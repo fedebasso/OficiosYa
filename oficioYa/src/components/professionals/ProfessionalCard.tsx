@@ -12,8 +12,8 @@ interface Props {
 function AvailableBadge() {
   return (
     <span
-      className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2 py-1 rounded-full"
-      style={{ background: '#DCFCE7', color: '#16A34A' }}
+      className="inline-flex items-center gap-1.5 font-bold px-2 py-1 rounded-full flex-shrink-0"
+      style={{ background: '#DCFCE7', color: '#16A34A', fontSize: 'var(--text-xs)' }}
     >
       <span
         className="w-1.5 h-1.5 rounded-full flex-shrink-0"
@@ -27,8 +27,8 @@ function AvailableBadge() {
 function TopBadge() {
   return (
     <span
-      className="inline-flex items-center text-[10px] font-black px-2 py-1 rounded-full"
-      style={{ background: '#FEF9C3', color: '#D97706' }}
+      className="inline-flex items-center font-black px-2 py-1 rounded-full flex-shrink-0"
+      style={{ background: '#FEF9C3', color: '#D97706', fontSize: 'var(--text-xs)' }}
     >
       ★ Top
     </span>
@@ -57,15 +57,18 @@ export function ProfessionalCard({ professional, onClick }: Props) {
       <div className="w-1 flex-shrink-0" style={{ background: accent }} />
 
       {/* Contenido */}
-      <div className="flex items-start gap-3 p-3.5 flex-1">
+      <div className="flex items-start gap-3 flex-1 min-w-0" style={{ padding: 'var(--space-3)' }}>
         {/* Avatar */}
-        <div className="w-[72px] h-[72px] rounded-xl overflow-hidden flex-shrink-0" style={{ background: '#F5F0E8' }}>
+        <div
+          className="rounded-xl overflow-hidden flex-shrink-0"
+          style={{ width: 64, height: 64, background: '#F5F0E8' }}
+        >
           {profiles.avatar_url ? (
             <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
           ) : (
             <div
-              className="w-full h-full flex items-center justify-center text-white text-xl font-black"
-              style={{ background: `linear-gradient(135deg, ${accent}cc, ${accent})` }}
+              className="w-full h-full flex items-center justify-center text-white font-black"
+              style={{ background: `linear-gradient(135deg, ${accent}cc, ${accent})`, fontSize: 'var(--text-lg)' }}
             >
               {initials}
             </div>
@@ -76,41 +79,44 @@ export function ProfessionalCard({ professional, onClick }: Props) {
         <div className="flex-1 min-w-0 py-0.5">
           {/* Nombre + verificado */}
           <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-[16px] font-bold truncate" style={{ color: '#111111' }}>
+            <span
+              className="font-bold truncate"
+              style={{ color: '#111111', fontSize: 'var(--text-base)' }}
+            >
               {profiles.full_name}
             </span>
             {verified && (
               <span
-                className="text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
-                style={{ background: '#FEF0EA', color: '#E8683A' }}
+                className="font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                style={{ background: '#FEF0EA', color: '#E8683A', fontSize: 'var(--text-xs)' }}
               >✓</span>
             )}
           </div>
 
           {/* Categoría */}
-          <div className="text-[13px] font-600 mb-1.5" style={{ color: accent }}>
+          <div className="font-semibold mb-1.5 truncate" style={{ color: accent, fontSize: 'var(--text-sm)' }}>
             {emoji} {label}
           </div>
 
           {/* Zona + trabajos */}
-          <div className="flex items-center gap-2">
-            <span className="text-[13px] font-medium" style={{ color: '#555555' }}>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-medium truncate" style={{ color: '#555555', fontSize: 'var(--text-sm)' }}>
               📍 {zone}
             </span>
-            <span className="text-[12px]" style={{ color: '#999999' }}>
+            <span className="flex-shrink-0" style={{ color: '#999999', fontSize: 'var(--text-xs)' }}>
               {jobs_count} trabajos
             </span>
           </div>
         </div>
 
         {/* Derecha: rating + corazón + badges */}
-        <div className="flex flex-col items-end justify-between min-h-[72px] flex-shrink-0 py-0.5">
+        <div className="flex flex-col items-end justify-between flex-shrink-0 py-0.5" style={{ minHeight: 64 }}>
           <div className="flex items-center gap-2">
             {/* Rating */}
             {avg_rating != null && (
               <div className="flex items-center gap-1">
-                <span style={{ color: '#F59E0B', fontSize: 15 }}>★</span>
-                <span className="font-black" style={{ color: '#111111', fontSize: 18, lineHeight: 1 }}>
+                <span style={{ color: '#F59E0B', fontSize: 'var(--text-base)' }}>★</span>
+                <span className="font-black" style={{ color: '#111111', fontSize: 'var(--text-lg)', lineHeight: 1 }}>
                   {avg_rating}
                 </span>
               </div>
@@ -137,10 +143,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           {/* Badges — max 2 */}
           <div className="flex flex-col items-end gap-1 mt-1">
             {isTopPro && <TopBadge />}
-            {available_now
-              ? <AvailableBadge />
-              : null
-            }
+            {available_now && <AvailableBadge />}
           </div>
         </div>
       </div>
