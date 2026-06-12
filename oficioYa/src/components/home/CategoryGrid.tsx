@@ -38,6 +38,12 @@ const CATEGORIES: Category[] = [
     emoji: '🧱',
     photo: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80',
   },
+  {
+    id: 'pintor',
+    label: 'Pintor',
+    emoji: '🎨',
+    photo: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80',
+  },
 ]
 
 function CategoryButton({ cat, onClick }: { cat: Category; onClick: () => void }) {
