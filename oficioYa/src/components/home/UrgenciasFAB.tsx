@@ -14,6 +14,7 @@ export function UrgenciasFAB() {
       navigate('/urgencias')
       return
     }
+    if (timerRef.current) clearTimeout(timerRef.current)
     setExpanded(true)
     timerRef.current = setTimeout(() => setExpanded(false), 4000)
   }
@@ -24,7 +25,8 @@ export function UrgenciasFAB() {
     <button
       type="button"
       onClick={handleTap}
-      aria-label="Emergencias 24hs"
+      aria-label={expanded ? 'Ir a emergencias' : 'Emergencias 24hs'}
+      aria-expanded={expanded}
       className="fixed z-40 flex items-center overflow-hidden active:opacity-80 transition-opacity"
       style={{
         bottom: 'calc(72px + var(--safe-bottom))',
