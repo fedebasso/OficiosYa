@@ -21,7 +21,7 @@ const INPUT_STYLE = {
   color: '#111111',
   borderRadius: 14,
   padding: '14px 16px',
-  fontSize: 15,
+  fontSize: 16,
   width: '100%',
   outline: 'none',
   resize: 'none' as const,

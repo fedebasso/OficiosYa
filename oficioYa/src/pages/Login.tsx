@@ -10,7 +10,7 @@ const INPUT_STYLE = {
   color: '#111111',
   borderRadius: '14px',
   padding: '14px 16px 14px 48px',
-  fontSize: '15px',
+  fontSize: 16,
   width: '100%',
   outline: 'none',
   caretColor: '#E8683A',
