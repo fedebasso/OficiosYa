@@ -38,6 +38,7 @@ export function UrgenciasFAB() {
         boxShadow: '0 4px 16px rgba(239,68,68,.45)',
         transition: 'width 280ms var(--ease-spring), border-radius 280ms var(--ease-spring)',
         flexDirection: 'row-reverse',
+        justifyContent: expanded ? 'flex-start' : 'center',
         paddingRight: expanded ? 4 : 0,
         paddingLeft: expanded ? 12 : 0,
         animation: expanded ? 'none' : 'urgency-pulse 2s ease-in-out infinite',

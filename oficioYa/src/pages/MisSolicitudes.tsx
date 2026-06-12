@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
+import { Header } from '../components/layout/Header'
 import { RequestCard } from '../components/requests/RequestCard'
 import { ReviewForm } from '../components/requests/ReviewForm'
 import { useRequestStore } from '../store/requestStore'
@@ -30,6 +32,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 }
 
 export default function MisSolicitudes() {
+  const navigate = useNavigate()
   const { requests, loading, loadRequests, submitReview, updateStatus } = useRequestStore()
   const [reviewingId, setReviewingId] = useState<string | null>(null)
   const [cancellingId, setCancellingId] = useState<string | null>(null)
@@ -37,19 +40,7 @@ export default function MisSolicitudes() {
   useEffect(() => { loadRequests() }, [loadRequests])
 
   const header = (
-    <div
-      className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}
-    >
-      <h1 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
-        Mis solicitudes
-      </h1>
-      {!loading && requests.length > 0 && (
-        <p className="text-xs mt-0.5" style={{ color: '#999999' }}>
-          {requests.length} solicitud{requests.length !== 1 ? 'es' : ''}
-        </p>
-      )}
-    </div>
+    <Header title="Mis solicitudes" showBack onBack={() => navigate(-1)} />
   )
 
   return (
