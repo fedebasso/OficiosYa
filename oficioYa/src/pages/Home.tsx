@@ -4,7 +4,7 @@ import { PageShell } from '../components/layout/PageShell'
 import { SearchBar } from '../components/home/SearchBar'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
-import { UrgenciasBanner } from '../components/home/UrgenciasBanner'
+import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
 import { StatsBar } from '../components/home/StatsBar'
 import { useAuthStore } from '../store/authStore'
 
@@ -29,7 +29,6 @@ export default function Home() {
   const signOut = useAuthStore((s) => s.signOut)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const urgRef   = useReveal()
   const catsRef  = useReveal()
   const statsRef = useReveal()
   const featRef  = useReveal()
@@ -108,59 +107,57 @@ export default function Home() {
   )
 
   return (
-    <PageShell header={homeHeader} showBottomNav>
-      <div className="px-4 py-5 flex flex-col gap-5">
+    <>
+      <PageShell header={homeHeader} showBottomNav>
+        <div className="px-4 py-5 flex flex-col gap-5">
 
-        {/* Urgencias */}
-        <section ref={urgRef as React.RefObject<HTMLElement>} className="reveal">
-          <UrgenciasBanner />
-        </section>
+          {/* Categorías */}
+          <section ref={catsRef as React.RefObject<HTMLElement>} className="reveal">
+            <h2 className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5" style={{ color: '#999999' }}>
+              ¿Qué necesitás?
+            </h2>
+            <CategoryGrid />
+          </section>
 
-        {/* Categorías */}
-        <section ref={catsRef as React.RefObject<HTMLElement>} className="reveal">
-          <h2 className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5" style={{ color: '#999999' }}>
-            ¿Qué necesitás?
-          </h2>
-          <CategoryGrid />
-        </section>
+          {/* Stats */}
+          <section ref={statsRef as React.RefObject<HTMLElement>} className="reveal">
+            <StatsBar />
+          </section>
 
-        {/* Stats */}
-        <section ref={statsRef as React.RefObject<HTMLElement>} className="reveal">
-          <StatsBar />
-        </section>
+          {/* Más recomendados */}
+          <section ref={featRef as React.RefObject<HTMLElement>} className="reveal">
+            <FeaturedProfessionals />
+          </section>
 
-        {/* Más recomendados */}
-        <section ref={featRef as React.RefObject<HTMLElement>} className="reveal">
-          <FeaturedProfessionals />
-        </section>
-
-        {/* CTA profesional */}
-        <section
-          ref={ctaRef as React.RefObject<HTMLElement>}
-          className="reveal rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3"
-          style={{
-            background: '#FFFFFF',
-            border: '1.5px solid #E8E0D4',
-            boxShadow: '0 1px 3px rgba(0,0,0,.06)',
-          }}
-        >
-          <div>
-            <h2 className="text-[14px] font-bold" style={{ color: '#111111' }}>¿Sos profesional?</h2>
-            <p className="text-xs mt-0.5" style={{ color: '#999999' }}>
-              Conseguí clientes en tu zona
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate('/pro/registro')}
-            className="rounded-xl px-4 py-2.5 text-sm font-bold text-white active:opacity-80 transition-opacity flex-shrink-0"
-            style={{ background: '#E8683A', boxShadow: '0 2px 8px rgba(232,104,58,.3)' }}
+          {/* CTA profesional */}
+          <section
+            ref={ctaRef as React.RefObject<HTMLElement>}
+            className="reveal rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3"
+            style={{
+              background: '#FFFFFF',
+              border: '1.5px solid #E8E0D4',
+              boxShadow: '0 1px 3px rgba(0,0,0,.06)',
+            }}
           >
-            Registrarme →
-          </button>
-        </section>
+            <div>
+              <h2 className="text-[14px] font-bold" style={{ color: '#111111' }}>¿Sos profesional?</h2>
+              <p className="text-xs mt-0.5" style={{ color: '#999999' }}>
+                Conseguí clientes en tu zona
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/pro/registro')}
+              className="rounded-xl px-4 py-2.5 text-sm font-bold text-white active:opacity-80 transition-opacity flex-shrink-0"
+              style={{ background: '#E8683A', boxShadow: '0 2px 8px rgba(232,104,58,.3)' }}
+            >
+              Registrarme →
+            </button>
+          </section>
 
-      </div>
-    </PageShell>
+        </div>
+      </PageShell>
+      <UrgenciasFAB />
+    </>
   )
 }
