@@ -25,11 +25,13 @@ export function SearchBar({ onSearch, initialValue = '' }: SearchBarProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center gap-3 rounded-2xl px-4"
+      className="flex items-center gap-3 rounded-2xl"
       style={{
         background: '#FFFFFF',
         border: '1.5px solid #E8E0D4',
         height: 48,
+        paddingLeft: 'var(--px-container)',
+        paddingRight: 'var(--px-container)',
         boxShadow: '0 2px 8px rgba(0,0,0,.04)',
       }}
     >
@@ -40,8 +42,8 @@ export function SearchBar({ onSearch, initialValue = '' }: SearchBarProps) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Electricista, plomero, cerrajero..."
-        className="flex-1 bg-transparent text-sm focus:outline-none min-w-0"
-        style={{ color: '#111111', caretColor: '#E8683A' }}
+        className="flex-1 bg-transparent focus:outline-none min-w-0"
+        style={{ color: '#111111', caretColor: '#E8683A', fontSize: 16 }}
       />
       {value && (
         <button type="button" onClick={clear} className="flex-shrink-0 active:opacity-60">
