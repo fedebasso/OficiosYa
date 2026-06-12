@@ -34,11 +34,17 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 flex"
+      className="fixed bottom-0 z-50 flex"
       style={{
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: 480,
         background: '#FFFFFF',
         borderTop: '1px solid #E8E0D4',
         boxShadow: '0 -1px 0 #E8E0D4',
+        paddingBottom: 'var(--safe-bottom)',
+        minHeight: 'calc(60px + var(--safe-bottom))',
       }}
     >
       {tabs.map((tab) => {
@@ -47,22 +53,27 @@ export function BottomNav() {
           <Link
             key={tab.to}
             to={tab.to}
-            className="flex-1 flex flex-col items-center justify-center py-2.5 gap-0.5 relative transition-opacity active:opacity-60"
-            style={{ color: active ? '#E8683A' : '#AAAAAA' }}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 relative transition-opacity active:opacity-60"
+            style={{
+              color: active ? '#E8683A' : '#AAAAAA',
+              paddingTop: 10,
+              paddingBottom: 10,
+              fontSize: 'var(--text-xs)',
+            }}
             aria-current={active ? 'page' : undefined}
           >
             <div className="relative">
               {tab.icon}
               {'badge' in tab && tab.badge && (
                 <span
-                  className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black text-white"
-                  style={{ background: '#EF4444' }}
+                  className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center font-black text-white"
+                  style={{ background: '#EF4444', fontSize: 9 }}
                 >
                   {tab.badge}
                 </span>
               )}
             </div>
-            <span className="text-[10px] font-bold">{tab.label}</span>
+            <span style={{ fontWeight: 700, fontSize: 'var(--text-xs)' }}>{tab.label}</span>
             {active && (
               <span
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full"
