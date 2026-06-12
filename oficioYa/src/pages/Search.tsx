@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBack } from '../hooks/useBack'
-import { Search as SearchIcon, ArrowLeft } from 'lucide-react'
+import { Search as SearchIcon, ChevronLeft } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
@@ -75,10 +75,9 @@ export default function Search() {
           type="button"
           onClick={goBack}
           aria-label="Volver"
-          className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 active:opacity-70 transition-opacity"
-          style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4', color: '#111111' }}
+          className="p-1 -ml-1 rounded-full flex-shrink-0 active:opacity-60 transition-opacity"
         >
-          <ArrowLeft size={18} />
+          <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
         <form
           className="flex-1 flex items-center gap-2 rounded-2xl px-3.5"

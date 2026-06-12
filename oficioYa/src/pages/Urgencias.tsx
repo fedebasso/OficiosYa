@@ -1,5 +1,5 @@
 import { useBack } from '../hooks/useBack'
-import { ArrowLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { UrgentProfessionalCard } from '../components/professionals/UrgentProfessionalCard'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
@@ -14,12 +14,10 @@ export default function Urgencias() {
       <button
         type="button"
         onClick={goBack}
-        aria-label="Volver atrás"
-        className="flex items-center gap-1.5 text-sm mb-4 active:opacity-60 transition-opacity"
-        style={{ color: '#555555' }}
+        aria-label="Volver"
+        className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity mb-4"
       >
-        <ArrowLeft size={15} />
-        Volver
+        <ChevronLeft size={24} style={{ color: '#111111' }} />
       </button>
 
       <div className="flex items-start justify-between gap-3">

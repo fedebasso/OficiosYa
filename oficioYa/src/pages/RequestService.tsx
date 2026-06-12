@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useBack } from '../hooks/useBack'
 import { PageShell } from '../components/layout/PageShell'
@@ -48,10 +48,10 @@ export default function RequestService() {
         <button
           type="button"
           onClick={goBack}
-          className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-base"
-          style={{ background: '#EDE8DE', border: '1.5px solid #E8E0D4', color: '#111111' }}
+          aria-label="Volver"
+          className="p-1 -ml-1 rounded-full flex-shrink-0 active:opacity-60 transition-opacity"
         >
-          <ArrowLeft size={18} />
+          <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
         <div>
           <h1 className="text-base font-black leading-tight" style={{ color: '#111111' }}>Solicitar servicio</h1>

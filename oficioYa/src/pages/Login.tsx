@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
 
 const INPUT_STYLE = {
   background: '#FFFFFF',
@@ -53,6 +53,14 @@ export default function Login() {
           className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative overflow-hidden"
           style={{ background: 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' }}
         >
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Volver"
+            className="absolute top-10 left-4 p-1 rounded-full active:opacity-60 transition-opacity"
+          >
+            <ChevronLeft size={24} color="#FFFFFF" />
+          </button>
           <div
             className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none"
             style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
