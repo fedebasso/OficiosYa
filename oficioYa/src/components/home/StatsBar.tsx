@@ -33,11 +33,11 @@ function StatCount({ item, active }: { item: StatItem; active: boolean }) {
   const count = useCountUp(item.value, 1400, active)
   return (
     <div className="flex-1 text-center px-2">
-      <div className="text-xs mb-1" style={{ color: '#AAAAAA' }}>{item.icon}</div>
-      <div className="text-lg font-black leading-none" style={{ color: '#111111' }}>
+      <div className="mb-1" style={{ color: '#AAAAAA', fontSize: 'var(--text-sm)' }}>{item.icon}</div>
+      <div className="font-black leading-none" style={{ color: '#111111', fontSize: 'var(--text-xl)' }}>
         {count.toLocaleString()}<span style={{ color: '#E8683A' }}>{item.suffix}</span>
       </div>
-      <div className="text-[9px] font-semibold uppercase tracking-wide mt-1" style={{ color: '#999999' }}>
+      <div className="font-semibold uppercase tracking-wide mt-1" style={{ color: '#999999', fontSize: 'var(--text-xs)' }}>
         {item.label}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
+import { Header } from '../components/layout/Header'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { useFavoritesStore } from '../store/favoritesStore'
@@ -14,23 +15,7 @@ export default function Favoritos() {
   const favorites = professionals.filter((p) => ids.includes(p.id))
 
   const header = (
-    <div
-      className="px-4 pt-12 pb-3 sticky top-0 z-50"
-      style={{
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E8E0D4',
-        boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)',
-      }}
-    >
-      <h1 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
-        Favoritos
-      </h1>
-      {!loading && favorites.length > 0 && (
-        <p className="text-xs mt-0.5" style={{ color: '#999999' }}>
-          {favorites.length} profesional{favorites.length !== 1 ? 'es' : ''} guardado{favorites.length !== 1 ? 's' : ''}
-        </p>
-      )}
-    </div>
+    <Header title="Favoritos" showBack onBack={() => navigate(-1)} />
   )
 
   return (

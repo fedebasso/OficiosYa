@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { useBack } from '../../hooks/useBack'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import { BottomNav } from '../layout/BottomNav'
@@ -128,7 +128,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             className="w-10 h-10 rounded-full flex items-center justify-center active:opacity-70 transition-opacity"
             style={{ background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.2)' }}
           >
-            <ArrowLeft size={20} color="#FFFFFF" />
+            <ChevronLeft size={24} color="#FFFFFF" />
           </button>
           <div className="w-10 h-10" />
         </div>

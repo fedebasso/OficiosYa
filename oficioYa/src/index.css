@@ -50,17 +50,35 @@ input:-webkit-autofill:focus {
   caret-color: #E8683A;
 }
 
-/* ── EASING TOKENS (Emil Kowalski) ───────────────────────────────
-   ease-out-strong : interactions (taps, button press)
-   ease-in-out-onscreen : elements already visible moving
-   ease-spring : natural/bouncy feel for entrances
-   ease-ios    : iOS-style drawer / sheet
-──────────────────────────────────────────────────────────────── */
 :root {
+  /* ── EASING TOKENS (Emil Kowalski) ─────────────── */
   --ease-out:       cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out:    cubic-bezier(0.77, 0, 0.175, 1);
   --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-ios:       cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* ── TIPOGRAFÍA FLUIDA ──────────────────────────── */
+  --text-xs:   clamp(11px, 2.8vw, 13px);
+  --text-sm:   clamp(12px, 3.2vw, 14px);
+  --text-base: clamp(14px, 3.7vw, 16px);
+  --text-lg:   clamp(16px, 4.2vw, 18px);
+  --text-xl:   clamp(18px, 4.8vw, 22px);
+  --text-2xl:  clamp(22px, 5.5vw, 28px);
+
+  /* ── SPACING FLUIDO ─────────────────────────────── */
+  --space-1:  clamp(4px,  1vw,   6px);
+  --space-2:  clamp(8px,  2vw,   10px);
+  --space-3:  clamp(12px, 3vw,   14px);
+  --space-4:  clamp(14px, 3.7vw, 16px);
+  --space-5:  clamp(18px, 4.5vw, 20px);
+  --space-6:  clamp(22px, 5.5vw, 24px);
+
+  /* ── PADDING DE CONTENEDOR ──────────────────────── */
+  --px-container: clamp(16px, 4.5vw, 24px);
+
+  /* ── SAFE AREAS ─────────────────────────────────── */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ── ANIMATIONS ──────────────────────────────────────────────── */

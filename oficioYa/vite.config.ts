@@ -3,6 +3,18 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (/node_modules\/(react|react-dom|react-router|scheduler)\//.test(id)) return 'react-vendor'
+          if (id.includes('node_modules/@supabase/')) return 'supabase'
+          if (/node_modules\/(react-hook-form|@hookform|zod)\//.test(id)) return 'forms'
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({

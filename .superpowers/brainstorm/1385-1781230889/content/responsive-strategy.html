@@ -1,0 +1,42 @@
+<h2>¿Cómo implementamos el sistema responsive?</h2>
+<p class="subtitle">El brief pide mobile-first real con Tailwind. Hay 3 formas de atacarlo — cada una tiene un trade-off importante.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>CSS Custom Properties + clamp()</h3>
+      <p>Definir variables CSS con <code>clamp(min, preferred, max)</code> para tipografía, spacing y tamaños. Fluido entre breakpoints sin saltos. Un solo archivo de tokens (<code>tokens.css</code>) controla todo.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Sin saltos bruscos entre viewports</li><li>Escalado matemáticamente consistente</li><li>Un solo lugar para ajustar todo</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Más difícil de depurar visualmente</li><li>Requiere reemplazar estilos inline actuales</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Tailwind Breakpoints (sm/md/lg) — mobile-first</h3>
+      <p>Usar los breakpoints de Tailwind correctamente: base = 320px, <code>sm:</code> = 375px, <code>md:</code> = 430px, <code>lg:</code> = 768px. Migrar los estilos inline clave a clases Tailwind.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Familiar, predecible, fácil de leer</li><li>Encaja con el stack actual</li><li>Fácil de mantener por otros devs</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Saltos entre breakpoints (no fluido)</li><li>Mezcla con estilos inline existentes</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Híbrido: tokens CSS + Tailwind para layout</h3>
+      <p>CSS custom properties para tipografía y spacing (fluido con clamp), Tailwind para layout y grid (breakpoints). Lo mejor de los dos mundos — estilos inline se migran a variables, layout usa clases.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Tipografía y spacing fluidos</li><li>Layout predecible con Tailwind</li><li>Profesional y escalable</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Más setup inicial</li><li>Dos sistemas a entender</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem">💡 Mi recomendación: <strong>C (Híbrido)</strong> — es lo que usan Uber y Airbnb internamente. Fluido donde importa, predecible donde importa.</p>

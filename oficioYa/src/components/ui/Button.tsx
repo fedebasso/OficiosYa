@@ -20,10 +20,10 @@ const variantStyles: Record<ButtonVariant, React.CSSProperties> = {
   ghost:     { background: 'transparent', color: '#E8683A' },
 }
 
-const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-3 py-2 text-sm rounded-xl',
-  md: 'px-4 py-2.5 text-base rounded-xl',
-  lg: 'px-6 py-3 text-lg rounded-2xl',
+const sizeStyles: Record<ButtonSize, React.CSSProperties> = {
+  sm: { padding: '8px 12px',  fontSize: 'var(--text-sm)',  borderRadius: 12, minHeight: 44 },
+  md: { padding: '10px 16px', fontSize: 'var(--text-base)', borderRadius: 12, minHeight: 44 },
+  lg: { padding: '12px 24px', fontSize: 'var(--text-lg)',  borderRadius: 16, minHeight: 48 },
 }
 
 export function Button({
@@ -43,12 +43,11 @@ export function Button({
       disabled={disabled}
       className={[
         'inline-flex items-center justify-center font-bold transition-[transform,opacity] duration-150 active:scale-[0.97] active:opacity-80 focus:outline-none',
-        sizeClasses[size],
         fullWidth ? 'w-full' : '',
         disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
         className,
       ].filter(Boolean).join(' ')}
-      style={variantStyles[variant]}
+      style={{ ...variantStyles[variant], ...sizeStyles[size] }}
     >
       {children}
     </button>

@@ -1,0 +1,74 @@
+<h2>¿Cómo expande el FAB de urgencias al tocarlo?</h2>
+<p class="subtitle">El ícono 🚨 está flotando. El usuario lo toca. ¿Qué pasa?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:1.5rem;background:#f9f9f9;display:flex;justify-content:center;gap:12px;align-items:center;">
+      <!-- Estado collapsed -->
+      <div style="text-align:center">
+        <div style="font-size:9px;color:#888;margin-bottom:6px">Antes</div>
+        <div style="width:44px;height:44px;background:#EF4444;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(239,68,68,.4)">🚨</div>
+      </div>
+      <div style="font-size:18px;color:#ccc">→</div>
+      <!-- Estado expanded -->
+      <div style="text-align:center">
+        <div style="font-size:9px;color:#888;margin-bottom:6px">Después</div>
+        <div style="width:160px;height:52px;background:#EF4444;border-radius:26px;display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 4px 16px rgba(239,68,68,.4)">
+          <span style="font-size:18px">🚨</span>
+          <div style="flex:1;text-align:left">
+            <div style="font-size:9px;font-weight:900;color:#fff;line-height:1.2">Emergencias 24hs</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.8)">6 disponibles ahora</div>
+          </div>
+          <span style="font-size:10px;color:#fff;opacity:.8">›</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Expand a pill horizontal</h3>
+      <p>El círculo se expande hacia la izquierda convirtiéndose en una pill larga con texto. Animación suave. Al tocar de nuevo (o esperar 4s) vuelve al ícono. Muy parecido a iOS emergency.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:1.5rem;background:#f9f9f9;display:flex;justify-content:center;">
+      <!-- Mockup: bottom sheet -->
+      <div style="width:200px;height:260px;background:#F5F0E8;border-radius:16px;position:relative;border:1.5px solid #E8E0D4;overflow:hidden;">
+        <!-- Contenido difuminado -->
+        <div style="padding:10px;display:flex;flex-direction:column;gap:6px;opacity:.3">
+          <div style="height:24px;background:#fff;border-radius:6px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;">
+            <div style="height:36px;background:#ddd;border-radius:6px"></div>
+            <div style="height:36px;background:#ddd;border-radius:6px"></div>
+            <div style="height:36px;background:#ddd;border-radius:6px"></div>
+            <div style="height:36px;background:#ddd;border-radius:6px"></div>
+            <div style="height:36px;background:#ddd;border-radius:6px"></div>
+            <div style="height:36px;background:#ddd;border-radius:6px"></div>
+          </div>
+        </div>
+        <!-- Bottom sheet -->
+        <div style="position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:16px 16px 0 0;padding:12px;border-top:1.5px solid #FECACA;">
+          <div style="width:28px;height:3px;background:#E8E0D4;border-radius:2px;margin:0 auto 10px"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="font-size:22px">🚨</span>
+            <div>
+              <div style="font-size:11px;font-weight:900;color:#991B1B">Emergencias 24hs</div>
+              <div style="font-size:8px;color:#B91C1C">6 profesionales disponibles</div>
+            </div>
+            <div style="margin-left:auto;font-size:7px;background:#EF4444;color:#fff;padding:2px 6px;border-radius:8px;font-weight:900">EN VIVO</div>
+          </div>
+          <div style="height:28px;background:#EF4444;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:9px;font-weight:900;color:#fff">Ver profesionales disponibles →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Bottom sheet</h3>
+      <p>Al tocar el FAB sube un mini bottom sheet desde abajo con el CTA completo y el botón de acción. Más información, más espacio, cierra al tocar afuera.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem">💡 Mi recomendación: <strong>A</strong> — la pill que expande es más elegante y rápida. El bottom sheet es más pesado para algo que puede ser un tap directo.</p>

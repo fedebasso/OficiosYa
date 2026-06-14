@@ -1,0 +1,205 @@
+- generic [ref=e48]:
+  - banner [ref=e49]:
+    - heading "OficioYa" [level=1] [ref=e50]
+  - main [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - heading "¿Qué necesitás?" [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - button "Electricista ⚡ Electricista" [ref=e56] [cursor=pointer]:
+            - img "Electricista" [ref=e57]
+            - generic [ref=e60]: ⚡
+            - generic [ref=e62]: Electricista
+          - button "Sanitario 🚿 Sanitario" [ref=e63] [cursor=pointer]:
+            - img "Sanitario" [ref=e64]
+            - generic [ref=e67]: 🚿
+            - generic [ref=e69]: Sanitario
+          - button "Aire Ac. ❄️ Aire Ac." [ref=e70] [cursor=pointer]:
+            - img "Aire Ac." [ref=e71]
+            - generic [ref=e74]: ❄️
+            - generic [ref=e76]: Aire Ac.
+          - button "Cerrajero 🔑 Cerrajero" [ref=e77] [cursor=pointer]:
+            - img "Cerrajero" [ref=e78]
+            - generic [ref=e81]: 🔑
+            - generic [ref=e83]: Cerrajero
+          - button "Albañil 🧱 Albañil" [ref=e84] [cursor=pointer]:
+            - img "Albañil" [ref=e85]
+            - generic [ref=e88]: 🧱
+            - generic [ref=e90]: Albañil
+          - button "Pintor 🎨 Pintor" [ref=e91] [cursor=pointer]:
+            - img "Pintor" [ref=e92]
+            - generic [ref=e95]: 🎨
+            - generic [ref=e97]: Pintor
+      - generic [ref=e99]:
+        - generic [ref=e101]:
+          - generic [ref=e102]: 🔧
+          - generic [ref=e103]: 1.200+
+          - generic [ref=e104]: Trabajos
+        - generic [ref=e106]:
+          - generic [ref=e107]: ⭐
+          - generic [ref=e108]: 98%
+          - generic [ref=e109]: Satisfacción
+        - generic [ref=e111]:
+          - generic [ref=e112]: ⚡
+          - generic [ref=e113]: 30min
+          - generic [ref=e114]: Respuesta
+      - generic [ref=e116]:
+        - heading "Más recomendados" [level=2] [ref=e117]
+        - generic [ref=e118]:
+          - button "Carlos Méndez Carlos Méndez ✓ ⚡ Electricista 📍 Pocitos 127 trabajos ★ 4.8 Guardar en favoritos ★ Top Online" [ref=e120] [cursor=pointer]:
+            - generic [ref=e122]:
+              - img "Carlos Méndez" [ref=e124]
+              - generic [ref=e125]:
+                - generic [ref=e126]:
+                  - generic [ref=e127]: Carlos Méndez
+                  - generic [ref=e128]: ✓
+                - generic [ref=e129]: ⚡ Electricista
+                - generic [ref=e130]:
+                  - generic [ref=e131]: 📍 Pocitos
+                  - generic [ref=e132]: 127 trabajos
+              - generic [ref=e133]:
+                - generic [ref=e134]:
+                  - generic [ref=e135]:
+                    - generic [ref=e136]: ★
+                    - generic [ref=e137]: "4.8"
+                  - button "Guardar en favoritos" [ref=e138]:
+                    - img [ref=e139]
+                - generic [ref=e141]:
+                  - generic [ref=e142]: ★ Top
+                  - generic [ref=e143]: Online
+          - button "Roberto Silva Roberto Silva ✓ 🔧 Plomero 📍 Malvín 83 trabajos ★ 4.5 Guardar en favoritos Online" [ref=e146] [cursor=pointer]:
+            - generic [ref=e148]:
+              - img "Roberto Silva" [ref=e150]
+              - generic [ref=e151]:
+                - generic [ref=e152]:
+                  - generic [ref=e153]: Roberto Silva
+                  - generic [ref=e154]: ✓
+                - generic [ref=e155]: 🔧 Plomero
+                - generic [ref=e156]:
+                  - generic [ref=e157]: 📍 Malvín
+                  - generic [ref=e158]: 83 trabajos
+              - generic [ref=e159]:
+                - generic [ref=e160]:
+                  - generic [ref=e161]:
+                    - generic [ref=e162]: ★
+                    - generic [ref=e163]: "4.5"
+                  - button "Guardar en favoritos" [ref=e164]:
+                    - img [ref=e165]
+                - generic [ref=e168]: Online
+          - button "AP Andrés Pereira ✓ 🔧 Plomero 📍 Punta Carretas 102 trabajos ★ 4.7 Guardar en favoritos Online" [ref=e171] [cursor=pointer]:
+            - generic [ref=e173]:
+              - generic [ref=e175]: AP
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - generic [ref=e178]: Andrés Pereira
+                  - generic [ref=e179]: ✓
+                - generic [ref=e180]: 🔧 Plomero
+                - generic [ref=e181]:
+                  - generic [ref=e182]: 📍 Punta Carretas
+                  - generic [ref=e183]: 102 trabajos
+              - generic [ref=e184]:
+                - generic [ref=e185]:
+                  - generic [ref=e186]:
+                    - generic [ref=e187]: ★
+                    - generic [ref=e188]: "4.7"
+                  - button "Guardar en favoritos" [ref=e189]:
+                    - img [ref=e190]
+                - generic [ref=e193]: Online
+          - button "Fabián Moreira Fabián Moreira ✓ ❄️ Aire Acondicionado 📍 Buceo 76 trabajos ★ 4.9 Guardar en favoritos ★ Top Online" [ref=e196] [cursor=pointer]:
+            - generic [ref=e198]:
+              - img "Fabián Moreira" [ref=e200]
+              - generic [ref=e201]:
+                - generic [ref=e202]:
+                  - generic [ref=e203]: Fabián Moreira
+                  - generic [ref=e204]: ✓
+                - generic [ref=e205]: ❄️ Aire Acondicionado
+                - generic [ref=e206]:
+                  - generic [ref=e207]: 📍 Buceo
+                  - generic [ref=e208]: 76 trabajos
+              - generic [ref=e209]:
+                - generic [ref=e210]:
+                  - generic [ref=e211]:
+                    - generic [ref=e212]: ★
+                    - generic [ref=e213]: "4.9"
+                  - button "Guardar en favoritos" [ref=e214]:
+                    - img [ref=e215]
+                - generic [ref=e217]:
+                  - generic [ref=e218]: ★ Top
+                  - generic [ref=e219]: Online
+          - button "Ana Rodríguez Ana Rodríguez ✓ 🔑 Cerrajero 📍 Centro 89 trabajos ★ 4.9 Guardar en favoritos ★ Top Online" [ref=e222] [cursor=pointer]:
+            - generic [ref=e224]:
+              - img "Ana Rodríguez" [ref=e226]
+              - generic [ref=e227]:
+                - generic [ref=e228]:
+                  - generic [ref=e229]: Ana Rodríguez
+                  - generic [ref=e230]: ✓
+                - generic [ref=e231]: 🔑 Cerrajero
+                - generic [ref=e232]:
+                  - generic [ref=e233]: 📍 Centro
+                  - generic [ref=e234]: 89 trabajos
+              - generic [ref=e235]:
+                - generic [ref=e236]:
+                  - generic [ref=e237]:
+                    - generic [ref=e238]: ★
+                    - generic [ref=e239]: "4.9"
+                  - button "Guardar en favoritos" [ref=e240]:
+                    - img [ref=e241]
+                - generic [ref=e243]:
+                  - generic [ref=e244]: ★ Top
+                  - generic [ref=e245]: Online
+          - button "Gabriel Ríos Gabriel Ríos ✓ 🏗️ Albañil 📍 Parque Batlle 91 trabajos ★ 4.7 Guardar en favoritos" [ref=e248] [cursor=pointer]:
+            - generic [ref=e250]:
+              - img "Gabriel Ríos" [ref=e252]
+              - generic [ref=e253]:
+                - generic [ref=e254]:
+                  - generic [ref=e255]: Gabriel Ríos
+                  - generic [ref=e256]: ✓
+                - generic [ref=e257]: 🏗️ Albañil
+                - generic [ref=e258]:
+                  - generic [ref=e259]: 📍 Parque Batlle
+                  - generic [ref=e260]: 91 trabajos
+              - generic [ref=e262]:
+                - generic [ref=e263]:
+                  - generic [ref=e264]: ★
+                  - generic [ref=e265]: "4.7"
+                - button "Guardar en favoritos" [ref=e266]:
+                  - img [ref=e267]
+      - generic [ref=e269]:
+        - generic [ref=e270]:
+          - heading "¿Sos profesional?" [level=2] [ref=e271]
+          - paragraph [ref=e272]: Conseguí clientes en tu zona
+        - button "Registrarme →" [ref=e273] [cursor=pointer]
+    - button "Emergencias 24hs" [ref=e274] [cursor=pointer]:
+      - generic [ref=e275]: 🚨
+  - generic [ref=e278]:
+    - button "Mis favoritos" [ref=e279] [cursor=pointer]:
+      - img [ref=e280]
+      - generic [ref=e282]: Mis favoritos
+      - img [ref=e283]
+    - button "Mi perfil" [ref=e285] [cursor=pointer]:
+      - img [ref=e286]
+      - generic [ref=e289]: Mi perfil
+      - img [ref=e290]
+    - button "Quiero ser profesional" [ref=e293] [cursor=pointer]:
+      - img [ref=e294]
+      - generic [ref=e296]: Quiero ser profesional
+      - img [ref=e297]
+    - button "Cerrar sesión" [ref=e299] [cursor=pointer]:
+      - img [ref=e300]
+      - generic [ref=e303]: Cerrar sesión
+  - navigation [ref=e304]:
+    - link "Inicio" [ref=e305] [cursor=pointer]:
+      - /url: /
+      - img [ref=e307]
+      - generic [ref=e310]: Inicio
+    - link "Buscar" [ref=e312] [cursor=pointer]:
+      - /url: /buscar
+      - img [ref=e314]
+      - generic [ref=e317]: Buscar
+    - link "Solicitudes" [ref=e318] [cursor=pointer]:
+      - /url: /mis-solicitudes
+      - img [ref=e320]
+      - generic [ref=e323]: Solicitudes
+    - button "Más" [active] [ref=e324] [cursor=pointer]:
+      - img [ref=e326]
+      - generic [ref=e327]: Más
