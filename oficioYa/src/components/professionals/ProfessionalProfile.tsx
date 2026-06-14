@@ -104,7 +104,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
     whatsapp, id, jobs_count, response_time_min, available_now,
   } = professional
 
-  const { label, emoji, accent } = getCategoryMeta(categories[0] ?? '')
+  const { label, emoji, cover } = getCategoryMeta(categories[0] ?? '')
   const specialty = `${emoji} ${label}`
   const initials = getInitials(profiles.full_name)
 
@@ -112,28 +112,11 @@ export function ProfessionalProfile({ professional, photos }: Props) {
     <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
       {/* ── HERO ── */}
-      <div
-        className="relative h-72 overflow-hidden flex-shrink-0"
-        style={{
-          background: `linear-gradient(135deg, ${accent}22 0%, #111111 60%, #0a0a0a 100%)`,
-        }}
-      >
-        {/* Patrón decorativo con el emoji de categoría */}
-        <div
-          className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
-          aria-hidden="true"
-          style={{ fontSize: 180, opacity: 0.06, filter: 'blur(2px)', transform: 'rotate(-10deg) scale(1.2)' }}
-        >
-          {emoji}
-        </div>
-        {/* Orbe de color del acento */}
-        <div
-          className="absolute -top-16 -right-16 w-64 h-64 rounded-full pointer-events-none"
-          style={{ background: `radial-gradient(circle, ${accent}33 0%, transparent 70%)` }}
-        />
+      <div className="relative h-72 overflow-hidden flex-shrink-0" style={{ background: '#1a1a1a' }}>
+        <img src={cover} alt={specialty} className="w-full h-full object-cover opacity-40" />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,.2) 0%, rgba(10,10,10,.75) 100%)' }}
+          style={{ background: 'linear-gradient(to bottom, rgba(15,15,15,.3) 0%, rgba(15,15,15,.85) 100%)' }}
         />
 
         {/* Nav */}
@@ -155,7 +138,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
           {/* Avatar circular con borde naranja */}
           <div
             className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center mb-3 flex-shrink-0"
-            style={{ border: `3px solid ${accent}bb`, boxShadow: `0 0 0 6px ${accent}14` }}
+            style={{ border: '3px solid rgba(232,104,58,.7)', boxShadow: '0 0 0 6px rgba(232,104,58,.08)' }}
           >
             {profiles.avatar_url ? (
               <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
