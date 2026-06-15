@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 import { requestService } from '../services/requestService'
 
+export type WorkType = 'reparacion' | 'instalacion' | 'mantenimiento' | 'otro'
+export type UrgencyLevel = 'ahora' | 'hoy' | 'esta_semana' | 'sin_apuro'
+export type RequestType = 'presupuesto' | 'visita'
+
 export interface ServiceRequest {
   id: string
   client_id: string | null
@@ -11,6 +15,10 @@ export interface ServiceRequest {
   status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
   created_at: string
   contact_phone?: string
+  work_type?: WorkType
+  urgency_level?: UrgencyLevel
+  request_type?: RequestType
+  location?: string
 }
 
 interface RequestStore {
