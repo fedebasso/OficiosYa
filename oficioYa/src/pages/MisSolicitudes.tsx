@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { Header } from '../components/layout/Header'
-import { RequestCard } from '../components/requests/RequestCard'
 import { ReviewForm } from '../components/requests/ReviewForm'
 import { useRequestStore } from '../store/requestStore'
 
@@ -68,46 +67,86 @@ export default function MisSolicitudes() {
 
         {requests.map((req) => {
           const status = STATUS_CONFIG[req.status] ?? STATUS_CONFIG.pending
+          const date = new Date(req.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short' })
+          const hasAction = req.status === 'completed' || req.status === 'pending'
           return (
-            <div key={req.id} className="flex flex-col gap-2 animate-fade-up">
-              <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-                {/* Status bar */}
-                <div className="flex items-center justify-between px-4 py-2.5" style={{ background: status.bg, borderBottom: `1px solid ${status.color}22` }}>
-                  <div className="flex items-center gap-2">
-                    <span>{status.icon}</span>
-                    <span className="text-xs font-black uppercase tracking-wide" style={{ color: status.color }}>
-                      {status.label}
-                    </span>
+            <div key={req.id} className="animate-fade-up">
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1.5px solid #E8E0D4',
+                  boxShadow: '0 2px 8px rgba(0,0,0,.06)',
+                }}
+              >
+                {/* Card body con barra lateral de color */}
+                <div className="flex gap-3 p-4">
+                  {/* Barra de color izquierda */}
+                  <div
+                    className="flex-shrink-0 rounded-full"
+                    style={{ width: 4, background: status.color, minHeight: 48 }}
+                  />
+                  {/* Contenido */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span
+                        className="text-xs font-black uppercase tracking-wide"
+                        style={{ color: status.color }}
+                      >
+                        {status.icon} {status.label}
+                      </span>
+                      <span className="text-[10px]" style={{ color: '#AAAAAA' }}>{date}</span>
+                    </div>
+                    <p className="text-sm leading-relaxed line-clamp-2 mb-2" style={{ color: '#444444' }}>
+                      {req.description}
+                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {req.work_type && (
+                        <span
+                          className="text-[10px] font-600 px-2 py-0.5 rounded-full"
+                          style={{ background: '#F5F0E8', color: '#777777' }}
+                        >
+                          📋 {req.work_type === 'reparacion' ? 'Reparación' : req.work_type === 'instalacion' ? 'Instalación' : req.work_type === 'mantenimiento' ? 'Mantenimiento' : 'Otro'}
+                        </span>
+                      )}
+                      {req.urgency && (
+                        <span
+                          className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                          style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,.2)' }}
+                        >
+                          🚨 Urgente
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <span className="text-[10px]" style={{ color: '#999999' }}>
-                    {new Date(req.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short' })}
-                  </span>
                 </div>
-                {/* Card body */}
-                <div className="p-4">
-                  <RequestCard request={req} />
-                </div>
+
+                {/* Acción al pie con separador */}
+                {hasAction && (
+                  <div style={{ borderTop: '1px solid #F0EBE1', padding: '10px 14px' }}>
+                    {req.status === 'completed' && (
+                      <button
+                        type="button"
+                        onClick={() => setReviewingId(req.id)}
+                        className="w-full rounded-xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
+                        style={{ background: 'rgba(232,104,58,.08)', color: '#E8683A', border: '1px solid rgba(232,104,58,.2)' }}
+                      >
+                        ★ Dejar reseña
+                      </button>
+                    )}
+                    {req.status === 'pending' && (
+                      <button
+                        type="button"
+                        onClick={() => setCancellingId(req.id)}
+                        className="w-full rounded-xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
+                        style={{ background: 'rgba(239,68,68,.05)', color: '#ef4444', border: '1px solid rgba(239,68,68,.15)' }}
+                      >
+                        Cancelar solicitud
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
-              {req.status === 'completed' && (
-                <button
-                  type="button"
-                  onClick={() => setReviewingId(req.id)}
-                  className="w-full rounded-2xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
-                  style={{ background: 'rgba(232,104,58,.1)', color: '#e8683a', border: '1px solid rgba(232,104,58,.2)' }}
-                >
-                  ★ Dejar reseña
-                </button>
-              )}
-              {req.status === 'pending' && (
-                <button
-                  type="button"
-                  onClick={() => setCancellingId(req.id)}
-                  className="w-full rounded-2xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
-                  style={{ background: 'rgba(239,68,68,.06)', color: '#ef4444', border: '1px solid rgba(239,68,68,.15)' }}
-                >
-                  Cancelar solicitud
-                </button>
-              )}
             </div>
           )
         })}
