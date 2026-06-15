@@ -2,10 +2,12 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { analyzeTicket } from '../services/ai/ticketService'
 import { useProfessionals } from '../hooks/useProfessionals'
 import { CATEGORY_LABELS, CATEGORY_EMOJI } from '../lib/categories'
+import { SPRING_GENTLE } from '../lib/motion'
 import type { TicketInput, GeneratedTicket } from '../types/ticket'
 import type { ProfessionalWithProfile } from '../hooks/useProfessionals'
 
@@ -31,24 +33,39 @@ function CategoryStep({
 }) {
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+      >
         <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#E8683A' }}>
           ✨ Nuevo ticket
         </p>
         <h2 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
           ¿Qué tipo de trabajo necesitás?
         </h2>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-2 gap-3 flex-1">
+      <motion.div
+        className="grid grid-cols-2 gap-3 flex-1"
+        variants={{ hidden: {}, visible: { transition: { delayChildren: 0.1, staggerChildren: 0.07 } } }}
+        initial="hidden"
+        animate="visible"
+      >
         {CATEGORIES.map((cat) => {
           const active = selected === cat.id
           return (
-            <button
+            <motion.button
               key={cat.id}
               type="button"
               onClick={() => onSelect(cat.id)}
-              className="flex items-center gap-3 rounded-2xl p-4 text-left active:scale-[.98] transition-transform"
+              variants={{
+                hidden: { opacity: 0, scale: 0.92 },
+                visible: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 500, damping: 35 } },
+              }}
+              whileTap={{ scale: 0.94 }}
+              animate={active ? { scale: [1, 1.04, 1] } : {}}
+              className="flex items-center gap-3 rounded-2xl p-4 text-left"
               style={{
                 background: active ? '#E8683A' : '#F5F0E8',
                 border: `1.5px solid ${active ? '#E8683A' : '#EDE8DE'}`,
@@ -64,20 +81,24 @@ function CategoryStep({
                   {cat.desc}
                 </div>
               </div>
-            </button>
+            </motion.button>
           )
         })}
-      </div>
+      </motion.div>
 
-      <button
+      <motion.button
         type="button"
         onClick={onNext}
         disabled={!selected}
-        className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 disabled:opacity-40 transition-opacity"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: selected ? 1 : 0.4, y: 0 }}
+        transition={{ delay: 0.35 }}
+        whileTap={{ scale: 0.97 }}
+        className="w-full rounded-2xl py-4 text-base font-bold text-white disabled:cursor-not-allowed"
         style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
       >
         Continuar →
-      </button>
+      </motion.button>
     </div>
   )
 }
@@ -285,70 +306,104 @@ function MediaStep({
 
 /* ── Paso 3: IA procesando ── */
 function AIProcessingStep({ progress }: { progress: number }) {
-  const steps = [
-    'Imagen analizada',
-    'Identificando el problema...',
-    'Generando ticket',
-    'Buscando profesionales',
-  ]
+  const steps = ['Imagen analizada', 'Identificando el problema...', 'Generando ticket', 'Buscando profesionales']
 
   return (
     <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-6">
-      {/* Orb */}
-      <div
-        className="flex items-center justify-center"
-        style={{
-          width: 80,
-          height: 80,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg,#E8683A,#c44d1f)',
-          fontSize: 36,
-          boxShadow: '0 0 0 16px rgba(232,104,58,.08), 0 0 0 32px rgba(232,104,58,.04)',
-        }}
-      >
-        ✨
+      {/* Orb multi-layer */}
+      <div className="relative flex items-center justify-center" style={{ width: 120, height: 120 }}>
+        {/* Outer glow */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(232,104,58,.12) 0%, transparent 70%)' }}
+          animate={{ scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 2.8, ease: 'easeInOut', repeat: Infinity }}
+        />
+        {/* Mid glow */}
+        <motion.div
+          className="absolute rounded-full"
+          style={{ width: 96, height: 96, background: 'radial-gradient(circle, rgba(232,104,58,.15) 0%, transparent 70%)' }}
+          animate={{ scale: [1, 1.25, 1], opacity: [0.7, 1, 0.7] }}
+          transition={{ duration: 2.8, ease: 'easeInOut', repeat: Infinity, delay: 0.2 }}
+        />
+        {/* Inner orb */}
+        <motion.div
+          className="absolute rounded-full flex items-center justify-center"
+          style={{
+            width: 80, height: 80,
+            background: 'radial-gradient(circle at 35% 35%, #FF9A5C, #E8683A 50%, #B84A1F)',
+            boxShadow: '0 8px 32px rgba(232,104,58,.4)',
+          }}
+          animate={{ scale: [1, 1.06, 1] }}
+          transition={{ duration: 2.8, ease: 'easeInOut', repeat: Infinity, delay: 0.1 }}
+        />
+        {/* Core */}
+        <motion.span
+          className="relative z-10"
+          style={{ fontSize: 32 }}
+          animate={{ rotate: [-3, 3, -3] }}
+          transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }}
+        >
+          ✨
+        </motion.span>
       </div>
 
-      <div>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.3 }}>
         <h2 className="text-xl font-black" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
           Analizando tu problema
         </h2>
         <p className="text-sm mt-1" style={{ color: '#AAAAAA' }}>Tardará solo unos segundos</p>
-      </div>
+      </motion.div>
 
-      {/* Progress steps */}
-      <div className="w-full max-w-xs flex flex-col gap-3 text-left">
+      <motion.div
+        className="w-full max-w-xs flex flex-col gap-3 text-left"
+        variants={{ hidden: {}, visible: { transition: { delayChildren: 0.3, staggerChildren: 0.15 } } }}
+        initial="hidden"
+        animate="visible"
+      >
         {steps.map((label, i) => {
           const done = i < progress
           const active = i === progress
           return (
-            <div key={label} className="flex items-center gap-3">
-              <div
-                className="flex items-center justify-center flex-shrink-0 font-black text-white"
-                style={{
-                  width: 22,
-                  height: 22,
-                  borderRadius: '50%',
-                  fontSize: 10,
-                  background: done ? '#E8683A' : 'transparent',
-                  border: done ? 'none' : active ? '2px solid #E8683A' : '1.5px solid #EDE8DE',
-                }}
-              >
-                {done ? '✓' : ''}
+            <motion.div
+              key={label}
+              variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 28 } } }}
+              className="flex items-center gap-3"
+            >
+              <div className="relative flex-shrink-0" style={{ width: 22, height: 22 }}>
+                <AnimatePresence mode="wait">
+                  {done ? (
+                    <motion.div
+                      key="done"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                      className="absolute inset-0 rounded-full flex items-center justify-center font-black text-white"
+                      style={{ background: '#E8683A', fontSize: 10 }}
+                    >
+                      ✓
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="pending"
+                      className="absolute inset-0 rounded-full"
+                      style={{ border: active ? '2px solid #E8683A' : '1.5px solid #EDE8DE' }}
+                      animate={active ? { boxShadow: ['0 0 0 0 rgba(232,104,58,.4)', '0 0 0 5px rgba(232,104,58,0)', '0 0 0 0 rgba(232,104,58,.4)'] } : {}}
+                      transition={{ duration: 1.2, repeat: Infinity }}
+                    />
+                  )}
+                </AnimatePresence>
               </div>
-              <span
-                className="text-sm"
-                style={{
-                  color: done ? '#555' : active ? '#E8683A' : '#CCC',
-                  fontWeight: done || active ? 700 : 400,
-                }}
-              >
+              <span className="text-sm" style={{
+                color: done ? '#555' : active ? '#E8683A' : '#CCC',
+                fontWeight: done || active ? 700 : 400,
+              }}>
                 {label}
               </span>
-            </div>
+            </motion.div>
           )
         })}
-      </div>
+      </motion.div>
     </div>
   )
 }
@@ -383,7 +438,10 @@ function ResultsStep({
     <div className="flex flex-col pb-24" style={{ minHeight: '100%' }}>
       {/* Ticket generado */}
       <div className="p-4 pb-3" style={{ borderBottom: '1px solid #F0EBE1' }}>
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.05 }}
           className="inline-flex items-center gap-1.5 rounded-full mb-3"
           style={{
             background: 'rgba(232,104,58,.1)',
@@ -395,14 +453,31 @@ function ResultsStep({
           }}
         >
           ✨ Generado por IA
-        </div>
-        <h2 className="text-xl font-black leading-tight mb-2" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
+        </motion.div>
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.12 }}
+          className="text-xl font-black leading-tight mb-2"
+          style={{ color: '#111111', letterSpacing: '-0.3px' }}
+        >
           {ticket.title}
-        </h2>
-        <p className="text-sm leading-relaxed mb-3" style={{ color: '#666666' }}>
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.22 }}
+          className="text-sm leading-relaxed mb-3"
+          style={{ color: '#666666' }}
+        >
           {ticket.description}
-        </p>
-        <div className="flex gap-2 flex-wrap">
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.35 }}
+          className="flex gap-2 flex-wrap"
+        >
           {ticket.urgent && (
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
               style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,.2)' }}>
@@ -413,82 +488,115 @@ function ResultsStep({
             style={{ background: '#F5F0E8', color: '#666' }}>
             {CATEGORY_EMOJI[category]} {CATEGORY_LABELS[category] ?? category}
           </span>
-        </div>
+        </motion.div>
       </div>
 
       {/* Profesionales recomendados */}
       <div className="flex-1 p-4 flex flex-col gap-3" style={{ background: '#F9F6F2' }}>
-        <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-[10px] font-bold uppercase tracking-widest"
+          style={{ color: '#AAAAAA' }}
+        >
           Tocá para elegir un profesional
-        </p>
-        {sorted.slice(0, 5).map((pro) => {
-          const selected = pro.id === selectedId
-          return (
-            <button
-              key={pro.id}
-              type="button"
-              onClick={() => setSelectedId(pro.id)}
-              className="rounded-2xl overflow-hidden text-left w-full active:opacity-80 transition-opacity"
-              style={{
-                background: '#FFFFFF',
-                border: `2px solid ${selected ? '#E8683A' : '#EDE8DE'}`,
-                boxShadow: selected ? '0 2px 12px rgba(232,104,58,.18)' : '0 1px 3px rgba(0,0,0,.04)',
-              }}
-            >
-              <div className="flex items-center gap-3 p-3">
-                {pro.profiles.avatar_url ? (
-                  <img src={pro.profiles.avatar_url} alt={pro.profiles.full_name}
-                    className="rounded-xl object-cover flex-shrink-0" style={{ width: 40, height: 40 }} />
-                ) : (
-                  <div className="rounded-xl flex items-center justify-center flex-shrink-0 font-black text-white"
-                    style={{ width: 40, height: 40, background: 'linear-gradient(135deg,#E8683A,#c44d1f)', fontSize: 16 }}>
-                    {pro.profiles.full_name.charAt(0)}
+        </motion.p>
+        <motion.div
+          className="flex flex-col gap-3"
+          variants={{ hidden: {}, visible: { transition: { delayChildren: 0.45, staggerChildren: 0.06 } } }}
+          initial="hidden"
+          animate="visible"
+        >
+          {sorted.slice(0, 5).map((pro) => {
+            const selected = pro.id === selectedId
+            return (
+              <motion.button
+                key={pro.id}
+                type="button"
+                onClick={() => setSelectedId(pro.id)}
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 400, damping: 32 } },
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="rounded-2xl overflow-hidden text-left w-full"
+                style={{
+                  background: '#FFFFFF',
+                  border: `2px solid ${selected ? '#E8683A' : '#EDE8DE'}`,
+                  boxShadow: selected ? '0 2px 12px rgba(232,104,58,.18)' : '0 1px 3px rgba(0,0,0,.04)',
+                }}
+              >
+                <div className="flex items-center gap-3 p-3">
+                  {pro.profiles.avatar_url ? (
+                    <img src={pro.profiles.avatar_url} alt={pro.profiles.full_name}
+                      className="rounded-xl object-cover flex-shrink-0" style={{ width: 40, height: 40 }} />
+                  ) : (
+                    <div className="rounded-xl flex items-center justify-center flex-shrink-0 font-black text-white"
+                      style={{ width: 40, height: 40, background: 'linear-gradient(135deg,#E8683A,#c44d1f)', fontSize: 16 }}>
+                      {pro.profiles.full_name.charAt(0)}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold truncate" style={{ color: '#111' }}>{pro.profiles.full_name}</div>
+                    <div className="text-[10px]" style={{ color: '#AAAAAA' }}>
+                      {pro.avg_rating != null && <><span style={{ color: '#f59e0b' }}>★</span> {pro.avg_rating} · </>}
+                      {pro.jobs_count} trabajos
+                      {pro.response_time_min > 0 && ` · ~${pro.response_time_min}min`}
+                    </div>
                   </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-bold truncate" style={{ color: '#111' }}>{pro.profiles.full_name}</div>
-                  <div className="text-[10px]" style={{ color: '#AAAAAA' }}>
-                    {pro.avg_rating != null && <><span style={{ color: '#f59e0b' }}>★</span> {pro.avg_rating} · </>}
-                    {pro.jobs_count} trabajos
-                    {pro.response_time_min > 0 && ` · ~${pro.response_time_min}min`}
+                  {/* Indicador de selección */}
+                  <div className="relative flex-shrink-0" style={{ width: 22, height: 22 }}>
+                    <AnimatePresence mode="wait">
+                      {selected ? (
+                        <motion.div
+                          key="selected"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                          className="absolute inset-0 rounded-full flex items-center justify-center font-black text-white"
+                          style={{ background: '#E8683A', fontSize: 11 }}
+                        >
+                          ✓
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="unselected"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                          className="absolute inset-0 rounded-full"
+                          style={{ border: '1.5px solid #DDD' }}
+                        />
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
-                {/* Indicador de selección */}
-                <div
-                  className="flex-shrink-0 flex items-center justify-center font-black text-white"
-                  style={{
-                    width: 22,
-                    height: 22,
-                    borderRadius: '50%',
-                    fontSize: 11,
-                    background: selected ? '#E8683A' : 'transparent',
-                    border: selected ? 'none' : '1.5px solid #DDD',
-                    transition: 'all .15s',
-                  }}
-                >
-                  {selected ? '✓' : ''}
-                </div>
-              </div>
-            </button>
-          )
-        })}
+              </motion.button>
+            )
+          })}
+        </motion.div>
       </div>
 
       {/* CTA fijo al fondo */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, type: 'spring', stiffness: 300, damping: 30 }}
         className="fixed bottom-0 left-0 right-0 p-4"
         style={{ background: 'rgba(249,246,242,.96)', backdropFilter: 'blur(8px)', borderTop: '1px solid #EDE8DE' }}
       >
-        <button
+        <motion.button
           type="button"
           onClick={() => selectedPro && onPedir(selectedPro)}
           disabled={!selectedPro}
-          className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 disabled:opacity-40 transition-opacity"
+          whileTap={{ scale: 0.97 }}
+          className="w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-40"
           style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
         >
           {selectedPro ? `Continuar con ${selectedPro.profiles.full_name.split(' ')[0]} →` : 'Elegí un profesional'}
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     </div>
   )
 }
@@ -500,6 +608,7 @@ export default function TicketFlow() {
   const preselectedProId = searchParams.get('pro')
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
+  const [direction, setDirection] = useState<'forward' | 'back'>('forward')
   const [category, setCategory] = useState<string | null>(null)
   const [input, setInput] = useState<TicketInput>({ category: '', photo: null, audioBlob: null, text: '' })
   const [aiProgress, setAiProgress] = useState(0)
@@ -538,19 +647,32 @@ export default function TicketFlow() {
     })
   }
 
+  // Slide variants based on direction
+  const slideVariants = {
+    enter: (dir: 'forward' | 'back') => ({ x: dir === 'forward' ? 40 : -40, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: 'forward' | 'back') => ({ x: dir === 'forward' ? -40 : 40, opacity: 0 }),
+  }
+
+  const fadeVariants = {
+    enter: { opacity: 0 },
+    center: { opacity: 1 },
+    exit: { opacity: 0 },
+  }
+
   const header = (
     <div
       className="px-4 pt-10 pb-3 sticky top-0 z-50 flex items-center gap-3"
       style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}
     >
       {step > 1 && step < 3 && (
-        <button type="button" onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3 | 4)}
+        <button type="button" onClick={() => { setDirection('back'); setStep((s) => (s - 1) as 1 | 2 | 3 | 4) }}
           className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0">
           <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
       )}
       {step === 4 && (
-        <button type="button" onClick={() => setStep(2)}
+        <button type="button" onClick={() => { setDirection('back'); setStep(2) }}
           className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0">
           <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
@@ -569,30 +691,77 @@ export default function TicketFlow() {
 
   return (
     <PageShell showBottomNav={false} header={header}>
-      <div className="flex flex-col" style={{ minHeight: '100%' }}>
-        {step === 1 && (
-          <CategoryStep
-            selected={category}
-            onSelect={(id) => setCategory(id)}
-            onNext={() => setStep(2)}
-          />
-        )}
-        {step === 2 && (
-          <MediaStep
-            input={input}
-            onChange={(patch) => setInput((prev) => ({ ...prev, ...patch }))}
-            onAnalyze={handleAnalyze}
-          />
-        )}
-        {step === 3 && <AIProcessingStep progress={aiProgress} />}
-        {step === 4 && ticket && (
-          <ResultsStep
-            ticket={ticket}
-            category={category ?? ''}
-            preselectedProId={preselectedProId}
-            onPedir={handlePedir}
-          />
-        )}
+      <div className="flex flex-col" style={{ minHeight: '100%', position: 'relative', overflow: 'hidden' }}>
+        <AnimatePresence mode="wait" custom={direction}>
+          {step === 1 && (
+            <motion.div
+              key="step1"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={SPRING_GENTLE}
+              style={{ width: '100%' }}
+            >
+              <CategoryStep
+                selected={category}
+                onSelect={(id) => setCategory(id)}
+                onNext={() => { setDirection('forward'); setStep(2) }}
+              />
+            </motion.div>
+          )}
+          {step === 2 && (
+            <motion.div
+              key="step2"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={SPRING_GENTLE}
+              style={{ width: '100%' }}
+            >
+              <MediaStep
+                input={input}
+                onChange={(patch) => setInput((prev) => ({ ...prev, ...patch }))}
+                onAnalyze={handleAnalyze}
+              />
+            </motion.div>
+          )}
+          {step === 3 && (
+            <motion.div
+              key="step3"
+              variants={fadeVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.3 }}
+              style={{ width: '100%', display: 'flex', flex: 1 }}
+            >
+              <AIProcessingStep progress={aiProgress} />
+            </motion.div>
+          )}
+          {step === 4 && ticket && (
+            <motion.div
+              key="step4"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={SPRING_GENTLE}
+              style={{ width: '100%' }}
+            >
+              <ResultsStep
+                ticket={ticket}
+                category={category ?? ''}
+                preselectedProId={preselectedProId}
+                onPedir={handlePedir}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </PageShell>
   )
