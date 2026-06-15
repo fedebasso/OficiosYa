@@ -52,16 +52,24 @@ export default function MisSolicitudes() {
           <div className="flex flex-col items-center gap-4 py-16 text-center">
             <div
               className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
-              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+              style={{ background: '#FEF0EA', border: '1.5px solid #FDDCC8' }}
             >
               📋
             </div>
             <div>
               <p className="font-black text-base" style={{ color: '#111111' }}>Sin solicitudes aún</p>
-              <p className="text-sm mt-1" style={{ color: '#999999' }}>
-                Tus trabajos solicitados aparecerán acá
+              <p className="text-sm mt-1 leading-relaxed" style={{ color: '#999999' }}>
+                Cuando pidas un servicio,<br />tus solicitudes aparecerán acá
               </p>
             </div>
+            <button
+              type="button"
+              onClick={() => navigate('/buscar')}
+              className="rounded-2xl px-6 py-3 text-sm font-bold text-white active:opacity-80 transition-opacity"
+              style={{ background: '#E8683A', boxShadow: '0 2px 8px rgba(232,104,58,.3)' }}
+            >
+              Buscar profesionales
+            </button>
           </div>
         )}
 

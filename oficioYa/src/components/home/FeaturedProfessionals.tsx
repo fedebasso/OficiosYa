@@ -79,9 +79,26 @@ export function FeaturedProfessionals() {
 
       {/* Cards */}
       {visible.length === 0 ? (
-        <p className="text-sm text-center py-6" style={{ color: '#AAAAAA' }}>
-          No hay profesionales destacados en esta categoría
-        </p>
+        <div className="flex flex-col items-center gap-3 py-8 text-center">
+          <div
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
+            style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
+          >
+            🔍
+          </div>
+          <div>
+            <p className="text-sm font-bold" style={{ color: '#111111' }}>Sin destacados en esta categoría</p>
+            <p className="text-xs mt-1" style={{ color: '#AAAAAA' }}>Probá buscando directamente</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate(`/buscar/${activeCategory}`)}
+            className="text-sm font-bold active:opacity-70 transition-opacity"
+            style={{ color: '#E8683A' }}
+          >
+            Ver todos los profesionales →
+          </button>
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
           {visible.map((pro, i) => (
