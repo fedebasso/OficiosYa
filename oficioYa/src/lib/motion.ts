@@ -32,14 +32,3 @@ export const staggerFast: Variants = {
   visible: { transition: { delayChildren: 0, staggerChildren: 0.06 } },
 }
 
-export const slideFromRight: Variants = {
-  hidden:  { opacity: 0, x: 40 },
-  visible: { opacity: 1, x: 0, transition: SPRING_GENTLE },
-  exit:    { opacity: 0, x: -40, transition: { duration: 0.2 } },
-}
-
-export const slideFromLeft: Variants = {
-  hidden:  { opacity: 0, x: -40 },
-  visible: { opacity: 1, x: 0, transition: SPRING_GENTLE },
-  exit:    { opacity: 0, x: 40, transition: { duration: 0.2 } },
-}

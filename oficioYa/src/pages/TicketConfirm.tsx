@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
+import { SPRING_GENTLE } from '../lib/motion'
 import { useRequestStore } from '../store/requestStore'
 import type { GeneratedTicket } from '../types/ticket'
 
@@ -36,9 +37,9 @@ function Confetti() {
       {CONFETTI_COLORS.map((color, i) => (
         <motion.div
           key={i}
-          initial={{ y: -20, x: `${10 + i * 11}%`, opacity: 1, rotate: Math.random() * 360 }}
-          animate={{ y: 120, opacity: 0, rotate: Math.random() * 720 }}
-          transition={{ duration: 0.8 + Math.random() * 0.4, delay: i * 0.05, ease: 'easeIn' }}
+          initial={{ y: -20, x: `${10 + i * 11}%`, opacity: 1, rotate: i * 45 }}
+          animate={{ y: 120, opacity: 0, rotate: i * 90 + 360 }}
+          transition={{ duration: 0.8 + (i % 3) * 0.2, delay: i * 0.05, ease: 'easeIn' }}
           style={{
             position: 'absolute',
             top: 0,
@@ -133,7 +134,7 @@ export default function TicketConfirm() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.05, ...SPRING_GENTLE }}
               className="flex items-center gap-3 rounded-2xl p-3.5"
               style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
@@ -160,7 +161,7 @@ export default function TicketConfirm() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.12, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.12, ...SPRING_GENTLE }}
               className="rounded-2xl overflow-hidden"
               style={{ border: '1.5px solid #E8E0D4' }}
             >
@@ -187,7 +188,7 @@ export default function TicketConfirm() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.2, ...SPRING_GENTLE }}
               className="flex flex-col gap-2"
             >
               <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
@@ -219,7 +220,7 @@ export default function TicketConfirm() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.28, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.28, ...SPRING_GENTLE }}
             >
               <motion.button
                 type="button"
@@ -267,7 +268,7 @@ export default function TicketConfirm() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.25, ...SPRING_GENTLE }}
               className="relative z-10"
             >
               <h2 className="text-xl font-black mb-2" style={{ color: '#111111' }}>¡Solicitud enviada!</h2>
@@ -281,7 +282,7 @@ export default function TicketConfirm() {
               onClick={() => window.open(whatsappUrl, '_blank')}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.35, ...SPRING_GENTLE }}
               whileTap={{ scale: 0.97 }}
               className="w-full rounded-2xl py-4 text-base font-bold text-white relative z-10"
               style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.2)' }}
@@ -294,7 +295,7 @@ export default function TicketConfirm() {
               onClick={() => navigate('/mis-solicitudes')}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.42, type: 'spring', stiffness: 300, damping: 28 }}
+              transition={{ delay: 0.42, ...SPRING_GENTLE }}
               whileTap={{ scale: 0.97 }}
               className="w-full rounded-2xl py-3.5 text-sm font-bold relative z-10"
               style={{ background: '#EDE8DE', color: '#111111', border: '1.5px solid #E8E0D4' }}

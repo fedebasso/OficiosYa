@@ -647,17 +647,17 @@ export default function TicketFlow() {
     })
   }
 
-  // Slide variants based on direction
+  // Slide variants based on direction (transitions embedded so stagger animations are not overridden)
   const slideVariants = {
     enter: (dir: 'forward' | 'back') => ({ x: dir === 'forward' ? 40 : -40, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (dir: 'forward' | 'back') => ({ x: dir === 'forward' ? -40 : 40, opacity: 0 }),
+    center: { x: 0, opacity: 1, transition: SPRING_GENTLE },
+    exit: (dir: 'forward' | 'back') => ({ x: dir === 'forward' ? -40 : 40, opacity: 0, transition: { duration: 0.2 } as const }),
   }
 
   const fadeVariants = {
     enter: { opacity: 0 },
-    center: { opacity: 1 },
-    exit: { opacity: 0 },
+    center: { opacity: 1, transition: { duration: 0.3 } },
+    exit: { opacity: 0, transition: { duration: 0.2 } },
   }
 
   const header = (
@@ -701,7 +701,6 @@ export default function TicketFlow() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={SPRING_GENTLE}
               style={{ width: '100%' }}
             >
               <CategoryStep
@@ -719,7 +718,6 @@ export default function TicketFlow() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={SPRING_GENTLE}
               style={{ width: '100%' }}
             >
               <MediaStep
@@ -736,7 +734,6 @@ export default function TicketFlow() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.3 }}
               style={{ width: '100%', display: 'flex', flex: 1 }}
             >
               <AIProcessingStep progress={aiProgress} />
@@ -750,7 +747,6 @@ export default function TicketFlow() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={SPRING_GENTLE}
               style={{ width: '100%' }}
             >
               <ResultsStep
