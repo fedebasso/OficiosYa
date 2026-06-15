@@ -1,23 +1,32 @@
 // src/components/ticket/TicketEntryCard.tsx
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import { SPRING_SOFT, fadeUp } from '../../lib/motion'
 
 export function TicketEntryCard() {
   const navigate = useNavigate()
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={() => navigate('/ticket')}
-      className="w-full text-left flex items-center gap-3 active:opacity-80 transition-opacity rounded-2xl p-4"
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      whileTap={{ scale: 0.97 }}
+      transition={SPRING_SOFT}
+      className="w-full text-left flex items-center gap-3 rounded-2xl p-4"
       style={{
         background: '#FFFFFF',
         border: '2px solid #E8683A',
         boxShadow: '0 2px 12px rgba(232,104,58,.12)',
       }}
     >
-      {/* Ícono */}
-      <div
+      {/* Orb animado */}
+      <motion.div
         className="flex items-center justify-center flex-shrink-0"
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 3, ease: 'easeInOut', repeat: Infinity }}
         style={{
           width: 44,
           height: 44,
@@ -27,7 +36,7 @@ export function TicketEntryCard() {
         }}
       >
         ✨
-      </div>
+      </motion.div>
 
       {/* Texto */}
       <div className="flex-1 min-w-0">
@@ -39,8 +48,15 @@ export function TicketEntryCard() {
         </p>
       </div>
 
-      {/* Flecha */}
-      <span className="text-lg flex-shrink-0" style={{ color: '#E8683A' }}>›</span>
-    </button>
+      {/* Flecha animada */}
+      <motion.span
+        animate={{ x: [0, 3, 0] }}
+        transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity }}
+        className="text-lg flex-shrink-0"
+        style={{ color: '#E8683A' }}
+      >
+        ›
+      </motion.span>
+    </motion.button>
   )
 }
