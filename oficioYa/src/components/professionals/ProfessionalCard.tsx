@@ -1,4 +1,5 @@
 import { Heart } from 'lucide-react'
+import { motion } from 'framer-motion'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
 import { getCategoryMeta } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
@@ -17,9 +18,11 @@ export function ProfessionalCard({ professional, onClick }: Props) {
   const favorite = isFavorite(id)
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
-      className="w-full text-left rounded-2xl overflow-hidden flex items-stretch active:scale-[0.985] transition-transform duration-150"
+      className="w-full text-left rounded-2xl overflow-hidden flex items-stretch"
+      whileTap={{ scale: 0.98, y: 1 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       style={{
         background: '#FFFFFF',
         border: '1.5px solid #EDE8DE',
@@ -29,7 +32,10 @@ export function ProfessionalCard({ professional, onClick }: Props) {
       <div className="flex items-center gap-3 flex-1 min-w-0" style={{ padding: 'var(--space-3)' }}>
 
         {/* Avatar */}
-        <div
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           className="rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center font-black"
           style={{
             width: 56,
@@ -43,7 +49,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           ) : (
             <span style={{ color: accent }}>{initials}</span>
           )}
-        </div>
+        </motion.div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
@@ -114,7 +120,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
         </div>
 
       </div>
-    </button>
+    </motion.button>
   )
 }
 
