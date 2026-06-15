@@ -39,13 +39,13 @@ export default function RequestService() {
         description: data.description,
         urgency: data.urgency_level === 'ahora' || data.urgency_level === 'hoy',
         contact_phone: data.contact_phone,
-        work_type: data.work_type ?? undefined,
-        urgency_level: data.urgency_level ?? undefined,
-        request_type: data.request_type ?? undefined,
+        work_type: data.work_type || undefined,
+        urgency_level: data.urgency_level || undefined,
+        request_type: data.request_type || undefined,
         location: data.location,
       })
       const urgencyText = data.urgency_level === 'ahora' ? ' Es urgente.' : data.urgency_level === 'hoy' ? ' Lo necesito hoy.' : ''
-      const typeText = data.request_type === 'presupuesto' ? ' Me gustaría un presupuesto.' : ' Necesito que vengas a verlo.'
+      const typeText = data.request_type === 'presupuesto' ? ' Me gustaría un presupuesto.' : data.request_type === 'visita' ? ' Necesito que vengas a verlo.' : ''
       const message = encodeURIComponent(
         `Hola! Vi tu perfil en OficioYa y necesito ayuda.\n\n${data.description}${urgencyText}${typeText}\n\nMi teléfono: ${data.contact_phone}`
       )
