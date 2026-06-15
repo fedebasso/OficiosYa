@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { CATEGORY_GRADIENT, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
+import { CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
 
 const CATEGORIES = [
   'electricista',
@@ -30,12 +30,13 @@ export function CategoryIcons() {
               width: 56,
               height: 56,
               borderRadius: 18,
-              background: CATEGORY_GRADIENT[id] ?? 'linear-gradient(135deg, #F5F0E8, #EDE8DE)',
+              background: '#FFFFFF',
+              border: '1.5px solid #EDE8DE',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 26,
-              boxShadow: '0 2px 10px rgba(0,0,0,.08)',
+              boxShadow: '0 1px 4px rgba(0,0,0,.06)',
             }}
           >
             {CATEGORY_EMOJI[id]}
