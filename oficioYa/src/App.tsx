@@ -6,6 +6,8 @@ import Home from './pages/Home'
 import Search from './pages/Search'
 import ProfessionalDetail from './pages/ProfessionalDetail'
 import RequestService from './pages/RequestService'
+import TicketFlow from './pages/TicketFlow'
+import TicketConfirm from './pages/TicketConfirm'
 import MisSolicitudes from './pages/MisSolicitudes'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -41,6 +43,8 @@ function App() {
         <Route path="/urgencias" element={<Urgencias />} />
         <Route path="/profesional/:id" element={<ProfessionalDetail />} />
         <Route path="/solicitar/:id" element={<RequestService />} />
+        <Route path="/ticket" element={<TicketFlow />} />
+        <Route path="/ticket/confirmar" element={<TicketConfirm />} />
         <Route
           path="/mis-solicitudes"
           element={
