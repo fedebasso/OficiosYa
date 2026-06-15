@@ -366,7 +366,6 @@ function ResultsStep({
   onPedir: (pro: ProfessionalWithProfile) => void
 }) {
   const { professionals } = useProfessionals(category)
-
   const sorted = [...professionals].sort((a, b) => {
     if (a.id === preselectedProId) return -1
     if (b.id === preselectedProId) return 1
@@ -374,8 +373,14 @@ function ResultsStep({
     return (b.avg_rating ?? 0) - (a.avg_rating ?? 0)
   })
 
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  useEffect(() => {
+    if (sorted.length > 0 && selectedId === null) setSelectedId(sorted[0].id)
+  }, [sorted.length])
+  const selectedPro = sorted.find((p) => p.id === selectedId) ?? null
+
   return (
-    <div className="flex flex-col" style={{ minHeight: '100%' }}>
+    <div className="flex flex-col pb-24" style={{ minHeight: '100%' }}>
       {/* Ticket generado */}
       <div className="p-4 pb-3" style={{ borderBottom: '1px solid #F0EBE1' }}>
         <div
@@ -414,18 +419,20 @@ function ResultsStep({
       {/* Profesionales recomendados */}
       <div className="flex-1 p-4 flex flex-col gap-3" style={{ background: '#F9F6F2' }}>
         <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
-          Profesionales recomendados
+          Tocá para elegir un profesional
         </p>
-        {sorted.slice(0, 5).map((pro, i) => {
-          const best = i === 0
+        {sorted.slice(0, 5).map((pro) => {
+          const selected = pro.id === selectedId
           return (
-            <div
+            <button
               key={pro.id}
-              className="rounded-2xl overflow-hidden"
+              type="button"
+              onClick={() => setSelectedId(pro.id)}
+              className="rounded-2xl overflow-hidden text-left w-full active:opacity-80 transition-opacity"
               style={{
                 background: '#FFFFFF',
-                border: `1.5px solid ${best ? '#E8683A' : '#EDE8DE'}`,
-                boxShadow: best ? '0 2px 10px rgba(232,104,58,.12)' : '0 1px 3px rgba(0,0,0,.04)',
+                border: `2px solid ${selected ? '#E8683A' : '#EDE8DE'}`,
+                boxShadow: selected ? '0 2px 12px rgba(232,104,58,.18)' : '0 1px 3px rgba(0,0,0,.04)',
               }}
             >
               <div className="flex items-center gap-3 p-3">
@@ -446,21 +453,41 @@ function ResultsStep({
                     {pro.response_time_min > 0 && ` · ~${pro.response_time_min}min`}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => onPedir(pro)}
-                  className="rounded-xl px-3 py-2 text-xs font-bold flex-shrink-0 active:opacity-80 transition-opacity"
-                  style={best
-                    ? { background: '#E8683A', color: '#fff' }
-                    : { background: '#fff', color: '#E8683A', border: '1.5px solid rgba(232,104,58,.4)' }
-                  }
+                {/* Indicador de selección */}
+                <div
+                  className="flex-shrink-0 flex items-center justify-center font-black text-white"
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: '50%',
+                    fontSize: 11,
+                    background: selected ? '#E8683A' : 'transparent',
+                    border: selected ? 'none' : '1.5px solid #DDD',
+                    transition: 'all .15s',
+                  }}
                 >
-                  Pedir
-                </button>
+                  {selected ? '✓' : ''}
+                </div>
               </div>
-            </div>
+            </button>
           )
         })}
+      </div>
+
+      {/* CTA fijo al fondo */}
+      <div
+        className="fixed bottom-0 left-0 right-0 p-4"
+        style={{ background: 'rgba(249,246,242,.96)', backdropFilter: 'blur(8px)', borderTop: '1px solid #EDE8DE' }}
+      >
+        <button
+          type="button"
+          onClick={() => selectedPro && onPedir(selectedPro)}
+          disabled={!selectedPro}
+          className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 disabled:opacity-40 transition-opacity"
+          style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+        >
+          {selectedPro ? `Continuar con ${selectedPro.profiles.full_name.split(' ')[0]} →` : 'Elegí un profesional'}
+        </button>
       </div>
     </div>
   )
