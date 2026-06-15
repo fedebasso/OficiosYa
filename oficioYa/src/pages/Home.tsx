@@ -14,22 +14,17 @@ export default function Home() {
         boxShadow: '0 1px 0 #EDE8DE, 0 2px 8px rgba(0,0,0,.04)',
       }}
     >
-      {/* Fila 1: logo + ubicación */}
+      {/* Fila 1: logo */}
       <div
-        className="flex items-center justify-between"
-        style={{ padding: 'calc(12px + var(--safe-top)) var(--px-container) 8px' }}
+        className="flex items-center"
+        style={{ padding: 'calc(14px + var(--safe-top)) var(--px-container) 10px' }}
       >
-        <div>
-          <h1
-            className="font-black leading-none"
-            style={{ fontSize: 'var(--text-xl)', color: '#111111', letterSpacing: '-0.5px' }}
-          >
-            Oficio<span style={{ color: '#E8683A' }}>Ya</span>
-          </h1>
-          <p style={{ fontSize: 'var(--text-xs)', color: '#AAAAAA', marginTop: 2 }}>
-            📍 Montevideo
-          </p>
-        </div>
+        <h1
+          className="font-black leading-none"
+          style={{ fontSize: 32, color: '#111111', letterSpacing: '-1px' }}
+        >
+          Oficio<span style={{ color: '#E8683A' }}>Ya</span>
+        </h1>
       </div>
 
       {/* Fila 2: search bar */}
