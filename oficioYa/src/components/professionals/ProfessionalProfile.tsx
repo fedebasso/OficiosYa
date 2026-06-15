@@ -101,10 +101,10 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const goBack = useBack('/buscar')
   const {
     profiles, bio, avg_rating, verified, zone, categories,
-    whatsapp, id, jobs_count, response_time_min, available_now,
+    whatsapp, id, jobs_count, available_now,
   } = professional
 
-  const { label, emoji, cover } = getCategoryMeta(categories[0] ?? '')
+  const { label, emoji } = getCategoryMeta(categories[0] ?? '')
   const specialty = `${emoji} ${label}`
   const initials = getInitials(profiles.full_name)
 
@@ -112,83 +112,70 @@ export function ProfessionalProfile({ professional, photos }: Props) {
     <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
       {/* ── HERO ── */}
-      <div className="relative h-72 overflow-hidden flex-shrink-0" style={{ background: '#1a1a1a' }}>
-        <img src={cover} alt={specialty} className="w-full h-full object-cover opacity-40" />
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(15,15,15,.3) 0%, rgba(15,15,15,.85) 100%)' }}
-        />
-
+      <div
+        className="relative flex flex-col items-center pt-14 pb-6 px-4"
+        style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
+      >
         {/* Nav */}
-        <div className="absolute top-10 left-4 right-4 flex justify-between items-center z-20">
+        <div className="absolute top-10 left-4 right-4 flex justify-between items-center">
           <button
             type="button"
             onClick={goBack}
             aria-label="Volver"
             className="w-10 h-10 rounded-full flex items-center justify-center active:opacity-70 transition-opacity"
-            style={{ background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.2)' }}
+            style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
           >
-            <ChevronLeft size={24} color="#FFFFFF" />
+            <ChevronLeft size={24} color="#111111" />
           </button>
           <div className="w-10 h-10" />
         </div>
 
-        {/* Contenido centrado */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-5 z-10">
-          {/* Avatar circular con borde naranja */}
-          <div
-            className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center mb-3 flex-shrink-0"
-            style={{ border: '3px solid rgba(232,104,58,.7)', boxShadow: '0 0 0 6px rgba(232,104,58,.08)' }}
-          >
-            {profiles.avatar_url ? (
-              <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-[#f5f0e8] text-2xl font-black"
-                style={{ background: 'rgba(232,104,58,.2)' }}>
-                {initials}
-              </div>
-            )}
-          </div>
-
-          {available_now && (
+        {/* Foto grande */}
+        <div
+          className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center mb-4 flex-shrink-0"
+          style={{ border: '3px solid #E8683A', boxShadow: '0 0 0 6px rgba(232,104,58,.08)' }}
+        >
+          {profiles.avatar_url ? (
+            <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
+          ) : (
             <div
-              className="flex items-center gap-1.5 text-[#f5f0e8] text-[10px] font-bold px-3 py-1.5 rounded-full mb-2"
-              style={{ background: 'rgba(232,104,58,.15)', border: '1px solid rgba(232,104,58,.25)' }}
+              className="w-full h-full flex items-center justify-center text-white text-2xl font-black"
+              style={{ background: 'linear-gradient(135deg,#E8683A,#c44d1f)' }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#e8683a]" />
-              Disponible ahora
+              {initials}
             </div>
           )}
+        </div>
 
-          <h1
-            className="text-2xl font-black text-[#f5f0e8] text-center leading-tight px-4"
-            style={{ letterSpacing: '-0.5px' }}
-          >
-            {profiles.full_name}
-          </h1>
-          <p className="text-[#888] text-sm font-medium mt-1">{specialty} · {zone}</p>
+        {/* Nombre y rubro */}
+        <h1 className="text-2xl font-black text-center leading-tight" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
+          {profiles.full_name}
+        </h1>
+        <p className="text-sm font-medium mt-1 mb-4" style={{ color: '#777777' }}>
+          {specialty} · {zone}
+        </p>
 
-          {/* Stats pill */}
-          <div
-            className="flex mt-4 rounded-2xl overflow-hidden"
-            style={{ background: 'rgba(0,0,0,.35)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,.08)' }}
-          >
-            <div className="px-5 py-2.5 text-center border-r" style={{ borderColor: 'rgba(255,255,255,.08)' }}>
-              <div className="text-sm font-black text-[#f5f0e8]">
-                {avg_rating != null ? <><span className="text-[#f59e0b]">★</span> {avg_rating}</> : '–'}
-              </div>
-              <div className="text-[9px] text-[#555] mt-0.5 uppercase tracking-wider">Rating</div>
+        {/* Indicadores de confianza */}
+        <div className="flex items-center gap-4 flex-wrap justify-center">
+          {avg_rating != null && (
+            <div className="flex items-center gap-1">
+              <span style={{ color: '#F59E0B', fontSize: 18 }}>★</span>
+              <span className="font-black text-base" style={{ color: '#111111' }}>{avg_rating}</span>
             </div>
-            <div className="px-5 py-2.5 text-center border-r" style={{ borderColor: 'rgba(255,255,255,.08)' }}>
-              <div className="text-sm font-black text-[#f5f0e8]">{jobs_count}</div>
-              <div className="text-[9px] text-[#555] mt-0.5 uppercase tracking-wider">Trabajos</div>
+          )}
+          <div className="flex items-center gap-1">
+            <span style={{ fontSize: 14 }}>🔨</span>
+            <span className="font-semibold text-sm" style={{ color: '#555555' }}>{jobs_count} trabajos</span>
+          </div>
+          {verified && (
+            <div className="flex items-center gap-1">
+              <span style={{ fontSize: 14 }}>✅</span>
+              <span className="font-semibold text-sm" style={{ color: '#3B82F6' }}>Verificado</span>
             </div>
-            <div className="px-5 py-2.5 text-center">
-              <div className="text-sm font-black text-[#f5f0e8]">
-                {available_now ? `~${response_time_min}m` : '–'}
-              </div>
-              <div className="text-[9px] text-[#555] mt-0.5 uppercase tracking-wider">Respuesta</div>
-            </div>
+          )}
+          <div className="flex items-center gap-1">
+            <span style={{ fontSize: 14 }}>📍</span>
+            <span className="font-semibold text-sm" style={{ color: '#555555' }}>{zone}</span>
           </div>
         </div>
       </div>
