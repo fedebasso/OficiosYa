@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
+import { HowItWorks } from '../components/home/HowItWorks'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
 
 export default function Home() {
@@ -53,6 +54,7 @@ export default function Home() {
   return (
     <PageShell header={homeHeader} showBottomNav>
       <div className="flex flex-col gap-5 pt-4 pb-4">
+        <HowItWorks />
         <section>
           <FeaturedProfessionals />
         </section>
