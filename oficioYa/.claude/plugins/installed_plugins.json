@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "plugins": {
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\fede8\\.claude\\plugins\\cache\\claude-plugins-official\\superpowers\\5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-06-03T23:20:58.725Z",
+        "lastUpdated": "2026-06-03T23:20:58.725Z",
+        "gitCommitSha": "6fd4507659784c351abbd2bc264c7162cfd386dc"
+      }
+    ],
+    "vercel@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\fede8\\.claude\\plugins\\cache\\claude-plugins-official\\vercel\\0.43.0",
+        "version": "0.43.0",
+        "installedAt": "2026-06-14T17:18:43.383Z",
+        "lastUpdated": "2026-06-14T17:18:43.383Z",
+        "gitCommitSha": "6e51924cb249e2941de005d59f1ac6f768477b98"
+      }
+    ]
+  }
+}
