@@ -237,7 +237,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         </button>
         <button
           type="button"
-          onClick={() => navigate(`/solicitar/${id}`)}
+          onClick={() => navigate(`/ticket?pro=${id}`)}
           className="rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
           style={{ background: '#e8683a', boxShadow: '0 4px 16px rgba(232,104,58,.3)' }}
         >
