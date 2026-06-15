@@ -180,9 +180,6 @@ export function RequestWizard({ onSubmit, loading }: Props) {
               <div className="text-base font-bold" style={{ color: data.urgent ? '#DC2626' : '#111111' }}>
                 Es urgente
               </div>
-              <div className="text-xs mt-0.5" style={{ color: data.urgent ? '#EF4444' : '#999999' }}>
-                Necesito ayuda lo antes posible
-              </div>
             </div>
             {/* Toggle switch */}
             <div
