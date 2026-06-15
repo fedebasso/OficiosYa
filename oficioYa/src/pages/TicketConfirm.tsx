@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useRequestStore } from '../store/requestStore'
 import type { GeneratedTicket } from '../types/ticket'
@@ -27,6 +28,31 @@ const INPUT_STYLE = {
   caretColor: '#E8683A',
 }
 
+const CONFETTI_COLORS = ['#E8683A', '#25D366', '#F59E0B', '#EF4444', '#E8683A', '#25D366', '#F59E0B', '#A78BFA']
+
+function Confetti() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+      {CONFETTI_COLORS.map((color, i) => (
+        <motion.div
+          key={i}
+          initial={{ y: -20, x: `${10 + i * 11}%`, opacity: 1, rotate: Math.random() * 360 }}
+          animate={{ y: 120, opacity: 0, rotate: Math.random() * 720 }}
+          transition={{ duration: 0.8 + Math.random() * 0.4, delay: i * 0.05, ease: 'easeIn' }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            width: 8,
+            height: 8,
+            borderRadius: i % 2 === 0 ? '50%' : 2,
+            background: color,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function TicketConfirm() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -40,16 +66,11 @@ export default function TicketConfirm() {
   const [whatsappUrl, setWhatsappUrl] = useState('')
 
   const hasState = state !== null
-
   useEffect(() => {
-    if (!hasState) {
-      navigate('/ticket')
-    }
+    if (!hasState) navigate('/ticket')
   }, [hasState, navigate])
 
-  if (!state) {
-    return null
-  }
+  if (!state) return null
 
   const { ticket, proId, proName, proAvatar, proRating, proWhatsapp } = state
 
@@ -97,12 +118,25 @@ export default function TicketConfirm() {
 
   return (
     <PageShell showBottomNav={false} header={header}>
-      <div className="p-4 flex flex-col gap-4" style={{ minHeight: '100%' }}>
+      <AnimatePresence mode="wait">
         {!sent ? (
-          <>
+          <motion.div
+            key="form"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.2 }}
+            className="p-4 flex flex-col gap-4"
+            style={{ minHeight: '100%' }}
+          >
             {/* Mini card del profesional */}
-            <div className="flex items-center gap-3 rounded-2xl p-3.5"
-              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05, type: 'spring', stiffness: 300, damping: 28 }}
+              className="flex items-center gap-3 rounded-2xl p-3.5"
+              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+            >
               {proAvatar ? (
                 <img src={proAvatar} alt={proName}
                   className="rounded-xl object-cover flex-shrink-0" style={{ width: 44, height: 44 }} />
@@ -120,10 +154,16 @@ export default function TicketConfirm() {
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
 
             {/* Resumen del ticket */}
-            <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E8E0D4' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12, type: 'spring', stiffness: 300, damping: 28 }}
+              className="rounded-2xl overflow-hidden"
+              style={{ border: '1.5px solid #E8E0D4' }}
+            >
               <div className="flex items-center gap-2 px-4 py-2.5"
                 style={{ background: 'rgba(232,104,58,.06)', borderBottom: '1px solid rgba(232,104,58,.12)' }}>
                 <span style={{ fontSize: 12 }}>✨</span>
@@ -141,10 +181,15 @@ export default function TicketConfirm() {
                   </span>
                 )}
               </div>
-            </div>
+            </motion.div>
 
             {/* Teléfono */}
-            <div className="flex flex-col gap-2">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 300, damping: 28 }}
+              className="flex flex-col gap-2"
+            >
               <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Tu teléfono de contacto
               </label>
@@ -155,57 +200,122 @@ export default function TicketConfirm() {
                 placeholder="Ej: 099 123 456"
                 style={INPUT_STYLE}
               />
-              {phoneError && <p className="text-xs" style={{ color: '#ef4444' }}>{phoneError}</p>}
-            </div>
+              <AnimatePresence>
+                {phoneError && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="text-xs"
+                    style={{ color: '#ef4444' }}
+                  >
+                    {phoneError}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </motion.div>
 
             {/* Submit */}
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={loading}
-              className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 disabled:opacity-50 transition-opacity"
-              style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.28, type: 'spring', stiffness: 300, damping: 28 }}
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                  </svg>
-                  Enviando...
-                </span>
-              ) : 'Enviar solicitud'}
-            </button>
-          </>
+              <motion.button
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading}
+                whileTap={{ scale: 0.97 }}
+                animate={{ scale: loading ? 0.98 : 1 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                className="w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50"
+                style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    Enviando...
+                  </span>
+                ) : 'Enviar solicitud'}
+              </motion.button>
+            </motion.div>
+          </motion.div>
         ) : (
-          <div className="flex flex-col items-center gap-5 py-10 text-center">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
-              style={{ background: 'rgba(232,104,58,.12)', border: '1px solid rgba(232,104,58,.25)' }}>
+          <motion.div
+            key="success"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col items-center gap-5 py-10 text-center p-4 relative"
+            style={{ minHeight: '100%' }}
+          >
+            <Confetti />
+
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: [0, 1.2, 1] }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30, delay: 0.1 }}
+              className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl relative z-10"
+              style={{ background: 'rgba(232,104,58,.12)', border: '1px solid rgba(232,104,58,.25)' }}
+            >
               ✅
-            </div>
-            <div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, type: 'spring', stiffness: 300, damping: 28 }}
+              className="relative z-10"
+            >
               <h2 className="text-xl font-black mb-2" style={{ color: '#111111' }}>¡Solicitud enviada!</h2>
               <p className="text-sm leading-relaxed" style={{ color: '#555555' }}>
                 El profesional recibirá tu solicitud. También podés contactarlo directamente por WhatsApp.
               </p>
-            </div>
-            <button type="button" onClick={() => window.open(whatsappUrl, '_blank')}
-              className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80"
-              style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.2)' }}>
+            </motion.div>
+
+            <motion.button
+              type="button"
+              onClick={() => window.open(whatsappUrl, '_blank')}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, type: 'spring', stiffness: 300, damping: 28 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full rounded-2xl py-4 text-base font-bold text-white relative z-10"
+              style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.2)' }}
+            >
               💬 Contactar por WhatsApp
-            </button>
-            <button type="button" onClick={() => navigate('/mis-solicitudes')}
-              className="w-full rounded-2xl py-3.5 text-sm font-bold active:opacity-70 transition-opacity"
-              style={{ background: '#EDE8DE', color: '#111111', border: '1.5px solid #E8E0D4' }}>
+            </motion.button>
+
+            <motion.button
+              type="button"
+              onClick={() => navigate('/mis-solicitudes')}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.42, type: 'spring', stiffness: 300, damping: 28 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full rounded-2xl py-3.5 text-sm font-bold relative z-10"
+              style={{ background: '#EDE8DE', color: '#111111', border: '1.5px solid #E8E0D4' }}
+            >
               Ver mis solicitudes
-            </button>
-            <button type="button" onClick={() => navigate('/')}
-              className="text-sm font-bold active:opacity-70" style={{ color: '#999999' }}>
+            </motion.button>
+
+            <motion.button
+              type="button"
+              onClick={() => navigate('/')}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.2 }}
+              className="text-sm font-bold relative z-10"
+              style={{ color: '#999999' }}
+            >
               Volver al inicio
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </PageShell>
   )
 }
