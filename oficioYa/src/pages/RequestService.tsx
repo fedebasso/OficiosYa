@@ -3,11 +3,21 @@ import { ChevronLeft } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useBack } from '../hooks/useBack'
 import { PageShell } from '../components/layout/PageShell'
-import { RequestForm } from '../components/requests/RequestForm'
+import { RequestWizard } from '../components/requests/RequestWizard'
 import { useProfessionalById } from '../hooks/useProfessionals'
-import { useRequestStore } from '../store/requestStore'
+import { useRequestStore, type WorkType, type UrgencyLevel, type RequestType } from '../store/requestStore'
 import { getCategoryMeta } from '../lib/categories'
 import { getInitials } from '../lib/utils'
+
+interface WizardData {
+  work_type: WorkType | null
+  description: string
+  photos: File[]
+  location: string
+  urgency_level: UrgencyLevel | null
+  request_type: RequestType | null
+  contact_phone: string
+}
 
 export default function RequestService() {
   const { id } = useParams<{ id: string }>()
@@ -19,7 +29,7 @@ export default function RequestService() {
   const [sent, setSent] = useState(false)
   const [whatsappUrl, setWhatsappUrl] = useState('')
 
-  const handleSubmit = async (data: { description: string; contact_phone: string; urgency: boolean }) => {
+  const handleSubmit = async (data: WizardData) => {
     if (!professional) return
     setLoading(true)
     try {
@@ -27,11 +37,17 @@ export default function RequestService() {
         professional_id: professional.id,
         category: professional.categories[0] ?? '',
         description: data.description,
-        urgency: data.urgency,
+        urgency: data.urgency_level === 'ahora' || data.urgency_level === 'hoy',
         contact_phone: data.contact_phone,
+        work_type: data.work_type ?? undefined,
+        urgency_level: data.urgency_level ?? undefined,
+        request_type: data.request_type ?? undefined,
+        location: data.location,
       })
+      const urgencyText = data.urgency_level === 'ahora' ? ' Es urgente.' : data.urgency_level === 'hoy' ? ' Lo necesito hoy.' : ''
+      const typeText = data.request_type === 'presupuesto' ? ' Me gustaría un presupuesto.' : ' Necesito que vengas a verlo.'
       const message = encodeURIComponent(
-        `Hola! Vi tu perfil en OficioYa y necesito tu ayuda.\n\n${data.description}\n\nMi teléfono: ${data.contact_phone}`
+        `Hola! Vi tu perfil en OficioYa y necesito ayuda.\n\n${data.description}${urgencyText}${typeText}\n\nMi teléfono: ${data.contact_phone}`
       )
       setWhatsappUrl(`https://wa.me/${professional.whatsapp}?text=${message}`)
       setSent(true)
@@ -107,7 +123,7 @@ export default function RequestService() {
               </div>
             )}
 
-            <RequestForm onSubmit={handleSubmit} loading={loading} />
+            <RequestWizard onSubmit={handleSubmit} loading={loading} />
           </>
         ) : (
           /* Success state */
