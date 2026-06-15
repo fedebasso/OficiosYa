@@ -9,33 +9,9 @@ interface Props {
   onClick: () => void
 }
 
-function AvailableBadge() {
-  return (
-    <span
-      className="inline-flex items-center gap-1 font-bold px-2 py-0.5 rounded-full flex-shrink-0"
-      style={{ background: '#DCFCE7', color: '#16A34A', fontSize: 'var(--text-xs)' }}
-    >
-      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#16A34A' }} />
-      Online
-    </span>
-  )
-}
-
-function TopBadge() {
-  return (
-    <span
-      className="inline-flex items-center font-black px-2 py-0.5 rounded-full flex-shrink-0"
-      style={{ background: '#FEF9C3', color: '#D97706', fontSize: 'var(--text-xs)' }}
-    >
-      ★ Top
-    </span>
-  )
-}
-
 export function ProfessionalCard({ professional, onClick }: Props) {
-  const { profiles, verified, avg_rating, zone, jobs_count, available_now, categories, id } = professional
+  const { profiles, verified, avg_rating, zone, jobs_count, categories, id } = professional
   const { label, emoji, accent, avatarGradient } = getCategoryMeta(categories[0] ?? '')
-  const isTopPro = jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8
   const initials = getInitials(profiles.full_name)
   const { toggle, isFavorite } = useFavoritesStore()
   const favorite = isFavorite(id)
@@ -78,8 +54,8 @@ export function ProfessionalCard({ professional, onClick }: Props) {
             {verified && (
               <span
                 className="font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
-                style={{ background: '#FEF0EA', color: '#E8683A', fontSize: 'var(--text-xs)' }}
-              >✓</span>
+                style={{ background: '#EFF6FF', color: '#3B82F6', fontSize: 'var(--text-xs)', border: '1px solid rgba(59,130,246,.2)' }}
+              >✓ Verificado</span>
             )}
           </div>
           <div className="font-semibold mb-1 truncate" style={{ color: accent, fontSize: 'var(--text-sm)' }}>
@@ -89,40 +65,34 @@ export function ProfessionalCard({ professional, onClick }: Props) {
             <span className="font-medium truncate" style={{ color: '#555555', fontSize: 'var(--text-sm)' }}>
               📍 {zone}
             </span>
-            <span className="flex-shrink-0" style={{ color: '#AAAAAA', fontSize: 'var(--text-xs)' }}>
-              {jobs_count} trabajos
+            <span className="flex-shrink-0" style={{ color: '#AAAAAA', fontSize: 'var(--text-sm)' }}>
+              🔨 {jobs_count} trabajos
             </span>
           </div>
         </div>
 
-        {/* Rating + favorito + badges */}
+        {/* Rating + favorito */}
         <div className="flex flex-col items-end justify-between flex-shrink-0 py-0.5" style={{ minHeight: 56 }}>
-          <div className="flex items-center gap-2">
-            {avg_rating != null && (
-              <div className="flex items-center gap-1">
-                <span style={{ color: '#F59E0B', fontSize: 'var(--text-base)' }}>★</span>
-                <span className="font-black" style={{ color: '#111111', fontSize: 'var(--text-lg)', lineHeight: 1 }}>
-                  {avg_rating}
-                </span>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); toggle(id) }}
-              aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
-              className="w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-transform"
-              style={{
-                background: favorite ? '#FEF2F2' : '#F5F0E8',
-                border: `1px solid ${favorite ? '#FECACA' : '#EDE8DE'}`,
-              }}
-            >
-              <Heart size={13} style={{ color: favorite ? '#EF4444' : '#CCCCCC' }} fill={favorite ? '#EF4444' : 'none'} />
-            </button>
-          </div>
-          <div className="flex flex-col items-end gap-1 mt-1">
-            {isTopPro && <TopBadge />}
-            {available_now && <AvailableBadge />}
-          </div>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); toggle(id) }}
+            aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+            className="w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-transform"
+            style={{
+              background: favorite ? '#FEF2F2' : '#F5F0E8',
+              border: `1px solid ${favorite ? '#FECACA' : '#EDE8DE'}`,
+            }}
+          >
+            <Heart size={13} style={{ color: favorite ? '#EF4444' : '#CCCCCC' }} fill={favorite ? '#EF4444' : 'none'} />
+          </button>
+          {avg_rating != null && (
+            <div className="flex items-center gap-1">
+              <span style={{ color: '#F59E0B', fontSize: 'var(--text-base)' }}>★</span>
+              <span className="font-black" style={{ color: '#111111', fontSize: 'var(--text-lg)', lineHeight: 1 }}>
+                {avg_rating}
+              </span>
+            </div>
+          )}
         </div>
 
       </div>
