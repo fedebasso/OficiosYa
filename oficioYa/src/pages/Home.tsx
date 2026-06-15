@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
-import { CategoryIcons } from '../components/home/CategoryIcons'
-import { CategoryChips } from '../components/home/CategoryChips'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
 
@@ -34,7 +32,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Fila 2: search bar — navega a /buscar al tocar */}
+      {/* Fila 2: search bar */}
       <div style={{ padding: '0 var(--px-container) 12px' }}>
         <button
           type="button"
@@ -54,34 +52,16 @@ export default function Home() {
           </span>
         </button>
       </div>
-
-      {/* Fila 3: chips de categoría */}
-      <CategoryChips />
     </header>
   )
 
   return (
     <PageShell header={homeHeader} showBottomNav>
       <div className="flex flex-col gap-5 pt-4 pb-4">
-
-        {/* Íconos de categorías */}
-        <section>
-          <h2
-            className="font-bold uppercase tracking-wide mb-3"
-            style={{ fontSize: 'var(--text-xs)', color: '#AAAAAA' }}
-          >
-            Categorías
-          </h2>
-          <CategoryIcons />
-        </section>
-
-        {/* Profesionales destacados */}
         <section>
           <FeaturedProfessionals />
         </section>
-
       </div>
-
       <UrgenciasFAB />
     </PageShell>
   )
