@@ -167,6 +167,8 @@ export function RequestWizard({ onSubmit, loading }: Props) {
         <div className="flex flex-col gap-3">
           <button
             type="button"
+            role="switch"
+            aria-pressed={data.urgent}
             onClick={() => setData((d) => ({ ...d, urgent: !d.urgent }))}
             className="w-full text-left rounded-2xl p-4 flex items-center gap-3 active:opacity-80 transition-all"
             style={{
