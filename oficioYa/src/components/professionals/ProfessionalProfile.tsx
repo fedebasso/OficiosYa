@@ -101,7 +101,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const goBack = useBack('/buscar')
   const {
     profiles, bio, avg_rating, verified, zone, categories,
-    whatsapp, id, jobs_count, available_now,
+    whatsapp, id, jobs_count,
   } = professional
 
   const { label, emoji } = getCategoryMeta(categories[0] ?? '')
@@ -182,32 +182,6 @@ export function ProfessionalProfile({ professional, photos }: Props) {
 
       {/* ── BODY ── */}
       <div className="flex flex-col gap-3 px-4 pt-4 pb-36">
-
-        {/* Badges */}
-        <div className="flex flex-wrap gap-2">
-          {verified && (
-            <span className="rounded-full text-[11px] font-semibold px-3 py-1"
-              style={{ background: 'rgba(59,130,246,.1)', color: '#60a5fa', border: '1px solid rgba(59,130,246,.2)' }}>
-              ✓ Verificado
-            </span>
-          )}
-          {jobs_count >= 50 && avg_rating != null && avg_rating >= 4.8 && (
-            <span className="rounded-full text-[11px] font-black px-3 py-1"
-              style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#fff' }}>
-              ★ Top Pro
-            </span>
-          )}
-          {available_now && (
-            <span className="rounded-full text-[11px] font-semibold px-3 py-1"
-              style={{ background: 'rgba(232,104,58,.1)', color: '#e8683a', border: '1px solid rgba(232,104,58,.2)' }}>
-              ● Disponible
-            </span>
-          )}
-          <span className="rounded-full text-[11px] font-semibold px-3 py-1"
-            style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #E8E0D4' }}>
-            📍 {zone}
-          </span>
-        </div>
 
         {/* Sobre mí */}
         {bio && (
