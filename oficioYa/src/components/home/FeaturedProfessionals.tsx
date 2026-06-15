@@ -44,8 +44,8 @@ export function FeaturedProfessionals() {
 
       {/* Filtros de categoría */}
       <div
-        className="flex gap-2 overflow-x-auto mb-3"
-        style={{ scrollbarWidth: 'none' }}
+        className="flex gap-2 overflow-x-auto mb-4"
+        style={{ scrollbarWidth: 'none', paddingBottom: 2 }}
       >
         {CATEGORY_FILTERS.map((cat) => {
           const active = activeCategory === cat.id
@@ -54,20 +54,23 @@ export function FeaturedProfessionals() {
               key={cat.id}
               type="button"
               onClick={() => setActiveCategory(cat.id)}
-              className="flex-shrink-0 flex items-center gap-1 active:opacity-70 transition-all duration-150"
+              className="flex-shrink-0 flex items-center gap-1.5 active:scale-95 transition-all duration-150"
               style={{
-                height: 30,
-                padding: '0 12px',
-                borderRadius: 20,
-                background: active ? '#E8683A' : '#F5F0E8',
-                border: `1.5px solid ${active ? '#E8683A' : '#EDE8DE'}`,
-                fontSize: 'var(--text-xs)',
+                height: 36,
+                padding: '0 14px',
+                borderRadius: 24,
+                background: active ? '#E8683A' : '#FFFFFF',
+                border: `1.5px solid ${active ? '#E8683A' : '#E8E0D4'}`,
+                fontSize: 13,
                 fontWeight: 700,
-                color: active ? '#FFFFFF' : '#888888',
+                color: active ? '#FFFFFF' : '#666666',
                 whiteSpace: 'nowrap',
+                boxShadow: active
+                  ? '0 2px 10px rgba(232,104,58,.30)'
+                  : '0 1px 3px rgba(0,0,0,.06)',
               }}
             >
-              {cat.emoji && <span>{cat.emoji}</span>}
+              {cat.emoji && <span style={{ fontSize: 15 }}>{cat.emoji}</span>}
               {cat.label}
             </button>
           )
