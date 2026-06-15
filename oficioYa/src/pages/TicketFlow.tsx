@@ -1,5 +1,5 @@
 // src/pages/TicketFlow.tsx
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
@@ -93,12 +93,26 @@ function MediaStep({
   onAnalyze: () => void
 }) {
   const fileRef = useRef<HTMLInputElement>(null)
+  const videoRef = useRef<HTMLInputElement>(null)
   const [recording, setRecording] = useState(false)
   const mediaRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
   const [showText, setShowText] = useState(false)
+  const [videoFile, setVideoFile] = useState<File | null>(null)
 
-  const hasContent = input.photo !== null || input.audioBlob !== null || input.text.length >= 10
+  const photoUrl = useMemo(() => {
+    if (!input.photo) return null
+    const url = URL.createObjectURL(input.photo)
+    return url
+  }, [input.photo])
+
+  useEffect(() => {
+    return () => {
+      if (photoUrl) URL.revokeObjectURL(photoUrl)
+    }
+  }, [photoUrl])
+
+  const hasContent = input.photo !== null || input.audioBlob !== null || input.text.length >= 10 || videoFile !== null
 
   const startRecording = async () => {
     try {
@@ -139,7 +153,7 @@ function MediaStep({
       {input.photo ? (
         <div className="relative rounded-2xl overflow-hidden" style={{ height: 180 }}>
           <img
-            src={URL.createObjectURL(input.photo)}
+            src={photoUrl ?? ''}
             alt="foto del problema"
             className="w-full h-full object-cover"
           />
@@ -176,6 +190,13 @@ function MediaStep({
         className="hidden"
         onChange={(e) => onChange({ photo: e.target.files?.[0] ?? null })}
       />
+      <input
+        ref={videoRef}
+        type="file"
+        accept="video/*"
+        className="hidden"
+        onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
+      />
 
       {/* Alternativas: audio, video, texto */}
       <div className="grid grid-cols-3 gap-2">
@@ -195,7 +216,7 @@ function MediaStep({
         </button>
         <button
           type="button"
-          onClick={() => { const i = document.createElement('input'); i.type='file'; i.accept='video/*'; i.click() }}
+          onClick={() => videoRef.current?.click()}
           className="flex flex-col items-center gap-1.5 rounded-xl py-3 active:opacity-80 transition-opacity"
           style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}
         >
@@ -221,6 +242,14 @@ function MediaStep({
           <span>🎤</span>
           <span className="text-sm font-semibold flex-1" style={{ color: '#555' }}>Audio grabado</span>
           <button type="button" onClick={() => onChange({ audioBlob: null })} style={{ color: '#EF4444', fontWeight: 700, fontSize: 12 }}>Quitar</button>
+        </div>
+      )}
+
+      {videoFile && (
+        <div className="flex items-center gap-2 rounded-xl p-3" style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}>
+          <span>🎥</span>
+          <span className="text-sm font-semibold flex-1" style={{ color: '#555' }}>Video agregado</span>
+          <button type="button" onClick={() => setVideoFile(null)} style={{ color: '#EF4444', fontWeight: 700, fontSize: 12 }}>Quitar</button>
         </div>
       )}
 
@@ -448,22 +477,32 @@ export default function TicketFlow() {
   const [input, setInput] = useState<TicketInput>({ category: '', photo: null, audioBlob: null, text: '' })
   const [aiProgress, setAiProgress] = useState(0)
   const [ticket, setTicket] = useState<GeneratedTicket | null>(null)
+  const timeoutIdsRef = useRef<ReturnType<typeof setTimeout>[]>([])
+
+  useEffect(() => {
+    return () => {
+      timeoutIdsRef.current.forEach(clearTimeout)
+    }
+  }, [])
 
   const handleAnalyze = async () => {
     if (!category) return
     const ticketInput: TicketInput = { ...input, category }
     setStep(3)
     setAiProgress(0)
+    timeoutIdsRef.current.forEach(clearTimeout)
+    timeoutIdsRef.current = []
 
-    // Simular progreso de 4 pasos
     const intervals = [400, 900, 1600, 2500]
     intervals.forEach((delay, i) => {
-      setTimeout(() => setAiProgress(i + 1), delay)
+      const id = setTimeout(() => setAiProgress(i + 1), delay)
+      timeoutIdsRef.current.push(id)
     })
 
     const result = await analyzeTicket(ticketInput)
     setTicket(result)
-    setTimeout(() => setStep(4), 2600)
+    const id = setTimeout(() => setStep(4), 2600)
+    timeoutIdsRef.current.push(id)
   }
 
   const handlePedir = (pro: ProfessionalWithProfile) => {

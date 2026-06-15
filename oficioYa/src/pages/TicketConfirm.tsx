@@ -1,5 +1,5 @@
 // src/pages/TicketConfirm.tsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
@@ -39,8 +39,15 @@ export default function TicketConfirm() {
   const [sent, setSent] = useState(false)
   const [whatsappUrl, setWhatsappUrl] = useState('')
 
+  const hasState = state !== null
+
+  useEffect(() => {
+    if (!hasState) {
+      navigate('/ticket')
+    }
+  }, [hasState, navigate])
+
   if (!state) {
-    navigate('/ticket')
     return null
   }
 
