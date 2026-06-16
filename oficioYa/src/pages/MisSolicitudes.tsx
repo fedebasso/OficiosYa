@@ -4,6 +4,8 @@ import { PageShell } from '../components/layout/PageShell'
 import { Header } from '../components/layout/Header'
 import { ReviewForm } from '../components/requests/ReviewForm'
 import { useRequestStore } from '../store/requestStore'
+import { motion } from 'framer-motion'
+import { fadeUp, scaleIn, staggerFast, SPRING_SOFT } from '../lib/motion'
 
 function SolicitudSkeleton() {
   return (
@@ -49,7 +51,12 @@ export default function MisSolicitudes() {
         {loading && [0,1,2].map(i => <SolicitudSkeleton key={i} />)}
 
         {!loading && requests.length === 0 && (
-          <div className="flex flex-col items-center gap-4 py-16 text-center">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4 py-16 text-center"
+          >
             <div
               className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
               style={{ background: '#FEF0EA', border: '1.5px solid #FDDCC8' }}
@@ -62,23 +69,31 @@ export default function MisSolicitudes() {
                 Cuando pidas un servicio,<br />tus solicitudes aparecerán acá
               </p>
             </div>
-            <button
+            <motion.button
               type="button"
               onClick={() => navigate('/buscar')}
-              className="rounded-2xl px-6 py-3 text-sm font-bold text-white active:opacity-80 transition-opacity"
+              whileTap={{ scale: 0.97 }}
+              transition={SPRING_SOFT}
+              className="rounded-2xl px-6 py-3 text-sm font-bold text-white"
               style={{ background: '#E8683A', boxShadow: '0 2px 8px rgba(232,104,58,.3)' }}
             >
               Buscar profesionales
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
 
+        <motion.div
+          variants={staggerFast}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col gap-3"
+        >
         {requests.map((req) => {
           const status = STATUS_CONFIG[req.status] ?? STATUS_CONFIG.pending
           const date = new Date(req.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short' })
           const hasAction = req.status === 'completed' || req.status === 'pending'
           return (
-            <div key={req.id} className="animate-fade-up">
+            <motion.div key={req.id} variants={fadeUp}>
               <div
                 className="rounded-2xl overflow-hidden"
                 style={{
@@ -155,9 +170,10 @@ export default function MisSolicitudes() {
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
           )
         })}
+        </motion.div>
 
       </div>
 
