@@ -1,0 +1,98 @@
+<h2>¿Cómo mostramos la urgencia?</h2>
+<p class="subtitle">Sirena para lo urgente, pedido normal sin etiquetas de tiempo</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:16px;border-radius:8px;">
+      <div style="background:#fff;border-radius:12px;padding:14px;border:1.5px solid #ede8de;font-family:sans-serif;">
+        <div style="font-size:10px;color:#aaa;font-weight:700;letter-spacing:1px;margin-bottom:4px;">PASO 3 DE 4</div>
+        <div style="font-size:15px;font-weight:900;color:#111;margin-bottom:12px;">¿Qué tan urgente es?</div>
+
+        <!-- Urgente -->
+        <div style="background:#fff5f5;border:2px solid #ef4444;border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:28px;line-height:1;">🚨</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:800;color:#dc2626;">Es urgente</div>
+            <div style="font-size:11px;color:#ef4444;margin-top:2px;">Necesito que vengan lo antes posible</div>
+          </div>
+        </div>
+
+        <!-- Normal -->
+        <div style="background:#f5f0e8;border:1.5px solid #ede8de;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:28px;line-height:1;">📋</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:800;color:#111;">Pedido normal</div>
+            <div style="font-size:11px;color:#999;margin-top:2px;">Sin apuro, coordinamos cuando puedan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Dos opciones claras</h3>
+      <p>🚨 urgente en rojo prominente · 📋 pedido normal neutro · Sin opciones de tiempo</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:16px;border-radius:8px;">
+      <div style="background:#fff;border-radius:12px;padding:14px;border:1.5px solid #ede8de;font-family:sans-serif;">
+        <div style="font-size:10px;color:#aaa;font-weight:700;letter-spacing:1px;margin-bottom:4px;">PASO 3 DE 4</div>
+        <div style="font-size:15px;font-weight:900;color:#111;margin-bottom:12px;">¿Qué tan urgente es?</div>
+
+        <!-- Toggle grande -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div style="background:#fff5f5;border:2px solid #ef4444;border-radius:14px;padding:16px 8px;text-align:center;">
+            <div style="font-size:32px;margin-bottom:6px;">🚨</div>
+            <div style="font-size:12px;font-weight:800;color:#dc2626;">URGENTE</div>
+            <div style="font-size:9px;color:#ef4444;margin-top:3px;">Lo antes posible</div>
+          </div>
+          <div style="background:#f5f0e8;border:1.5px solid #ede8de;border-radius:14px;padding:16px 8px;text-align:center;">
+            <div style="font-size:32px;margin-bottom:6px;">🗓️</div>
+            <div style="font-size:12px;font-weight:800;color:#555;">NORMAL</div>
+            <div style="font-size:9px;color:#999;margin-top:3px;">Cuando puedas</div>
+          </div>
+        </div>
+
+        <div style="background:#fef0ea;border:1.5px solid rgba(232,104,58,.3);border-radius:8px;padding:8px;font-size:10px;color:#e8683a;text-align:center;">
+          💡 Urgente tiene prioridad y puede tener costo adicional</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Cards grandes lado a lado</h3>
+      <p>Visual de impacto · Sirena vs calendario · Nota informativa sobre urgencia</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:16px;border-radius:8px;">
+      <div style="background:#fff;border-radius:12px;padding:14px;border:1.5px solid #ede8de;font-family:sans-serif;">
+        <div style="font-size:10px;color:#aaa;font-weight:700;letter-spacing:1px;margin-bottom:4px;">PASO 3 DE 4</div>
+        <div style="font-size:15px;font-weight:900;color:#111;margin-bottom:6px;">¿Necesitás atención urgente?</div>
+        <div style="font-size:11px;color:#999;margin-bottom:12px;">Podés elegir solo si es urgente</div>
+
+        <!-- Switch estilo toggle -->
+        <div style="background:#fff5f5;border:2px solid #ef4444;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="font-size:30px;">🚨</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:800;color:#dc2626;">Sí, es urgente</div>
+            <div style="font-size:10px;color:#ef4444;margin-top:2px;">Necesito ayuda lo antes posible</div>
+          </div>
+          <!-- Toggle on -->
+          <div style="width:36px;height:20px;background:#ef4444;border-radius:10px;position:relative;flex-shrink:0;">
+            <div style="width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div>
+          </div>
+        </div>
+
+        <div style="background:#f5f0e8;border:1.5px solid #ede8de;border-radius:12px;padding:10px 16px;text-align:center;font-size:11px;color:#999;">
+          Si no marcás nada → <strong style="color:#555;">pedido normal</strong>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Toggle de urgencia</h3>
+      <p>Solo una opción activable · Por defecto = pedido normal · Más simple, menos decisiones</p>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA Ticket Flow — Rediseño</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f0ebe1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 24px 16px; }
+  h2 { font-size: 20px; font-weight: 900; color: #111; letter-spacing: -.5px; margin-bottom: 6px; }
+  p.sub { font-size: 13px; color: #888; margin-bottom: 24px; }
+  .screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+  .screen-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .step-label { font-size: 10px; font-weight: 800; color: #e8683a; text-transform: uppercase; letter-spacing: .8px; }
+  .phone { width: 100%; background: #fff; border-radius: 20px; overflow: hidden; border: 1.5px solid #e8e0d4; box-shadow: 0 8px 32px rgba(0,0,0,.1); aspect-ratio: 9/16; display: flex; flex-direction: column; position: relative; }
+
+  /* Step 1 — Categoría */
+  .s1-bg { background: #fff; flex: 1; display: flex; flex-direction: column; padding: 28px 20px 20px; }
+  .s1-tag { font-size: 9px; font-weight: 800; color: #e8683a; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
+  .s1-title { font-size: 20px; font-weight: 900; color: #111; letter-spacing: -.5px; line-height: 1.2; margin-bottom: 20px; }
+  .s1-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+  .s1-cat { border-radius: 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 14px; cursor: pointer; min-height: 80px; }
+  .s1-cat.active { background: #e8683a; }
+  .s1-cat.idle { background: #f5f0e8; border: 1.5px solid #ede8de; }
+  .s1-emoji { font-size: 26px; margin-bottom: 6px; display: block; }
+  .s1-name { font-size: 11px; font-weight: 800; }
+  .s1-cat.active .s1-name { color: #fff; }
+  .s1-cat.idle .s1-name { color: #333; }
+
+  /* Step 2 — Media */
+  .s2-bg { background: #fff; flex: 1; display: flex; flex-direction: column; padding: 28px 20px 20px; }
+  .s2-title { font-size: 18px; font-weight: 900; color: #111; margin-bottom: 4px; }
+  .s2-sub { font-size: 11px; color: #aaa; margin-bottom: 20px; }
+  .s2-hero { background: #f5f0e8; border: 2px dashed #e8683a; border-radius: 20px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-bottom: 14px; }
+  .s2-hero-icon { font-size: 40px; }
+  .s2-hero-text { font-size: 12px; font-weight: 700; color: #e8683a; }
+  .s2-hero-sub { font-size: 10px; color: #bbb; }
+  .s2-alts { display: flex; gap: 8px; margin-bottom: 14px; }
+  .s2-alt { flex: 1; background: #f5f0e8; border: 1.5px solid #ede8de; border-radius: 12px; padding: 10px; text-align: center; }
+  .s2-alt-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+  .s2-alt-label { font-size: 9px; font-weight: 700; color: #666; }
+  .s2-cta { background: #e8683a; border-radius: 14px; padding: 14px; text-align: center; font-size: 13px; font-weight: 800; color: #fff; box-shadow: 0 4px 16px rgba(232,104,58,.3); }
+
+  /* Step 3 — AI */
+  .s3-bg { background: linear-gradient(160deg, #fff 0%, #fef0ea 100%); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 20px; text-align: center; }
+  .s3-orb { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #e8683a, #c44d1f); display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 20px; box-shadow: 0 0 0 16px rgba(232,104,58,.08), 0 0 0 32px rgba(232,104,58,.04); }
+  .s3-title { font-size: 18px; font-weight: 900; color: #111; margin-bottom: 6px; }
+  .s3-sub { font-size: 11px; color: #aaa; margin-bottom: 28px; }
+  .s3-steps { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 12px; }
+  .s3-step { display: flex; align-items: center; gap: 10px; }
+  .s3-dot-done { width: 20px; height: 20px; background: #e8683a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; font-weight: 900; flex-shrink: 0; }
+  .s3-dot-active { width: 20px; height: 20px; background: rgba(232,104,58,.15); border: 2px solid #e8683a; border-radius: 50%; flex-shrink: 0; }
+  .s3-dot-idle { width: 20px; height: 20px; background: #f5f0e8; border: 1.5px solid #ede8de; border-radius: 50%; flex-shrink: 0; }
+  .s3-step-done { font-size: 11px; font-weight: 700; color: #555; }
+  .s3-step-active { font-size: 11px; font-weight: 800; color: #e8683a; }
+  .s3-step-idle { font-size: 11px; color: #ccc; }
+
+  /* Step 4 — Resultados */
+  .s4-bg { background: #fff; flex: 1; display: flex; flex-direction: column; }
+  .s4-ticket { background: linear-gradient(135deg, #e8683a, #c44d1f); padding: 18px 20px; }
+  .s4-ticket-label { font-size: 9px; font-weight: 800; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+  .s4-ticket-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+  .s4-ticket-desc { font-size: 10px; color: rgba(255,255,255,.75); line-height: 1.4; margin-bottom: 10px; }
+  .s4-tags { display: flex; gap: 6px; }
+  .s4-tag { background: rgba(255,255,255,.2); color: #fff; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+  .s4-pros { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+  .s4-pros-label { font-size: 9px; font-weight: 800; color: #aaa; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+  .s4-pro { background: #f5f0e8; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+  .s4-pro.top { background: #fff; border: 1.5px solid #ede8de; }
+  .s4-avatar { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+  .s4-info { flex: 1; min-width: 0; }
+  .s4-name { font-size: 12px; font-weight: 800; color: #111; margin-bottom: 2px; }
+  .s4-meta { font-size: 9px; color: #aaa; }
+  .s4-btn { background: #e8683a; color: #fff; border-radius: 8px; padding: 7px 12px; font-size: 10px; font-weight: 800; flex-shrink: 0; white-space: nowrap; }
+  .s4-btn-ghost { background: #fff; color: #e8683a; border: 1.5px solid #e8683a; border-radius: 8px; padding: 7px 12px; font-size: 10px; font-weight: 800; flex-shrink: 0; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<h2>Nuevo flujo IA — diseño premium</h2>
+<p class="sub">Mobile-first, respirado, moderno. Inspirado en Airbnb + apps IA.</p>
+
+<div class="screens">
+
+  <!-- Paso 1 -->
+  <div class="screen-wrap">
+    <div class="step-label">Paso 1 — Categoría</div>
+    <div class="phone">
+      <div class="s1-bg">
+        <div class="s1-tag">✨ Nuevo ticket</div>
+        <div class="s1-title">¿Qué tipo de trabajo necesitás?</div>
+        <div class="s1-grid">
+          <div class="s1-cat active">
+            <span class="s1-emoji">⚡</span>
+            <span class="s1-name">Electricidad</span>
+          </div>
+          <div class="s1-cat idle">
+            <span class="s1-emoji">🚿</span>
+            <span class="s1-name">Sanitario</span>
+          </div>
+          <div class="s1-cat idle">
+            <span class="s1-emoji">❄️</span>
+            <span class="s1-name">Aire Ac.</span>
+          </div>
+          <div class="s1-cat idle">
+            <span class="s1-emoji">🔑</span>
+            <span class="s1-name">Cerrajería</span>
+          </div>
+          <div class="s1-cat idle">
+            <span class="s1-emoji">🎨</span>
+            <span class="s1-name">Pintura</span>
+          </div>
+          <div class="s1-cat idle">
+            <span class="s1-emoji">🧱</span>
+            <span class="s1-name">Albañilería</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 2 -->
+  <div class="screen-wrap">
+    <div class="step-label">Paso 2 — Describí</div>
+    <div class="phone">
+      <div class="s2-bg">
+        <div class="s2-title">Mostranos el problema</div>
+        <div class="s2-sub">Lo que sea más fácil para vos</div>
+        <div class="s2-hero">
+          <span class="s2-hero-icon">📷</span>
+          <span class="s2-hero-text">Sacar o subir foto</span>
+          <span class="s2-hero-sub">Toca para abrir la cámara</span>
+        </div>
+        <div class="s2-alts">
+          <div class="s2-alt">
+            <span class="s2-alt-icon">🎤</span>
+            <span class="s2-alt-label">Audio</span>
+          </div>
+          <div class="s2-alt">
+            <span class="s2-alt-icon">🎥</span>
+            <span class="s2-alt-label">Video</span>
+          </div>
+          <div class="s2-alt">
+            <span class="s2-alt-icon">✏️</span>
+            <span class="s2-alt-label">Texto</span>
+          </div>
+        </div>
+        <div class="s2-cta">Analizar con IA ✨</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 3 -->
+  <div class="screen-wrap">
+    <div class="step-label">Paso 3 — IA procesando</div>
+    <div class="phone">
+      <div class="s3-bg">
+        <div class="s3-orb">✨</div>
+        <div class="s3-title">Analizando tu problema</div>
+        <div class="s3-sub">Tardará solo unos segundos</div>
+        <div class="s3-steps">
+          <div class="s3-step">
+            <div class="s3-dot-done">✓</div>
+            <span class="s3-step-done">Imagen analizada</span>
+          </div>
+          <div class="s3-step">
+            <div class="s3-dot-active"></div>
+            <span class="s3-step-active">Identificando el problema...</span>
+          </div>
+          <div class="s3-step">
+            <div class="s3-dot-idle"></div>
+            <span class="s3-step-idle">Generando ticket</span>
+          </div>
+          <div class="s3-step">
+            <div class="s3-dot-idle"></div>
+            <span class="s3-step-idle">Buscando profesionales</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 4 -->
+  <div class="screen-wrap">
+    <div class="step-label">Paso 4 — Resultados</div>
+    <div class="phone">
+      <div class="s4-bg">
+        <div class="s4-ticket">
+          <div class="s4-ticket-label">✨ Generado por IA</div>
+          <div class="s4-ticket-title">Cortocircuito en tomacorriente</div>
+          <div class="s4-ticket-desc">Posible falla en el cableado interno. Riesgo de chispas, requiere atención urgente.</div>
+          <div class="s4-tags">
+            <div class="s4-tag">🚨 Urgente</div>
+            <div class="s4-tag">⚡ Eléctrico</div>
+          </div>
+        </div>
+        <div class="s4-pros">
+          <div class="s4-pros-label">Profesionales recomendados</div>
+          <div class="s4-pro top">
+            <img class="s4-avatar" src="https://i.pravatar.cc/38?img=11" />
+            <div class="s4-info">
+              <div class="s4-name">Carlos Méndez</div>
+              <div class="s4-meta">⭐ 4.8 · 127 trabajos · ~15min</div>
+            </div>
+            <div class="s4-btn">Pedir</div>
+          </div>
+          <div class="s4-pro">
+            <img class="s4-avatar" src="https://i.pravatar.cc/38?img=15" />
+            <div class="s4-info">
+              <div class="s4-name">Luis Cabrera</div>
+              <div class="s4-meta">⭐ 4.4 · 34 trabajos · ~40min</div>
+            </div>
+            <div class="s4-btn-ghost">Pedir</div>
+          </div>
+          <div class="s4-pro">
+            <img class="s4-avatar" src="https://i.pravatar.cc/38?img=20" />
+            <div class="s4-info">
+              <div class="s4-name">Roberto Silva</div>
+              <div class="s4-meta">⭐ 4.5 · 83 trabajos · ~25min</div>
+            </div>
+            <div class="s4-btn-ghost">Pedir</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<h2>¿Cómo mejoramos la visual de las solicitudes?</h2>
+<p class="subtitle">Misma info, distinto diseño. Elegí el estilo que más te gusta.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+
+      <!-- Status arriba como línea izquierda de color -->
+      <div style="background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #ede8de;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+        <div style="display:flex;gap:12px;padding:14px;">
+          <div style="width:4px;background:#f59e0b;border-radius:4px;flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:11px;font-weight:800;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;">⏳ Pendiente</span>
+              <span style="font-size:10px;color:#aaa;">15 jun</span>
+            </div>
+            <p style="font-size:13px;color:#444;line-height:1.5;margin:0 0 8px;">Se me rompió el caño bajo el lavatorio, hay agua en el piso...</p>
+            <span style="font-size:10px;background:rgba(239,68,68,.1);color:#ef4444;padding:2px 8px;border-radius:20px;font-weight:700;">⚡ Urgente</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid #f0ebe1;padding:10px 14px;">
+          <button style="width:100%;background:rgba(239,68,68,.06);color:#ef4444;border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:8px;font-size:12px;font-weight:700;">Cancelar solicitud</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <h3>A — Línea de color lateral</h3>
+      <p>Barra de color a la izquierda indica el estado · Layout limpio sin header separado · Acciones abajo con separador</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+
+      <!-- Status como badge flotante arriba derecha -->
+      <div style="background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #ede8de;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:14px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-size:10px;color:#aaa;margin-bottom:3px;">15 jun · Reparación</div>
+            <p style="font-size:13px;font-weight:600;color:#222;margin:0;line-height:1.4;">Se me rompió el caño bajo el lavatorio...</p>
+          </div>
+          <span style="flex-shrink:0;margin-left:10px;background:rgba(245,158,11,.12);color:#f59e0b;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;border:1px solid rgba(245,158,11,.25);">⏳ Pendiente</span>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;padding-top:10px;border-top:1px solid #f0ebe1;">
+          <span style="font-size:10px;background:rgba(239,68,68,.1);color:#ef4444;padding:2px 8px;border-radius:20px;font-weight:700;">⚡ Urgente</span>
+          <span style="flex:1;"></span>
+          <button style="background:rgba(239,68,68,.06);color:#ef4444;border:1px solid rgba(239,68,68,.15);border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;">Cancelar</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <h3>B — Badge de estado flotante</h3>
+      <p>Estado como pill arriba a la derecha · Descripción y fecha bien jerarquizadas · Acciones inline al pie</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+
+      <!-- Estilo timeline / progreso -->
+      <div style="background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #ede8de;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+        <!-- Header naranja suave -->
+        <div style="background:rgba(245,158,11,.08);border-bottom:1px solid rgba(245,158,11,.15);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">⏳</span>
+          <span style="font-size:12px;font-weight:800;color:#b45309;">Pendiente de respuesta</span>
+          <span style="margin-left:auto;font-size:10px;color:#aaa;">15 jun</span>
+        </div>
+        <!-- Body -->
+        <div style="padding:12px 14px;">
+          <p style="font-size:13px;color:#444;line-height:1.5;margin:0 0 10px;">Se me rompió el caño bajo el lavatorio, hay agua en el piso...</p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:10px;background:#f5f0e8;color:#777;padding:2px 8px;border-radius:20px;font-weight:600;">📋 Reparación</span>
+            <span style="font-size:10px;background:rgba(239,68,68,.1);color:#ef4444;padding:2px 8px;border-radius:20px;font-weight:700;">⚡ Urgente</span>
+          </div>
+        </div>
+        <!-- Action -->
+        <div style="border-top:1px solid #f0ebe1;padding:10px 14px;">
+          <button style="width:100%;background:#fff5f5;color:#ef4444;border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:8px;font-size:12px;font-weight:700;">Cancelar solicitud</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <h3>C — Header de estado con ícono grande</h3>
+      <p>Header tintado según el estado · Ícono grande · Mensaje descriptivo del estado · Tags de tipo y urgencia</p>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,102 @@
+<h2>Banner "Cómo funciona"</h2>
+<p class="subtitle">Aparece la primera vez, se cierra y no vuelve. ¿Cuál estilo te gusta?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+      <div style="background:#fff;border-radius:16px;border:1.5px solid #ede8de;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;">
+          <span style="font-size:12px;font-weight:800;color:#111;">¿Cómo funciona?</span>
+          <span style="font-size:16px;color:#aaa;cursor:pointer;">×</span>
+        </div>
+        <!-- 3 pasos horizontales -->
+        <div style="display:flex;gap:4px;padding:4px 14px 14px;">
+          <div style="flex:1;text-align:center;padding:10px 6px;background:#f5f0e8;border-radius:10px;">
+            <div style="font-size:22px;margin-bottom:4px;">🔍</div>
+            <div style="font-size:10px;font-weight:800;color:#111;margin-bottom:2px;">Buscá</div>
+            <div style="font-size:9px;color:#999;line-height:1.3;">Encontrá el profesional</div>
+          </div>
+          <div style="display:flex;align-items:center;color:#ddd;font-size:12px;">›</div>
+          <div style="flex:1;text-align:center;padding:10px 6px;background:#f5f0e8;border-radius:10px;">
+            <div style="font-size:22px;margin-bottom:4px;">📋</div>
+            <div style="font-size:10px;font-weight:800;color:#111;margin-bottom:2px;">Pedí</div>
+            <div style="font-size:9px;color:#999;line-height:1.3;">Enviá la solicitud</div>
+          </div>
+          <div style="display:flex;align-items:center;color:#ddd;font-size:12px;">›</div>
+          <div style="flex:1;text-align:center;padding:10px 6px;background:#f5f0e8;border-radius:10px;">
+            <div style="font-size:22px;margin-bottom:4px;">✅</div>
+            <div style="font-size:10px;font-weight:800;color:#111;margin-bottom:2px;">Coordiná</div>
+            <div style="font-size:9px;color:#999;line-height:1.3;">Acordá por WhatsApp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — 3 pasos horizontales</h3>
+      <p>Compacto · Íconos + título + descripción · X para cerrar arriba a la derecha</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+      <div style="background:linear-gradient(135deg,#e8683a,#c44d1f);border-radius:16px;overflow:hidden;padding:16px;position:relative;">
+        <span style="position:absolute;top:10px;right:12px;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;">×</span>
+        <div style="font-size:13px;font-weight:900;color:#fff;margin-bottom:12px;">Bienvenido a OficioYa 👋</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🔍</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.9);font-weight:600;">Buscá profesionales de confianza en Montevideo</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📋</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.9);font-weight:600;">Enviá tu solicitud en segundos, sin llamadas</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">💬</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.9);font-weight:600;">Coordiná por WhatsApp directo con el profesional</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Banner naranja de bienvenida</h3>
+      <p>Impacto visual fuerte · Lista vertical de pasos · Fondo naranja de la marca</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+      <div style="background:#fff;border-radius:16px;border:1.5px solid #ede8de;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:14px;">👋</span>
+            <span style="font-size:12px;font-weight:800;color:#111;">¿Primera vez aquí?</span>
+          </div>
+          <span style="font-size:10px;color:#e8683a;font-weight:700;cursor:pointer;">Entendido ›</span>
+        </div>
+        <!-- Pasos numerados -->
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:22px;height:22px;background:#e8683a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;">1</div>
+            <span style="font-size:12px;color:#444;font-weight:600;">Buscá un profesional por categoría</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:22px;height:22px;background:#e8683a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;">2</div>
+            <span style="font-size:12px;color:#444;font-weight:600;">Enviá tu solicitud (tarda 1 minuto)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:22px;height:22px;background:#e8683a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;">3</div>
+            <span style="font-size:12px;color:#444;font-weight:600;">Coordiná directo por WhatsApp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Pasos numerados con círculos naranja</h3>
+      <p>Minimalista · Numeración clara · "Entendido" como CTA para cerrar</p>
+    </div>
+  </div>
+
+</div>

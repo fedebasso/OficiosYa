@@ -1,0 +1,93 @@
+<h2>Disposición de info en la card</h2>
+<p class="subtitle">¿Cómo reorganizamos profesión, zona y trabajos?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+      <div style="background:#fff;border-radius:16px;padding:12px;border:1.5px solid #ede8de;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#fde68a,#f59e0b);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;">CM</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:1px;">Carlos Méndez</div>
+          <div style="font-size:10px;font-weight:600;color:#e8683a;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">⚡ Electricista</div>
+          <div style="display:flex;gap:6px;">
+            <span style="background:#f5f0e8;border-radius:6px;padding:3px 7px;font-size:11px;font-weight:600;color:#555;">📍 Pocitos</span>
+            <span style="background:#f5f0e8;border-radius:6px;padding:3px 7px;font-size:11px;font-weight:600;color:#555;">🔨 127</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+          <div style="width:32px;height:32px;background:#f5f0e8;border:1.5px solid #e8e0d4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;">♡</div>
+          <div style="display:flex;align-items:center;gap:2px;">
+            <span style="color:#f59e0b;font-size:13px;">★</span>
+            <span style="font-size:15px;font-weight:900;color:#111;">4.8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Profesión pequeña uppercase</h3>
+      <p>Profesión en mayúsculas chicas · Zona y trabajos como chips/pastillas · Más estructurado</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+      <div style="background:#fff;border-radius:16px;padding:12px;border:1.5px solid #ede8de;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#fde68a,#f59e0b);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;">CM</div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:3px;">
+            <span style="font-size:14px;font-weight:800;color:#111;">Carlos Méndez</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;">
+            <span style="font-size:12px;font-weight:700;color:#e8683a;">⚡ Electricista</span>
+            <span style="color:#ddd;">·</span>
+            <span style="font-size:12px;font-weight:600;color:#777;">📍 Pocitos</span>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:#555;">🔨 <span style="font-size:13px;color:#111;">127</span> trabajos realizados</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+          <div style="width:32px;height:32px;background:#f5f0e8;border:1.5px solid #e8e0d4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;">♡</div>
+          <div style="display:flex;align-items:center;gap:2px;">
+            <span style="color:#f59e0b;font-size:13px;">★</span>
+            <span style="font-size:15px;font-weight:900;color:#111;">4.8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Profesión + zona en línea</h3>
+      <p>Profesión y zona en la misma línea · Trabajos destacados abajo con número más grande</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f5f0e8;padding:14px;border-radius:8px;font-family:sans-serif;">
+      <div style="background:#fff;border-radius:16px;padding:12px;border:1.5px solid #ede8de;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#fde68a,#f59e0b);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;">CM</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:4px;">Carlos Méndez</div>
+          <div style="display:flex;align-items:center;gap:3px;margin-bottom:4px;">
+            <span style="background:rgba(232,104,58,.12);color:#e8683a;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;">⚡ Electricista</span>
+          </div>
+          <div style="display:flex;gap:10px;font-size:12px;color:#888;align-items:center;">
+            <span style="font-weight:600;">📍 Pocitos</span>
+            <span style="color:#ddd;">|</span>
+            <span><span style="font-size:13px;font-weight:800;color:#333;">127</span> <span style="font-weight:500;">trabajos</span></span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+          <div style="width:32px;height:32px;background:#f5f0e8;border:1.5px solid #e8e0d4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;">♡</div>
+          <div style="display:flex;align-items:center;gap:2px;">
+            <span style="color:#f59e0b;font-size:13px;">★</span>
+            <span style="font-size:15px;font-weight:900;color:#111;">4.8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Profesión como etiqueta pill</h3>
+      <p>Profesión como chip de color · Zona y trabajos en fila con el número destacado · Jerarquía clara</p>
+    </div>
+  </div>
+
+</div>

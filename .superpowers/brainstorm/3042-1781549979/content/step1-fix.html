@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paso 1 — Fix espacio</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f0ebe1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 24px 16px; }
+  h2 { font-size: 18px; font-weight: 900; color: #111; margin-bottom: 6px; }
+  p.sub { font-size: 12px; color: #888; margin-bottom: 20px; }
+  .screens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 700px; }
+  .screen-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .step-label { font-size: 10px; font-weight: 800; color: #e8683a; text-transform: uppercase; letter-spacing: .8px; }
+  .phone { width: 100%; background: #fff; border-radius: 20px; overflow: hidden; border: 1.5px solid #e8e0d4; box-shadow: 0 8px 32px rgba(0,0,0,.1); aspect-ratio: 9/16; display: flex; flex-direction: column; }
+  .inner { flex: 1; display: flex; flex-direction: column; padding: 22px 18px 18px; background: #fff; }
+  .tag { font-size: 9px; font-weight: 800; color: #e8683a; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+  .title { font-size: 17px; font-weight: 900; color: #111; letter-spacing: -.3px; line-height: 1.2; margin-bottom: 14px; }
+  .cta { background: #e8683a; border-radius: 12px; padding: 13px; text-align: center; font-size: 13px; font-weight: 800; color: #fff; box-shadow: 0 4px 14px rgba(232,104,58,.3); margin-top: 14px; }
+  .cat { border-radius: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .cat.active { background: #e8683a; }
+  .cat.idle { background: #f5f0e8; border: 1.5px solid #ede8de; }
+  .cat .name { font-size: 9px; font-weight: 800; }
+  .cat.active .name { color: #fff; }
+  .cat.idle .name { color: #444; }
+</style>
+</head>
+<body>
+
+<h2>Paso 1 — Tres opciones para ocupar el espacio</h2>
+<p class="sub">¿Cómo llenamos el espacio debajo de las cards de categoría?</p>
+
+<div class="screens">
+
+  <!-- Opción A: cards más altas que llenan el espacio -->
+  <div class="screen-wrap">
+    <div class="step-label">A — Cards más altas</div>
+    <div class="phone">
+      <div class="inner">
+        <div class="tag">✨ Nuevo ticket</div>
+        <div class="title">¿Qué tipo de trabajo necesitás?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;flex:1;">
+          <div class="cat active" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">⚡</span><span class="name">Electricidad</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🚿</span><span class="name">Sanitario</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">❄️</span><span class="name">Aire Ac.</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🔑</span><span class="name">Cerrajería</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🎨</span><span class="name">Pintura</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🧱</span><span class="name">Albañilería</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🪟</span><span class="name">Ventanas</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🛁</span><span class="name">Baño</span></div>
+          <div class="cat idle" style="padding:10px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">📋</span><span class="name">Otro</span></div>
+        </div>
+        <div class="cta">Continuar →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opción B: scroll horizontal de categorías + descripción abajo -->
+  <div class="screen-wrap">
+    <div class="step-label">B — Grid 2 col con descripción</div>
+    <div class="phone">
+      <div class="inner">
+        <div class="tag">✨ Nuevo ticket</div>
+        <div class="title">¿Qué tipo de trabajo necesitás?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div class="cat active" style="padding:16px 10px;flex-direction:row;gap:10px;text-align:left;justify-content:flex-start;border-radius:14px;">
+            <span style="font-size:24px;flex-shrink:0;">⚡</span>
+            <div><div style="font-size:12px;font-weight:800;color:#fff;">Electricidad</div><div style="font-size:9px;color:rgba(255,255,255,.7);margin-top:2px;">Tomacorrientes, luces, tableros</div></div>
+          </div>
+          <div class="cat idle" style="padding:16px 10px;flex-direction:row;gap:10px;text-align:left;justify-content:flex-start;border-radius:14px;">
+            <span style="font-size:24px;flex-shrink:0;">🚿</span>
+            <div><div style="font-size:12px;font-weight:800;color:#333;">Sanitario</div><div style="font-size:9px;color:#aaa;margin-top:2px;">Caños, llaves, pérdidas</div></div>
+          </div>
+          <div class="cat idle" style="padding:16px 10px;flex-direction:row;gap:10px;text-align:left;justify-content:flex-start;border-radius:14px;">
+            <span style="font-size:24px;flex-shrink:0;">❄️</span>
+            <div><div style="font-size:12px;font-weight:800;color:#333;">Aire Ac.</div><div style="font-size:9px;color:#aaa;margin-top:2px;">Instalación y limpieza</div></div>
+          </div>
+          <div class="cat idle" style="padding:16px 10px;flex-direction:row;gap:10px;text-align:left;justify-content:flex-start;border-radius:14px;">
+            <span style="font-size:24px;flex-shrink:0;">🔑</span>
+            <div><div style="font-size:12px;font-weight:800;color:#333;">Cerrajería</div><div style="font-size:9px;color:#aaa;margin-top:2px;">Cerraduras, llaves</div></div>
+          </div>
+          <div class="cat idle" style="padding:16px 10px;flex-direction:row;gap:10px;text-align:left;justify-content:flex-start;border-radius:14px;">
+            <span style="font-size:24px;flex-shrink:0;">🎨</span>
+            <div><div style="font-size:12px;font-weight:800;color:#333;">Pintura</div><div style="font-size:9px;color:#aaa;margin-top:2px;">Interior y exterior</div></div>
+          </div>
+          <div class="cat idle" style="padding:16px 10px;flex-direction:row;gap:10px;text-align:left;justify-content:flex-start;border-radius:14px;">
+            <span style="font-size:24px;flex-shrink:0;">📋</span>
+            <div><div style="font-size:12px;font-weight:800;color:#333;">Otro</div><div style="font-size:9px;color:#aaa;margin-top:2px;">Cualquier trabajo</div></div>
+          </div>
+        </div>
+        <div class="cta">Continuar →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opción C: 3 col + "Otro" separado + CTA pegado abajo -->
+  <div class="screen-wrap">
+    <div class="step-label">C — 3 col + Otro al pie</div>
+    <div class="phone">
+      <div class="inner">
+        <div class="tag">✨ Nuevo ticket</div>
+        <div class="title">¿Qué tipo de trabajo necesitás?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px;">
+          <div class="cat active" style="padding:14px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">⚡</span><span class="name">Electricidad</span></div>
+          <div class="cat idle" style="padding:14px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🚿</span><span class="name">Sanitario</span></div>
+          <div class="cat idle" style="padding:14px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">❄️</span><span class="name">Aire Ac.</span></div>
+          <div class="cat idle" style="padding:14px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🔑</span><span class="name">Cerrajería</span></div>
+          <div class="cat idle" style="padding:14px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🎨</span><span class="name">Pintura</span></div>
+          <div class="cat idle" style="padding:14px 4px;"><span style="font-size:22px;display:block;margin-bottom:5px;">🧱</span><span class="name">Albañilería</span></div>
+        </div>
+        <!-- Otro separado -->
+        <div style="background:#f5f0e8;border:1.5px solid #ede8de;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:auto;">
+          <span style="font-size:18px;">📋</span>
+          <span style="font-size:12px;font-weight:700;color:#444;">Otro tipo de trabajo</span>
+          <span style="margin-left:auto;color:#ccc;font-size:14px;">›</span>
+        </div>
+        <div class="cta" style="margin-top:14px;">Continuar →</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
