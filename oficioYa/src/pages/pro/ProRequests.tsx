@@ -4,6 +4,8 @@ import { useIncomingRequests } from '../../hooks/useRequests'
 import { PageShell } from '../../components/layout/PageShell'
 import { CheckCircle, XCircle, MessageCircle, Clock, Inbox, ChevronDown, ChevronUp, Zap } from 'lucide-react'
 import type { ServiceRequest } from '../../store/requestStore'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
 
 const STATUS_META: Record<ServiceRequest['status'], { label: string; color: string; bg: string }> = {
   pending:     { label: 'Pendiente',  color: '#f59e0b', bg: 'rgba(245,158,11,.1)' },
@@ -38,7 +40,6 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
         boxShadow: req.urgency
           ? '0 2px 12px rgba(239,68,68,.08), 0 1px 3px rgba(0,0,0,.04)'
           : '0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04)',
-        animation: 'slideIn .28s cubic-bezier(.22,.68,0,1.2) both',
       }}
     >
       {/* Top bar */}
@@ -85,34 +86,37 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
 
         {/* Actions */}
         <div className="flex gap-2 pt-0.5">
-          <button
+          <motion.button
             type="button"
             onClick={onAccept}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold active:scale-[.97] transition-transform"
+            whileTap={{ scale: 0.97 }}
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
             style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
           >
             <CheckCircle size={14} />
             Aceptar
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             type="button"
             onClick={onReject}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold active:scale-[.97] transition-transform"
+            whileTap={{ scale: 0.97 }}
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
             style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}
           >
             <XCircle size={14} />
             Rechazar
-          </button>
+          </motion.button>
           {req.contact_phone && (
-            <button
+            <motion.button
               type="button"
               onClick={onWhatsApp}
-              className="w-12 flex items-center justify-center rounded-xl active:scale-[.97] transition-transform flex-shrink-0"
+              whileTap={{ scale: 0.97 }}
+              className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
               style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
               aria-label="WhatsApp"
             >
               <MessageCircle size={15} />
-            </button>
+            </motion.button>
           )}
         </div>
       </div>
@@ -195,10 +199,6 @@ export default function ProRequests() {
   return (
     <PageShell header={header}>
       <style>{`
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateY(10px) scale(.98); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
         @keyframes ping-slow {
           0%, 100% { opacity: 1; transform: scale(1); }
           50%       { opacity: .5; transform: scale(1.4); }
@@ -235,7 +235,12 @@ export default function ProRequests() {
         )}
 
         {!loading && pending.length === 0 && others.length === 0 && (
-          <div className="flex flex-col items-center gap-4 py-20 text-center">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4 py-20 text-center"
+          >
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
               style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
@@ -246,7 +251,7 @@ export default function ProRequests() {
               <p className="font-black text-sm" style={{ color: '#111111' }}>Sin solicitudes aún</p>
               <p className="text-xs mt-1" style={{ color: '#AAAAAA' }}>Las nuevas solicitudes aparecerán acá</p>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Pendientes */}
@@ -255,16 +260,23 @@ export default function ProRequests() {
             <p className="text-[10px] font-bold uppercase tracking-widest px-0.5" style={{ color: '#AAAAAA' }}>
               Por responder · {pending.length}
             </p>
-            {pending.map((req, i) => (
-              <div key={req.id} style={{ animationDelay: `${i * 0.07}s` }}>
-                <PendingCard
-                  req={req}
-                  onAccept={() => updateStatus(req.id, 'confirmed')}
-                  onReject={() => updateStatus(req.id, 'cancelled')}
-                  onWhatsApp={() => req.contact_phone && openWhatsApp(req.contact_phone)}
-                />
-              </div>
-            ))}
+            <motion.div
+              variants={staggerFast}
+              initial="hidden"
+              animate="visible"
+              className="flex flex-col gap-2.5"
+            >
+              {pending.map((req) => (
+                <motion.div key={req.id} variants={fadeUp}>
+                  <PendingCard
+                    req={req}
+                    onAccept={() => updateStatus(req.id, 'confirmed')}
+                    onReject={() => updateStatus(req.id, 'cancelled')}
+                    onWhatsApp={() => req.contact_phone && openWhatsApp(req.contact_phone)}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
           </section>
         )}
 
@@ -274,7 +286,7 @@ export default function ProRequests() {
             <button
               type="button"
               onClick={() => setHistoryOpen((v) => !v)}
-              className="flex items-center justify-between px-0.5 active:opacity-70 transition-opacity"
+              className="flex items-center justify-between px-0.5"
             >
               <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
                 Historial · {others.length}
@@ -285,11 +297,18 @@ export default function ProRequests() {
               }
             </button>
             {historyOpen && (
-              <div className="flex flex-col gap-1.5">
+              <motion.div
+                variants={staggerFast}
+                initial="hidden"
+                animate="visible"
+                className="flex flex-col gap-1.5"
+              >
                 {others.map((req) => (
-                  <HistoryCard key={req.id} req={req} />
+                  <motion.div key={req.id} variants={fadeUp}>
+                    <HistoryCard req={req} />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
           </section>
         )}
