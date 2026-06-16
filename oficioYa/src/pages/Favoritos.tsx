@@ -6,6 +6,8 @@ import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useProfessionals } from '../hooks/useProfessionals'
+import { motion } from 'framer-motion'
+import { fadeUp, scaleIn, staggerFast, SPRING_SOFT } from '../lib/motion'
 
 export default function Favoritos() {
   const navigate = useNavigate()
@@ -25,7 +27,12 @@ export default function Favoritos() {
         {loading && [0, 1, 2].map((i) => <ProfessionalCardSkeleton key={i} />)}
 
         {!loading && ids.length === 0 && (
-          <div className="flex flex-col items-center gap-4 py-20 text-center">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4 py-20 text-center"
+          >
             <div
               className="w-20 h-20 rounded-2xl flex items-center justify-center"
               style={{ background: '#FEF0EA', border: '1.5px solid #FDDCC8' }}
@@ -40,15 +47,17 @@ export default function Favoritos() {
                 Guardá profesionales de confianza<br />para contactarlos rápido cuando los necesités
               </p>
             </div>
-            <button
+            <motion.button
               type="button"
               onClick={() => navigate('/buscar')}
-              className="rounded-2xl px-6 py-3 text-sm font-bold text-white active:opacity-80 transition-opacity"
+              whileTap={{ scale: 0.97 }}
+              transition={SPRING_SOFT}
+              className="rounded-2xl px-6 py-3 text-sm font-bold text-white"
               style={{ background: '#E8683A', boxShadow: '0 2px 8px rgba(232,104,58,.3)' }}
             >
               Buscar profesionales
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
 
         {!loading && ids.length > 0 && favorites.length === 0 && (
@@ -67,14 +76,23 @@ export default function Favoritos() {
           </div>
         )}
 
-        {favorites.map((pro, i) => (
-          <div key={pro.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
-            <ProfessionalCard
-              professional={pro}
-              onClick={() => navigate(`/profesional/${pro.id}`)}
-            />
-          </div>
-        ))}
+        {!loading && favorites.length > 0 && (
+          <motion.div
+            variants={staggerFast}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-3"
+          >
+            {favorites.map((pro) => (
+              <motion.div key={pro.id} variants={fadeUp}>
+                <ProfessionalCard
+                  professional={pro}
+                  onClick={() => navigate(`/profesional/${pro.id}`)}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
 
       </div>
     </PageShell>
