@@ -688,6 +688,12 @@ export default function TicketFlow() {
       className="px-4 pt-10 pb-3 sticky top-0 z-50 flex items-center gap-3"
       style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}
     >
+      {step === 1 && (
+        <button type="button" onClick={() => navigate(-1)}
+          className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0">
+          <ChevronLeft size={24} style={{ color: '#111111' }} />
+        </button>
+      )}
       {step > 1 && step < 3 && (
         <button type="button" onClick={() => { setDirection('back'); setStep((s) => (s - 1) as 1 | 2 | 3 | 4) }}
           className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0">
