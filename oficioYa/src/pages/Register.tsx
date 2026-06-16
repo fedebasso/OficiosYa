@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
 import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
+import { fadeUp, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
 const INPUT_STYLE = {
   background: '#FFFFFF',
@@ -62,38 +64,62 @@ export default function Register() {
             className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none"
             style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
           />
-          <h1 className="text-[40px] font-black tracking-tight leading-none" style={{ color: '#FFFFFF', letterSpacing: '-2px' }}>
+          <motion.h1
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            className="text-[40px] font-black tracking-tight leading-none"
+            style={{ color: '#FFFFFF', letterSpacing: '-2px' }}
+          >
             Oficio<span style={{ color: 'rgba(255,255,255,.7)' }}>Ya</span>
-          </h1>
-          <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,.8)' }}>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, type: 'spring', stiffness: 300, damping: 28 }}
+            className="text-sm font-medium"
+            style={{ color: 'rgba(255,255,255,.8)' }}
+          >
             Creá tu cuenta gratis
-          </p>
+          </motion.p>
           <div className="absolute bottom-0 left-0 right-0 h-10 rounded-t-[32px]" style={{ background: '#F5F0E8' }} />
         </div>
 
         {/* Form */}
-        <div className="flex flex-col gap-5 px-5 pt-6 pb-10">
+        <motion.div
+          className="flex flex-col gap-5 px-5 pt-6 pb-10"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
 
-          <div>
+          <motion.div variants={fadeUp}>
             <h2 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
               Empezá ahora
             </h2>
             <p className="text-sm mt-1" style={{ color: '#999999' }}>Solo te lleva 1 minuto</p>
-          </div>
+          </motion.div>
 
-          {error && (
-            <div
-              role="alert"
-              aria-live="polite"
-              className="rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2"
-              style={{ background: '#FEF2F2', border: '1.5px solid #FECACA', color: '#DC2626' }}
-            >
-              ⚠️ {error}
-            </div>
-          )}
+          <motion.div variants={fadeUp}>
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  role="alert" aria-live="polite"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  className="rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2"
+                  style={{ background: '#FEF2F2', border: '1.5px solid #FECACA', color: '#DC2626' }}
+                >
+                  ⚠️ {error}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
           {/* Selector de rol — primero para contexto */}
-          <div className="flex flex-col gap-2">
+          <motion.div variants={fadeUp} className="flex flex-col gap-2">
             <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
               Soy...
             </label>
@@ -104,11 +130,13 @@ export default function Register() {
               ] as const).map((opt) => {
                 const active = role === opt.value
                 return (
-                  <button
+                  <motion.button
                     key={opt.value}
                     type="button"
                     onClick={() => setRole(opt.value)}
-                    className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-all duration-150 active:scale-[0.97]"
+                    whileTap={{ scale: 0.95 }}
+                    transition={SPRING_SOFT}
+                    className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-all duration-150"
                     style={{
                       background: active ? '#FEF0EA' : '#FFFFFF',
                       border: active ? '2px solid #E8683A' : '1.5px solid #E8E0D4',
@@ -123,13 +151,13 @@ export default function Register() {
                     <span className="text-[10px] text-center leading-tight" style={{ color: '#999999' }}>
                       {opt.desc}
                     </span>
-                  </button>
+                  </motion.button>
                 )
               })}
             </div>
-          </div>
+          </motion.div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <motion.form variants={fadeUp} onSubmit={handleSubmit} className="flex flex-col gap-3">
 
             {/* Nombre */}
             <div className="flex flex-col gap-1.5">
@@ -195,10 +223,12 @@ export default function Register() {
             </div>
 
             {/* Submit */}
-            <button
+            <motion.button
               type="submit"
               disabled={loading}
-              className="w-full rounded-2xl py-4 text-base font-black tracking-wide transition-[transform,opacity] duration-150 active:scale-[0.97] disabled:opacity-50 mt-1"
+              whileTap={{ scale: 0.97 }}
+              transition={SPRING_SOFT}
+              className="w-full rounded-2xl py-4 text-base font-black tracking-wide disabled:opacity-50 mt-1"
               style={{
                 background: '#E8683A',
                 color: '#FFFFFF',
@@ -214,26 +244,26 @@ export default function Register() {
                   Creando cuenta...
                 </span>
               ) : 'Crear cuenta'}
-            </button>
+            </motion.button>
 
-          </form>
+          </motion.form>
 
           {/* Divider */}
-          <div className="flex items-center gap-3">
+          <motion.div variants={fadeUp} className="flex items-center gap-3">
             <div className="flex-1 h-px" style={{ background: '#E8E0D4' }} />
             <span className="text-xs font-medium" style={{ color: '#CCCCCC' }}>o</span>
             <div className="flex-1 h-px" style={{ background: '#E8E0D4' }} />
-          </div>
+          </motion.div>
 
           {/* Login link */}
-          <p className="text-center text-sm" style={{ color: '#999999' }}>
+          <motion.p variants={fadeUp} className="text-center text-sm" style={{ color: '#999999' }}>
             ¿Ya tenés cuenta?{' '}
             <Link to="/login" className="font-bold" style={{ color: '#E8683A' }}>
               Iniciá sesión
             </Link>
-          </p>
+          </motion.p>
 
-        </div>
+        </motion.div>
       </div>
     </PageShell>
   )
