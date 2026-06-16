@@ -2,10 +2,12 @@ import { useState, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBack } from '../hooks/useBack'
 import { Search as SearchIcon, ChevronLeft } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
 import { useProfessionals } from '../hooks/useProfessionals'
+import { fadeUp, scaleIn, staggerFast, SPRING_SOFT } from '../lib/motion'
 
 const CATEGORY_LABELS: Record<string, string> = {
   electricista: 'Electricistas',
@@ -20,7 +22,7 @@ type Filter = 'disponible' | 'top' | 'rating'
 export default function Search() {
   const { categoria } = useParams<{ categoria: string }>()
   const navigate = useNavigate()
-  const goBack = useBack('/') 
+  const goBack = useBack('/')
   const [searchParams, setSearchParams] = useSearchParams()
   const textQuery = searchParams.get('q') ?? ''
   const [inputValue, setInputValue] = useState(textQuery)
@@ -108,11 +110,13 @@ export default function Search() {
         {FILTERS.map(f => {
           const active = activeFilters.has(f.key)
           return (
-            <button
+            <motion.button
               key={f.key}
               type="button"
               onClick={() => toggleFilter(f.key)}
-              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all duration-150 active:scale-[.97]"
+              whileTap={{ scale: 0.94 }}
+              transition={SPRING_SOFT}
+              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all duration-150"
               style={active ? {
                 background: '#E8683A',
                 color: '#FFFFFF',
@@ -125,7 +129,7 @@ export default function Search() {
             >
               <span style={{ fontSize: 9 }}>{f.icon}</span>
               {f.label}
-            </button>
+            </motion.button>
           )
         })}
       </div>
@@ -151,32 +155,46 @@ export default function Search() {
           <p className="text-center py-8 text-sm" style={{ color: '#ef4444' }}>{error}</p>
         )}
         {!loading && !error && filtered.length === 0 && (
-          <div className="flex flex-col items-center gap-3 py-16 text-center">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-3 py-16 text-center"
+          >
             <div className="text-4xl">🔍</div>
             <p className="font-bold" style={{ color: '#111111' }}>No encontramos profesionales</p>
             <p className="text-sm" style={{ color: '#999999' }}>
               {activeFilters.size > 0 ? 'Probá quitando algún filtro' : 'Intentá con otra categoría'}
             </p>
             {activeFilters.size > 0 && (
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setActiveFilters(new Set())}
+                whileTap={{ scale: 0.97 }}
+                transition={SPRING_SOFT}
                 className="text-sm font-bold px-4 py-2 rounded-xl"
                 style={{ background: 'rgba(232,104,58,.15)', color: '#e8683a' }}
               >
                 Quitar filtros
-              </button>
+              </motion.button>
             )}
-          </div>
+          </motion.div>
         )}
-        {filtered.map((pro, i) => (
-          <div key={pro.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
-            <ProfessionalCard
-              professional={pro}
-              onClick={() => navigate(`/profesional/${pro.id}`)}
-            />
-          </div>
-        ))}
+        <motion.div
+          variants={staggerFast}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col gap-3"
+        >
+          {filtered.map((pro) => (
+            <motion.div key={pro.id} variants={fadeUp}>
+              <ProfessionalCard
+                professional={pro}
+                onClick={() => navigate(`/profesional/${pro.id}`)}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </PageShell>
   )
