@@ -4,6 +4,8 @@ import { PageShell } from '../components/layout/PageShell'
 import { UrgentProfessionalCard } from '../components/professionals/UrgentProfessionalCard'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { useUrgentProfessionals } from '../hooks/useProfessionals'
+import { motion } from 'framer-motion'
+import { fadeUp, scaleIn, staggerFast } from '../lib/motion'
 
 export default function Urgencias() {
   const goBack = useBack('/') 
@@ -75,17 +77,29 @@ export default function Urgencias() {
           </div>
         )}
         {!loading && professionals.length === 0 && (
-          <div className="text-center py-12">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            animate="visible"
+            className="text-center py-12"
+          >
             <div className="text-4xl mb-3">😴</div>
             <p className="font-medium" style={{ color: '#555555' }}>No hay profesionales disponibles ahora</p>
             <p className="text-sm mt-1" style={{ color: '#999999' }}>Intentá de nuevo en unos minutos</p>
-          </div>
+          </motion.div>
         )}
-        {professionals.map((pro, i) => (
-          <div key={pro.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.07}s` }}>
-            <UrgentProfessionalCard professional={pro} />
-          </div>
-        ))}
+        <motion.div
+          variants={staggerFast}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col gap-3"
+        >
+          {professionals.map((pro) => (
+            <motion.div key={pro.id} variants={fadeUp}>
+              <UrgentProfessionalCard professional={pro} />
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </PageShell>
   )
