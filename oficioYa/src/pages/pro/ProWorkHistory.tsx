@@ -3,6 +3,8 @@ import { useIncomingRequests } from '../../hooks/useRequests'
 import { PageShell } from '../../components/layout/PageShell'
 import { Briefcase } from 'lucide-react'
 import { getCategoryMeta } from '../../lib/categories'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -62,7 +64,12 @@ export default function ProWorkHistory() {
         {loading && [0, 1, 2].map((i) => <WorkSkeleton key={i} />)}
 
         {!loading && completed.length === 0 && (
-          <div className="flex flex-col items-center gap-4 py-20 text-center">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4 py-20 text-center"
+          >
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
               style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
@@ -75,53 +82,55 @@ export default function ProWorkHistory() {
                 Los trabajos completados aparecerán acá
               </p>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        {completed.map((req, i) => {
-          const { emoji, label, accent } = getCategoryMeta(req.category)
-          return (
-            <div
-              key={req.id}
-              className="rounded-2xl p-4 flex items-start gap-3"
-              style={{
-                background: '#FFFFFF',
-                border: '1.5px solid #E8E0D4',
-                animation: `fadeUp .25s ease both`,
-                animationDelay: `${i * 0.05}s`,
-              }}
-            >
-              {/* Ícono categoría */}
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
-                style={{ background: `${accent}15`, border: `1px solid ${accent}25` }}
-              >
-                {emoji}
-              </div>
+        {!loading && completed.length > 0 && (
+          <motion.div
+            variants={staggerFast}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-2.5"
+          >
+            {completed.map((req) => {
+              const { emoji, label, accent } = getCategoryMeta(req.category)
+              return (
+                <motion.div
+                  key={req.id}
+                  variants={fadeUp}
+                  className="rounded-2xl p-4 flex items-start gap-3"
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1.5px solid #E8E0D4',
+                  }}
+                >
+                  {/* Ícono categoría */}
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                    style={{ background: `${accent}15`, border: `1px solid ${accent}25` }}
+                  >
+                    {emoji}
+                  </div>
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-xs font-bold" style={{ color: accent }}>{label}</span>
-                  <span className="text-[10px] flex-shrink-0" style={{ color: '#AAAAAA' }}>
-                    {timeAgo(req.created_at)}
-                  </span>
-                </div>
-                <p className="text-sm line-clamp-2 leading-relaxed" style={{ color: '#555555' }}>
-                  {req.description}
-                </p>
-              </div>
-            </div>
-          )
-        })}
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span className="text-xs font-bold" style={{ color: accent }}>{label}</span>
+                      <span className="text-[10px] flex-shrink-0" style={{ color: '#AAAAAA' }}>
+                        {timeAgo(req.created_at)}
+                      </span>
+                    </div>
+                    <p className="text-sm line-clamp-2 leading-relaxed" style={{ color: '#555555' }}>
+                      {req.description}
+                    </p>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+        )}
 
       </div>
-      <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </PageShell>
   )
 }
