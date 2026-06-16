@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Share2, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useBack } from '../../hooks/useBack'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
@@ -109,6 +110,21 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const { label, emoji } = getCategoryMeta(categories[0] ?? '')
   const specialty = `${emoji} ${label}`
   const initials = getInitials(profiles.full_name)
+  const [shared, setShared] = useState(false)
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/profesional/${id}`
+    const text = `Te recomiendo a ${profiles.full_name} — ${specialty} en OficioYa`
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: profiles.full_name, text, url })
+      } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(url)
+      setShared(true)
+      setTimeout(() => setShared(false), 2000)
+    }
+  }
 
   return (
     <motion.div
@@ -136,7 +152,20 @@ export function ProfessionalProfile({ professional, photos }: Props) {
           >
             <ChevronLeft size={24} color="#111111" />
           </button>
-          <div className="w-10 h-10" />
+          <motion.button
+            type="button"
+            onClick={handleShare}
+            whileTap={{ scale: 0.9 }}
+            transition={SPRING_SOFT}
+            aria-label="Compartir perfil"
+            className="w-10 h-10 rounded-full flex items-center justify-center"
+            style={{ background: shared ? 'rgba(34,197,94,.12)' : '#F5F0E8', border: `1px solid ${shared ? 'rgba(34,197,94,.3)' : '#E8E0D4'}` }}
+          >
+            {shared
+              ? <Check size={18} color="#22c55e" />
+              : <Share2 size={18} color="#E8683A" />
+            }
+          </motion.button>
         </div>
 
         {/* Foto grande */}
