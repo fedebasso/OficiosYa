@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerContainer, SPRING_SOFT } from '../../lib/motion'
 
 const STORAGE_KEY = 'oficioya_how_it_works_seen'
 
@@ -13,8 +15,11 @@ export function HowItWorks() {
   }
 
   return (
-    <div
+    <motion.div
       className="rounded-2xl overflow-hidden"
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
       style={{
         background: '#FFFFFF',
         border: '1.5px solid #E8E0D4',
@@ -22,7 +27,7 @@ export function HowItWorks() {
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-3">
+      <motion.div variants={fadeUp} className="flex items-center justify-between px-4 pt-4 pb-3">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#E8683A' }}>
             Bienvenido
@@ -31,7 +36,7 @@ export function HowItWorks() {
             ¿Cómo funciona OficioYa? 👋
           </h3>
         </div>
-      </div>
+      </motion.div>
 
       {/* Pasos */}
       <div className="flex flex-col gap-3 px-4 pb-4">
@@ -52,7 +57,7 @@ export function HowItWorks() {
             desc: 'El profesional recibe tu pedido y te contacta para acordar fecha y precio.',
           },
         ].map((step) => (
-          <div key={step.n} className="flex items-start gap-3">
+          <motion.div key={step.n} variants={fadeUp} className="flex items-start gap-3">
             <div
               className="flex items-center justify-center flex-shrink-0 font-black text-white"
               style={{
@@ -74,21 +79,24 @@ export function HowItWorks() {
                 {step.desc}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
       {/* CTA */}
       <div style={{ borderTop: '1px solid #F0EBE1', padding: '10px 14px' }}>
-        <button
+        <motion.button
           type="button"
           onClick={dismiss}
-          className="w-full rounded-xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
+          variants={fadeUp}
+          whileTap={{ scale: 0.97 }}
+          transition={SPRING_SOFT}
+          className="w-full rounded-xl py-2.5 text-sm font-bold"
           style={{ background: '#E8683A', color: '#FFFFFF', boxShadow: '0 2px 8px rgba(232,104,58,.25)' }}
         >
           Entendido, ¡empecemos! →
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   )
 }
