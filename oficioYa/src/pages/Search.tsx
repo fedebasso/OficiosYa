@@ -1,8 +1,8 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBack } from '../hooks/useBack'
-import { Search as SearchIcon, ChevronLeft } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Search as SearchIcon, ChevronLeft, Clock, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
@@ -17,6 +17,38 @@ const CATEGORY_LABELS: Record<string, string> = {
   albanil: 'Albañiles',
 }
 
+const AUTOCOMPLETE_CATEGORIES = [
+  { id: 'electricista',       emoji: '⚡', label: 'Electricista',      keywords: ['electri', 'luz', 'tomacorriente', 'tablero'] },
+  { id: 'plomero',            emoji: '🚿', label: 'Sanitario/Plomero', keywords: ['plom', 'sanit', 'caño', 'agua', 'pérdida'] },
+  { id: 'aire_acondicionado', emoji: '❄️', label: 'Aire Acondicionado', keywords: ['aire', 'ac', 'frío', 'frío', 'refriger'] },
+  { id: 'cerrajero',          emoji: '🔑', label: 'Cerrajero',         keywords: ['cerraj', 'llave', 'cerradura', 'portón'] },
+  { id: 'albanil',            emoji: '🧱', label: 'Albañil',           keywords: ['alba', 'pared', 'fisura', 'mampost', 'cemento'] },
+  { id: 'pintor',             emoji: '🎨', label: 'Pintor',            keywords: ['pint', 'color', 'pared'] },
+  { id: 'cerrajero',          emoji: '🔒', label: 'Urgencias 24hs',    keywords: ['urgent', 'emergencia', '24hs', 'ahora'] },
+]
+
+const HISTORY_KEY = 'oficioya_search_history'
+
+function getHistory(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) ?? '[]')
+  } catch {
+    return []
+  }
+}
+
+function saveToHistory(query: string) {
+  const trimmed = query.trim()
+  if (!trimmed) return
+  const current = getHistory().filter((h) => h !== trimmed)
+  localStorage.setItem(HISTORY_KEY, JSON.stringify([trimmed, ...current].slice(0, 5)))
+}
+
+function removeFromHistory(query: string) {
+  const current = getHistory().filter((h) => h !== query)
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(current))
+}
+
 type Filter = 'disponible' | 'top' | 'rating'
 
 export default function Search() {
@@ -26,11 +58,77 @@ export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams()
   const textQuery = searchParams.get('q') ?? ''
   const [inputValue, setInputValue] = useState(textQuery)
+  const [isFocused, setIsFocused] = useState(false)
+  const [history, setHistory] = useState<string[]>(getHistory)
   const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const { professionals, loading, error } = useProfessionals(categoria)
   const [activeFilters, setActiveFilters] = useState<Set<Filter>>(new Set())
 
   const label = categoria ? CATEGORY_LABELS[categoria] ?? categoria : textQuery ? `"${textQuery}"` : 'Profesionales'
+
+  // Cerrar dropdown al hacer click fuera
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node) &&
+          inputRef.current && !inputRef.current.contains(e.target as Node)) {
+        setIsFocused(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  // Sugerencias filtradas mientras tipea
+  const suggestions = useMemo(() => {
+    if (!inputValue.trim()) return []
+    const q = inputValue.toLowerCase()
+    const seen = new Set<string>()
+    return AUTOCOMPLETE_CATEGORIES.filter((cat) => {
+      if (seen.has(cat.id)) return false
+      const matches = cat.label.toLowerCase().includes(q) || cat.keywords.some((k) => k.includes(q))
+      if (matches) seen.add(cat.id)
+      return matches
+    })
+  }, [inputValue])
+
+  const showDropdown = isFocused && (suggestions.length > 0 || (history.length > 0 && !inputValue.trim()))
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    const q = inputValue.trim()
+    if (q) {
+      saveToHistory(q)
+      setHistory(getHistory())
+      setSearchParams({ q })
+    } else {
+      setSearchParams({})
+    }
+    setIsFocused(false)
+    inputRef.current?.blur()
+  }
+
+  function handleSelectSuggestion(catId: string, catLabel: string) {
+    saveToHistory(catLabel)
+    setHistory(getHistory())
+    setIsFocused(false)
+    navigate(`/buscar/${catId}`)
+  }
+
+  function handleSelectHistory(query: string) {
+    setInputValue(query)
+    saveToHistory(query)
+    setHistory(getHistory())
+    setSearchParams({ q: query })
+    setIsFocused(false)
+    inputRef.current?.blur()
+  }
+
+  function handleRemoveHistory(query: string, e: React.MouseEvent) {
+    e.stopPropagation()
+    removeFromHistory(query)
+    setHistory(getHistory())
+  }
 
   function toggleFilter(f: Filter) {
     setActiveFilters(prev => {
@@ -68,8 +166,8 @@ export default function Search() {
       className="px-4 pt-12 pb-3 sticky top-0 z-50"
       style={{
         background: '#FFFFFF',
-        borderBottom: '1px solid #E8E0D4',
-        boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)',
+        borderBottom: showDropdown ? 'none' : '1px solid #E8E0D4',
+        boxShadow: showDropdown ? 'none' : '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)',
       }}
     >
       <div className="flex items-center gap-2 mb-3">
@@ -83,14 +181,13 @@ export default function Search() {
         </button>
         <form
           className="flex-1 flex items-center gap-2 rounded-2xl px-3.5"
-          style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', height: 44 }}
-          onSubmit={(e) => {
-            e.preventDefault()
-            const q = inputValue.trim()
-            if (q) setSearchParams({ q })
-            else setSearchParams({})
-            inputRef.current?.blur()
+          style={{
+            background: '#FFFFFF',
+            border: `1.5px solid ${isFocused ? '#E8683A' : '#E8E0D4'}`,
+            height: 44,
+            transition: 'border-color .15s',
           }}
+          onSubmit={handleSubmit}
         >
           <SearchIcon size={14} style={{ color: '#E8683A', flexShrink: 0 }} />
           <input
@@ -98,48 +195,161 @@ export default function Search() {
             type="search"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            onFocus={() => setIsFocused(true)}
             placeholder={`${label}...`}
             className="flex-1 bg-transparent text-sm focus:outline-none min-w-0"
             style={{ color: '#111111', caretColor: '#E8683A' }}
           />
+          {inputValue && (
+            <button
+              type="button"
+              onClick={() => { setInputValue(''); setSearchParams({}); inputRef.current?.focus() }}
+              className="flex-shrink-0"
+            >
+              <X size={14} style={{ color: '#CCCCCC' }} />
+            </button>
+          )}
         </form>
       </div>
 
       {/* Filtros */}
-      <div className="flex gap-2 pb-1 overflow-x-auto scrollbar-hide">
-        {FILTERS.map(f => {
-          const active = activeFilters.has(f.key)
-          return (
-            <motion.button
-              key={f.key}
-              type="button"
-              onClick={() => toggleFilter(f.key)}
-              whileTap={{ scale: 0.94 }}
-              transition={SPRING_SOFT}
-              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all duration-150"
-              style={active ? {
-                background: '#E8683A',
-                color: '#FFFFFF',
-                border: '1.5px solid #E8683A',
-              } : {
-                background: '#F5F0E8',
-                color: '#555555',
-                border: '1.5px solid #E8E0D4',
-              }}
-            >
-              <span style={{ fontSize: 9 }}>{f.icon}</span>
-              {f.label}
-            </motion.button>
-          )
-        })}
-      </div>
+      {!showDropdown && (
+        <div className="flex gap-2 pb-1 overflow-x-auto scrollbar-hide">
+          {FILTERS.map(f => {
+            const active = activeFilters.has(f.key)
+            return (
+              <motion.button
+                key={f.key}
+                type="button"
+                onClick={() => toggleFilter(f.key)}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_SOFT}
+                className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
+                style={active ? {
+                  background: '#E8683A', color: '#FFFFFF', border: '1.5px solid #E8683A',
+                } : {
+                  background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+                }}
+              >
+                <span style={{ fontSize: 9 }}>{f.icon}</span>
+                {f.label}
+              </motion.button>
+            )
+          })}
+        </div>
+      )}
 
-      {!loading && !error && (
+      {!showDropdown && !loading && !error && (
         <p className="text-[10px] mt-1.5" style={{ color: '#999999' }}>
           <span style={{ color: '#111111', fontWeight: 700 }}>{filtered.length}</span> profesionales
           {activeFilters.size > 0 && <span style={{ color: '#E8683A' }}> · filtrado</span>}
         </p>
       )}
+
+      {/* Dropdown autocomplete / historial */}
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            ref={dropdownRef}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            className="absolute left-0 right-0 z-50 px-4 pb-4"
+            style={{
+              top: '100%',
+              background: '#FFFFFF',
+              borderBottom: '1px solid #E8E0D4',
+              boxShadow: '0 8px 24px rgba(0,0,0,.08)',
+            }}
+          >
+            {/* Sugerencias mientras tipea */}
+            {suggestions.length > 0 && (
+              <div className="flex flex-col gap-2 pt-2">
+                <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#AAA' }}>
+                  Sugerencias
+                </p>
+                {suggestions.map((cat) => (
+                  <motion.button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => handleSelectSuggestion(cat.id, cat.label)}
+                    whileTap={{ scale: 0.98 }}
+                    transition={SPRING_SOFT}
+                    className="flex items-center gap-3 rounded-xl p-2.5 text-left w-full"
+                    style={{ background: '#F9F6F2' }}
+                  >
+                    <div className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{ width: 32, height: 32, background: '#FEF0EA', fontSize: 16 }}>
+                      {cat.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-bold" style={{ color: '#111' }}>
+                        {/* Resaltar match */}
+                        {cat.label.toLowerCase().includes(inputValue.toLowerCase()) ? (
+                          <>
+                            {cat.label.substring(0, cat.label.toLowerCase().indexOf(inputValue.toLowerCase()))}
+                            <span style={{ color: '#E8683A' }}>
+                              {cat.label.substring(
+                                cat.label.toLowerCase().indexOf(inputValue.toLowerCase()),
+                                cat.label.toLowerCase().indexOf(inputValue.toLowerCase()) + inputValue.length
+                              )}
+                            </span>
+                            {cat.label.substring(cat.label.toLowerCase().indexOf(inputValue.toLowerCase()) + inputValue.length)}
+                          </>
+                        ) : cat.label}
+                      </span>
+                    </div>
+                    <span className="text-[10px] flex-shrink-0" style={{ color: '#AAA' }}>
+                      {professionals.filter(p => p.categories.includes(cat.id)).length} pros
+                    </span>
+                  </motion.button>
+                ))}
+              </div>
+            )}
+
+            {/* Historial cuando no está tipeando */}
+            {!inputValue.trim() && history.length > 0 && (
+              <div className="flex flex-col gap-2 pt-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#AAA' }}>
+                    Buscaste antes
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => { localStorage.removeItem(HISTORY_KEY); setHistory([]) }}
+                    className="text-[9px] font-bold"
+                    style={{ color: '#CCC' }}
+                  >
+                    Borrar todo
+                  </button>
+                </div>
+                {history.map((query) => (
+                  <motion.button
+                    key={query}
+                    type="button"
+                    onClick={() => handleSelectHistory(query)}
+                    whileTap={{ scale: 0.98 }}
+                    transition={SPRING_SOFT}
+                    className="flex items-center gap-3 rounded-xl p-2.5 text-left w-full"
+                    style={{ background: '#F9F6F2' }}
+                  >
+                    <Clock size={14} style={{ color: '#CCCCCC', flexShrink: 0 }} />
+                    <span className="text-sm flex-1 min-w-0 truncate" style={{ color: '#555' }}>{query}</span>
+                    <button
+                      type="button"
+                      onClick={(e) => handleRemoveHistory(query, e)}
+                      className="flex-shrink-0 p-1"
+                    >
+                      <X size={12} style={{ color: '#DDD' }} />
+                    </button>
+                  </motion.button>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 
