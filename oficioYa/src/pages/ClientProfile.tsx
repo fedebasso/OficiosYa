@@ -4,6 +4,8 @@ import { PageShell } from '../components/layout/PageShell'
 import { Header } from '../components/layout/Header'
 import { useAuthStore } from '../store/authStore'
 import { getInitials } from '../lib/utils'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
 function ProfileRow({
   icon,
@@ -22,10 +24,12 @@ function ProfileRow({
   const bg = danger ? '#FEF2F2' : accent ? '#FEF0EA' : '#F5F0E8'
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center gap-3 rounded-2xl active:opacity-60 transition-opacity"
+      whileTap={{ scale: 0.97 }}
+      transition={SPRING_SOFT}
+      className="w-full flex items-center gap-3 rounded-2xl"
       style={{ background: bg, padding: 'var(--space-4)' }}
     >
       <span style={{ color, flexShrink: 0 }}>{icon}</span>
@@ -33,7 +37,7 @@ function ProfileRow({
         {label}
       </span>
       {!danger && <ChevronRight size={18} style={{ color: '#CCCCCC' }} />}
-    </button>
+    </motion.button>
   )
 }
 
@@ -57,10 +61,15 @@ export default function ClientProfile() {
 
   return (
     <PageShell header={header} showBottomNav>
-      <div className="flex flex-col gap-4 pt-4 pb-6">
+      <motion.div
+        className="flex flex-col gap-4 pt-4 pb-6"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
 
         {/* Avatar + nombre + rol */}
-        <div className="flex flex-col items-center gap-2 py-4">
+        <motion.div variants={fadeUp} className="flex flex-col items-center gap-2 py-4">
           <div
             className="rounded-full flex items-center justify-center font-black text-white"
             style={{
@@ -81,10 +90,10 @@ export default function ClientProfile() {
           >
             {roleLabel}
           </span>
-        </div>
+        </motion.div>
 
         {/* Mi actividad */}
-        <div className="flex flex-col gap-2">
+        <motion.div variants={fadeUp} className="flex flex-col gap-2">
           <h2
             className="font-bold uppercase tracking-wide"
             style={{ fontSize: 'var(--text-xs)', color: '#999999' }}
@@ -101,10 +110,10 @@ export default function ClientProfile() {
             label="Mis solicitudes"
             onClick={() => navigate('/mis-solicitudes')}
           />
-        </div>
+        </motion.div>
 
         {/* Ajustes */}
-        <div className="flex flex-col gap-2">
+        <motion.div variants={fadeUp} className="flex flex-col gap-2">
           <h2
             className="font-bold uppercase tracking-wide"
             style={{ fontSize: 'var(--text-xs)', color: '#999999' }}
@@ -128,9 +137,9 @@ export default function ClientProfile() {
             }}
             danger
           />
-        </div>
+        </motion.div>
 
-      </div>
+      </motion.div>
     </PageShell>
   )
 }
