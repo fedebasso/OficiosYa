@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { ProfessionalCard } from '../professionals/ProfessionalCard'
 import { FeaturedSkeleton } from '../ui/Skeleton'
 import { useProfessionals } from '../../hooks/useProfessionals'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerFast, SPRING_SOFT } from '../../lib/motion'
 
 const CATEGORY_FILTERS = [
   { id: 'todos',              label: 'Todos',        emoji: '' },
@@ -27,9 +29,15 @@ export function FeaturedProfessionals() {
 
   if (loading) return (
     <section>
-      <h2 className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5" style={{ color: '#999999' }}>
+      <motion.h2
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+        className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
+        style={{ color: '#999999' }}
+      >
         Más recomendados
-      </h2>
+      </motion.h2>
       <FeaturedSkeleton />
     </section>
   )
@@ -38,9 +46,15 @@ export function FeaturedProfessionals() {
 
   return (
     <section>
-      <h2 className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5" style={{ color: '#999999' }}>
+      <motion.h2
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+        className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
+        style={{ color: '#999999' }}
+      >
         Más recomendados
-      </h2>
+      </motion.h2>
 
       {/* Filtros de categoría */}
       <div
@@ -50,11 +64,13 @@ export function FeaturedProfessionals() {
         {CATEGORY_FILTERS.map((cat) => {
           const active = activeCategory === cat.id
           return (
-            <button
+            <motion.button
               key={cat.id}
               type="button"
               onClick={() => setActiveCategory(cat.id)}
-              className="flex-shrink-0 flex items-center gap-1.5 active:scale-95 transition-all duration-150"
+              whileTap={{ scale: 0.94 }}
+              transition={SPRING_SOFT}
+              className="flex-shrink-0 flex items-center gap-1.5"
               style={{
                 height: 36,
                 padding: '0 14px',
@@ -72,7 +88,7 @@ export function FeaturedProfessionals() {
             >
               {cat.emoji && <span style={{ fontSize: 15 }}>{cat.emoji}</span>}
               {cat.label}
-            </button>
+            </motion.button>
           )
         })}
       </div>
@@ -100,16 +116,21 @@ export function FeaturedProfessionals() {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
-          {visible.map((pro, i) => (
-            <div key={pro.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.08}s` }}>
+        <motion.div
+          variants={staggerFast}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col gap-2"
+        >
+          {visible.map((pro) => (
+            <motion.div key={pro.id} variants={fadeUp}>
               <ProfessionalCard
                 professional={pro}
                 onClick={() => navigate(`/profesional/${pro.id}`)}
               />
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </section>
   )
