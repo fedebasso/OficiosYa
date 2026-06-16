@@ -17,6 +17,18 @@ const CATEGORY_LABELS: Record<string, string> = {
   albanil: 'Albañiles',
 }
 
+const ZONES = [
+  'Pocitos', 'Malvín', 'Centro', 'Carrasco', 'Punta Carretas',
+  'Cordón', 'Tres Cruces', 'La Blanqueada', 'Buceo', 'Parque Batlle',
+]
+
+const RATING_OPTIONS: { label: string; value: number | null }[] = [
+  { label: '★ Rating', value: null },
+  { label: '★ 4.0+',  value: 4.0 },
+  { label: '★ 4.5+',  value: 4.5 },
+  { label: '★ 4.8+',  value: 4.8 },
+]
+
 const AUTOCOMPLETE_CATEGORIES = [
   { id: 'electricista',       emoji: '⚡', label: 'Electricista',      keywords: ['electri', 'luz', 'tomacorriente', 'tablero'] },
   { id: 'plomero',            emoji: '🚿', label: 'Sanitario/Plomero', keywords: ['plom', 'sanit', 'caño', 'agua', 'pérdida'] },
@@ -60,6 +72,9 @@ export default function Search() {
   const [inputValue, setInputValue] = useState(textQuery)
   const [isFocused, setIsFocused] = useState(false)
   const [history, setHistory] = useState<string[]>(getHistory)
+  const [selectedZone, setSelectedZone] = useState<string | null>(null)
+  const [showZonePicker, setShowZonePicker] = useState(false)
+  const [ratingIndex, setRatingIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const { professionals, loading, error } = useProfessionals(categoria)
@@ -138,6 +153,8 @@ export default function Search() {
     })
   }
 
+  const totalActiveFilters = activeFilters.size + (selectedZone ? 1 : 0) + (ratingIndex > 0 ? 1 : 0)
+
   const filtered = useMemo(() => {
     let list = [...professionals]
     if (textQuery) {
@@ -152,8 +169,11 @@ export default function Search() {
     if (activeFilters.has('disponible')) list = list.filter(p => p.available_now)
     if (activeFilters.has('top'))        list = list.filter(p => p.jobs_count >= 50 && (p.avg_rating ?? 0) >= 4.8)
     if (activeFilters.has('rating'))     list = list.sort((a, b) => (b.avg_rating ?? 0) - (a.avg_rating ?? 0))
+    if (selectedZone) list = list.filter(p => p.zone.toLowerCase().includes(selectedZone.toLowerCase()))
+    const minRating = RATING_OPTIONS[ratingIndex].value
+    if (minRating !== null) list = list.filter(p => (p.avg_rating ?? 0) >= minRating)
     return list
-  }, [professionals, activeFilters, textQuery])
+  }, [professionals, activeFilters, textQuery, selectedZone, ratingIndex])
 
   const FILTERS: { key: Filter; label: string; icon: string }[] = [
     { key: 'disponible', label: 'Disponibles', icon: '●' },
@@ -236,13 +256,96 @@ export default function Search() {
               </motion.button>
             )
           })}
+
+          {/* Chip de zona */}
+          <div className="relative flex-shrink-0">
+            <motion.button
+              type="button"
+              onClick={() => setShowZonePicker(v => !v)}
+              whileTap={{ scale: 0.94 }}
+              transition={SPRING_SOFT}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
+              style={selectedZone ? {
+                background: '#EEF2FF', color: '#4F46E5', border: '1.5px solid #C7D2FE',
+              } : {
+                background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+              }}
+            >
+              📍 {selectedZone ?? 'Zona'}
+            </motion.button>
+            <AnimatePresence>
+              {showZonePicker && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  className="absolute top-full left-0 mt-2 z-50 rounded-2xl overflow-hidden"
+                  style={{ background: '#fff', border: '1.5px solid #E8E0D4', boxShadow: '0 8px 24px rgba(0,0,0,.12)', minWidth: 160 }}
+                >
+                  {selectedZone && (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedZone(null); setShowZonePicker(false) }}
+                      className="w-full text-left px-4 py-2.5 text-[11px] font-bold border-b"
+                      style={{ color: '#E8683A', borderColor: '#F0EBE1' }}
+                    >
+                      ✕ Quitar zona
+                    </button>
+                  )}
+                  {ZONES.map(z => (
+                    <button
+                      key={z}
+                      type="button"
+                      onClick={() => { setSelectedZone(z); setShowZonePicker(false) }}
+                      className="w-full text-left px-4 py-2.5 text-[11px] font-bold"
+                      style={{
+                        background: selectedZone === z ? '#EEF2FF' : 'transparent',
+                        color: selectedZone === z ? '#4F46E5' : '#333',
+                      }}
+                    >
+                      {selectedZone === z ? '✓ ' : ''}{z}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Chip de rating */}
+          <motion.button
+            type="button"
+            onClick={() => setRatingIndex(i => (i + 1) % RATING_OPTIONS.length)}
+            whileTap={{ scale: 0.94 }}
+            transition={SPRING_SOFT}
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
+            style={ratingIndex > 0 ? {
+              background: '#FFFBEB', color: '#D97706', border: '1.5px solid #FDE68A',
+            } : {
+              background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+            }}
+          >
+            {RATING_OPTIONS[ratingIndex].label}
+          </motion.button>
         </div>
       )}
 
       {!showDropdown && !loading && !error && (
-        <p className="text-[10px] mt-1.5" style={{ color: '#999999' }}>
-          <span style={{ color: '#111111', fontWeight: 700 }}>{filtered.length}</span> profesionales
-          {activeFilters.size > 0 && <span style={{ color: '#E8683A' }}> · filtrado</span>}
+        <p className="text-[10px] mt-1.5 flex items-center gap-2" style={{ color: '#999999' }}>
+          <span><span style={{ color: '#111111', fontWeight: 700 }}>{filtered.length}</span> profesionales</span>
+          {totalActiveFilters > 0 && (
+            <>
+              <span style={{ color: '#E8683A' }}>· filtrado</span>
+              <button
+                type="button"
+                onClick={() => { setActiveFilters(new Set()); setSelectedZone(null); setRatingIndex(0) }}
+                className="font-bold"
+                style={{ color: '#E8683A' }}
+              >
+                ✕ Limpiar
+              </button>
+            </>
+          )}
         </p>
       )}
 
