@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useBack } from '../../hooks/useBack'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import { BottomNav } from '../layout/BottomNav'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
 import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
+import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT, SPRING_GENTLE } from '../../lib/motion'
 
 /* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
 const MOCK_REVIEWS: Record<string, { name: string; initials: string; color: string; rating: number; date: string; text: string }[]> = {
@@ -109,9 +111,16 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const initials = getInitials(profiles.full_name)
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="flex flex-col min-h-screen"
+      style={{ background: '#F5F0E8' }}
+    >
 
       {/* ── HERO ── */}
+      <motion.div variants={fadeUp}>
       <div
         className="relative flex flex-col items-center pt-14 pb-6 px-4"
         style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
@@ -156,7 +165,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         </p>
 
         {/* Indicadores de confianza */}
-        <div className="flex items-center gap-4 flex-wrap justify-center">
+        <motion.div variants={scaleIn} className="flex items-center gap-4 flex-wrap justify-center">
           {avg_rating != null && (
             <div className="flex items-center gap-1">
               <span style={{ color: '#F59E0B', fontSize: 18 }}>★</span>
@@ -177,22 +186,23 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             <span style={{ fontSize: 14 }}>📍</span>
             <span className="font-semibold text-sm" style={{ color: '#555555' }}>{zone}</span>
           </div>
-        </div>
+        </motion.div>
       </div>
+      </motion.div>
 
       {/* ── BODY ── */}
       <div className="flex flex-col gap-3 px-4 pt-4 pb-36">
 
         {/* Sobre mí */}
         {bio && (
-          <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-2">Sobre mí</h3>
             <p className="text-sm text-[#888] leading-relaxed">{bio}</p>
-          </div>
+          </motion.div>
         )}
 
         {/* Servicios */}
-        <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+        <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
           <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Servicios</h3>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
@@ -205,47 +215,56 @@ export function ProfessionalProfile({ professional, photos }: Props) {
               </span>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Fotos */}
         {photos.length > 0 && (
-          <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
             <WorkPhotoGallery photos={photos} />
-          </div>
+          </motion.div>
         )}
 
         {/* Reseñas */}
-        <ReviewsSection rating={avg_rating} jobsCount={jobs_count} professionalId={id} />
+        <motion.div variants={fadeUp}>
+          <ReviewsSection rating={avg_rating} jobsCount={jobs_count} professionalId={id} />
+        </motion.div>
       </div>
 
       {/* ── CTA FIJO ── */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, ...SPRING_GENTLE }}
         className="fixed bottom-16 left-0 right-0 px-4 pb-4 pt-3 grid gap-3"
         style={{
           gridTemplateColumns: '1fr 2fr',
           background: 'linear-gradient(to top, #F5F0E8 60%, rgba(245,240,232,0))',
         }}
       >
-        <button
+        <motion.button
           type="button"
           onClick={() => window.open(`https://wa.me/${whatsapp}`, '_blank', 'noopener,noreferrer')}
-          className="rounded-2xl py-3.5 text-sm font-bold text-[#888] flex items-center justify-center gap-1.5 active:opacity-70 transition-opacity"
+          whileTap={{ scale: 0.97 }}
+          transition={SPRING_SOFT}
+          className="rounded-2xl py-3.5 text-sm font-bold text-[#888] flex items-center justify-center gap-1.5"
           style={{ border: '1.5px solid #E8E0D4', background: '#FFFFFF' }}
         >
           💬 Chat
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           type="button"
           onClick={() => navigate(`/ticket?pro=${id}`)}
-          className="rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
+          whileTap={{ scale: 0.97 }}
+          transition={SPRING_SOFT}
+          className="rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 text-white"
           style={{ background: '#e8683a', boxShadow: '0 4px 16px rgba(232,104,58,.3)' }}
         >
           Solicitar trabajo
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
       <BottomNav />
-    </div>
+    </motion.div>
   )
 }
