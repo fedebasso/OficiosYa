@@ -188,20 +188,37 @@ function MediaStep({
           </button>
         </div>
       ) : (
-        <button
+        <motion.button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl active:opacity-80 transition-opacity"
+          whileTap={{ scale: 0.98 }}
+          className="flex flex-col items-center justify-center gap-2 rounded-2xl relative overflow-hidden"
           style={{
-            height: 160,
+            height: 200,
             border: '2px dashed #E8683A',
             background: '#FEF0EA',
           }}
         >
-          <span style={{ fontSize: 36 }}>📷</span>
-          <span className="text-sm font-bold" style={{ color: '#E8683A' }}>Sacar o subir foto</span>
-          <span className="text-xs" style={{ color: '#BBBBBB' }}>Tocá para abrir la cámara</span>
-        </button>
+          {/* Glow sutil centrado */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(232,104,58,.1) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+          <motion.span
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 2.5, ease: 'easeInOut', repeat: Infinity }}
+            style={{ fontSize: 42, position: 'relative', zIndex: 1 }}
+          >
+            📷
+          </motion.span>
+          <span className="text-sm font-bold" style={{ color: '#E8683A', position: 'relative', zIndex: 1 }}>
+            Sacar o subir foto
+          </span>
+          <span className="text-xs" style={{ color: '#C4927A', position: 'relative', zIndex: 1 }}>
+            Tocá para abrir la cámara
+          </span>
+        </motion.button>
       )}
       <input
         ref={fileRef}
@@ -221,41 +238,47 @@ function MediaStep({
 
       {/* Alternativas: audio, video, texto */}
       <div className="grid grid-cols-3 gap-2">
-        <button
+        <motion.button
           type="button"
           onClick={recording ? stopRecording : startRecording}
-          className="flex flex-col items-center gap-1.5 rounded-xl py-3 active:opacity-80 transition-opacity"
+          whileTap={{ scale: 0.94 }}
+          className="flex flex-col items-center gap-1.5 rounded-xl py-3"
           style={{
-            background: recording ? 'rgba(239,68,68,.1)' : '#F5F0E8',
+            background: recording ? 'rgba(239,68,68,.1)' : '#FFFFFF',
             border: `1.5px solid ${recording ? '#EF4444' : '#EDE8DE'}`,
           }}
         >
-          <span style={{ fontSize: 20 }}>{recording ? '⏹️' : '🎤'}</span>
-          <span className="text-[10px] font-bold" style={{ color: recording ? '#EF4444' : '#666' }}>
+          <span style={{ fontSize: 22 }}>{recording ? '⏹️' : '🎤'}</span>
+          <span className="text-[10px] font-bold" style={{ color: recording ? '#EF4444' : '#555' }}>
             {recording ? 'Detener' : 'Audio'}
           </span>
-        </button>
-        <button
+          <span className="text-[9px]" style={{ color: '#BBB' }}>{recording ? 'Grabando...' : 'Grabá'}</span>
+        </motion.button>
+        <motion.button
           type="button"
           onClick={() => videoRef.current?.click()}
-          className="flex flex-col items-center gap-1.5 rounded-xl py-3 active:opacity-80 transition-opacity"
-          style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}
+          whileTap={{ scale: 0.94 }}
+          className="flex flex-col items-center gap-1.5 rounded-xl py-3"
+          style={{ background: videoFile ? 'rgba(232,104,58,.08)' : '#FFFFFF', border: `1.5px solid ${videoFile ? '#E8683A' : '#EDE8DE'}` }}
         >
-          <span style={{ fontSize: 20 }}>🎥</span>
-          <span className="text-[10px] font-bold" style={{ color: '#666' }}>Video</span>
-        </button>
-        <button
+          <span style={{ fontSize: 22 }}>🎥</span>
+          <span className="text-[10px] font-bold" style={{ color: '#555' }}>Video</span>
+          <span className="text-[9px]" style={{ color: '#BBB' }}>Filmá</span>
+        </motion.button>
+        <motion.button
           type="button"
           onClick={() => setShowText((v) => !v)}
-          className="flex flex-col items-center gap-1.5 rounded-xl py-3 active:opacity-80 transition-opacity"
+          whileTap={{ scale: 0.94 }}
+          className="flex flex-col items-center gap-1.5 rounded-xl py-3"
           style={{
-            background: showText ? 'rgba(232,104,58,.1)' : '#F5F0E8',
+            background: showText ? 'rgba(232,104,58,.1)' : '#FFFFFF',
             border: `1.5px solid ${showText ? '#E8683A' : '#EDE8DE'}`,
           }}
         >
-          <span style={{ fontSize: 20 }}>✏️</span>
-          <span className="text-[10px] font-bold" style={{ color: showText ? '#E8683A' : '#666' }}>Texto</span>
-        </button>
+          <span style={{ fontSize: 22 }}>✏️</span>
+          <span className="text-[10px] font-bold" style={{ color: showText ? '#E8683A' : '#555' }}>Texto</span>
+          <span className="text-[9px]" style={{ color: '#BBB' }}>Describí</span>
+        </motion.button>
       </div>
 
       {input.audioBlob && (
