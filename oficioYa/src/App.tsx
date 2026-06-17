@@ -10,6 +10,7 @@ import TicketFlow from './pages/TicketFlow'
 import TicketConfirm from './pages/TicketConfirm'
 import MisSolicitudes from './pages/MisSolicitudes'
 import SolicitudDetail from './pages/SolicitudDetail'
+import Chat from './pages/Chat'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ProOnboarding from './pages/pro/ProOnboarding'
@@ -55,6 +56,14 @@ function App() {
           }
         />
         <Route path="/solicitud/:id" element={<ProtectedRoute requiredRole="client"><SolicitudDetail /></ProtectedRoute>} />
+        <Route
+          path="/solicitud/:id/chat"
+          element={
+            <ProtectedRoute requiredRole="client">
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Register />} />
         <Route path="/favoritos" element={<Favoritos />} />
