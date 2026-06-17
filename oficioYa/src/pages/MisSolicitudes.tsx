@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { PageShell } from '../components/layout/PageShell'
 import { Header } from '../components/layout/Header'
 import { ReviewForm } from '../components/requests/ReviewForm'
@@ -94,6 +94,7 @@ export default function MisSolicitudes() {
           const hasAction = req.status === 'completed' || req.status === 'pending'
           return (
             <motion.div key={req.id} variants={fadeUp}>
+              <Link to={`/solicitud/${req.id}`} style={{ textDecoration: 'none', display: 'block' }}>
               <div
                 className="rounded-2xl overflow-hidden"
                 style={{
@@ -170,6 +171,7 @@ export default function MisSolicitudes() {
                   </div>
                 )}
               </div>
+              </Link>
             </motion.div>
           )
         })}
