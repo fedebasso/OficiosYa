@@ -190,19 +190,6 @@ export default function SolicitudDetail() {
             </motion.button>
           )}
 
-          {/* WhatsApp — siempre disponible si no está cancelado */}
-          {!isCancelled && (
-            <motion.button
-              type="button"
-              onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Hola, soy el cliente de OficioYa. Mi solicitud: ${req.description}`)}`, '_blank')}
-              whileTap={{ scale: 0.97 }} transition={SPRING_SOFT}
-              className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2"
-              style={{ background: '#25D366', color: '#fff', boxShadow: '0 4px 14px rgba(37,211,102,.2)' }}
-            >
-              <MessageCircle size={16} />
-              Contactar por WhatsApp
-            </motion.button>
-          )}
 
           {/* Dejar reseña — solo si completado */}
           {req.status === 'completed' && (

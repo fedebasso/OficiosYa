@@ -265,28 +265,17 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, ...SPRING_GENTLE }}
-        className="fixed bottom-16 left-0 right-0 px-4 pb-4 pt-3 grid gap-3"
+        className="fixed bottom-16 left-0 right-0 px-4 pb-4 pt-3"
         style={{
-          gridTemplateColumns: '1fr 2fr',
           background: 'linear-gradient(to top, #F5F0E8 60%, rgba(245,240,232,0))',
         }}
       >
         <motion.button
           type="button"
-          onClick={() => window.open(`https://wa.me/${whatsapp}`, '_blank', 'noopener,noreferrer')}
-          whileTap={{ scale: 0.97 }}
-          transition={SPRING_SOFT}
-          className="rounded-2xl py-3.5 text-sm font-bold text-[#888] flex items-center justify-center gap-1.5"
-          style={{ border: '1.5px solid #E8E0D4', background: '#FFFFFF' }}
-        >
-          💬 Chat
-        </motion.button>
-        <motion.button
-          type="button"
           onClick={() => navigate(`/ticket?pro=${id}`)}
           whileTap={{ scale: 0.97 }}
           transition={SPRING_SOFT}
-          className="rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 text-white"
+          className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 text-white"
           style={{ background: '#e8683a', boxShadow: '0 4px 16px rgba(232,104,58,.3)' }}
         >
           Solicitar trabajo

@@ -17,7 +17,6 @@ export default function RequestService() {
   const addRequest = useRequestStore((s) => s.addRequest)
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
-  const [whatsappUrl, setWhatsappUrl] = useState('')
 
   const handleSubmit = async (data: WizardData) => {
     if (!professional) return
@@ -31,11 +30,6 @@ export default function RequestService() {
         contact_phone: data.contact_phone,
         work_type: data.work_type || undefined,
       })
-      const urgencyText = data.urgent ? ' Es urgente.' : ''
-      const message = encodeURIComponent(
-        `Hola! Vi tu perfil en OficioYa y necesito ayuda.\n\n${data.description}${urgencyText}\n\nMi teléfono: ${data.contact_phone}`
-      )
-      setWhatsappUrl(`https://wa.me/${professional.whatsapp}?text=${message}`)
       setSent(true)
     } finally {
       setLoading(false)
@@ -122,17 +116,9 @@ export default function RequestService() {
             <div>
               <h2 className="text-xl font-black mb-2" style={{ color: '#111111' }}>¡Solicitud enviada!</h2>
               <p className="text-sm leading-relaxed" style={{ color: '#555555' }}>
-                El profesional recibirá tu solicitud. También podés contactarlo directamente por WhatsApp.
+                El profesional recibirá tu solicitud. Podés seguir la conversación desde Mis solicitudes.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => window.open(whatsappUrl, '_blank')}
-              className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80"
-              style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.2)' }}
-            >
-              💬 Contactar por WhatsApp
-            </button>
             <button
               type="button"
               onClick={() => navigate('/mis-solicitudes')}
