@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { House, FileText, Briefcase, UserCircle, Menu } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { MoreMenu } from './MoreMenu'
+import { useIncomingRequests } from '../../hooks/useRequests'
 
 interface NavTab {
   label: string
@@ -16,6 +17,8 @@ export function BottomNav() {
   const { pathname } = useLocation()
   const user = useAuthStore((s) => s.user)
   const [moreOpen, setMoreOpen] = useState(false)
+  const { requests: incomingReqs } = useIncomingRequests(user?.id ?? '')
+  const pendingCount = user?.role === 'professional' ? incomingReqs.filter(r => r.status === 'pending').length : 0
 
   const clientTabs: NavTab[] = [
     { label: 'Inicio',      to: '/',               icon: <House size={22} /> },
@@ -25,7 +28,7 @@ export function BottomNav() {
 
   const proTabs: NavTab[] = [
     { label: 'Inicio',      to: '/',                icon: <House size={22} /> },
-    { label: 'Solicitudes', to: '/pro/solicitudes', icon: <FileText size={22} /> },
+    { label: 'Solicitudes', to: '/pro/solicitudes', icon: <FileText size={22} />, badge: pendingCount > 0 ? pendingCount : null },
     { label: 'Trabajos',    to: '/pro/trabajos',    icon: <Briefcase size={22} /> },
     { label: 'Perfil',      to: '/pro/perfil',      icon: <UserCircle size={22} /> },
   ]

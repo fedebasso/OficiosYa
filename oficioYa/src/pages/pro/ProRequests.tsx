@@ -74,6 +74,19 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
           {req.description}
         </p>
 
+        <div className="flex gap-2 flex-wrap">
+          {req.category && (
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: '#F5F0E8', color: '#666' }}>
+              {req.category.replace('_', ' ')}
+            </span>
+          )}
+          {req.work_type && (
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: '#EEF2FF', color: '#4F46E5' }}>
+              {req.work_type === 'reparacion' ? 'Reparación' : req.work_type === 'instalacion' ? 'Instalación' : req.work_type === 'mantenimiento' ? 'Mantenimiento' : 'Otro'}
+            </span>
+          )}
+        </div>
+
         {req.contact_phone && (
           <div
             className="flex items-center gap-2 rounded-xl px-3 py-2"
@@ -124,6 +137,57 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
   )
 }
 
+function ActiveCard({ req, onProgress, onWhatsApp }: {
+  req: ServiceRequest
+  onProgress: (status: ServiceRequest['status']) => void
+  onWhatsApp: () => void
+}) {
+  const isInProgress = req.status === 'in_progress'
+  return (
+    <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 1px 3px rgba(0,0,0,.06)' }}>
+      <div className="flex items-center justify-between px-4 py-2.5" style={{ background: isInProgress ? 'rgba(139,92,246,.06)' : 'rgba(34,197,94,.06)', borderBottom: `1px solid ${isInProgress ? 'rgba(139,92,246,.15)' : 'rgba(34,197,94,.15)'}` }}>
+        <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: isInProgress ? '#8b5cf6' : '#22c55e' }}>
+          {isInProgress ? '🚗 En camino' : '✅ Aceptado'}
+        </span>
+        <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAAAAA' }}>
+          <Clock size={9} />{timeAgo(req.created_at)}
+        </span>
+      </div>
+      <div className="px-4 pt-3.5 pb-4 flex flex-col gap-3">
+        <p className="text-sm leading-relaxed" style={{ color: '#333333' }}>{req.description}</p>
+        {req.contact_phone && (
+          <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}>
+            <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
+            <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
+          </div>
+        )}
+        <div className="flex gap-2">
+          <motion.button
+            type="button"
+            onClick={() => onProgress(isInProgress ? 'completed' : 'in_progress')}
+            whileTap={{ scale: 0.97 }}
+            className="flex-1 rounded-xl py-3 text-sm font-bold"
+            style={{ background: isInProgress ? '#DCFCE7' : '#EEF2FF', color: isInProgress ? '#16A34A' : '#4F46E5', border: `1px solid ${isInProgress ? '#BBF7D0' : '#C7D2FE'}` }}
+          >
+            {isInProgress ? '🏁 Marcar completado' : '🚗 Marcar en camino'}
+          </motion.button>
+          {req.contact_phone && (
+            <motion.button
+              type="button"
+              onClick={onWhatsApp}
+              whileTap={{ scale: 0.97 }}
+              className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
+              style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
+            >
+              <MessageCircle size={15} />
+            </motion.button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function HistoryCard({ req }: { req: ServiceRequest }) {
   const meta = STATUS_META[req.status] ?? STATUS_META.pending
   return (
@@ -157,7 +221,8 @@ export default function ProRequests() {
   const [historyOpen, setHistoryOpen] = useState(true)
 
   const pending = requests.filter((r) => r.status === 'pending')
-  const others  = requests.filter((r) => r.status !== 'pending')
+  const active  = requests.filter((r) => r.status === 'confirmed' || r.status === 'in_progress')
+  const others  = requests.filter((r) => r.status !== 'pending' && r.status !== 'confirmed' && r.status !== 'in_progress')
 
   function openWhatsApp(phone: string) {
     const msg = encodeURIComponent('Hola! Vi tu solicitud en OficioYa y me gustaría ayudarte.')
@@ -193,6 +258,21 @@ export default function ProRequests() {
           </div>
         )}
       </div>
+      {/* Stats */}
+      {!loading && (
+        <div className="flex gap-2 mt-3">
+          {[
+            { label: 'Pendientes', count: pending.length, color: '#f59e0b', bg: 'rgba(245,158,11,.1)' },
+            { label: 'Activos', count: requests.filter(r => r.status === 'confirmed' || r.status === 'in_progress').length, color: '#8b5cf6', bg: 'rgba(139,92,246,.1)' },
+            { label: 'Completados', count: requests.filter(r => r.status === 'completed').length, color: '#22c55e', bg: 'rgba(34,197,94,.1)' },
+          ].map(s => (
+            <div key={s.label} className="flex-1 rounded-xl px-3 py-2 text-center" style={{ background: s.bg }}>
+              <div className="text-lg font-black leading-none" style={{ color: s.color }}>{s.count}</div>
+              <div className="text-[9px] font-bold mt-0.5" style={{ color: s.color }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -272,6 +352,26 @@ export default function ProRequests() {
                     req={req}
                     onAccept={() => updateStatus(req.id, 'confirmed')}
                     onReject={() => updateStatus(req.id, 'cancelled')}
+                    onWhatsApp={() => req.contact_phone && openWhatsApp(req.contact_phone)}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </section>
+        )}
+
+        {/* Activos (confirmed + in_progress) */}
+        {active.length > 0 && (
+          <section className="flex flex-col gap-2.5">
+            <p className="text-[10px] font-bold uppercase tracking-widest px-0.5" style={{ color: '#AAAAAA' }}>
+              En curso · {active.length}
+            </p>
+            <motion.div variants={staggerFast} initial="hidden" animate="visible" className="flex flex-col gap-2.5">
+              {active.map((req) => (
+                <motion.div key={req.id} variants={fadeUp}>
+                  <ActiveCard
+                    req={req}
+                    onProgress={(status) => updateStatus(req.id, status)}
                     onWhatsApp={() => req.contact_phone && openWhatsApp(req.contact_phone)}
                   />
                 </motion.div>
