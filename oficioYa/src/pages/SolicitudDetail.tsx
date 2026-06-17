@@ -10,7 +10,7 @@ import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string; desc: string }> = {
   pending:     { label: 'Pendiente',   color: '#f59e0b', bg: 'rgba(245,158,11,.1)',  icon: '⏳', desc: 'Esperando que el profesional confirme tu solicitud.' },
-  confirmed:   { label: 'Confirmado',  color: '#3b82f6', bg: 'rgba(59,130,246,.1)', icon: '✅', desc: 'El profesional aceptó tu solicitud. Coordiná por WhatsApp.' },
+  confirmed:   { label: 'Confirmado',  color: '#3b82f6', bg: 'rgba(59,130,246,.1)', icon: '✅', desc: 'El profesional aceptó tu solicitud. Podés chatear con él desde acá.' },
   in_progress: { label: 'En camino',   color: '#8b5cf6', bg: 'rgba(139,92,246,.1)', icon: '🚗', desc: 'El profesional está en camino a tu domicilio.' },
   completed:   { label: 'Completado',  color: '#22c55e', bg: 'rgba(34,197,94,.1)',  icon: '🏁', desc: 'Trabajo finalizado. ¡Dejá tu reseña!' },
   cancelled:   { label: 'Cancelado',   color: '#ef4444', bg: 'rgba(239,68,68,.1)',  icon: '❌', desc: 'La solicitud fue cancelada.' },

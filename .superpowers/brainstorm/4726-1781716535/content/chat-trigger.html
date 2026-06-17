@@ -1,0 +1,43 @@
+<h2>¿Desde qué momento está disponible el chat?</h2>
+<p class="subtitle">El profesional acepta la solicitud → ¿cuándo puede empezar la conversación?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Desde que el profesional acepta</h3>
+      <p>Estado <strong>Confirmado</strong> en adelante. El cliente envió la solicitud, el pro la aceptó — ya tienen algo en común para hablar. Chat disponible antes de que llegue.</p>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="background:#dcfce7;color:#16a34a;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">✅ Confirmado</span>
+        <span style="background:#ede9fe;color:#7c3aed;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">🚗 En camino</span>
+        <span style="background:#dbeafe;color:#1d4ed8;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">🏁 Completado</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Solo cuando está "En camino"</h3>
+      <p>Estado <strong>En camino</strong> en adelante. El chat sirve principalmente para coordinar la llegada ("¿cuánto tardás?", "estacioná en el fondo").</p>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="background:#ede9fe;color:#7c3aed;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">🚗 En camino</span>
+        <span style="background:#dbeafe;color:#1d4ed8;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">🏁 Completado</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Desde que se envía la solicitud</h3>
+      <p>Estado <strong>Pendiente</strong> en adelante. El cliente puede adjuntar fotos del problema antes de que el pro acepte, para que tenga más contexto.</p>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="background:#fef9c3;color:#a16207;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">⏳ Pendiente</span>
+        <span style="background:#dcfce7;color:#16a34a;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">✅ Confirmado</span>
+        <span style="background:#ede9fe;color:#7c3aed;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">🚗 En camino</span>
+        <span style="background:#dbeafe;color:#1d4ed8;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700">🏁 Completado</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<h2>¿Cómo manejamos el backend del chat?</h2>
+<p class="subtitle">El chat necesita mensajes en tiempo real. Supabase ya está en el proyecto — ¿qué tan lejos queremos llegar?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Supabase Realtime + Storage (recomendado)</h3>
+      <p>Usamos lo que ya tenemos. Tabla <code>messages</code> en Supabase con <strong>Realtime subscriptions</strong> para mensajes instantáneos. Fotos y audios en <strong>Supabase Storage</strong>. Sin dependencias nuevas.</p>
+      <div style="margin-top:8px" class="pros-cons">
+        <div class="pros"><h4>A favor</h4><ul><li>Cero dependencias nuevas</li><li>Realtime ya incluido en el plan free</li><li>Storage para archivos integrado</li></ul></div>
+        <div class="cons"><h4>En contra</h4><ul><li>Requiere configurar Supabase real (no modo demo)</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Mock local primero (solo UI, sin backend real)</h3>
+      <p>Construimos toda la UI del chat con datos mock, igual que el resto del POC. Cuando Supabase esté configurado, se conecta solo. Permite avanzar sin credenciales reales ahora.</p>
+      <div style="margin-top:8px" class="pros-cons">
+        <div class="pros"><h4>A favor</h4><ul><li>Funciona en modo demo ya</li><li>Diseño validable sin backend</li></ul></div>
+        <div class="cons"><h4>En contra</h4><ul><li>Sin tiempo real hasta conectar Supabase</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

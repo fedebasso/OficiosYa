@@ -1,0 +1,148 @@
+<h2>Diseño completo — Pantalla de Chat</h2>
+<p class="subtitle">Ruta: <code>/solicitudes/:id/chat</code> — paleta OficiosYa, mobile-first</p>
+
+<div class="split">
+
+  <div class="mockup">
+    <div class="mockup-header">Vista cliente — chat activo</div>
+    <div class="mockup-body" style="font-family:sans-serif;background:#f4f4f2;padding:0;border-radius:8px;overflow:hidden;max-width:280px;margin:0 auto">
+
+      <!-- Header -->
+      <div style="background:#0F6E56;padding:10px 14px;display:flex;align-items:center;gap:10px">
+        <span style="color:#9FE1CB;font-size:18px">◀</span>
+        <div style="width:34px;height:34px;background:#9FE1CB;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0F6E56;flex-shrink:0">JP</div>
+        <div style="flex:1">
+          <div style="color:#fff;font-size:12px;font-weight:700">Juan Pérez</div>
+          <div style="color:#9FE1CB;font-size:10px">Electricista · Solicitud #124</div>
+        </div>
+        <div style="background:rgba(159,225,203,.2);border-radius:6px;padding:3px 7px">
+          <span style="color:#9FE1CB;font-size:9px;font-weight:700">⏳ Pendiente</span>
+        </div>
+      </div>
+
+      <!-- Mensajes -->
+      <div style="padding:10px;display:flex;flex-direction:column;gap:8px;min-height:200px;background:#f4f4f2">
+
+        <!-- Separador de fecha -->
+        <div style="text-align:center"><span style="background:#e8e0d4;color:#888;font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px">Hoy</span></div>
+
+        <!-- Mensaje sistema -->
+        <div style="text-align:center"><span style="background:rgba(15,110,86,.08);color:#0F6E56;font-size:9px;font-weight:600;padding:3px 10px;border-radius:99px">Chat habilitado — Juan Pérez asignado</span></div>
+
+        <!-- Pro enviando -->
+        <div style="align-self:flex-start;max-width:78%">
+          <div style="font-size:9px;color:#aaa;margin-bottom:2px">Juan · 10:23</div>
+          <div style="background:#fff;border:1px solid #e8e0d4;border-radius:4px 12px 12px 12px;padding:7px 10px;font-size:11px;color:#333;line-height:1.4">
+            Hola! ¿Podés mandarme una foto del tablero eléctrico?
+          </div>
+        </div>
+
+        <!-- Cliente enviando foto -->
+        <div style="align-self:flex-end;max-width:78%">
+          <div style="font-size:9px;color:#aaa;margin-bottom:2px;text-align:right">Vos · 10:25</div>
+          <div style="background:#0F6E56;border-radius:12px 4px 12px 12px;padding:0;overflow:hidden">
+            <div style="background:rgba(0,0,0,.15);height:60px;display:flex;align-items:center;justify-content:center;font-size:20px">🖼️</div>
+            <div style="padding:5px 8px;font-size:10px;color:#9FE1CB">foto_tablero.jpg</div>
+          </div>
+        </div>
+
+        <!-- Pro enviando audio -->
+        <div style="align-self:flex-start;max-width:78%">
+          <div style="font-size:9px;color:#aaa;margin-bottom:2px">Juan · 10:27</div>
+          <div style="background:#fff;border:1px solid #e8e0d4;border-radius:4px 12px 12px 12px;padding:8px 10px;display:flex;align-items:center;gap:6px">
+            <span style="background:#0F6E56;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">▶</span>
+            <div style="flex:1">
+              <div style="height:3px;background:#e8e0d4;border-radius:99px"><div style="width:40%;height:100%;background:#0F6E56;border-radius:99px"></div></div>
+            </div>
+            <span style="font-size:9px;color:#aaa">0:12</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Barra de entrada -->
+      <div style="background:#fff;border-top:1.5px solid #e8e0d4;padding:8px 10px;display:flex;gap:6px;align-items:center">
+        <button style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px">📷</button>
+        <button style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px">🎙️</button>
+        <div style="flex:1;background:#f5f0e8;border-radius:20px;padding:6px 12px;font-size:10px;color:#aaa;border:1px solid #e8e0d4">Escribir mensaje...</div>
+        <button style="background:#0F6E56;color:#fff;border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer">➤</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">Estado de grabación de audio</div>
+    <div class="mockup-body" style="font-family:sans-serif;background:#f4f4f2;padding:0;border-radius:8px;overflow:hidden;max-width:280px;margin:0 auto">
+
+      <!-- Header igual -->
+      <div style="background:#0F6E56;padding:10px 14px;display:flex;align-items:center;gap:10px">
+        <span style="color:#9FE1CB;font-size:18px">◀</span>
+        <div style="width:34px;height:34px;background:#9FE1CB;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0F6E56;flex-shrink:0">JP</div>
+        <div style="flex:1">
+          <div style="color:#fff;font-size:12px;font-weight:700">Juan Pérez</div>
+          <div style="color:#9FE1CB;font-size:10px">Electricista · Solicitud #124</div>
+        </div>
+      </div>
+
+      <!-- Mensajes (same) -->
+      <div style="padding:10px;min-height:200px;background:#f4f4f2;display:flex;align-items:flex-end">
+        <div style="color:#ccc;font-size:11px;font-style:italic">mensajes anteriores...</div>
+      </div>
+
+      <!-- Estado: grabando -->
+      <div style="background:#fff;border-top:1.5px solid #e8e0d4;padding:10px">
+        <div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="background:#ef4444;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;animation:pulse 1s infinite">⏹</span>
+          <div style="flex:1">
+            <div style="font-size:11px;color:#ef4444;font-weight:700">Grabando... 0:07</div>
+            <div style="height:3px;background:#fecaca;border-radius:99px;margin-top:4px"><div style="width:35%;height:100%;background:#ef4444;border-radius:99px"></div></div>
+          </div>
+          <button style="background:none;border:none;color:#aaa;font-size:12px;cursor:pointer">✕ cancelar</button>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;opacity:.4">📷</button>
+          <button style="background:#ef4444;border:none;font-size:14px;cursor:pointer;padding:2px;border-radius:50%;width:28px;height:28px;color:#fff;display:flex;align-items:center;justify-content:center">⏹</button>
+          <div style="flex:1;background:#f5f0e8;border-radius:20px;padding:6px 12px;font-size:10px;color:#ccc;border:1px solid #e8e0d4">Grabando audio...</div>
+          <button style="background:#0F6E56;color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:12px;opacity:.4">➤</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:24px" class="section">
+  <h3>Flujo completo</h3>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+    <div style="background:#f5f0e8;border:1px solid #e8e0d4;border-radius:8px;padding:8px 12px;font-size:11px;color:#333">
+      <strong>1.</strong> SolicitudDetail → botón <span style="background:#0F6E56;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px">💬 Chat</span>
+    </div>
+    <div style="color:#aaa;display:flex;align-items:center">→</div>
+    <div style="background:#f5f0e8;border:1px solid #e8e0d4;border-radius:8px;padding:8px 12px;font-size:11px;color:#333">
+      <strong>2.</strong> Navega a <code>/solicitudes/:id/chat</code>
+    </div>
+    <div style="color:#aaa;display:flex;align-items:center">→</div>
+    <div style="background:#f5f0e8;border:1px solid #e8e0d4;border-radius:8px;padding:8px 12px;font-size:11px;color:#333">
+      <strong>3.</strong> Chat full-screen con header del pro
+    </div>
+    <div style="color:#aaa;display:flex;align-items:center">→</div>
+    <div style="background:#f5f0e8;border:1px solid #e8e0d4;border-radius:8px;padding:8px 12px;font-size:11px;color:#333">
+      <strong>4.</strong> ◀ vuelve al detalle
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Componentes a crear</h3>
+  <ul style="font-size:12px;color:#444;line-height:2">
+    <li><code>pages/Chat.tsx</code> — pantalla principal</li>
+    <li><code>components/chat/ChatBubble.tsx</code> — burbuja texto / foto / audio</li>
+    <li><code>components/chat/ChatInput.tsx</code> — barra de entrada + adjuntos</li>
+    <li><code>components/chat/AudioRecorder.tsx</code> — grabación tap-to-start/stop</li>
+    <li><code>store/chatStore.ts</code> — mensajes mock + estado</li>
+    <li>Ruta nueva en <code>App.tsx</code></li>
+    <li>Botón "💬 Chat" en <code>SolicitudDetail.tsx</code></li>
+  </ul>
+</div>

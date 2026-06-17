@@ -9,7 +9,7 @@ interface Props {
 
 export function UrgentProfessionalCard({ professional }: Props) {
   const navigate = useNavigate()
-  const { profiles, avg_rating, zone, jobs_count, response_time_min, whatsapp, categories } = professional
+  const { profiles, avg_rating, zone, jobs_count, response_time_min, categories } = professional
   const { label: specialty, emoji } = getCategoryMeta(categories[0] ?? '')
 
   function handleCall(e: React.MouseEvent) {
@@ -17,12 +17,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
     if (profiles.phone) window.location.href = `tel:${profiles.phone}`
   }
 
-  function handleWhatsApp(e: React.MouseEvent) {
-    e.stopPropagation()
-    window.open(`https://wa.me/${whatsapp}`, '_blank', 'noopener,noreferrer')
-  }
-
-  return (
+return (
     <div
       className="rounded-2xl overflow-hidden"
       style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.08)' }}
@@ -92,11 +87,11 @@ export function UrgentProfessionalCard({ professional }: Props) {
         </button>
         <button
           type="button"
-          onClick={handleWhatsApp}
+          onClick={() => navigate(`/ticket?pro=${professional.id}`)}
           className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
-          style={{ background: '#25D366', boxShadow: '0 4px 12px rgba(37,211,102,.2)' }}
+          style={{ background: '#0F6E56', boxShadow: '0 4px 12px rgba(15,110,86,.2)' }}
         >
-          💬 WhatsApp
+          Solicitar
         </button>
       </div>
     </div>

@@ -64,7 +64,6 @@ export default function TicketConfirm() {
   const [phoneError, setPhoneError] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
-  const [whatsappUrl, setWhatsappUrl] = useState('')
 
   const hasState = state !== null
   useEffect(() => {
@@ -91,11 +90,6 @@ export default function TicketConfirm() {
         contact_phone: phone,
         work_type: ticket.work_type,
       })
-      const urgencyText = ticket.urgent ? ' Es urgente.' : ''
-      const message = encodeURIComponent(
-        `Hola! Vi tu perfil en OficioYa.\n\n${ticket.title}: ${ticket.description}${urgencyText}\n\nMi teléfono: ${phone}`
-      )
-      setWhatsappUrl(`https://wa.me/${proWhatsapp}?text=${message}`)
       setSent(true)
     } finally {
       setLoading(false)
@@ -273,22 +267,9 @@ export default function TicketConfirm() {
             >
               <h2 className="text-xl font-black mb-2" style={{ color: '#111111' }}>¡Solicitud enviada!</h2>
               <p className="text-sm leading-relaxed" style={{ color: '#555555' }}>
-                El profesional recibirá tu solicitud. También podés contactarlo directamente por WhatsApp.
+                El profesional recibirá tu solicitud. Podés chatear desde Mis solicitudes.
               </p>
             </motion.div>
-
-            <motion.button
-              type="button"
-              onClick={() => window.open(whatsappUrl, '_blank')}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, ...SPRING_GENTLE }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full rounded-2xl py-4 text-base font-bold text-white relative z-10"
-              style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.2)' }}
-            >
-              💬 Contactar por WhatsApp
-            </motion.button>
 
             <motion.button
               type="button"
