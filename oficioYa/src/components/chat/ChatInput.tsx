@@ -78,6 +78,7 @@ export function ChatInput({ onSendText, onSendImage, onSendAudio }: Props) {
           borderRadius: 24,
           padding:      '7px 14px',
           maxHeight:    80,
+          overflowY:    'auto',
         }}
       />
 
