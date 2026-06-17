@@ -8,6 +8,7 @@ interface Props {
 
 export function AudioRecorder({ onSend, onCancel }: Props) {
   const [seconds, setSeconds] = useState(0)
+  const [micError, setMicError] = useState(false)
   const mediaRef    = useRef<MediaRecorder | null>(null)
   const chunksRef   = useRef<Blob[]>([])
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -15,30 +16,39 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
   useEffect(() => {
     let active = true
 
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      if (!active) return
-      const recorder = new MediaRecorder(stream)
-      mediaRef.current = recorder
-      chunksRef.current = []
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        if (!active) return
+        const recorder = new MediaRecorder(stream)
+        mediaRef.current = recorder
+        chunksRef.current = []
 
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data)
-      }
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunksRef.current.push(e.data)
+        }
 
-      recorder.start()
+        recorder.start()
 
-      intervalRef.current = setInterval(() => {
-        setSeconds((s) => s + 1)
-      }, 1000)
-    })
+        intervalRef.current = setInterval(() => {
+          setSeconds((s) => s + 1)
+        }, 1000)
+      })
+      .catch(() => {
+        if (active) setMicError(true)
+      })
 
     return () => {
       active = false
+      if (mediaRef.current && mediaRef.current.state !== 'inactive') {
+        mediaRef.current.stream.getTracks().forEach((t) => t.stop())
+        mediaRef.current.stop()
+      }
+      if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [])
 
   function stop() {
-    if (!mediaRef.current) return
+    if (!mediaRef.current || mediaRef.current.state === 'inactive') return
     const recorder = mediaRef.current
     const duration = seconds
 
@@ -68,6 +78,27 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
 
   // Waveform bars estáticas (decorativas)
   const bars = [7, 13, 5, 11, 5, 9, 13, 6, 10, 4, 12, 8]
+
+  if (micError) {
+    return (
+      <div
+        className="flex items-center gap-2 px-3 py-2"
+        style={{ background: '#0F6E56' }}
+      >
+        <button
+          type="button"
+          onClick={onCancel}
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+          style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.55)' }}
+        >
+          <X size={14} color="rgba(255,255,255,0.8)" />
+        </button>
+        <span className="text-[11px] flex-1 text-center" style={{ color: 'rgba(255,255,255,0.7)' }}>
+          No se pudo acceder al micrófono
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div
