@@ -72,7 +72,7 @@ export default function TicketConfirm() {
 
   if (!state) return null
 
-  const { ticket, proId, proName, proAvatar, proRating, proWhatsapp } = state
+  const { ticket, proId, proName, proAvatar, proRating } = state
 
   const handleSubmit = async () => {
     if (phone.length < 8) {

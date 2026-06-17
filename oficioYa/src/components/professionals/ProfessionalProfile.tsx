@@ -104,7 +104,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const goBack = useBack('/buscar')
   const {
     profiles, bio, avg_rating, verified, zone, categories,
-    whatsapp, id, jobs_count,
+    id, jobs_count,
   } = professional
 
   const { label, emoji } = getCategoryMeta(categories[0] ?? '')
