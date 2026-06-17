@@ -176,6 +176,20 @@ export default function SolicitudDetail() {
         {/* Acciones */}
         <motion.div variants={fadeUp} className="flex flex-col gap-2 mt-1">
 
+          {/* Chat interno — siempre disponible si no está cancelado */}
+          {!isCancelled && (
+            <motion.button
+              type="button"
+              onClick={() => navigate(`/solicitud/${req.id}/chat`)}
+              whileTap={{ scale: 0.97 }} transition={SPRING_SOFT}
+              className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 text-white"
+              style={{ background: '#0F6E56', boxShadow: '0 4px 14px rgba(15,110,86,.25)' }}
+            >
+              <MessageCircle size={16} />
+              Chatear con el profesional
+            </motion.button>
+          )}
+
           {/* WhatsApp — siempre disponible si no está cancelado */}
           {!isCancelled && (
             <motion.button
