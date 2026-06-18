@@ -6,6 +6,8 @@ import { CheckCircle, XCircle, MessageCircle, Clock, Inbox, ChevronDown, Chevron
 import type { ServiceRequest } from '../../store/requestStore'
 import { motion } from 'framer-motion'
 import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
+import { isInRadius } from '../../lib/barrio-coords'
+import { MOCK_PROFESSIONALS } from '../../data/mockProfessionals'
 
 const STATUS_META: Record<ServiceRequest['status'], { label: string; color: string; bg: string }> = {
   pending:     { label: 'Pendiente',  color: '#f59e0b', bg: 'rgba(245,158,11,.1)' },
@@ -197,9 +199,19 @@ export default function ProRequests() {
   const { requests, loading, error, updateStatus } = useIncomingRequests(user?.id ?? '')
   const [historyOpen, setHistoryOpen] = useState(true)
 
-  const pending = requests.filter((r) => r.status === 'pending')
-  const active  = requests.filter((r) => r.status === 'confirmed' || r.status === 'in_progress')
-  const others  = requests.filter((r) => r.status !== 'pending' && r.status !== 'confirmed' && r.status !== 'in_progress')
+  const currentPro = MOCK_PROFESSIONALS.find((p) => p.profiles.id === user?.id)
+
+  const visibleRequests = requests.filter((req) =>
+    isInRadius(
+      currentPro?.zone ?? '',
+      currentPro?.radius_km ?? null,
+      req.location ?? ''
+    )
+  )
+
+  const pending = visibleRequests.filter((r) => r.status === 'pending')
+  const active  = visibleRequests.filter((r) => r.status === 'confirmed' || r.status === 'in_progress')
+  const others  = visibleRequests.filter((r) => r.status !== 'pending' && r.status !== 'confirmed' && r.status !== 'in_progress')
 
   function openWhatsApp(phone: string) {
     const msg = encodeURIComponent('Hola! Vi tu solicitud en OficioYa y me gustaría ayudarte.')
