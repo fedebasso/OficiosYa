@@ -592,6 +592,7 @@ export default function TicketFlow() {
   const [input, setInput] = useState<TicketInput>({ category: '', photo: null, text: '' })
   const [aiProgress, setAiProgress] = useState(0)
   const [ticket, setTicket] = useState<GeneratedTicket | null>(null)
+  const [aiError, setAiError] = useState<'no_match' | null>(null)
   const timeoutIdsRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const [lockedPro, setLockedPro] = useState<ProfessionalWithProfile | null>(null)
 
@@ -615,6 +616,7 @@ export default function TicketFlow() {
     if (!category) return
     const ticketInput: TicketInput = { ...input, category }
     setStep(3)
+    setAiError(null)
     setAiProgress(0)
     timeoutIdsRef.current.forEach(clearTimeout)
     timeoutIdsRef.current = []
@@ -625,17 +627,21 @@ export default function TicketFlow() {
       timeoutIdsRef.current.push(id)
     })
 
-    const result = await analyzeTicket(ticketInput)
-    setTicket(result)
+    try {
+      const result = await analyzeTicket(ticketInput)
+      setTicket(result)
 
-    if (lockedPro) {
-      // Modo dirigido: saltar paso 4, ir directo a TicketConfirm
-      const id = setTimeout(() => handlePedir(lockedPro, result), 2600)
-      timeoutIdsRef.current.push(id)
-    } else {
-      // Modo libre: mostrar lista de profesionales
-      const id = setTimeout(() => setStep(4), 2600)
-      timeoutIdsRef.current.push(id)
+      if (lockedPro) {
+        const id = setTimeout(() => handlePedir(lockedPro, result), 2600)
+        timeoutIdsRef.current.push(id)
+      } else {
+        const id = setTimeout(() => setStep(4), 2600)
+        timeoutIdsRef.current.push(id)
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message === 'NO_MATCH') {
+        setAiError('no_match')
+      }
     }
   }
 
@@ -757,7 +763,35 @@ export default function TicketFlow() {
               exit="exit"
               style={{ width: '100%', display: 'flex', flex: 1 }}
             >
-              <AIProcessingStep progress={aiProgress} />
+              {aiError === 'no_match' ? (
+                <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-5">
+                  <div
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
+                    style={{ background: 'rgba(239,68,68,.08)', border: '1.5px solid rgba(239,68,68,.15)' }}
+                  >
+                    🤔
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-black leading-tight mb-2" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
+                      No pudimos identificar el problema
+                    </h2>
+                    <p className="text-sm leading-relaxed" style={{ color: '#777777' }}>
+                      La descripción o imagen no corresponde a un servicio del hogar. Intentá con una foto del problema o describí qué trabajo necesitás (electricidad, plomería, pintura, etc).
+                    </p>
+                  </div>
+                  <motion.button
+                    type="button"
+                    onClick={() => { setAiError(null); setDirection('back'); setStep(2) }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full rounded-2xl py-3.5 text-sm font-bold"
+                    style={{ background: '#E8683A', color: '#fff', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+                  >
+                    Intentar de nuevo
+                  </motion.button>
+                </div>
+              ) : (
+                <AIProcessingStep progress={aiProgress} />
+              )}
             </motion.div>
           )}
           {step === 4 && ticket && !lockedPro && (
