@@ -1,7 +1,7 @@
 // src/pages/SolicitudDetail.tsx
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ChevronLeft, MessageCircle, XCircle, Star, Phone } from 'lucide-react'
+import { ChevronLeft, MessageCircle, XCircle, Star } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useRequestStore } from '../store/requestStore'
@@ -26,7 +26,8 @@ const WORK_TYPE_LABELS: Record<string, string> = {
 const STEPS = ['pending', 'confirmed', 'in_progress', 'completed'] as const
 
 function openWhatsApp(phone: string) {
-  const clean = phone.replace(/\s/g, '')
+  const clean = phone.replace(/[\s\-().+]/g, '')
+  if (!clean) return
   const msg = encodeURIComponent('Hola, te contacto por mi solicitud en OficioYa.')
   window.open(`https://wa.me/${clean}?text=${msg}`, '_blank')
 }
@@ -205,7 +206,7 @@ export default function SolicitudDetail() {
               className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 text-white"
               style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.25)' }}
             >
-              <Phone size={16} />
+              <MessageCircle size={16} />
               Contactar por WhatsApp
             </motion.button>
           )}
