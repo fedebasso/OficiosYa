@@ -5,6 +5,7 @@ export interface TicketInput {
   category: string
   photo: File | null
   text: string
+  zone: string
 }
 
 export interface GeneratedTicket {

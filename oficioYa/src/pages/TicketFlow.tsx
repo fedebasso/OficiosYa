@@ -589,7 +589,7 @@ export default function TicketFlow() {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
   const [category, setCategory] = useState<string | null>(null)
-  const [input, setInput] = useState<TicketInput>({ category: '', photo: null, text: '' })
+  const [input, setInput] = useState<TicketInput>({ category: '', photo: null, text: '', zone: '' })
   const [aiProgress, setAiProgress] = useState(0)
   const [ticket, setTicket] = useState<GeneratedTicket | null>(null)
   const [aiError, setAiError] = useState<'no_match' | null>(null)
