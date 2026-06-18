@@ -14,6 +14,7 @@ interface LocationState {
   proName: string
   proAvatar: string | null
   proRating: number | null
+  zone: string
 }
 
 const INPUT_STYLE = {
@@ -71,7 +72,7 @@ export default function TicketConfirm() {
 
   if (!state) return null
 
-  const { ticket, proId, proName, proAvatar, proRating } = state
+  const { ticket, proId, proName, proAvatar, proRating, zone } = state
 
   const handleSubmit = async () => {
     if (phone.length < 8) {
@@ -88,6 +89,7 @@ export default function TicketConfirm() {
         urgency: ticket.urgent,
         contact_phone: phone,
         work_type: ticket.work_type,
+        location: zone || undefined,
       })
       setSent(true)
     } finally {
