@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { registrationService } from '../services/registrationService'
+import { supabase } from '../lib/supabase'
 import type { RegistrationState } from '../types/registration'
 
 export function useRegistration() {
@@ -32,5 +33,12 @@ export function useRegistration() {
     }
   }, [user?.id])
 
-  return { state, loading, error, saveStep }
+  const goBack = useCallback(async () => {
+    if (!user?.id || !state || state.registration_step <= 1) return
+    const prevStep = state.registration_step - 1
+    await supabase.from('professionals').update({ registration_step: prevStep }).eq('id', user.id)
+    setState((prev) => prev ? { ...prev, registration_step: prevStep } : prev)
+  }, [user?.id, state?.registration_step])
+
+  return { state, loading, error, saveStep, goBack }
 }

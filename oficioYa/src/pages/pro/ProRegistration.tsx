@@ -1,6 +1,7 @@
 import { useAuthStore } from '../../store/authStore'
 import { useRegistration } from '../../hooks/useRegistration'
 import { registrationService } from '../../services/registrationService'
+import { supabase } from '../../lib/supabase'
 import { RegistrationShell } from '../../components/pro/registration/RegistrationShell'
 import { Step1PersonalData } from '../../components/pro/registration/Step1PersonalData'
 import { Step2TradeInfo } from '../../components/pro/registration/Step2TradeInfo'
@@ -9,17 +10,20 @@ import type { RegistrationState } from '../../types/registration'
 
 export default function ProRegistration() {
   const user = useAuthStore((s) => s.user)
-  const { state, loading, saveStep } = useRegistration()
+  const { state, loading, saveStep, goBack } = useRegistration()
 
   const currentStep = state?.registration_step ?? 1
 
   async function handleStep1(data: Partial<RegistrationState>, avatarFile?: File) {
     if (avatarFile && user?.id) {
-      const url = await registrationService.uploadFile('pro-avatars', user.id, avatarFile)
-      // actualizar avatar en profiles también
-      await import('../../lib/supabase').then(({ supabase }) =>
-        supabase.from('profiles').update({ avatar_url: url }).eq('id', user.id)
-      )
+      try {
+        const url = await registrationService.uploadFile('pro-avatars', user.id, avatarFile)
+        await supabase.from('profiles').update({ avatar_url: url }).eq('id', user.id)
+      } catch (e) {
+        console.error('Avatar upload failed:', e)
+        // Do not advance wizard if avatar upload fails
+        return
+      }
     }
     await saveStep(1, data)
   }
@@ -56,7 +60,7 @@ export default function ProRegistration() {
       totalSteps={10}
       title={meta.title}
       subtitle={meta.subtitle}
-      onBack={currentStep > 1 ? () => {} : undefined}
+      onBack={currentStep > 1 ? goBack : undefined}
     >
       {currentStep === 1 && (
         <Step1PersonalData

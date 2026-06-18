@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { RegistrationState } from '../../../types/registration'
+import { DEPARTMENTS_UY } from '../../../lib/categories'
 
 interface Props {
   initial: Partial<RegistrationState>
@@ -95,7 +96,7 @@ export function Step1PersonalData({ initial, avatarUrl, onNext, loading }: Props
           style={{ border: errors.department ? '1.5px solid #ef4444' : '1.5px solid #E8E0D4', background: '#fff' }}
         >
           <option value="">Seleccioná...</option>
-          {['Montevideo','Canelones','Maldonado','Colonia','San José','Flores','Florida','Soriano','Río Negro','Paysandú','Salto','Artigas','Rivera','Tacuarembó','Cerro Largo','Treinta y Tres','Rocha','Lavalleja','Durazno','Minas'].map((d) => (
+          {DEPARTMENTS_UY.map((d) => (
             <option key={d} value={d}>{d}</option>
           ))}
         </select>
