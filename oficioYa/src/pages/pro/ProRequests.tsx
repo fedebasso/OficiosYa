@@ -25,11 +25,10 @@ function timeAgo(iso: string) {
   return `hace ${Math.floor(h / 24)}d`
 }
 
-function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
+function PendingCard({ req, onAccept, onReject }: {
   req: ServiceRequest
   onAccept: () => void
   onReject: () => void
-  onWhatsApp: () => void
 }) {
   return (
     <div
@@ -87,16 +86,6 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
           )}
         </div>
 
-        {req.contact_phone && (
-          <div
-            className="flex items-center gap-2 rounded-xl px-3 py-2"
-            style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
-          >
-            <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
-            <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
-          </div>
-        )}
-
         {/* Actions */}
         <div className="flex gap-2 pt-0.5">
           <motion.button
@@ -119,18 +108,6 @@ function PendingCard({ req, onAccept, onReject, onWhatsApp }: {
             <XCircle size={14} />
             Rechazar
           </motion.button>
-          {req.contact_phone && (
-            <motion.button
-              type="button"
-              onClick={onWhatsApp}
-              whileTap={{ scale: 0.97 }}
-              className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
-              style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
-              aria-label="WhatsApp"
-            >
-              <MessageCircle size={15} />
-            </motion.button>
-          )}
         </div>
       </div>
     </div>
@@ -352,7 +329,6 @@ export default function ProRequests() {
                     req={req}
                     onAccept={() => updateStatus(req.id, 'confirmed')}
                     onReject={() => updateStatus(req.id, 'cancelled')}
-                    onWhatsApp={() => req.contact_phone && openWhatsApp(req.contact_phone)}
                   />
                 </motion.div>
               ))}
