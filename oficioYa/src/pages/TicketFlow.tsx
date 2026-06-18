@@ -9,6 +9,7 @@ import { useProfessionals } from '../hooks/useProfessionals'
 import { CATEGORY_LABELS, CATEGORY_EMOJI } from '../lib/categories'
 import { SPRING_GENTLE } from '../lib/motion'
 import { professionalService } from '../services/professionalService'
+import { scoreProfessional } from '../lib/scoring'
 import type { TicketInput, GeneratedTicket } from '../types/ticket'
 import type { ProfessionalWithProfile } from '../hooks/useProfessionals'
 
@@ -270,6 +271,39 @@ function MediaStep({
         />
       )}
 
+      {/* Zona del cliente */}
+      <div className="flex flex-col gap-2">
+        <div>
+          <p className="text-sm font-bold" style={{ color: '#111111' }}>
+            ¿En qué barrio necesitás el servicio?
+          </p>
+          <p className="text-xs mt-0.5" style={{ color: '#AAAAAA' }}>
+            Opcional — te mostramos profesionales más cerca
+          </p>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {['Pocitos', 'Punta Carretas', 'Carrasco', 'Malvín', 'Buceo', 'Centro', 'Cordón', 'La Blanqueada', 'Parque Batlle'].map((zone) => {
+            const active = input.zone === zone
+            return (
+              <motion.button
+                key={zone}
+                type="button"
+                onClick={() => onChange({ zone: active ? '' : zone })}
+                whileTap={{ scale: 0.95 }}
+                className="rounded-xl py-2 px-1 text-center text-[11px] font-bold leading-tight"
+                style={{
+                  background: active ? '#E8683A' : '#FFFFFF',
+                  border: `1.5px solid ${active ? '#E8683A' : '#EDE8DE'}`,
+                  color: active ? '#FFFFFF' : '#555555',
+                }}
+              >
+                {zone}
+              </motion.button>
+            )
+          })}
+        </div>
+      </div>
+
       <button
         type="button"
         onClick={onAnalyze}
@@ -392,20 +426,20 @@ function ResultsStep({
   ticket,
   category,
   preselectedProId,
+  clientZone,
   onPedir,
 }: {
   ticket: GeneratedTicket
   category: string
   preselectedProId: string | null
+  clientZone: string
   onPedir: (pro: ProfessionalWithProfile) => void
 }) {
   const { professionals } = useProfessionals(category)
-  const sorted = [...professionals].sort((a, b) => {
-    if (a.id === preselectedProId) return -1
-    if (b.id === preselectedProId) return 1
-    if (a.available_now !== b.available_now) return a.available_now ? -1 : 1
-    return (b.avg_rating ?? 0) - (a.avg_rating ?? 0)
-  })
+  const sorted = [...professionals]
+    .map((p) => ({ pro: p, score: scoreProfessional(p, clientZone) }))
+    .sort((a, b) => b.score - a.score)
+    .map(({ pro }) => pro)
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
   useEffect(() => {
@@ -808,6 +842,7 @@ export default function TicketFlow() {
                 ticket={ticket}
                 category={category ?? ''}
                 preselectedProId={preselectedProId}
+                clientZone={input.zone}
                 onPedir={handlePedir}
               />
             </motion.div>
