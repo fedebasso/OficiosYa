@@ -23,6 +23,7 @@ export interface Professional {
   jobs_count: number
   response_time_min: number
   available_now: boolean
+  radius_km: number | null
 }
 
 export interface WorkPhoto {
