@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { PageShell } from '../../components/layout/PageShell'
@@ -8,10 +9,19 @@ const STEPS = [
   { icon: '📱', title: 'Agregá tu WhatsApp', desc: 'Los clientes podrán contactarte directamente' },
 ]
 
+const RADIO_OPTIONS: { label: string; value: number | null }[] = [
+  { label: '3 km', value: 3 },
+  { label: '5 km', value: 5 },
+  { label: '10 km', value: 10 },
+  { label: '20 km', value: 20 },
+  { label: 'Toda la ciudad', value: null },
+]
+
 export default function ProOnboarding() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const firstName = user?.full_name?.split(' ')[0] ?? 'profesional'
+  const [radiusKm, setRadiusKm] = useState<number | null>(null)
 
   return (
     <PageShell showBottomNav={false}>
@@ -78,6 +88,38 @@ export default function ProOnboarding() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Radio de cobertura */}
+          <div className="rounded-2xl p-4 flex flex-col gap-3" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+            <div>
+              <h3 className="font-black text-sm mb-0.5" style={{ color: '#111111' }}>
+                📍 Radio de cobertura
+              </h3>
+              <p className="text-xs leading-relaxed" style={{ color: '#777777' }}>
+                ¿Hasta dónde te desplazás para trabajar? Podés cambiarlo después desde tu perfil.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {RADIO_OPTIONS.map((opt) => {
+                const active = radiusKm === opt.value
+                return (
+                  <button
+                    key={String(opt.value)}
+                    type="button"
+                    onClick={() => setRadiusKm(opt.value)}
+                    className="rounded-xl px-3 py-2 text-xs font-bold"
+                    style={{
+                      background: active ? '#E8683A' : '#F5F0E8',
+                      color: active ? '#FFFFFF' : '#555555',
+                      border: `1.5px solid ${active ? '#E8683A' : '#EDE8DE'}`,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           {/* CTAs */}
