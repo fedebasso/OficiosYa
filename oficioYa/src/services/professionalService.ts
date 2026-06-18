@@ -10,7 +10,7 @@ export const professionalService = {
         ? MOCK_PROFESSIONALS.filter((p) => p.categories.includes(categoria))
         : MOCK_PROFESSIONALS
     }
-    let query = supabase.from('professionals').select('*, profiles(*)')
+    let query = supabase.from('professionals').select('*, profiles(*)').eq('verification_status', 'verified')
     if (categoria) query = query.contains('categories', [categoria])
     const { data, error } = await query
     if (error) throw error
@@ -38,6 +38,7 @@ export const professionalService = {
       .from('professionals')
       .select('*, profiles(*)')
       .eq('available_now', true)
+      .eq('verification_status', 'verified')
     if (error) throw error
     return (data as ProfessionalWithProfile[]) ?? []
   },

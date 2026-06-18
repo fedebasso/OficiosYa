@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
+import { registrationService } from '../../services/registrationService'
 import { PageShell } from '../../components/layout/PageShell'
 
 interface PendingPro {
@@ -20,6 +21,7 @@ export default function AdminVerificaciones() {
   const [pros, setPros] = useState<PendingPro[]>([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<PendingPro | null>(null)
+  const [signedUrls, setSignedUrls] = useState<Record<string, string>>({})
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
 
@@ -35,6 +37,24 @@ export default function AdminVerificaciones() {
   }
 
   useEffect(() => { load() }, [])
+
+  async function openModal(pro: PendingPro) {
+    setSelected(pro)
+    if (pro.identity_verification) {
+      const { cedula_front_url, cedula_back_url, selfie_url } = pro.identity_verification
+      const urls: Record<string, string> = {}
+      for (const [key, path] of Object.entries({ cedula_front_url, cedula_back_url, selfie_url })) {
+        if (path) {
+          try {
+            urls[key] = await registrationService.getSignedUrl('pro-identity', path)
+          } catch {
+            urls[key] = ''
+          }
+        }
+      }
+      setSignedUrls(urls)
+    }
+  }
 
   async function handleDecision(proId: string, identityId: string, decision: 'verified' | 'rejected') {
     setSaving(true)
@@ -64,7 +84,7 @@ export default function AdminVerificaciones() {
           {pros.map((pro) => (
             <div
               key={pro.id}
-              onClick={() => setSelected(pro)}
+              onClick={() => openModal(pro)}
               className="rounded-2xl p-4 flex items-center gap-4 cursor-pointer"
               style={{ background: '#fff', border: '1.5px solid #E8E0D4' }}
             >
@@ -93,9 +113,9 @@ export default function AdminVerificaciones() {
 
                 <div className="grid grid-cols-3 gap-2 mb-5">
                   {[
-                    { label: 'Cédula frente', url: selected.identity_verification?.cedula_front_url },
-                    { label: 'Cédula dorso',  url: selected.identity_verification?.cedula_back_url },
-                    { label: 'Selfie',         url: selected.identity_verification?.selfie_url },
+                    { label: 'Cédula frente', url: signedUrls['cedula_front_url'] },
+                    { label: 'Cédula dorso',  url: signedUrls['cedula_back_url'] },
+                    { label: 'Selfie',         url: signedUrls['selfie_url'] },
                   ].map(({ label, url }) => (
                     <div key={label} className="flex flex-col gap-1">
                       <p className="text-xs text-center font-bold" style={{ color: '#555' }}>{label}</p>

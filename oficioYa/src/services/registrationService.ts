@@ -124,6 +124,21 @@ export const registrationService = {
     return data.publicUrl
   },
 
+  async uploadPrivateFile(bucket: string, proId: string, file: File): Promise<string> {
+    const ext = file.name.split('.').pop()
+    const path = `${proId}/${Date.now()}.${ext}`
+    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true })
+    if (error) throw error
+    // Return the storage path, not a public URL — caller generates signed URLs on demand
+    return path
+  },
+
+  async getSignedUrl(bucket: string, path: string, expiresIn = 3600): Promise<string> {
+    const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, expiresIn)
+    if (error) throw error
+    return data.signedUrl
+  },
+
   async getPortfolio(proId: string): Promise<PortfolioItem[]> {
     const { data, error } = await supabase
       .from('work_portfolio')

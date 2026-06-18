@@ -84,3 +84,23 @@ ALTER TABLE identity_verification ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Pro can manage own identity" ON identity_verification
   USING (professional_id = auth.uid())
   WITH CHECK (professional_id = auth.uid());
+
+-- Admin policies (POC: email-based check — replace with proper role system before production)
+CREATE POLICY "Admin can read all identity verifications" ON identity_verification
+  FOR SELECT
+  USING (auth.jwt() ->> 'email' = 'fede840.30@gmail.com');
+
+CREATE POLICY "Admin can update all identity verifications" ON identity_verification
+  FOR UPDATE
+  USING (auth.jwt() ->> 'email' = 'fede840.30@gmail.com')
+  WITH CHECK (auth.jwt() ->> 'email' = 'fede840.30@gmail.com');
+
+-- Allow admin to read all professionals for verification panel
+CREATE POLICY "Admin can read all professionals" ON professionals
+  FOR SELECT
+  USING (auth.jwt() ->> 'email' = 'fede840.30@gmail.com');
+
+-- Allow admin to update verification status on professionals
+CREATE POLICY "Admin can update verification status" ON professionals
+  FOR UPDATE
+  USING (auth.jwt() ->> 'email' = 'fede840.30@gmail.com');

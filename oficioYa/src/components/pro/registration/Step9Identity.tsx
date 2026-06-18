@@ -22,9 +22,9 @@ export function Step9Identity({ onNext, loading }: Props) {
     if (!user?.id) return
     setUploading(field)
     try {
-      const url = await registrationService.uploadFile('pro-identity', user.id, file)
-      const updated = { ...identity, [field]: url }
-      await registrationService.saveIdentity(user.id, { [field]: url })
+      const path = await registrationService.uploadPrivateFile('pro-identity', user.id, file)
+      const updated = { ...identity, [field]: path }
+      await registrationService.saveIdentity(user.id, { [field]: path })
       setIdentity(updated)
     } catch {
       setError('Error al subir la imagen')
