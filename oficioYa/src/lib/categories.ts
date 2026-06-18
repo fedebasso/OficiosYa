@@ -83,3 +83,43 @@ export function getCategoryMeta(cat: string) {
     avatarGradient: CATEGORY_AVATAR_GRADIENT[cat as CategoryKey] ?? 'linear-gradient(135deg, #FEF0EA, #FDDCC8)',
   }
 }
+
+// Categorías completas para registro de profesionales
+export const ALL_TRADES: { value: string; label: string; emoji: string }[] = [
+  { value: 'electricista',        label: 'Electricista',           emoji: '⚡' },
+  { value: 'plomero',             label: 'Sanitario',              emoji: '🚿' },
+  { value: 'albanil',             label: 'Albañil',                emoji: '🧱' },
+  { value: 'pintor',              label: 'Pintor',                 emoji: '🎨' },
+  { value: 'herrero',             label: 'Herrero',                emoji: '⚙️' },
+  { value: 'carpintero',          label: 'Carpintero',             emoji: '🪚' },
+  { value: 'aire_acondicionado',  label: 'Técnico en AC',          emoji: '❄️' },
+  { value: 'cerrajero',           label: 'Cerrajero',              emoji: '🔑' },
+  { value: 'jardinero',           label: 'Jardinero',              emoji: '🌿' },
+  { value: 'limpieza',            label: 'Limpieza',               emoji: '🧹' },
+  { value: 'mudanzas',            label: 'Mudanzas',               emoji: '📦' },
+  { value: 'manitas',             label: 'Manitas',                emoji: '🔧' },
+  { value: 'otros',               label: 'Otros',                  emoji: '🛠️' },
+]
+
+export const SPECIALTIES_BY_TRADE: Record<string, string[]> = {
+  electricista:       ['Instalaciones nuevas', 'Reparaciones', 'Automatización', 'Domótica'],
+  plomero:            ['Destapes', 'Instalaciones', 'Reparaciones', 'Termotanques'],
+  albanil:            ['Construcción', 'Reformas', 'Revoques', 'Impermeabilización'],
+  pintor:             ['Interior', 'Exterior', 'Texturas', 'Papel mural'],
+  herrero:            ['Rejas', 'Portones', 'Soldadura', 'Estructuras'],
+  carpintero:         ['Muebles', 'Puertas', 'Aberturas', 'Deck'],
+  aire_acondicionado: ['Instalación', 'Mantenimiento', 'Reparación', 'Gas'],
+  cerrajero:          ['Apertura', 'Cambio de cerradura', 'Caja fuerte', 'Alarmas'],
+  jardinero:          ['Diseño', 'Mantenimiento', 'Poda', 'Riego automático'],
+  limpieza:           ['Hogar', 'Oficinas', 'Post obra', 'Vidrios'],
+  mudanzas:           ['Local', 'Larga distancia', 'Embalaje', 'Piano/objetos especiales'],
+  manitas:            ['Reparaciones generales', 'Montaje de muebles', 'Colgado de cuadros'],
+  otros:              [],
+}
+
+export const DEPARTMENTS_UY = [
+  'Montevideo', 'Canelones', 'Maldonado', 'Colonia', 'San José',
+  'Flores', 'Florida', 'Soriano', 'Río Negro', 'Paysandú',
+  'Salto', 'Artigas', 'Rivera', 'Tacuarembó', 'Cerro Largo',
+  'Treinta y Tres', 'Rocha', 'Lavalleja', 'Durazno', 'Minas',
+]
