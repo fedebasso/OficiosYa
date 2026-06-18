@@ -712,13 +712,22 @@ export default function TicketFlow() {
 
     const result = await analyzeTicket(ticketInput)
     setTicket(result)
-    const id = setTimeout(() => setStep(4), 2600)
-    timeoutIdsRef.current.push(id)
+
+    if (lockedPro) {
+      // Modo dirigido: saltar paso 4, ir directo a TicketConfirm
+      const id = setTimeout(() => handlePedir(lockedPro, result), 2600)
+      timeoutIdsRef.current.push(id)
+    } else {
+      // Modo libre: mostrar lista de profesionales
+      const id = setTimeout(() => setStep(4), 2600)
+      timeoutIdsRef.current.push(id)
+    }
   }
 
-  const handlePedir = (pro: ProfessionalWithProfile) => {
+  const handlePedir = (pro: ProfessionalWithProfile, resolvedTicket?: GeneratedTicket) => {
+    const t = resolvedTicket ?? ticket
     navigate('/ticket/confirmar', {
-      state: { ticket, proId: pro.id, proName: pro.profiles.full_name, proAvatar: pro.profiles.avatar_url, proRating: pro.avg_rating },
+      state: { ticket: t, proId: pro.id, proName: pro.profiles.full_name, proAvatar: pro.profiles.avatar_url, proRating: pro.avg_rating },
     })
   }
 
@@ -836,7 +845,7 @@ export default function TicketFlow() {
               <AIProcessingStep progress={aiProgress} />
             </motion.div>
           )}
-          {step === 4 && ticket && (
+          {step === 4 && ticket && !lockedPro && (
             <motion.div
               key="step4"
               custom={direction}
