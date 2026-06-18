@@ -109,10 +109,12 @@ function MediaStep({
   input,
   onChange,
   onAnalyze,
+  lockedPro,
 }: {
   input: TicketInput
   onChange: (patch: Partial<TicketInput>) => void
   onAnalyze: () => void
+  lockedPro?: ProfessionalWithProfile | null
 }) {
   const fileRef = useRef<HTMLInputElement>(null)
   const videoRef = useRef<HTMLInputElement>(null)
@@ -162,6 +164,44 @@ function MediaStep({
 
   return (
     <div className="flex flex-col gap-4 p-4">
+      {lockedPro && (
+        <div
+          className="flex items-center gap-3 rounded-2xl p-3"
+          style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+        >
+          {lockedPro.profiles.avatar_url ? (
+            <img
+              src={lockedPro.profiles.avatar_url}
+              alt={lockedPro.profiles.full_name}
+              className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
+            />
+          ) : (
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-black flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg,#E8683A,#c44d1f)', fontSize: 18 }}
+            >
+              {lockedPro.profiles.full_name.charAt(0)}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold truncate" style={{ color: '#111111' }}>
+              {lockedPro.profiles.full_name}
+            </div>
+            <div className="text-[10px]" style={{ color: '#AAAAAA' }}>
+              {CATEGORY_EMOJI[lockedPro.categories[0]] ?? '🛠️'} {CATEGORY_LABELS[lockedPro.categories[0]] ?? lockedPro.categories[0]} · {lockedPro.zone}
+            </div>
+          </div>
+          {lockedPro.avg_rating != null && (
+            <div
+              className="flex items-center gap-1 px-2 py-1 rounded-xl flex-shrink-0"
+              style={{ background: 'rgba(34,197,94,.1)', border: '1px solid rgba(34,197,94,.2)' }}
+            >
+              <span style={{ color: '#f59e0b', fontSize: 11 }}>★</span>
+              <span className="text-xs font-black" style={{ color: '#22c55e' }}>{lockedPro.avg_rating}</span>
+            </div>
+          )}
+        </div>
+      )}
       <div>
         <h2 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
           Mostranos el problema
@@ -706,9 +746,19 @@ export default function TicketFlow() {
           <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
       )}
-      {step > 1 && step < 3 && (
-        <button type="button" onClick={() => { setDirection('back'); setStep((s) => (s - 1) as 1 | 2 | 3 | 4) }}
-          className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0">
+      {step === 2 && (
+        <button
+          type="button"
+          onClick={() => {
+            if (lockedPro) {
+              navigate(-1)
+            } else {
+              setDirection('back')
+              setStep(1)
+            }
+          }}
+          className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0"
+        >
           <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
       )}
@@ -721,11 +771,16 @@ export default function TicketFlow() {
       <div>
         <h1 className="text-base font-black leading-tight" style={{ color: '#111111' }}>
           {step === 1 && 'Nuevo ticket'}
-          {step === 2 && 'Describí el problema'}
+          {step === 2 && (lockedPro ? `Solicitar a ${lockedPro.profiles.full_name.split(' ')[0]}` : 'Describí el problema')}
           {step === 3 && 'Analizando...'}
           {step === 4 && 'Profesionales para vos'}
         </h1>
-        <p className="text-xs mt-0.5" style={{ color: '#AAAAAA' }}>Paso {step} de 4</p>
+        <p className="text-xs mt-0.5" style={{ color: '#AAAAAA' }}>
+          {lockedPro && step !== 1 && step !== 4
+            ? `Paso ${step === 2 ? 1 : 2} de 2 · ${CATEGORY_LABELS[lockedPro.categories[0]] ?? lockedPro.categories[0]}`
+            : `Paso ${step} de 4`
+          }
+        </p>
       </div>
     </div>
   )
@@ -765,6 +820,7 @@ export default function TicketFlow() {
                 input={input}
                 onChange={(patch) => setInput((prev) => ({ ...prev, ...patch }))}
                 onAnalyze={handleAnalyze}
+                lockedPro={lockedPro}
               />
             </motion.div>
           )}
