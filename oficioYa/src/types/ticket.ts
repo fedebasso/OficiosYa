@@ -4,7 +4,6 @@ import type { WorkType } from '../store/requestStore'
 export interface TicketInput {
   category: string
   photo: File | null
-  audioBlob: Blob | null
   text: string
 }
 

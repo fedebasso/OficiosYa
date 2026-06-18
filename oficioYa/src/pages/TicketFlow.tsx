@@ -117,17 +117,11 @@ function MediaStep({
   lockedPro?: ProfessionalWithProfile | null
 }) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const videoRef = useRef<HTMLInputElement>(null)
-  const [recording, setRecording] = useState(false)
-  const mediaRef = useRef<MediaRecorder | null>(null)
-  const chunksRef = useRef<Blob[]>([])
   const [showText, setShowText] = useState(false)
-  const [videoFile, setVideoFile] = useState<File | null>(null)
 
   const photoUrl = useMemo(() => {
     if (!input.photo) return null
-    const url = URL.createObjectURL(input.photo)
-    return url
+    return URL.createObjectURL(input.photo)
   }, [input.photo])
 
   useEffect(() => {
@@ -136,31 +130,7 @@ function MediaStep({
     }
   }, [photoUrl])
 
-  const hasContent = input.photo !== null || input.audioBlob !== null || input.text.length >= 10 || videoFile !== null
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mr = new MediaRecorder(stream)
-      chunksRef.current = []
-      mr.ondataavailable = (e) => chunksRef.current.push(e.data)
-      mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
-        onChange({ audioBlob: blob })
-        stream.getTracks().forEach((t) => t.stop())
-      }
-      mr.start()
-      mediaRef.current = mr
-      setRecording(true)
-    } catch {
-      alert('No se pudo acceder al micrófono')
-    }
-  }
-
-  const stopRecording = () => {
-    mediaRef.current?.stop()
-    setRecording(false)
-  }
+  const hasContent = input.photo !== null || input.text.length >= 10
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -202,12 +172,13 @@ function MediaStep({
           )}
         </div>
       )}
+
       <div>
         <h2 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
           Mostranos el problema
         </h2>
         <p className="text-sm mt-1" style={{ color: '#AAAAAA' }}>
-          Lo que sea más fácil para vos
+          Foto o descripción — lo que sea más fácil
         </p>
       </div>
 
@@ -234,13 +205,8 @@ function MediaStep({
           onClick={() => fileRef.current?.click()}
           whileTap={{ scale: 0.98 }}
           className="flex flex-col items-center justify-center gap-2 rounded-2xl relative overflow-hidden"
-          style={{
-            height: 200,
-            border: '2px dashed #E8683A',
-            background: '#FEF0EA',
-          }}
+          style={{ height: 200, border: '2px dashed #E8683A', background: '#FEF0EA' }}
         >
-          {/* Glow sutil centrado */}
           <div style={{
             position: 'absolute', inset: 0,
             background: 'radial-gradient(ellipse at 50% 50%, rgba(232,104,58,.1) 0%, transparent 70%)',
@@ -269,74 +235,23 @@ function MediaStep({
         className="hidden"
         onChange={(e) => onChange({ photo: e.target.files?.[0] ?? null })}
       />
-      <input
-        ref={videoRef}
-        type="file"
-        accept="video/*"
-        className="hidden"
-        onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
-      />
 
-      {/* Alternativas: audio, video, texto */}
-      <div className="grid grid-cols-3 gap-2">
-        <motion.button
-          type="button"
-          onClick={recording ? stopRecording : startRecording}
-          whileTap={{ scale: 0.94 }}
-          className="flex flex-col items-center gap-1.5 rounded-xl py-3"
-          style={{
-            background: recording ? 'rgba(239,68,68,.1)' : '#FFFFFF',
-            border: `1.5px solid ${recording ? '#EF4444' : '#EDE8DE'}`,
-          }}
-        >
-          <span style={{ fontSize: 22 }}>{recording ? '⏹️' : '🎤'}</span>
-          <span className="text-[10px] font-bold" style={{ color: recording ? '#EF4444' : '#555' }}>
-            {recording ? 'Detener' : 'Audio'}
-          </span>
-          <span className="text-[9px]" style={{ color: '#BBB' }}>{recording ? 'Grabando...' : 'Grabá'}</span>
-        </motion.button>
-        <motion.button
-          type="button"
-          onClick={() => videoRef.current?.click()}
-          whileTap={{ scale: 0.94 }}
-          className="flex flex-col items-center gap-1.5 rounded-xl py-3"
-          style={{ background: videoFile ? 'rgba(232,104,58,.08)' : '#FFFFFF', border: `1.5px solid ${videoFile ? '#E8683A' : '#EDE8DE'}` }}
-        >
-          <span style={{ fontSize: 22 }}>🎥</span>
-          <span className="text-[10px] font-bold" style={{ color: '#555' }}>Video</span>
-          <span className="text-[9px]" style={{ color: '#BBB' }}>Filmá</span>
-        </motion.button>
-        <motion.button
-          type="button"
-          onClick={() => setShowText((v) => !v)}
-          whileTap={{ scale: 0.94 }}
-          className="flex flex-col items-center gap-1.5 rounded-xl py-3"
-          style={{
-            background: showText ? 'rgba(232,104,58,.1)' : '#FFFFFF',
-            border: `1.5px solid ${showText ? '#E8683A' : '#EDE8DE'}`,
-          }}
-        >
-          <span style={{ fontSize: 22 }}>✏️</span>
-          <span className="text-[10px] font-bold" style={{ color: showText ? '#E8683A' : '#555' }}>Texto</span>
-          <span className="text-[9px]" style={{ color: '#BBB' }}>Describí</span>
-        </motion.button>
-      </div>
-
-      {input.audioBlob && (
-        <div className="flex items-center gap-2 rounded-xl p-3" style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}>
-          <span>🎤</span>
-          <span className="text-sm font-semibold flex-1" style={{ color: '#555' }}>Audio grabado</span>
-          <button type="button" onClick={() => onChange({ audioBlob: null })} style={{ color: '#EF4444', fontWeight: 700, fontSize: 12 }}>Quitar</button>
-        </div>
-      )}
-
-      {videoFile && (
-        <div className="flex items-center gap-2 rounded-xl p-3" style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}>
-          <span>🎥</span>
-          <span className="text-sm font-semibold flex-1" style={{ color: '#555' }}>Video agregado</span>
-          <button type="button" onClick={() => setVideoFile(null)} style={{ color: '#EF4444', fontWeight: 700, fontSize: 12 }}>Quitar</button>
-        </div>
-      )}
+      {/* Texto */}
+      <motion.button
+        type="button"
+        onClick={() => setShowText((v) => !v)}
+        whileTap={{ scale: 0.94 }}
+        className="flex items-center gap-2 rounded-xl py-3 px-4"
+        style={{
+          background: showText ? 'rgba(232,104,58,.1)' : '#FFFFFF',
+          border: `1.5px solid ${showText ? '#E8683A' : '#EDE8DE'}`,
+        }}
+      >
+        <span style={{ fontSize: 20 }}>✏️</span>
+        <span className="text-sm font-bold" style={{ color: showText ? '#E8683A' : '#555' }}>
+          {showText ? 'Ocultar texto' : 'Describir con texto'}
+        </span>
+      </motion.button>
 
       {showText && (
         <textarea
@@ -674,7 +589,7 @@ export default function TicketFlow() {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
   const [category, setCategory] = useState<string | null>(null)
-  const [input, setInput] = useState<TicketInput>({ category: '', photo: null, audioBlob: null, text: '' })
+  const [input, setInput] = useState<TicketInput>({ category: '', photo: null, text: '' })
   const [aiProgress, setAiProgress] = useState(0)
   const [ticket, setTicket] = useState<GeneratedTicket | null>(null)
   const timeoutIdsRef = useRef<ReturnType<typeof setTimeout>[]>([])
