@@ -280,6 +280,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
         >
           Solicitar trabajo
         </motion.button>
+        {/* v0.1 */}
       </motion.div>
 
       <BottomNav />
