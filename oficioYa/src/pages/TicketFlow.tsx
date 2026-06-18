@@ -425,13 +425,11 @@ function AIProcessingStep({ progress }: { progress: number }) {
 function ResultsStep({
   ticket,
   category,
-  preselectedProId,
   clientZone,
   onPedir,
 }: {
   ticket: GeneratedTicket
   category: string
-  preselectedProId: string | null
   clientZone: string
   onPedir: (pro: ProfessionalWithProfile) => void
 }) {
@@ -841,7 +839,6 @@ export default function TicketFlow() {
               <ResultsStep
                 ticket={ticket}
                 category={category ?? ''}
-                preselectedProId={preselectedProId}
                 clientZone={input.zone}
                 onPedir={handlePedir}
               />
