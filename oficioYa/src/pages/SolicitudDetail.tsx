@@ -153,6 +153,12 @@ export default function SolicitudDetail() {
                   📋 {WORK_TYPE_LABELS[req.work_type] ?? req.work_type}
                 </span>
               )}
+              {req.location && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: '#F5F0E8', color: '#666' }}>
+                  📍 {req.location}
+                </span>
+              )}
               {req.urgency && (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,.2)' }}>
