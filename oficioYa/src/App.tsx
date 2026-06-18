@@ -13,7 +13,7 @@ import SolicitudDetail from './pages/SolicitudDetail'
 import Chat from './pages/Chat'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import ProOnboarding from './pages/pro/ProOnboarding'
+import ProRegistration from './pages/pro/ProRegistration'
 import ProProfile from './pages/pro/ProProfile'
 import ProRequests from './pages/pro/ProRequests'
 import ProWorkHistory from './pages/pro/ProWorkHistory'
@@ -69,7 +69,7 @@ function App() {
         <Route path="/favoritos" element={<Favoritos />} />
         <Route path="/perfil" element={<ClientProfile />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/pro/registro" element={<ProOnboarding />} />
+        <Route path="/pro/registro" element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
         <Route
           path="/pro/perfil"
           element={
