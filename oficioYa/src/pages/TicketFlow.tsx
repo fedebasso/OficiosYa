@@ -8,6 +8,7 @@ import { analyzeTicket } from '../services/ai/ticketService'
 import { useProfessionals } from '../hooks/useProfessionals'
 import { CATEGORY_LABELS, CATEGORY_EMOJI } from '../lib/categories'
 import { SPRING_GENTLE } from '../lib/motion'
+import { professionalService } from '../services/professionalService'
 import type { TicketInput, GeneratedTicket } from '../types/ticket'
 import type { ProfessionalWithProfile } from '../hooks/useProfessionals'
 
@@ -637,12 +638,23 @@ export default function TicketFlow() {
   const [aiProgress, setAiProgress] = useState(0)
   const [ticket, setTicket] = useState<GeneratedTicket | null>(null)
   const timeoutIdsRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const [lockedPro, setLockedPro] = useState<ProfessionalWithProfile | null>(null)
 
   useEffect(() => {
     return () => {
       timeoutIdsRef.current.forEach(clearTimeout)
     }
   }, [])
+
+  useEffect(() => {
+    if (!preselectedProId) return
+    professionalService.getById(preselectedProId).then((pro) => {
+      if (!pro) return
+      setLockedPro(pro)
+      setCategory(pro.categories[0] ?? null)
+      setStep(2)
+    })
+  }, [preselectedProId])
 
   const handleAnalyze = async () => {
     if (!category) return
