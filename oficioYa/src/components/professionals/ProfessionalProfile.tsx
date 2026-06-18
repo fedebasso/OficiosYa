@@ -206,10 +206,12 @@ export function ProfessionalProfile({ professional, photos }: Props) {
             <span className="font-semibold text-sm" style={{ color: '#555555' }}>{jobs_count} trabajos</span>
           </div>
           {verified && (
-            <div className="flex items-center gap-1">
-              <span style={{ fontSize: 14 }}>✅</span>
-              <span className="font-semibold text-sm" style={{ color: '#3B82F6' }}>Verificado</span>
-            </div>
+            <span
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold"
+              style={{ background: '#F0FDF4', color: '#0F6E56', border: '1px solid #86EFAC' }}
+            >
+              ✓ Profesional Verificado
+            </span>
           )}
           <div className="flex items-center gap-1">
             <span style={{ fontSize: 14 }}>📍</span>

@@ -21,6 +21,7 @@ import Urgencias from './pages/Urgencias'
 import Favoritos from './pages/Favoritos'
 import ClientProfile from './pages/ClientProfile'
 import NotFound from './pages/NotFound'
+import AdminVerificaciones from './pages/admin/AdminVerificaciones'
 
 function ProtectedRoute({
   children,
@@ -68,6 +69,7 @@ function App() {
         <Route path="/registro" element={<Register />} />
         <Route path="/favoritos" element={<Favoritos />} />
         <Route path="/perfil" element={<ClientProfile />} />
+        <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/pro/registro" element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
         <Route
