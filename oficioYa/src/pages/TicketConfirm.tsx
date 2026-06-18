@@ -14,7 +14,6 @@ interface LocationState {
   proName: string
   proAvatar: string | null
   proRating: number | null
-  proWhatsapp: string
 }
 
 const INPUT_STYLE = {
