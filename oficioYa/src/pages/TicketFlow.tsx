@@ -11,6 +11,7 @@ import { SPRING_GENTLE } from '../lib/motion'
 import { BARRIOS_MONTEVIDEO } from '../lib/barrios'
 import { professionalService } from '../services/professionalService'
 import { scoreProfessional } from '../lib/scoring'
+import { isInRadius } from '../lib/barrio-coords'
 import type { TicketInput, GeneratedTicket } from '../types/ticket'
 import type { ProfessionalWithProfile } from '../hooks/useProfessionals'
 
@@ -497,7 +498,11 @@ function ResultsStep({
   onPedir: (pro: ProfessionalWithProfile) => void
 }) {
   const { professionals } = useProfessionals(category)
-  const sorted = [...professionals]
+  const inRange = professionals.filter((p) =>
+    isInRadius(p.zone, p.radius_km, clientZone)
+  )
+
+  const sorted = inRange
     .map((p) => ({ pro: p, score: scoreProfessional(p, clientZone) }))
     .sort((a, b) => b.score - a.score)
     .map(({ pro }) => pro)
@@ -618,6 +623,9 @@ function ResultsStep({
                       {pro.jobs_count} trabajos
                       {pro.response_time_min > 0 && ` · ~${pro.response_time_min}min`}
                     </div>
+                    <span className="text-[9px] font-bold" style={{ color: '#AAAAAA' }}>
+                      {pro.radius_km === null ? '🌍 Toda la ciudad' : `📍 ${pro.zone} · ${pro.radius_km} km`}
+                    </span>
                   </div>
                   {/* Indicador de selección */}
                   <div className="relative flex-shrink-0" style={{ width: 22, height: 22 }}>
