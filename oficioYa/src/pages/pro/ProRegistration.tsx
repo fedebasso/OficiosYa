@@ -10,6 +10,9 @@ import { Step4Portfolio } from '../../components/pro/registration/Step4Portfolio
 import { Step5Certifications } from '../../components/pro/registration/Step5Certifications'
 import { Step6WorkZone } from '../../components/pro/registration/Step6WorkZone'
 import { Step7Availability } from '../../components/pro/registration/Step7Availability'
+import { Step8ContactInfo } from '../../components/pro/registration/Step8ContactInfo'
+import { Step9Identity } from '../../components/pro/registration/Step9Identity'
+import { Step10Summary } from '../../components/pro/registration/Step10Summary'
 import type { RegistrationState } from '../../types/registration'
 
 export default function ProRegistration() {
@@ -114,11 +117,21 @@ export default function ProRegistration() {
           loading={loading}
         />
       )}
-      {currentStep > 7 && (
-        <div className="text-center py-10" style={{ color: '#555' }}>
-          <p className="text-lg font-bold mb-2">Paso {currentStep}</p>
-          <p className="text-sm">Próximamente...</p>
-        </div>
+      {currentStep === 8 && (
+        <Step8ContactInfo
+          initial={state ?? {}}
+          onNext={(data) => saveStep(8, data)}
+          loading={loading}
+        />
+      )}
+      {currentStep === 9 && (
+        <Step9Identity
+          onNext={() => saveStep(9, {})}
+          loading={loading}
+        />
+      )}
+      {currentStep >= 10 && state && (
+        <Step10Summary state={state} />
       )}
     </RegistrationShell>
   )
