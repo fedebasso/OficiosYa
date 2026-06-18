@@ -6,6 +6,10 @@ import { RegistrationShell } from '../../components/pro/registration/Registratio
 import { Step1PersonalData } from '../../components/pro/registration/Step1PersonalData'
 import { Step2TradeInfo } from '../../components/pro/registration/Step2TradeInfo'
 import { Step3Experience } from '../../components/pro/registration/Step3Experience'
+import { Step4Portfolio } from '../../components/pro/registration/Step4Portfolio'
+import { Step5Certifications } from '../../components/pro/registration/Step5Certifications'
+import { Step6WorkZone } from '../../components/pro/registration/Step6WorkZone'
+import { Step7Availability } from '../../components/pro/registration/Step7Availability'
 import type { RegistrationState } from '../../types/registration'
 
 export default function ProRegistration() {
@@ -84,10 +88,36 @@ export default function ProRegistration() {
           loading={loading}
         />
       )}
-      {currentStep > 3 && (
+      {currentStep === 4 && (
+        <Step4Portfolio
+          onNext={() => saveStep(4, {})}
+          loading={loading}
+        />
+      )}
+      {currentStep === 5 && (
+        <Step5Certifications
+          onNext={() => saveStep(5, {})}
+          loading={loading}
+        />
+      )}
+      {currentStep === 6 && (
+        <Step6WorkZone
+          initial={state ?? {}}
+          onNext={(data) => saveStep(6, data)}
+          loading={loading}
+        />
+      )}
+      {currentStep === 7 && (
+        <Step7Availability
+          initial={state ?? {}}
+          onNext={(data) => saveStep(7, data)}
+          loading={loading}
+        />
+      )}
+      {currentStep > 7 && (
         <div className="text-center py-10" style={{ color: '#555' }}>
           <p className="text-lg font-bold mb-2">Paso {currentStep}</p>
-          <p className="text-sm">Próximamente en la siguiente tarea...</p>
+          <p className="text-sm">Próximamente...</p>
         </div>
       )}
     </RegistrationShell>
