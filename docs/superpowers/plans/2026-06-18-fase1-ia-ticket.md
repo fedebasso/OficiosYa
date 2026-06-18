@@ -16,6 +16,9 @@
 - En `IS_DEMO_MODE === true` (cuando `VITE_SUPABASE_URL` es placeholder) → usar mock, sin llamadas de red
 - Modelo Claude: `claude-haiku-4-5-20251001` (exacto)
 - La Edge Function devuelve JSON con campos: `title`, `description`, `urgent`, `work_type`
+- La Edge Function devuelve `{ "no_match": true }` cuando el problema no corresponde a ningún oficio del hogar
+- Cuando hay `no_match`: `analyzeTicket` lanza `new Error('NO_MATCH')` — NO fallback al mock
+- El frontend muestra pantalla de error en paso 3 con botón "Intentar de nuevo" que vuelve al paso 2
 - El frontend agrega `category` al resultado antes de devolverlo como `GeneratedTicket`
 
 ---
@@ -295,10 +298,14 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
-const SYSTEM_PROMPT = `Sos un asistente especializado en servicios del hogar en Uruguay.
-Analizá la descripción y/o imagen del problema que te envía un cliente y generá un ticket de servicio estructurado.
+const SYSTEM_PROMPT = `Sos un asistente especializado en servicios del hogar en Uruguay (electricidad, sanitario, aire acondicionado, cerrajería, pintura, albañilería).
 
-Respondé ÚNICAMENTE con JSON válido, sin texto adicional, con este formato exacto:
+Analizá la descripción y/o imagen del problema que te envía un cliente.
+
+PRIMERO: determiná si el problema corresponde a un servicio del hogar. Si la descripción o imagen no tiene nada que ver con servicios del hogar (por ejemplo: es una consulta médica, un pedido de comida, una foto de persona, algo irrelevante), respondé ÚNICAMENTE con:
+{ "no_match": true }
+
+Si SÍ corresponde a un servicio del hogar, generá un ticket estructurado respondiendo ÚNICAMENTE con JSON válido, sin texto adicional:
 {
   "title": "Título breve del problema (máx 60 caracteres)",
   "description": "Descripción profesional del trabajo requerido (2-3 oraciones)",
@@ -307,7 +314,7 @@ Respondé ÚNICAMENTE con JSON válido, sin texto adicional, con este formato ex
 }
 
 Valores válidos para work_type: "reparacion", "instalacion", "mantenimiento", "otro"
-Criterios de urgencia: marcá urgent=true si hay riesgo de seguridad, daño progresivo, o el cliente menciona que es urgente.
+Criterios de urgencia: marcá urgent=true si hay riesgo de seguridad, daño progresivo, o el cliente menciona urgencia.
 Sé preciso y profesional. No inventes detalles que no estén en la descripción o imagen.`
 
 serve(async (req) => {
@@ -384,6 +391,14 @@ serve(async (req) => {
     }
 
     const ticket = JSON.parse(jsonMatch[0])
+
+    // Si Claude devolvió no_match, retornar 422
+    if (ticket.no_match) {
+      return new Response(JSON.stringify({ no_match: true }), {
+        status: 422,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
+    }
 
     return new Response(JSON.stringify(ticket), {
       status: 200,
@@ -527,6 +542,9 @@ export async function analyzeTicket(input: TicketInput): Promise<GeneratedTicket
       }),
     })
 
+    // 422 = no_match: el problema no corresponde a servicios del hogar
+    if (res.status === 422) throw new Error('NO_MATCH')
+
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
     const data = await res.json()
@@ -539,8 +557,10 @@ export async function analyzeTicket(input: TicketInput): Promise<GeneratedTicket
       work_type: data.work_type as WorkType,
       category: input.category,
     }
-  } catch {
-    // Fallback silencioso al mock si falla la Edge Function
+  } catch (err) {
+    // NO_MATCH: relanzar para que el frontend muestre el error al usuario
+    if (err instanceof Error && err.message === 'NO_MATCH') throw err
+    // Cualquier otro error (red, timeout, etc): fallback silencioso al mock
     await new Promise((r) => setTimeout(r, 500))
     return mockResult(input)
   }
@@ -559,4 +579,121 @@ Navegar a `http://localhost:5177/ticket`, seleccionar categoría, escribir texto
 ```bash
 git add oficioYa/src/services/ai/ticketService.ts
 git commit -m "feat: ticketService llama a Edge Function con fallback al mock"
+```
+
+---
+
+### Task 4: Error state en `TicketFlow` cuando la IA no reconoce el problema
+
+**Files:**
+- Modify: `oficioYa/src/pages/TicketFlow.tsx`
+
+**Interfaces:**
+- Consumes: `analyzeTicket` lanza `Error('NO_MATCH')` de Task 3
+- Produces: pantalla de error en paso 3 con botón "Intentar de nuevo"
+
+- [ ] **Step 1: Agregar estado `aiError` en el orquestador**
+
+Dentro de `export default function TicketFlow()`, después de `const [ticket, setTicket] = useState<GeneratedTicket | null>(null)`, agregar:
+
+```ts
+const [aiError, setAiError] = useState<'no_match' | null>(null)
+```
+
+- [ ] **Step 2: Actualizar `handleAnalyze` para capturar el error `NO_MATCH`**
+
+Reemplazar el bloque completo de `handleAnalyze`:
+
+```ts
+const handleAnalyze = async () => {
+  if (!category) return
+  const ticketInput: TicketInput = { ...input, category }
+  setStep(3)
+  setAiError(null)
+  setAiProgress(0)
+  timeoutIdsRef.current.forEach(clearTimeout)
+  timeoutIdsRef.current = []
+
+  const intervals = [400, 900, 1600, 2500]
+  intervals.forEach((delay, i) => {
+    const id = setTimeout(() => setAiProgress(i + 1), delay)
+    timeoutIdsRef.current.push(id)
+  })
+
+  try {
+    const result = await analyzeTicket(ticketInput)
+    setTicket(result)
+
+    if (lockedPro) {
+      const id = setTimeout(() => handlePedir(lockedPro, result), 2600)
+      timeoutIdsRef.current.push(id)
+    } else {
+      const id = setTimeout(() => setStep(4), 2600)
+      timeoutIdsRef.current.push(id)
+    }
+  } catch (err) {
+    if (err instanceof Error && err.message === 'NO_MATCH') {
+      setAiError('no_match')
+    }
+    // Otros errores: dejar en paso 3 con error visible
+  }
+}
+```
+
+- [ ] **Step 3: Mostrar pantalla de error en paso 3 cuando hay `aiError`**
+
+En el bloque `{step === 3 && (...)` del `AnimatePresence`, reemplazar el contenido del `motion.div`:
+
+```tsx
+{step === 3 && (
+  <motion.div
+    key="step3"
+    variants={fadeVariants}
+    initial="enter"
+    animate="center"
+    exit="exit"
+    style={{ width: '100%', display: 'flex', flex: 1 }}
+  >
+    {aiError === 'no_match' ? (
+      <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-5">
+        <div
+          className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
+          style={{ background: 'rgba(239,68,68,.08)', border: '1.5px solid rgba(239,68,68,.15)' }}
+        >
+          🤔
+        </div>
+        <div>
+          <h2 className="text-xl font-black leading-tight mb-2" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
+            No pudimos identificar el problema
+          </h2>
+          <p className="text-sm leading-relaxed" style={{ color: '#777777' }}>
+            La descripción o imagen no corresponde a un servicio del hogar. Intentá con una foto del problema o describí qué trabajo necesitás (electricidad, plomería, pintura, etc).
+          </p>
+        </div>
+        <motion.button
+          type="button"
+          onClick={() => { setAiError(null); setDirection('back'); setStep(2) }}
+          whileTap={{ scale: 0.97 }}
+          className="w-full rounded-2xl py-3.5 text-sm font-bold"
+          style={{ background: '#E8683A', color: '#fff', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+        >
+          Intentar de nuevo
+        </motion.button>
+      </div>
+    ) : (
+      <AIProcessingStep progress={aiProgress} />
+    )}
+  </motion.div>
+)}
+```
+
+- [ ] **Step 4: Verificar en dev server — modo demo**
+
+En modo demo el error `NO_MATCH` nunca se lanza (el mock siempre devuelve un resultado). Verificar que el flujo normal sigue funcionando: paso 2 → IA → paso 4. No hay regresión.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add oficioYa/src/pages/TicketFlow.tsx
+git commit -m "feat: mostrar error cuando la IA no reconoce el problema del cliente"
 ```
