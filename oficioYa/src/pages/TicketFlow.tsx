@@ -666,7 +666,7 @@ export default function TicketFlow() {
 
   const handlePedir = (pro: ProfessionalWithProfile) => {
     navigate('/ticket/confirmar', {
-      state: { ticket, proId: pro.id, proName: pro.profiles.full_name, proAvatar: pro.profiles.avatar_url, proRating: pro.avg_rating, proWhatsapp: pro.whatsapp },
+      state: { ticket, proId: pro.id, proName: pro.profiles.full_name, proAvatar: pro.profiles.avatar_url, proRating: pro.avg_rating },
     })
   }
 
