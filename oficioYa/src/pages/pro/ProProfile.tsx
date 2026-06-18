@@ -20,6 +20,14 @@ const ZONES = [
   'Cordón','Tres Cruces','La Blanqueada','Buceo','Parque Batlle',
 ]
 
+const RADIO_OPTIONS: { label: string; value: number | null }[] = [
+  { label: '3 km', value: 3 },
+  { label: '5 km', value: 5 },
+  { label: '10 km', value: 10 },
+  { label: '20 km', value: 20 },
+  { label: 'Toda la ciudad', value: null },
+]
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div
@@ -47,6 +55,7 @@ export default function ProProfile() {
   const [whatsapp, setWhatsapp]                 = useState(user?.phone ?? '')
   const [zone, setZone]                         = useState('')
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [radiusKm, setRadiusKm]                 = useState<number | null>(null)
   const [saved, setSaved]                       = useState(false)
 
   const toggleCategory = (id: string) =>
@@ -213,6 +222,35 @@ export default function ProProfile() {
                 <option key={z} value={z} style={{ background: '#EDE8DE', color: '#111111' }}>{z}</option>
               ))}
             </select>
+          </Section>
+        </motion.div>
+
+        {/* Radio de cobertura */}
+        <motion.div variants={fadeUp}>
+          <Section title="Radio de cobertura">
+            <p className="text-xs mb-3" style={{ color: '#999' }}>
+              ¿Hasta dónde te desplazás desde tu zona?
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {RADIO_OPTIONS.map((opt) => {
+                const active = radiusKm === opt.value
+                return (
+                  <button
+                    key={String(opt.value)}
+                    type="button"
+                    onClick={() => setRadiusKm(opt.value)}
+                    className="rounded-xl px-3 py-2 text-xs font-bold"
+                    style={{
+                      background: active ? '#E8683A' : '#F5F0E8',
+                      color: active ? '#FFFFFF' : '#555555',
+                      border: `1.5px solid ${active ? '#E8683A' : '#EDE8DE'}`,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                )
+              })}
+            </div>
           </Section>
         </motion.div>
 
