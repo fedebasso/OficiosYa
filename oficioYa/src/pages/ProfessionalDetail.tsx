@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom'
 import { ProfessionalProfile } from '../components/professionals/ProfessionalProfile'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
-import { useProfessionalById, useProfessionalPhotos } from '../hooks/useProfessionals'
+import { useProfessionalById, useProfessionalPhotos, useProfessionalPortfolio } from '../hooks/useProfessionals'
 
 export default function ProfessionalDetail() {
   const { id } = useParams<{ id: string }>()
   const { professional, loading, error } = useProfessionalById(id ?? '')
   const { photos } = useProfessionalPhotos(id ?? '')
+  const { portfolio } = useProfessionalPortfolio(id ?? '')
 
   if (loading) {
     return (
@@ -26,5 +27,5 @@ export default function ProfessionalDetail() {
     )
   }
 
-  return <ProfessionalProfile professional={professional} photos={photos} />
+  return <ProfessionalProfile professional={professional} photos={photos} portfolio={portfolio} />
 }

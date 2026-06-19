@@ -24,6 +24,7 @@ export interface Professional {
   response_time_min: number
   available_now: boolean
   radius_km: number | null
+  featured_photo_url?: string | null
 }
 
 export interface WorkPhoto {
@@ -98,6 +99,25 @@ export function useProfessionalPhotos(professionalId: string) {
   }, [professionalId])
 
   return { photos, loading }
+}
+
+import { registrationService } from '../services/registrationService'
+import type { PortfolioItem } from '../types/registration'
+
+export function useProfessionalPortfolio(professionalId: string) {
+  const [portfolio, setPortfolio] = useState<PortfolioItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!professionalId) return
+    setLoading(true)
+    registrationService.getPortfolio(professionalId)
+      .then(setPortfolio)
+      .catch(() => setPortfolio([]))
+      .finally(() => setLoading(false))
+  }, [professionalId])
+
+  return { portfolio, loading }
 }
 
 export function useUrgentProfessionals() {

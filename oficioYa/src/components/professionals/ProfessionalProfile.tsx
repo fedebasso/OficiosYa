@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { PortfolioWorkModal } from '../pro/portfolio/PortfolioWorkModal'
+import type { PortfolioItem } from '../../types/registration'
 import { ChevronLeft, Share2, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useBack } from '../../hooks/useBack'
@@ -96,10 +98,11 @@ function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number 
 interface Props {
   professional: ProfessionalWithProfile
   photos: WorkPhoto[]
+  portfolio?: PortfolioItem[]
 }
 
 
-export function ProfessionalProfile({ professional, photos }: Props) {
+export function ProfessionalProfile({ professional, photos, portfolio = [] }: Props) {
   const navigate = useNavigate()
   const goBack = useBack('/buscar')
   const {
@@ -111,6 +114,7 @@ export function ProfessionalProfile({ professional, photos }: Props) {
   const specialty = `${emoji} ${label}`
   const initials = getInitials(profiles.full_name)
   const [shared, setShared] = useState(false)
+  const [selectedWork, setSelectedWork] = useState<PortfolioItem | null>(null)
 
   const handleShare = async () => {
     const url = `${window.location.origin}/profesional/${id}`
@@ -137,6 +141,16 @@ export function ProfessionalProfile({ professional, photos }: Props) {
 
       {/* ── HERO ── */}
       <motion.div variants={fadeUp}>
+      {professional.featured_photo_url && (
+        <div className="relative w-full" style={{ height: 200 }}>
+          <img
+            src={professional.featured_photo_url}
+            alt="Trabajo destacado"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6))' }} />
+        </div>
+      )}
       <div
         className="relative flex flex-col items-center pt-14 pb-6 px-4"
         style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
@@ -256,11 +270,53 @@ export function ProfessionalProfile({ professional, photos }: Props) {
           </motion.div>
         )}
 
+        {/* Trabajos realizados (portfolio) */}
+        {portfolio.length > 0 && (
+          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+            <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {portfolio.slice(0, 6).map((item) => {
+                const mainPhoto = item.photos.find((p) => p.type === 'after')?.url
+                  ?? item.photos.find((p) => p.type === 'general')?.url
+                  ?? item.photos[0]?.url
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setSelectedWork(item)}
+                    className="rounded-xl overflow-hidden"
+                    style={{ aspectRatio: '1', background: '#EDE8DE' }}
+                  >
+                    {mainPhoto ? (
+                      <img src={mainPhoto} alt={item.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-2xl">📷</div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+            {portfolio.length > 6 && (
+              <p className="text-xs text-center font-bold mt-2" style={{ color: '#E8683A' }}>
+                +{portfolio.length - 6} trabajos más
+              </p>
+            )}
+          </motion.div>
+        )}
+
         {/* Reseñas */}
         <motion.div variants={fadeUp}>
           <ReviewsSection rating={avg_rating} jobsCount={jobs_count} professionalId={id} />
         </motion.div>
       </div>
+
+      {/* Modal galería */}
+      {selectedWork && (
+        <PortfolioWorkModal
+          item={selectedWork}
+          onClose={() => setSelectedWork(null)}
+        />
+      )}
 
       {/* ── CTA FIJO ── */}
       <motion.div
