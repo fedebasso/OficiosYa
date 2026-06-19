@@ -262,44 +262,27 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
           </div>
         </motion.div>
 
-        {/* Fotos */}
-        {photos.length > 0 && (
+        {/* Portfolio / Trabajos realizados */}
+        {(photos.length > 0 || portfolio.length > 0) && (
           <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
             <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
-            <WorkPhotoGallery photos={photos} />
-          </motion.div>
-        )}
-
-        {/* Trabajos realizados (portfolio) */}
-        {portfolio.length > 0 && (
-          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-            <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {portfolio.slice(0, 6).map((item) => {
-                const mainPhoto = item.photos.find((p) => p.type === 'after')?.url
-                  ?? item.photos.find((p) => p.type === 'general')?.url
-                  ?? item.photos[0]?.url
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setSelectedWork(item)}
-                    className="rounded-xl overflow-hidden"
-                    style={{ aspectRatio: '1', background: '#EDE8DE' }}
-                  >
-                    {mainPhoto ? (
-                      <img src={mainPhoto} alt={item.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-2xl">📷</div>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-            {portfolio.length > 6 && (
-              <p className="text-xs text-center font-bold mt-2" style={{ color: '#E8683A' }}>
-                +{portfolio.length - 6} trabajos más
-              </p>
+            {portfolio.length > 0 ? (
+              <WorkPhotoGallery
+                photos={portfolio.map((item, i) => ({
+                  id: item.id,
+                  professional_id: item.professional_id,
+                  url: item.photos.find((p) => p.type === 'after')?.url
+                    ?? item.photos.find((p) => p.type === 'general')?.url
+                    ?? item.photos[0]?.url
+                    ?? item.photo_urls[0]
+                    ?? '',
+                  caption: item.title,
+                  uploaded_at: item.created_at,
+                }))}
+                featuredUrl={professional.featured_photo_url ?? undefined}
+              />
+            ) : (
+              <WorkPhotoGallery photos={photos} featuredUrl={professional.featured_photo_url ?? undefined} />
             )}
           </motion.div>
         )}
