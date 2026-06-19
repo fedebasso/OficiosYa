@@ -268,7 +268,7 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
             <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
             {portfolio.length > 0 ? (
               <WorkPhotoGallery
-                photos={portfolio.map((item, i) => ({
+                photos={portfolio.map((item) => ({
                   id: item.id,
                   professional_id: item.professional_id,
                   url: item.photos.find((p) => p.type === 'after')?.url
