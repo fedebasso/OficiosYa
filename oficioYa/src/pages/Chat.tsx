@@ -8,6 +8,7 @@ import { ChatBubble } from '../components/chat/ChatBubble'
 import { ChatInput } from '../components/chat/ChatInput'
 import { useChatStore } from '../store/chatStore'
 import { useRequestStore } from '../store/requestStore'
+import { useProRequestsStore } from '../store/proRequestsStore'
 import { useAuthStore } from '../store/authStore'
 import { staggerFast } from '../lib/motion'
 import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
@@ -25,10 +26,13 @@ export default function Chat() {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const user = useAuthStore((s) => s.user)
-  const { requests } = useRequestStore()
+  const { requests: clientRequests } = useRequestStore()
+  const proRequests = useProRequestsStore((s) => s.requests)
   const { getMessages, sendTextMessage, sendImageMessage, sendAudioMessage, initMock } = useChatStore()
 
-  const req = requests.find((r) => r.id === id)
+  // El pro ve sus solicitudes, el cliente ve las suyas
+  const allRequests = user?.role === 'professional' ? proRequests : clientRequests
+  const req = allRequests.find((r) => r.id === id)
   const messages = id ? getMessages(id) : []
 
   // Nombre y avatar del profesional desde mock

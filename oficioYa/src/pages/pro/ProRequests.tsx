@@ -116,10 +116,10 @@ function PendingCard({ req, onAccept, onReject }: {
   )
 }
 
-function ActiveCard({ req, onProgress, onWhatsApp }: {
+function ActiveCard({ req, onProgress, onChat }: {
   req: ServiceRequest
   onProgress: (status: ServiceRequest['status']) => void
-  onWhatsApp: () => void
+  onChat: () => void
 }) {
   const isInProgress = req.status === 'in_progress'
   return (
@@ -150,17 +150,15 @@ function ActiveCard({ req, onProgress, onWhatsApp }: {
           >
             {isInProgress ? '🏁 Marcar completado' : '🚗 Marcar en camino'}
           </motion.button>
-          {req.contact_phone && (
-            <motion.button
-              type="button"
-              onClick={onWhatsApp}
-              whileTap={{ scale: 0.97 }}
-              className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
-              style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
-            >
-              <MessageCircle size={15} />
-            </motion.button>
-          )}
+          <motion.button
+            type="button"
+            onClick={onChat}
+            whileTap={{ scale: 0.97 }}
+            className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
+            style={{ background: '#EEF2FF', color: '#4F46E5', border: '1px solid #C7D2FE' }}
+          >
+            <MessageCircle size={15} />
+          </motion.button>
         </div>
       </div>
     </div>
@@ -213,10 +211,6 @@ export default function ProRequests() {
   const active  = visibleRequests.filter((r) => r.status === 'confirmed' || r.status === 'in_progress')
   const others  = visibleRequests.filter((r) => r.status !== 'pending' && r.status !== 'confirmed' && r.status !== 'in_progress')
 
-  function openWhatsApp(phone: string) {
-    const msg = encodeURIComponent('Hola! Vi tu solicitud en OficioYa y me gustaría ayudarte.')
-    window.open(`https://wa.me/${phone.replace(/\s/g, '')}?text=${msg}`, '_blank')
-  }
 
   const header = (
     <div
@@ -360,7 +354,8 @@ export default function ProRequests() {
                   <ActiveCard
                     req={req}
                     onProgress={(status) => updateStatus(req.id, status)}
-                    onWhatsApp={() => req.contact_phone && openWhatsApp(req.contact_phone)}
+
+                    onChat={() => window.location.href = `/solicitud/${req.id}/chat`}
                   />
                 </motion.div>
               ))}

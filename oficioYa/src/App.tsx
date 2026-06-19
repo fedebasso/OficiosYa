@@ -69,6 +69,7 @@ function App() {
           <Route path="/solicitar/:id"   element={<RequestService />} />
           <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
           <Route path="/pro/registro" element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
+          <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
 
           {/* ── Rutas profesional */}
           <Route
@@ -104,7 +105,7 @@ function App() {
                       <Route path="/mensajes"           element={<ProtectedRoute requiredRole="client"><Mensajes /></ProtectedRoute>} />
                       <Route path="/mis-solicitudes"    element={<ProtectedRoute requiredRole="client"><MisSolicitudes /></ProtectedRoute>} />
                       <Route path="/solicitud/:id"      element={<ProtectedRoute requiredRole="client"><SolicitudDetail /></ProtectedRoute>} />
-                      <Route path="/solicitud/:id/chat" element={<ProtectedRoute requiredRole="client"><Chat /></ProtectedRoute>} />
+                      {/* /solicitud/:id/chat está en rutas compartidas arriba */}
                       <Route path="/perfil"             element={<ProtectedRoute requiredRole="client"><ClientProfile /></ProtectedRoute>} />
                       <Route path="*"                   element={<NotFound />} />
                     </Routes>
