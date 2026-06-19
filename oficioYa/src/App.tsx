@@ -28,10 +28,11 @@ const ClientProfile  = lazy(() => import('./pages/ClientProfile'))
 const Mensajes       = lazy(() => import('./pages/Mensajes'))
 
 // ── Profesional
-const ProDashboard   = lazy(() => import('./pages/pro/ProDashboard'))
-const ProRequests    = lazy(() => import('./pages/pro/ProRequests'))
-const ProProfile     = lazy(() => import('./pages/pro/ProProfile'))
-const ProWorkHistory = lazy(() => import('./pages/pro/ProWorkHistory'))
+const ProDashboard    = lazy(() => import('./pages/pro/ProDashboard'))
+const ProRequests     = lazy(() => import('./pages/pro/ProRequests'))
+const ProProfile      = lazy(() => import('./pages/pro/ProProfile'))
+const ProProfileEdit  = lazy(() => import('./pages/pro/ProProfileEdit'))
+const ProWorkHistory  = lazy(() => import('./pages/pro/ProWorkHistory'))
 const ProRegistration = lazy(() => import('./pages/pro/ProRegistration'))
 
 // ── Admin
@@ -87,8 +88,9 @@ function App() {
                   <Routes>
                     <Route path="dashboard"   element={<ProDashboard />} />
                     <Route path="solicitudes" element={<ProRequests />} />
-                    <Route path="perfil"      element={<ProProfile />} />
-                    <Route path="trabajos"    element={<ProWorkHistory />} />
+                    <Route path="perfil"        element={<ProProfile />} />
+                    <Route path="perfil/editar" element={<ProProfileEdit />} />
+                    <Route path="trabajos"     element={<ProWorkHistory />} />
                     <Route path="*"           element={<Navigate to="/pro/dashboard" replace />} />
                   </Routes>
                 </ProLayout>
