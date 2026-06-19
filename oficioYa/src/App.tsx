@@ -78,7 +78,7 @@ function App() {
           <Route path="/solicitar/:id"   element={<RequestService />} />
           <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
           <Route path="/pro/registro"   element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
-          <Route path="/pro/onboarding" element={<ProtectedRoute requiredRole="professional"><ProOnboarding /></ProtectedRoute>} />
+          <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
           <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
 
           {/* ── Rutas profesional */}

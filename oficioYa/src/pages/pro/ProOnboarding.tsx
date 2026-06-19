@@ -109,6 +109,10 @@ export default function ProOnboarding() {
         whatsapp: whatsapp.replace(/\D/g, ''),
         registration_completed: true,
       })
+      // Actualizar role en authStore para que App.tsx redirija correctamente
+      useAuthStore.setState((s) => ({
+        user: s.user ? { ...s.user, role: 'professional' } : null,
+      }))
       navigate('/pro/perfil', { replace: true })
     } finally {
       setSaving(false)

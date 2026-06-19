@@ -124,7 +124,7 @@ export default function ClientProfile() {
             <ProfileRow
               icon={<Wrench size={20} />}
               label="Quiero ser profesional"
-              onClick={() => navigate('/pro/registro')}
+              onClick={() => navigate('/pro/onboarding')}
               accent
             />
           )}
