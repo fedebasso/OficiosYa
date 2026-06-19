@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react'
+import { Star, Loader2 } from 'lucide-react'
 import { getCategoryMeta } from '../../../lib/categories'
 import type { PortfolioItem, WorkPhoto } from '../../../types/registration'
 
@@ -7,7 +7,7 @@ function getPrimaryPhoto(photos: WorkPhoto[], fallbackUrls: string[]): string | 
     photos.find((p) => p.type === 'after')?.url ??
     photos.find((p) => p.type === 'general')?.url ??
     photos[0]?.url ??
-    fallbackUrls[0] ??  // fallback para items guardados antes de la migración
+    fallbackUrls[0] ??
     null
   )
 }
@@ -16,9 +16,11 @@ interface Props {
   item: PortfolioItem
   onEdit: () => void
   onDelete: () => void
+  onToggleFeatured: () => void
+  togglingFeatured?: boolean
 }
 
-export function PortfolioItemCard({ item, onEdit, onDelete }: Props) {
+export function PortfolioItemCard({ item, onEdit, onDelete, onToggleFeatured, togglingFeatured }: Props) {
   const { emoji, label } = getCategoryMeta(item.category ?? '')
   const photo = getPrimaryPhoto(item.photos, item.photo_urls)
 
@@ -34,6 +36,8 @@ export function PortfolioItemCard({ item, onEdit, onDelete }: Props) {
         ) : (
           <div className="w-full h-full flex items-center justify-center text-3xl">📷</div>
         )}
+
+        {/* Badge destacado */}
         {item.is_featured && (
           <div
             className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold"
@@ -42,20 +46,41 @@ export function PortfolioItemCard({ item, onEdit, onDelete }: Props) {
             <Star size={9} fill="currentColor" /> Destacado
           </div>
         )}
+
+        {/* Botón destacar — top right */}
+        <button
+          type="button"
+          onClick={onToggleFeatured}
+          disabled={togglingFeatured}
+          className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-transform"
+          style={{
+            background: item.is_featured ? '#E8683A' : 'rgba(255,255,255,0.9)',
+            border: `1.5px solid ${item.is_featured ? '#E8683A' : '#E8E0D4'}`,
+          }}
+          title={item.is_featured ? 'Quitar destacado' : 'Marcar como destacado'}
+        >
+          {togglingFeatured ? (
+            <Loader2
+              size={12}
+              style={{ color: item.is_featured ? '#fff' : '#E8683A', animation: 'spin 1s linear infinite' }}
+            />
+          ) : (
+            <Star
+              size={12}
+              fill={item.is_featured ? '#fff' : 'none'}
+              style={{ color: item.is_featured ? '#fff' : '#E8683A' }}
+            />
+          )}
+        </button>
       </div>
 
       {/* Info */}
       <div className="p-3">
         <p className="font-bold text-sm truncate" style={{ color: '#111111' }}>{item.title}</p>
-        <div className="flex items-center justify-between mt-1">
-          <span className="text-[11px]" style={{ color: '#888' }}>
-            {emoji} {label}
-            {item.work_date && ` · ${new Date(item.work_date).toLocaleDateString('es', { month: 'short', year: 'numeric' })}`}
-          </span>
-          <span className="text-[10px]" style={{ color: '#AAA' }}>
-            {item.photos.length} foto{item.photos.length !== 1 ? 's' : ''}
-          </span>
-        </div>
+        <p className="text-[11px] mt-0.5 truncate" style={{ color: '#888' }}>
+          {emoji} {label}
+          {item.work_date && ` · ${new Date(item.work_date).toLocaleDateString('es', { month: 'short', year: 'numeric' })}`}
+        </p>
         <div className="flex gap-2 mt-2">
           <button
             type="button"
@@ -71,7 +96,7 @@ export function PortfolioItemCard({ item, onEdit, onDelete }: Props) {
             className="flex-1 py-1.5 rounded-xl text-xs font-bold"
             style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}
           >
-            🗑️ Eliminar
+            🗑️
           </button>
         </div>
       </div>
