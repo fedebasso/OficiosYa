@@ -1,27 +1,41 @@
-import { type ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
+import { ClientLayout } from './layouts/ClientLayout'
+import { ProLayout } from './layouts/ProLayout'
+import { PageSkeleton } from './components/layout/PageSkeleton'
 
-import Home from './pages/Home'
-import Search from './pages/Search'
-import ProfessionalDetail from './pages/ProfessionalDetail'
-import RequestService from './pages/RequestService'
-import TicketFlow from './pages/TicketFlow'
-import TicketConfirm from './pages/TicketConfirm'
-import MisSolicitudes from './pages/MisSolicitudes'
-import SolicitudDetail from './pages/SolicitudDetail'
-import Chat from './pages/Chat'
+// ── Páginas compartidas (estáticas — pequeñas, las usan ambos roles)
 import Login from './pages/Login'
 import Register from './pages/Register'
-import ProRegistration from './pages/pro/ProRegistration'
-import ProProfile from './pages/pro/ProProfile'
-import ProRequests from './pages/pro/ProRequests'
-import ProWorkHistory from './pages/pro/ProWorkHistory'
-import Urgencias from './pages/Urgencias'
-import Favoritos from './pages/Favoritos'
-import ClientProfile from './pages/ClientProfile'
 import NotFound from './pages/NotFound'
-import AdminVerificaciones from './pages/admin/AdminVerificaciones'
+
+// ── Páginas lazy — se dividen en chunks por rol
+const Home               = lazy(() => import('./pages/Home'))
+const Search             = lazy(() => import('./pages/Search'))
+const ProfessionalDetail = lazy(() => import('./pages/ProfessionalDetail'))
+const RequestService     = lazy(() => import('./pages/RequestService'))
+const TicketFlow         = lazy(() => import('./pages/TicketFlow'))
+const TicketConfirm      = lazy(() => import('./pages/TicketConfirm'))
+const Urgencias          = lazy(() => import('./pages/Urgencias'))
+const Favoritos          = lazy(() => import('./pages/Favoritos'))
+
+// ── Cliente
+const MisSolicitudes = lazy(() => import('./pages/MisSolicitudes'))
+const SolicitudDetail = lazy(() => import('./pages/SolicitudDetail'))
+const Chat           = lazy(() => import('./pages/Chat'))
+const ClientProfile  = lazy(() => import('./pages/ClientProfile'))
+const Mensajes       = lazy(() => import('./pages/Mensajes'))
+
+// ── Profesional
+const ProDashboard   = lazy(() => import('./pages/pro/ProDashboard'))
+const ProRequests    = lazy(() => import('./pages/pro/ProRequests'))
+const ProProfile     = lazy(() => import('./pages/pro/ProProfile'))
+const ProWorkHistory = lazy(() => import('./pages/pro/ProWorkHistory'))
+const ProRegistration = lazy(() => import('./pages/pro/ProRegistration'))
+
+// ── Admin
+const AdminVerificaciones = lazy(() => import('./pages/admin/AdminVerificaciones'))
 
 function ProtectedRoute({
   children,
@@ -36,67 +50,75 @@ function ProtectedRoute({
   return <>{children}</>
 }
 
+function RoleRedirect() {
+  const user = useAuthStore((s) => s.user)
+  if (user?.role === 'professional') return <Navigate to="/pro/dashboard" replace />
+  return null // renderiza Home normalmente
+}
+
 function App() {
+  const user = useAuthStore((s) => s.user)
+  const isPro = user?.role === 'professional'
+
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/buscar/:categoria" element={<Search />} />
-        <Route path="/buscar" element={<Search />} />
-        <Route path="/urgencias" element={<Urgencias />} />
-        <Route path="/profesional/:id" element={<ProfessionalDetail />} />
-        <Route path="/solicitar/:id" element={<RequestService />} />
-        <Route path="/ticket" element={<TicketFlow />} />
-        <Route path="/ticket/confirmar" element={<TicketConfirm />} />
-        <Route
-          path="/mis-solicitudes"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <MisSolicitudes />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/solicitud/:id" element={<ProtectedRoute requiredRole="client"><SolicitudDetail /></ProtectedRoute>} />
-        <Route
-          path="/solicitud/:id/chat"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <Chat />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Register />} />
-        <Route path="/favoritos" element={<Favoritos />} />
-        <Route path="/perfil" element={<ClientProfile />} />
-        <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/pro/registro" element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
-        <Route
-          path="/pro/perfil"
-          element={
-            <ProtectedRoute requiredRole="professional">
-              <ProProfile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/pro/solicitudes"
-          element={
-            <ProtectedRoute requiredRole="professional">
-              <ProRequests />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/pro/trabajos"
-          element={
-            <ProtectedRoute requiredRole="professional">
-              <ProWorkHistory />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <Suspense fallback={<PageSkeleton />}>
+        <Routes>
+          {/* ── Rutas compartidas sin layout */}
+          <Route path="/login"    element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/profesional/:id" element={<ProfessionalDetail />} />
+          <Route path="/urgencias"       element={<Urgencias />} />
+          <Route path="/ticket"          element={<TicketFlow />} />
+          <Route path="/ticket/confirmar" element={<TicketConfirm />} />
+          <Route path="/solicitar/:id"   element={<RequestService />} />
+          <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
+          <Route path="/pro/registro" element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
+
+          {/* ── Rutas profesional */}
+          <Route
+            path="/pro/*"
+            element={
+              <ProtectedRoute requiredRole="professional">
+                <ProLayout>
+                  <Routes>
+                    <Route path="dashboard"   element={<ProDashboard />} />
+                    <Route path="solicitudes" element={<ProRequests />} />
+                    <Route path="perfil"      element={<ProProfile />} />
+                    <Route path="trabajos"    element={<ProWorkHistory />} />
+                    <Route path="*"           element={<Navigate to="/pro/dashboard" replace />} />
+                  </Routes>
+                </ProLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ── Rutas cliente */}
+          <Route
+            path="/*"
+            element={
+              isPro
+                ? <Navigate to="/pro/dashboard" replace />
+                : (
+                  <ClientLayout>
+                    <Routes>
+                      <Route path="/"                   element={<><RoleRedirect /><Home /></>} />
+                      <Route path="/buscar"             element={<Search />} />
+                      <Route path="/buscar/:categoria"  element={<Search />} />
+                      <Route path="/favoritos"          element={<Favoritos />} />
+                      <Route path="/mensajes"           element={<ProtectedRoute requiredRole="client"><Mensajes /></ProtectedRoute>} />
+                      <Route path="/mis-solicitudes"    element={<ProtectedRoute requiredRole="client"><MisSolicitudes /></ProtectedRoute>} />
+                      <Route path="/solicitud/:id"      element={<ProtectedRoute requiredRole="client"><SolicitudDetail /></ProtectedRoute>} />
+                      <Route path="/solicitud/:id/chat" element={<ProtectedRoute requiredRole="client"><Chat /></ProtectedRoute>} />
+                      <Route path="/perfil"             element={<ProtectedRoute requiredRole="client"><ClientProfile /></ProtectedRoute>} />
+                      <Route path="*"                   element={<NotFound />} />
+                    </Routes>
+                  </ClientLayout>
+                )
+            }
+          />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

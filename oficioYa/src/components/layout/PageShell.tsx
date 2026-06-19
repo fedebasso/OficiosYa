@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { BottomNav } from './BottomNav'
 
 interface PageShellProps {
   children: ReactNode
@@ -7,7 +6,7 @@ interface PageShellProps {
   showBottomNav?: boolean
 }
 
-export function PageShell({ children, header, showBottomNav = true }: PageShellProps) {
+export function PageShell({ children, header, showBottomNav = false }: PageShellProps) {
   return (
     <div style={{ background: '#F5F0E8', minHeight: '100dvh' }}>
       <div
@@ -24,14 +23,13 @@ export function PageShell({ children, header, showBottomNav = true }: PageShellP
         <main
           className="flex-1"
           style={{
-            paddingBottom: showBottomNav ? 'calc(64px + var(--safe-bottom))' : 0,
+            paddingBottom: showBottomNav ? 'calc(64px + var(--safe-bottom))' : 'calc(64px + var(--safe-bottom))',
             paddingLeft: 'var(--px-container)',
             paddingRight: 'var(--px-container)',
           }}
         >
           {children}
         </main>
-        {showBottomNav && <BottomNav />}
       </div>
     </div>
   )
