@@ -48,23 +48,39 @@ export function PortfolioItemForm({ item, proId, onSave, onClose, prefill }: Pro
         }
       }
 
-      const data = {
+      // Campos que siempre existieron en work_portfolio (seguros sin migración)
+      const baseData = {
         title,
         category,
         description: description || null,
         work_date: workDate || null,
+        photo_urls: uploadedPhotos.map((p) => p.url),
+      }
+
+      // Campos nuevos (requieren migración 20260618_portfolio_mejoras.sql)
+      // Se agregan si están disponibles; si la migración no corrió, el INSERT igual funciona con baseData
+      const extendedData = {
+        ...baseData,
         location: location || null,
         photos: uploadedPhotos,
-        photo_urls: uploadedPhotos.map((p) => p.url), // legacy
         request_id: item?.request_id ?? prefill?.request_id ?? null,
         is_featured: featured,
       }
 
       let saved: PortfolioItem
-      if (item) {
-        saved = await registrationService.updatePortfolioItem(item.id, data)
-      } else {
-        saved = await registrationService.addPortfolioItem(proId, data as Parameters<typeof registrationService.addPortfolioItem>[1])
+      try {
+        if (item) {
+          saved = await registrationService.updatePortfolioItem(item.id, extendedData)
+        } else {
+          saved = await registrationService.addPortfolioItem(proId, extendedData as Parameters<typeof registrationService.addPortfolioItem>[1])
+        }
+      } catch {
+        // Si falló con los campos nuevos (migración no ejecutada), reintentar solo con campos base
+        if (item) {
+          saved = await registrationService.updatePortfolioItem(item.id, baseData)
+        } else {
+          saved = await registrationService.addPortfolioItem(proId, baseData as Parameters<typeof registrationService.addPortfolioItem>[1])
+        }
       }
 
       // Si estamos quitando el destacado de un item que antes era destacado

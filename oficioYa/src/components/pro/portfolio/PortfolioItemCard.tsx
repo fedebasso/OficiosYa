@@ -2,11 +2,12 @@ import { Star } from 'lucide-react'
 import { getCategoryMeta } from '../../../lib/categories'
 import type { PortfolioItem, WorkPhoto } from '../../../types/registration'
 
-function getPrimaryPhoto(photos: WorkPhoto[]): string | null {
+function getPrimaryPhoto(photos: WorkPhoto[], fallbackUrls: string[]): string | null {
   return (
     photos.find((p) => p.type === 'after')?.url ??
     photos.find((p) => p.type === 'general')?.url ??
     photos[0]?.url ??
+    fallbackUrls[0] ??  // fallback para items guardados antes de la migración
     null
   )
 }
@@ -19,7 +20,7 @@ interface Props {
 
 export function PortfolioItemCard({ item, onEdit, onDelete }: Props) {
   const { emoji, label } = getCategoryMeta(item.category ?? '')
-  const photo = getPrimaryPhoto(item.photos)
+  const photo = getPrimaryPhoto(item.photos, item.photo_urls)
 
   return (
     <div
