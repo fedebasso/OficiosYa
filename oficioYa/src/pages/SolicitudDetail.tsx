@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useRequestStore } from '../store/requestStore'
 import { ReviewForm } from '../components/requests/ReviewForm'
+import { PortfolioItemForm } from '../components/pro/portfolio/PortfolioItemForm'
+import { useAuthStore } from '../store/authStore'
 import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string; desc: string }> = {
@@ -36,9 +38,12 @@ export default function SolicitudDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { requests, updateStatus, submitReview } = useRequestStore()
+  const user = useAuthStore((s) => s.user)
   const [showReview, setShowReview] = useState(false)
   const [showCancel, setShowCancel] = useState(false)
   const [cancelling, setCancelling] = useState(false)
+  const [showPortfolioForm, setShowPortfolioForm] = useState(false)
+  const [portfolioAdded, setPortfolioAdded] = useState(false)
 
   const req = requests.find((r) => r.id === id)
 
@@ -231,6 +236,27 @@ export default function SolicitudDetail() {
             </motion.button>
           )}
 
+          {/* Agregar a portfolio — solo si completado y es profesional */}
+          {req.status === 'completed' && user?.role === 'professional' && !portfolioAdded && (
+            <button
+              type="button"
+              onClick={() => setShowPortfolioForm(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold"
+              style={{ background: '#FEF0EA', color: '#E8683A', border: '1.5px solid #FDDCC8' }}
+            >
+              📸 Agregar a mi portfolio
+            </button>
+          )}
+
+          {portfolioAdded && (
+            <div
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold"
+              style={{ background: '#F0FDF4', color: '#0F6E56', border: '1.5px solid #86EFAC' }}
+            >
+              ✓ Trabajo agregado al portfolio
+            </div>
+          )}
+
           {/* Cancelar — solo si está pendiente */}
           {req.status === 'pending' && (
             <motion.button
@@ -272,6 +298,38 @@ export default function SolicitudDetail() {
                   setShowReview(false)
                 }}
                 onClose={() => setShowReview(false)}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal portfolio */}
+      <AnimatePresence>
+        {showPortfolioForm && user?.id && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-end justify-center"
+            style={{ background: 'rgba(0,0,0,.6)' }}
+            onClick={() => setShowPortfolioForm(false)}
+          >
+            <motion.div
+              initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+              className="w-full max-w-md rounded-t-2xl p-6"
+              style={{ background: '#FFFFFF' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <PortfolioItemForm
+                item={null}
+                proId={user.id}
+                prefill={{
+                  category: req.category ?? null,
+                  description: req.description ?? null,
+                  request_id: req.id ?? null,
+                }}
+                onSave={() => { setPortfolioAdded(true); setShowPortfolioForm(false) }}
+                onClose={() => setShowPortfolioForm(false)}
               />
             </motion.div>
           </motion.div>
