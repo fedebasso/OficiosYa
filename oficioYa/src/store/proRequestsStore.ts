@@ -11,9 +11,11 @@ const MOCK_INCOMING: ServiceRequest[] = [
     category: 'electricista',
     description: 'Tengo un cortocircuito en el panel eléctrico de mi departamento. La luz del living no enciende.',
     urgency: true,
-    status: 'pending',
+    status: 'confirmed',
     created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     contact_phone: '099 555 123',
+    address: 'Av. Brasil 2340, Pocitos',
+    scheduled_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: '202',
@@ -25,6 +27,8 @@ const MOCK_INCOMING: ServiceRequest[] = [
     status: 'pending',
     created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
     contact_phone: '098 777 456',
+    address: 'Bulevar Artigas 1560, Montevideo',
+    scheduled_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
   },
 ]
 

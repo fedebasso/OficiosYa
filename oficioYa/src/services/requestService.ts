@@ -3,8 +3,35 @@ import { IS_DEMO_MODE } from '../lib/env'
 import type { ServiceRequest } from '../store/requestStore'
 
 // Estado local para el modo demo (persiste durante la sesión)
-let mockRequests: ServiceRequest[] = []
-let mockIdCounter = 100
+let mockRequests: ServiceRequest[] = [
+  {
+    id: '201',
+    client_id: 'mock-client-1',
+    professional_id: '1',
+    category: 'electricista',
+    description: 'Tengo un cortocircuito en el panel eléctrico de mi departamento. La luz del living no enciende.',
+    urgency: true,
+    status: 'confirmed',
+    created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    contact_phone: '099 555 123',
+    address: 'Av. Brasil 2340, Pocitos',
+    scheduled_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '202',
+    client_id: 'mock-client-1',
+    professional_id: '2',
+    category: 'sanitario',
+    description: 'Pérdida de agua bajo el lavatorio del baño principal.',
+    urgency: false,
+    status: 'pending',
+    created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    contact_phone: '099 555 123',
+    address: 'Av. Brasil 2340, Pocitos',
+    scheduled_date: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+]
+let mockIdCounter = 300
 
 export const requestService = {
   async getAll(): Promise<ServiceRequest[]> {

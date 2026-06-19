@@ -47,67 +47,79 @@ export function ChatInput({ onSendText, onSendImage, onSendAudio }: Props) {
     )
   }
 
-  const iconButtonStyle: React.CSSProperties = {
-    background:   'transparent',
-    border:       '1.5px solid rgba(255,255,255,0.55)',
-    borderRadius: '50%',
-    width:        34,
-    height:       34,
-    display:      'flex',
-    alignItems:   'center',
-    justifyContent: 'center',
-    flexShrink:   0,
-    cursor:       'pointer',
-  }
+  const hasText = text.trim().length > 0
 
   return (
     <div
-      className="flex items-center gap-2 px-3 py-2"
-      style={{ background: '#0F6E56' }}
+      className="flex items-center gap-2 px-3 py-2.5"
+      style={{
+        background: '#FFFFFF',
+        borderTop: '1px solid #EDE8DE',
+        paddingBottom: 'calc(10px + var(--safe-bottom, 0px))',
+      }}
     >
-      {/* Input */}
+      {/* Textarea */}
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Escribir mensaje..."
         rows={1}
-        className="flex-1 resize-none outline-none text-[12px] leading-relaxed bg-transparent placeholder:text-white/40 text-white"
+        className="flex-1 resize-none outline-none text-[13px] leading-relaxed"
         style={{
-          border:       '1.5px solid rgba(255,255,255,0.55)',
+          background:   '#F5F0E8',
+          border:       '1.5px solid #EDE8DE',
           borderRadius: 24,
-          padding:      '7px 14px',
+          padding:      '9px 14px',
+          color:        '#111111',
           maxHeight:    80,
           overflowY:    'auto',
+          fontFamily:   'inherit',
         }}
       />
 
       {/* Cámara */}
-      <button type="button" style={iconButtonStyle} onClick={() => fileRef.current?.click()}>
-        <Camera size={16} color="rgba(255,255,255,0.9)" />
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        className="flex-shrink-0 flex items-center justify-center active:scale-90 transition-transform"
+        style={{
+          width: 36, height: 36, borderRadius: '50%',
+          background: '#F5F0E8',
+          border: '1.5px solid #EDE8DE',
+        }}
+      >
+        <Camera size={17} style={{ color: '#E8683A' }} />
       </button>
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={handleFileChange}
-      />
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
 
       {/* Micrófono */}
-      <button type="button" style={iconButtonStyle} onClick={() => setRecording(true)}>
-        <Mic size={16} color="rgba(255,255,255,0.9)" />
+      <button
+        type="button"
+        onClick={() => setRecording(true)}
+        className="flex-shrink-0 flex items-center justify-center active:scale-90 transition-transform"
+        style={{
+          width: 36, height: 36, borderRadius: '50%',
+          background: '#F5F0E8',
+          border: '1.5px solid #EDE8DE',
+        }}
+      >
+        <Mic size={17} style={{ color: '#E8683A' }} />
       </button>
 
       {/* Enviar */}
       <button
         type="button"
         onClick={handleSendText}
-        disabled={!text.trim()}
-        className="flex-shrink-0 w-[34px] h-[34px] rounded-full flex items-center justify-center disabled:opacity-40"
-        style={{ background: '#9FE1CB', border: 'none' }}
+        disabled={!hasText}
+        className="flex-shrink-0 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-40"
+        style={{
+          width: 36, height: 36, borderRadius: '50%',
+          background: '#E8683A',
+          border: 'none',
+        }}
       >
-        <Send size={15} color="#0F6E56" />
+        <Send size={15} color="#FFFFFF" />
       </button>
     </div>
   )

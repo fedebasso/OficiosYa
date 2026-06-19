@@ -1,4 +1,3 @@
-// src/components/chat/ChatBubble.tsx
 import { motion } from 'framer-motion'
 import { Play } from 'lucide-react'
 import { fadeUp } from '../../lib/motion'
@@ -19,39 +18,21 @@ interface Props {
 }
 
 export function ChatBubble({ message }: Props) {
-  const isOwn   = message.senderRole === 'client'
-  const isSystem = message.senderRole === 'system'
-
-  if (isSystem) {
-    return (
-      <motion.div variants={fadeUp} className="flex justify-center my-1">
-        <span
-          className="text-[10px] font-semibold px-3 py-1 rounded-full"
-          style={{ background: 'rgba(15,110,86,.08)', color: '#0F6E56' }}
-        >
-          {message.content}
-        </span>
-      </motion.div>
-    )
-  }
+  const isOwn = message.senderRole === 'client'
 
   return (
     <motion.div
       variants={fadeUp}
-      className={`flex flex-col gap-0.5 ${isOwn ? 'items-end' : 'items-start'}`}
+      className={`flex flex-col gap-1 ${isOwn ? 'items-end' : 'items-start'}`}
     >
-      <span className="text-[9px] px-1" style={{ color: '#aaa' }}>
-        {message.senderName} · {formatTime(message.createdAt)}
-      </span>
-
       {message.type === 'text' && (
         <div
-          className="max-w-[78%] px-3 py-2 text-[12px] leading-relaxed"
+          className="max-w-[78%] px-3 py-2 text-[13px] leading-relaxed"
           style={{
-            background:    isOwn ? '#0F6E56' : '#fff',
-            color:         isOwn ? '#fff'    : '#333',
-            border:        isOwn ? 'none'    : '1px solid #e8e0d4',
-            borderRadius:  isOwn ? '12px 4px 12px 12px' : '4px 12px 12px 12px',
+            background:   isOwn ? '#E8683A' : '#FFFFFF',
+            color:        isOwn ? '#FFFFFF' : '#111111',
+            border:       isOwn ? 'none' : '1.5px solid #EDE8DE',
+            borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
           }}
         >
           {message.content}
@@ -62,49 +43,65 @@ export function ChatBubble({ message }: Props) {
         <div
           className="max-w-[78%] overflow-hidden"
           style={{
-            background:   '#0F6E56',
-            borderRadius: isOwn ? '12px 4px 12px 12px' : '4px 12px 12px 12px',
+            borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
+            border: '1.5px solid #EDE8DE',
           }}
         >
           <img
             src={message.content}
             alt={message.fileName ?? 'imagen'}
-            className="w-full max-w-[200px] object-cover"
-            style={{ maxHeight: 160, display: 'block' }}
+            className="w-full object-cover"
+            style={{ maxWidth: 220, maxHeight: 180, display: 'block' }}
           />
-          <p className="text-[9px] px-2 py-1" style={{ color: '#9FE1CB' }}>
-            {message.fileName}
-          </p>
+          {message.fileName && (
+            <div
+              className="px-3 py-1.5"
+              style={{
+                background: isOwn ? '#E8683A' : '#F5F0E8',
+                color: isOwn ? 'rgba(255,255,255,0.8)' : '#888',
+                fontSize: 10,
+              }}
+            >
+              {message.fileName}
+            </div>
+          )}
         </div>
       )}
 
       {message.type === 'audio' && (
         <div
-          className="flex items-center gap-2 px-3 py-2"
+          className="flex items-center gap-2 px-3 py-2.5"
           style={{
-            background:   isOwn ? '#0F6E56' : '#fff',
-            border:       isOwn ? 'none'    : '1px solid #e8e0d4',
-            borderRadius: isOwn ? '12px 4px 12px 12px' : '4px 12px 12px 12px',
-            minWidth: 140,
+            background:   isOwn ? '#E8683A' : '#FFFFFF',
+            border:       isOwn ? 'none' : '1.5px solid #EDE8DE',
+            borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
+            minWidth: 160,
           }}
         >
           <button
             type="button"
             className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center"
-            style={{ background: isOwn ? '#9FE1CB' : '#0F6E56' }}
+            style={{ background: isOwn ? 'rgba(255,255,255,0.25)' : '#E8683A' }}
           >
-            <Play size={11} style={{ color: isOwn ? '#0F6E56' : '#fff' }} fill="currentColor" />
+            <Play size={11} style={{ color: isOwn ? '#fff' : '#fff' }} fill="currentColor" />
           </button>
           <div className="flex-1">
-            <div className="h-[3px] rounded-full" style={{ background: isOwn ? 'rgba(255,255,255,0.3)' : '#e8e0d4' }}>
-              <div className="h-full w-[40%] rounded-full" style={{ background: isOwn ? '#9FE1CB' : '#0F6E56' }} />
+            <div className="h-[3px] rounded-full" style={{ background: isOwn ? 'rgba(255,255,255,0.3)' : '#EDE8DE' }}>
+              <div className="h-full w-[40%] rounded-full" style={{ background: isOwn ? 'rgba(255,255,255,0.8)' : '#E8683A' }} />
             </div>
           </div>
-          <span className="text-[10px] flex-shrink-0" style={{ color: isOwn ? '#9FE1CB' : '#aaa' }}>
+          <span className="text-[10px] flex-shrink-0" style={{ color: isOwn ? 'rgba(255,255,255,0.7)' : '#AAA' }}>
             {message.duration != null ? formatDuration(message.duration) : '0:00'}
           </span>
         </div>
       )}
+
+      <span
+        className="text-[9px] px-1"
+        style={{ color: isOwn ? 'rgba(232,104,58,0.55)' : '#BBBBBB' }}
+      >
+        {formatTime(message.createdAt)}
+      </span>
     </motion.div>
   )
 }

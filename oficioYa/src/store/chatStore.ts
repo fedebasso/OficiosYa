@@ -28,7 +28,6 @@ function mockMessages(requestId: string): ChatMessage[] {
     ...extra,
   })
   return [
-    m(60, 'system', 'system', 'Chat habilitado — profesional asignado'),
     m(55, 'pro',    'text',   '¡Hola! Recibí tu solicitud. ¿Podés contarme más detalles del problema?'),
     m(50, 'client', 'text',   'Hola, el problema está en el tablero eléctrico del pasillo.'),
     m(45, 'pro',    'text',   '¿Podés mandarme una foto del tablero para verlo antes de ir?'),

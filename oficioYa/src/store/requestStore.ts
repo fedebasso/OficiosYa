@@ -19,6 +19,8 @@ export interface ServiceRequest {
   urgency_level?: UrgencyLevel
   request_type?: RequestType
   location?: string
+  address?: string
+  scheduled_date?: string
 }
 
 interface RequestStore {
