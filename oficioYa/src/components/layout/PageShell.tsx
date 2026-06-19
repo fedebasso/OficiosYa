@@ -23,7 +23,7 @@ export function PageShell({ children, header, showBottomNav = false }: PageShell
         <main
           className="flex-1"
           style={{
-            paddingBottom: showBottomNav ? 'calc(64px + var(--safe-bottom))' : 'calc(64px + var(--safe-bottom))',
+            paddingBottom: 'calc(64px + var(--safe-bottom))',
             paddingLeft: 'var(--px-container)',
             paddingRight: 'var(--px-container)',
           }}
