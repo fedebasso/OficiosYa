@@ -116,22 +116,48 @@ export default function ProDashboard() {
 
           {!loading && pending.length === 0 && (
             <div
-              className="flex flex-col items-center gap-3 py-10 text-center rounded-2xl"
+              className="rounded-2xl overflow-hidden"
               style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
             >
-              <span className="text-3xl">✓</span>
-              <div>
-                <p className="font-black text-sm" style={{ color: '#111' }}>Todo al día</p>
-                <p className="text-xs mt-1" style={{ color: '#AAA' }}>No tenés solicitudes pendientes</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => navigate('/pro/perfil')}
-                className="px-4 py-2 rounded-xl text-sm font-bold"
-                style={{ background: 'rgba(232,104,58,.12)', color: '#E8683A' }}
+              {/* Banner */}
+              <div
+                className="px-5 py-4 flex items-center gap-3"
+                style={{ background: 'linear-gradient(135deg, rgba(232,104,58,0.08) 0%, rgba(232,104,58,0.04) 100%)', borderBottom: '1px solid #EDE8DE' }}
               >
-                Completar perfil
-              </button>
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+                  style={{ background: 'rgba(232,104,58,0.12)' }}
+                >
+                  ✅
+                </div>
+                <div>
+                  <p className="font-black text-sm" style={{ color: '#111' }}>Todo al día, {firstName}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#AAA' }}>No hay solicitudes pendientes por ahora</p>
+                </div>
+              </div>
+              {/* Próximos pasos */}
+              <div className="p-4 flex flex-col gap-2">
+                <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: '#CCC' }}>Mientras tanto</p>
+                {[
+                  { icon: '👤', label: 'Completá tu perfil', desc: 'Más info = más clientes', to: '/pro/perfil/editar' },
+                  { icon: '📸', label: 'Subí fotos de trabajos', desc: 'Generá confianza con tu portfolio', to: '/pro/perfil' },
+                ].map(({ icon, label, desc, to }) => (
+                  <button
+                    key={to}
+                    type="button"
+                    onClick={() => navigate(to)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-left w-full active:opacity-70"
+                    style={{ background: '#F5F0E8', border: '1px solid #EDE8DE' }}
+                  >
+                    <span className="text-xl flex-shrink-0">{icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold" style={{ color: '#111' }}>{label}</p>
+                      <p className="text-xs" style={{ color: '#999' }}>{desc}</p>
+                    </div>
+                    <ChevronRight size={14} style={{ color: '#CCC', flexShrink: 0 }} />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 

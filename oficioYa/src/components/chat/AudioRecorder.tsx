@@ -77,6 +77,7 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
   const timeLabel = `${mins}:${secs.toString().padStart(2, '0')}`
 
   const bars = [7, 13, 5, 11, 5, 9, 13, 6, 10, 4, 12, 8]
+  const barDelays = [0, 0.1, 0.2, 0.15, 0.25, 0.05, 0.2, 0.1, 0.3, 0.15, 0.05, 0.25]
 
   if (micError) {
     return (
@@ -128,7 +129,7 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
           className="w-2 h-2 rounded-full flex-shrink-0"
           style={{ background: '#E8683A', animation: 'pulse 1s ease-in-out infinite' }}
         />
-        {/* Barras */}
+        {/* Barras animadas */}
         <div className="flex items-center gap-[2px] flex-1">
           {bars.map((h, i) => (
             <div
@@ -137,11 +138,23 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
               style={{
                 width: 2,
                 height: h,
-                background: `rgba(232,104,58,${0.25 + (h / 13) * 0.65})`,
+                background: `rgba(232,104,58,${0.35 + (h / 13) * 0.55})`,
+                animationName: 'waveBar',
+                animationDuration: `${0.55 + (h / 13) * 0.4}s`,
+                animationDelay: `${barDelays[i]}s`,
+                animationTimingFunction: 'ease-in-out',
+                animationIterationCount: 'infinite',
+                animationDirection: 'alternate',
               }}
             />
           ))}
         </div>
+        <style>{`
+          @keyframes waveBar {
+            from { transform: scaleY(0.35); }
+            to   { transform: scaleY(1.1); }
+          }
+        `}</style>
         {/* Timer */}
         <span className="text-[10px] font-bold flex-shrink-0" style={{ color: '#E8683A' }}>
           {timeLabel}
