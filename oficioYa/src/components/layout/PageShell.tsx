@@ -6,7 +6,7 @@ interface PageShellProps {
   showBottomNav?: boolean
 }
 
-export function PageShell({ children, header, showBottomNav = false }: PageShellProps) {
+export function PageShell({ children, header, showBottomNav: _showBottomNav = false }: PageShellProps) {
   return (
     <div style={{ background: '#F5F0E8', minHeight: '100dvh' }}>
       <div

@@ -1,19 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
 import { LayoutDashboard, FileText, UserCircle } from 'lucide-react'
 import { useProRequestsStore } from '../../store/proRequestsStore'
-import { useAuthStore } from '../../store/authStore'
-import { useEffect } from 'react'
 
 export function ProBottomNav() {
   const { pathname } = useLocation()
-  const user = useAuthStore((s) => s.user)
-  const load = useProRequestsStore((s) => s.load)
   const requests = useProRequestsStore((s) => s.requests)
   const pendingCount = requests.filter((r) => r.status === 'pending').length
-
-  useEffect(() => {
-    if (user?.id) load(user.id)
-  }, [user?.id, load])
 
   const TABS = [
     { label: 'Dashboard',   to: '/pro/dashboard',   icon: LayoutDashboard, badge: pendingCount > 0 ? pendingCount : null },

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useChatStore } from '../store/chatStore'
 import { useRequestStore } from '../store/requestStore'
@@ -19,6 +20,11 @@ export default function Mensajes() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const requests = useRequestStore((s) => s.requests)
+  const loadRequests = useRequestStore((s) => s.loadRequests)
+
+  useEffect(() => {
+    loadRequests()
+  }, [])
   const messagesByRequest = useChatStore((s) => s.messagesByRequest)
 
   // Solo solicitudes con chat activo (confirmed o in_progress) del cliente actual

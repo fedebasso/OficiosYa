@@ -50,11 +50,6 @@ function ProtectedRoute({
   return <>{children}</>
 }
 
-function RoleRedirect() {
-  const user = useAuthStore((s) => s.user)
-  if (user?.role === 'professional') return <Navigate to="/pro/dashboard" replace />
-  return null // renderiza Home normalmente
-}
 
 function App() {
   const user = useAuthStore((s) => s.user)
@@ -102,7 +97,7 @@ function App() {
                 : (
                   <ClientLayout>
                     <Routes>
-                      <Route path="/"                   element={<><RoleRedirect /><Home /></>} />
+                      <Route path="/"                   element={isPro ? <Navigate to="/pro/dashboard" replace /> : <Home />} />
                       <Route path="/buscar"             element={<Search />} />
                       <Route path="/buscar/:categoria"  element={<Search />} />
                       <Route path="/favoritos"          element={<Favoritos />} />
