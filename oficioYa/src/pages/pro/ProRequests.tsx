@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useIncomingRequests } from '../../hooks/useRequests'
 import { PageShell } from '../../components/layout/PageShell'
@@ -193,6 +194,7 @@ function HistoryCard({ req }: { req: ServiceRequest }) {
 }
 
 export default function ProRequests() {
+  const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const { requests, loading, error, updateStatus } = useIncomingRequests(user?.id ?? '')
   const [historyOpen, setHistoryOpen] = useState(true)
@@ -355,7 +357,7 @@ export default function ProRequests() {
                     req={req}
                     onProgress={(status) => updateStatus(req.id, status)}
 
-                    onChat={() => window.location.href = `/solicitud/${req.id}/chat`}
+                    onChat={() => navigate(`/solicitud/${req.id}/chat`)}
                   />
                 </motion.div>
               ))}

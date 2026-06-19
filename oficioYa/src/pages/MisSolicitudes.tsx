@@ -91,7 +91,7 @@ export default function MisSolicitudes() {
         {requests.map((req) => {
           const status = STATUS_CONFIG[req.status] ?? STATUS_CONFIG.pending
           const date = new Date(req.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short' })
-          const hasAction = req.status === 'completed' || req.status === 'pending'
+          const hasAction = req.status === 'completed' || req.status === 'pending' || req.status === 'confirmed' || req.status === 'in_progress'
           return (
             <motion.div key={req.id} variants={fadeUp}>
               <Link to={`/solicitud/${req.id}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -148,10 +148,20 @@ export default function MisSolicitudes() {
                 {/* Acción al pie con separador */}
                 {hasAction && (
                   <div style={{ borderTop: '1px solid #F0EBE1', padding: '10px 14px' }}>
+                    {(req.status === 'confirmed' || req.status === 'in_progress') && (
+                      <button
+                        type="button"
+                        onClick={(e) => { e.preventDefault(); navigate(`/solicitud/${req.id}/chat`) }}
+                        className="w-full rounded-xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity flex items-center justify-center gap-2"
+                        style={{ background: '#E8683A', color: '#FFFFFF' }}
+                      >
+                        💬 Ir al chat
+                      </button>
+                    )}
                     {req.status === 'completed' && (
                       <button
                         type="button"
-                        onClick={() => setReviewingId(req.id)}
+                        onClick={(e) => { e.preventDefault(); setReviewingId(req.id) }}
                         className="w-full rounded-xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
                         style={{ background: 'rgba(232,104,58,.08)', color: '#E8683A', border: '1px solid rgba(232,104,58,.2)' }}
                       >
@@ -161,7 +171,7 @@ export default function MisSolicitudes() {
                     {req.status === 'pending' && (
                       <button
                         type="button"
-                        onClick={() => setCancellingId(req.id)}
+                        onClick={(e) => { e.preventDefault(); setCancellingId(req.id) }}
                         className="w-full rounded-xl py-2.5 text-sm font-bold active:opacity-70 transition-opacity"
                         style={{ background: 'rgba(239,68,68,.05)', color: '#ef4444', border: '1px solid rgba(239,68,68,.15)' }}
                       >

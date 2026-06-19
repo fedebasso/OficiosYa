@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useProRequestsStore } from '../../store/proRequestsStore'
 import { PageShell } from '../../components/layout/PageShell'
-import { CheckCircle, XCircle, Clock, ChevronRight } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, ChevronRight, MessageCircle } from 'lucide-react'
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -197,6 +197,49 @@ export default function ProDashboard() {
             </button>
           )}
         </div>
+
+        {/* En curso — solicitudes confirmadas con botón chat */}
+        {active.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
+                En curso · {active.length}
+              </p>
+            </div>
+            {active.map((req) => (
+              <div
+                key={req.id}
+                className="rounded-2xl overflow-hidden"
+                style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+              >
+                <div
+                  className="flex items-center justify-between px-4 py-2"
+                  style={{ background: 'rgba(34,197,94,.06)', borderBottom: '1px solid rgba(34,197,94,.15)' }}
+                >
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#22c55e' }}>
+                    ✅ {req.status === 'in_progress' ? 'En camino' : 'Aceptado'}
+                  </span>
+                  <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAA' }}>
+                    <Clock size={9} /> {timeAgo(req.created_at)}
+                  </span>
+                </div>
+                <div className="px-4 pt-3 pb-4 flex flex-col gap-3">
+                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: '#333' }}>
+                    {req.description}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/solicitud/${req.id}/chat`)}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold"
+                    style={{ background: '#E8683A', color: '#FFFFFF' }}
+                  >
+                    <MessageCircle size={14} /> Ir al chat
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Resumen de completados */}
         {completed.length > 0 && (
