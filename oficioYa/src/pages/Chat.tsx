@@ -51,10 +51,29 @@ export default function Chat() {
   }, [messages.length])
 
   if (!req || !id) {
+    const errHeader = (
+      <div
+        className="px-5 sticky top-0 z-50 flex items-center gap-3"
+        style={{ background: '#0F6E56', paddingTop: 'calc(12px + var(--safe-top))', paddingBottom: 12, minHeight: 56 }}
+      >
+        <button type="button" onClick={() => navigate(-1)} className="p-1 -ml-1 rounded-full active:opacity-60">
+          <ChevronLeft size={24} color="#9FE1CB" />
+        </button>
+        <span className="text-sm font-black text-white">Chat</span>
+      </div>
+    )
     return (
-      <PageShell showBottomNav={false}>
+      <PageShell showBottomNav={false} header={errHeader}>
         <div className="flex flex-col items-center gap-4 py-24 text-center px-6">
           <p className="font-black text-base" style={{ color: '#111' }}>Solicitud no encontrada</p>
+          <button
+            type="button"
+            onClick={() => navigate('/mensajes')}
+            className="px-4 py-2 rounded-xl text-sm font-bold"
+            style={{ background: 'rgba(232,104,58,.12)', color: '#E8683A' }}
+          >
+            Ir a Mensajes
+          </button>
         </div>
       </PageShell>
     )

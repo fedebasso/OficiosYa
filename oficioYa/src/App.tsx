@@ -1,5 +1,5 @@
-import { lazy, Suspense, type ReactNode } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense, type ReactNode, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { ClientLayout } from './layouts/ClientLayout'
 import { ProLayout } from './layouts/ProLayout'
@@ -37,6 +37,12 @@ const ProRegistration = lazy(() => import('./pages/pro/ProRegistration'))
 // ── Admin
 const AdminVerificaciones = lazy(() => import('./pages/admin/AdminVerificaciones'))
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
 function ProtectedRoute({
   children,
   requiredRole,
@@ -57,6 +63,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<PageSkeleton />}>
         <Routes>
           {/* ── Rutas compartidas sin layout */}

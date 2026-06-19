@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
+import { IS_DEMO_MODE } from '../lib/env'
 import type { ServiceRequest } from './requestStore'
 
 const MOCK_INCOMING: ServiceRequest[] = [
@@ -27,8 +28,7 @@ const MOCK_INCOMING: ServiceRequest[] = [
   },
 ]
 
-const isPlaceholder = () =>
-  (import.meta.env.VITE_SUPABASE_URL ?? '').includes('placeholder')
+const isPlaceholder = () => IS_DEMO_MODE
 
 interface ProRequestsStore {
   requests: ServiceRequest[]

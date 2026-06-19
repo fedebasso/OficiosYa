@@ -18,9 +18,12 @@ export function ProfessionalCard({ professional, onClick }: Props) {
   const favorite = isFavorite(id)
 
   return (
-    <motion.button
+    <motion.div
       onClick={onClick}
-      className="w-full text-left rounded-2xl overflow-hidden flex items-stretch"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && onClick()}
+      className="w-full text-left rounded-2xl overflow-hidden flex items-stretch cursor-pointer"
       whileTap={{ scale: 0.98, y: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       style={{
@@ -120,7 +123,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
         </div>
 
       </div>
-    </motion.button>
+    </motion.div>
   )
 }
 
