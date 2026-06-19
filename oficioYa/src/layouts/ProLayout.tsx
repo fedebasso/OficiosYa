@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ProBottomNav } from '../components/layout/ProBottomNav'
 import { useProfessionalStore } from '../store/professionalStore'
 import { useAuthStore } from '../store/authStore'
