@@ -36,6 +36,10 @@ export function Step4Portfolio({ onNext, loading }: Props) {
         category: form.category || null,
         work_date: form.work_date || null,
         photo_urls: urls,
+        photos: [],
+        location: null,
+        request_id: null,
+        is_featured: false,
       })
       setItems((prev) => [item, ...prev])
       setShowForm(false)

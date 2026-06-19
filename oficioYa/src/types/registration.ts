@@ -48,10 +48,10 @@ export interface PortfolioItem {
   work_date: string | null
   category: string | null
   photo_urls: string[]       // legacy — mantener para no romper Step4Portfolio.tsx
-  photos?: WorkPhoto[]       // nuevo formato con tipo de foto
-  location?: string | null
-  request_id?: string | null
-  is_featured?: boolean
+  photos: WorkPhoto[]       // nuevo formato con tipo de foto
+  location: string | null
+  request_id: string | null
+  is_featured: boolean
   created_at: string
 }
 
