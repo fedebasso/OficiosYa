@@ -6,7 +6,6 @@ import { useAuthStore } from '../store/authStore'
 
 export function ProLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
-  const location = useLocation()
   const user = useAuthStore((s) => s.user)
   const { profile, load } = useProfessionalStore()
 
