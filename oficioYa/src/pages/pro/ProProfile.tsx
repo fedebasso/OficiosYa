@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ProPortfolio } from '../../components/pro/portfolio/ProPortfolio'
 import { useAuthStore } from '../../store/authStore'
 import { PageShell } from '../../components/layout/PageShell'
 import { Camera, Check, LogOut } from 'lucide-react'
@@ -51,6 +52,7 @@ export default function ProProfile() {
   const user = useAuthStore((s) => s.user)
   const signOut = useAuthStore((s) => s.signOut)
   const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState<'datos' | 'trabajos'>('datos')
   const [bio, setBio]                           = useState('')
   const [whatsapp, setWhatsapp]                 = useState(user?.phone ?? '')
   const [zone, setZone]                         = useState('')
@@ -90,6 +92,29 @@ export default function ProProfile() {
 
   return (
     <PageShell header={header}>
+      {/* Tabs */}
+      <div className="flex border-b" style={{ borderColor: '#E8E0D4', background: '#fff' }}>
+        {(['datos', 'trabajos'] as const).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            className="flex-1 py-3 text-sm font-bold capitalize transition-colors"
+            style={{
+              color: activeTab === tab ? '#E8683A' : '#AAAAAA',
+              borderBottom: activeTab === tab ? '2px solid #E8683A' : '2px solid transparent',
+            }}
+          >
+            {tab === 'datos' ? 'Mis Datos' : 'Mis Trabajos'}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'trabajos' ? (
+        <div className="px-4">
+          <ProPortfolio />
+        </div>
+      ) : (
       <motion.div
         className="p-4 flex flex-col gap-3 pb-8"
         variants={staggerContainer}
@@ -290,6 +315,7 @@ export default function ProProfile() {
         </motion.div>
 
       </motion.div>
+      )}
     </PageShell>
   )
 }
