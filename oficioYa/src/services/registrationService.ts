@@ -167,6 +167,40 @@ export const registrationService = {
     if (error) throw error
   },
 
+  async updatePortfolioItem(
+    id: string,
+    data: Partial<Omit<PortfolioItem, 'id' | 'professional_id' | 'created_at'>>
+  ): Promise<PortfolioItem> {
+    const { data: updated, error } = await supabase
+      .from('work_portfolio')
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single()
+    if (error) throw error
+    return updated as PortfolioItem
+  },
+
+  async toggleFeatured(proId: string, itemId: string, featuredPhotoUrl: string): Promise<void> {
+    // 1. Limpiar is_featured de todos los trabajos del pro
+    await supabase
+      .from('work_portfolio')
+      .update({ is_featured: false })
+      .eq('professional_id', proId)
+
+    // 2. Marcar el trabajo elegido como destacado
+    await supabase
+      .from('work_portfolio')
+      .update({ is_featured: true })
+      .eq('id', itemId)
+
+    // 3. Actualizar featured_photo_url en professionals
+    await supabase
+      .from('professionals')
+      .update({ featured_photo_url: featuredPhotoUrl })
+      .eq('id', proId)
+  },
+
   async getCertifications(proId: string): Promise<CertificationItem[]> {
     const { data, error } = await supabase
       .from('certifications')
