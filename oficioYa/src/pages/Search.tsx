@@ -258,59 +258,20 @@ export default function Search() {
           })}
 
           {/* Chip de zona */}
-          <div className="relative flex-shrink-0">
-            <motion.button
-              type="button"
-              onClick={() => setShowZonePicker(v => !v)}
-              whileTap={{ scale: 0.94 }}
-              transition={SPRING_SOFT}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
-              style={selectedZone ? {
-                background: '#EEF2FF', color: '#4F46E5', border: '1.5px solid #C7D2FE',
-              } : {
-                background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
-              }}
-            >
-              📍 {selectedZone ?? 'Zona'}
-            </motion.button>
-            <AnimatePresence>
-              {showZonePicker && (
-                <motion.div
-                  initial={{ opacity: 0, y: -6, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -6, scale: 0.96 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  className="absolute top-full left-0 mt-2 z-50 rounded-2xl overflow-hidden"
-                  style={{ background: '#fff', border: '1.5px solid #E8E0D4', boxShadow: '0 8px 24px rgba(0,0,0,.12)', minWidth: 160 }}
-                >
-                  {selectedZone && (
-                    <button
-                      type="button"
-                      onClick={() => { setSelectedZone(null); setShowZonePicker(false) }}
-                      className="w-full text-left px-4 py-2.5 text-[11px] font-bold border-b"
-                      style={{ color: '#E8683A', borderColor: '#F0EBE1' }}
-                    >
-                      ✕ Quitar zona
-                    </button>
-                  )}
-                  {ZONES.map(z => (
-                    <button
-                      key={z}
-                      type="button"
-                      onClick={() => { setSelectedZone(z); setShowZonePicker(false) }}
-                      className="w-full text-left px-4 py-2.5 text-[11px] font-bold"
-                      style={{
-                        background: selectedZone === z ? '#EEF2FF' : 'transparent',
-                        color: selectedZone === z ? '#4F46E5' : '#333',
-                      }}
-                    >
-                      {selectedZone === z ? '✓ ' : ''}{z}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <motion.button
+            type="button"
+            onClick={() => setShowZonePicker(v => !v)}
+            whileTap={{ scale: 0.94 }}
+            transition={SPRING_SOFT}
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
+            style={selectedZone ? {
+              background: 'rgba(232,104,58,0.12)', color: '#E8683A', border: '1.5px solid rgba(232,104,58,0.3)',
+            } : {
+              background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+            }}
+          >
+            📍 {selectedZone ?? 'Zona'}
+          </motion.button>
 
           {/* Chip de rating */}
           <motion.button
@@ -320,7 +281,7 @@ export default function Search() {
             transition={SPRING_SOFT}
             className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
             style={ratingIndex > 0 ? {
-              background: '#FFFBEB', color: '#D97706', border: '1.5px solid #FDE68A',
+              background: 'rgba(232,104,58,0.12)', color: '#E8683A', border: '1.5px solid rgba(232,104,58,0.3)',
             } : {
               background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
             }}
@@ -509,6 +470,69 @@ export default function Search() {
           ))}
         </motion.div>
       </div>
+
+      {/* Bottom sheet selector de zona */}
+      <AnimatePresence>
+        {showZonePicker && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50"
+              style={{ background: 'rgba(0,0,0,0.45)' }}
+              onClick={() => setShowZonePicker(false)}
+            />
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 380, damping: 38 }}
+              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl overflow-hidden"
+              style={{
+                background: '#FFFFFF',
+                maxWidth: 480,
+                margin: '0 auto',
+                maxHeight: '70vh',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <div className="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
+                <p className="text-base font-black" style={{ color: '#111' }}>Elegí una zona</p>
+                {selectedZone && (
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedZone(null); setShowZonePicker(false) }}
+                    className="text-xs font-bold"
+                    style={{ color: '#E8683A' }}
+                  >
+                    Quitar zona
+                  </button>
+                )}
+              </div>
+              <div className="overflow-y-auto flex-1 px-3 pb-8">
+                <div className="flex flex-wrap gap-2 py-2">
+                  {ZONES.map((z) => (
+                    <button
+                      key={z}
+                      type="button"
+                      onClick={() => { setSelectedZone(z); setShowZonePicker(false) }}
+                      className="px-4 py-2.5 rounded-2xl text-sm font-bold"
+                      style={selectedZone === z
+                        ? { background: '#E8683A', color: '#fff', border: '2px solid #E8683A' }
+                        : { background: '#F5F0E8', color: '#444', border: '2px solid #EDE8DE' }
+                      }
+                    >
+                      {selectedZone === z ? '✓ ' : ''}{z}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </PageShell>
   )
 }

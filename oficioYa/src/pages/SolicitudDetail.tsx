@@ -164,6 +164,18 @@ export default function SolicitudDetail() {
                   📍 {req.location}
                 </span>
               )}
+              {req.address && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: '#F5F0E8', color: '#666' }}>
+                  📍 {req.address}
+                </span>
+              )}
+              {req.scheduled_date && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: '#F5F0E8', color: '#666' }}>
+                  📅 {new Date(req.scheduled_date).toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                </span>
+              )}
               {req.urgency && (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,.2)' }}>
@@ -194,14 +206,14 @@ export default function SolicitudDetail() {
         {/* Acciones */}
         <motion.div variants={fadeUp} className="flex flex-col gap-2 mt-1">
 
-          {/* Chat interno — siempre disponible si no está cancelado */}
-          {!isCancelled && (
+          {/* Chat — disponible cuando el profesional aceptó */}
+          {(req.status === 'confirmed' || req.status === 'in_progress' || req.status === 'completed') && (
             <motion.button
               type="button"
               onClick={() => navigate(`/solicitud/${req.id}/chat`)}
               whileTap={{ scale: 0.97 }} transition={SPRING_SOFT}
               className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 text-white"
-              style={{ background: '#0F6E56', boxShadow: '0 4px 14px rgba(15,110,86,.25)' }}
+              style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.25)' }}
             >
               <MessageCircle size={16} />
               Chatear con el profesional
