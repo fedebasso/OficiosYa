@@ -67,13 +67,25 @@ export function PortfolioItemForm({ item, proId, onSave, onClose, prefill }: Pro
         saved = await registrationService.addPortfolioItem(proId, data as Parameters<typeof registrationService.addPortfolioItem>[1])
       }
 
-      // Si se marcó como destacado, actualizar featured_photo_url
-      if (featured) {
-        const firstPhoto = uploadedPhotos[0]?.url ?? null
-        if (firstPhoto) await registrationService.toggleFeatured(proId, saved.id, firstPhoto)
+      // Si estamos quitando el destacado de un item que antes era destacado
+      if (item && item.is_featured && !featured) {
+        await import('../../../lib/supabase').then(({ supabase }) =>
+          supabase.from('professionals').update({ featured_photo_url: null }).eq('id', proId)
+        )
       }
 
       onSave(saved)
+
+      // Si se marcó como destacado, intentar actualizar foto destacada
+      // (no bloquea si falla — el item ya fue guardado exitosamente)
+      if (featured) {
+        const firstPhoto = uploadedPhotos[0]?.url ?? null
+        if (firstPhoto) {
+          registrationService.toggleFeatured(proId, saved.id, firstPhoto).catch(() => {
+            // foto destacada no se actualizó, pero el trabajo sí se guardó
+          })
+        }
+      }
     } catch (e) {
       setError('Error al guardar el trabajo')
     } finally {
