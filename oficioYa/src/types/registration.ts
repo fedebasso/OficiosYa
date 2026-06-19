@@ -1,6 +1,7 @@
 export type VerificationStatus = 'pending' | 'verified' | 'rejected'
 export type WorkMode = 'independiente' | 'empresa'
 export type CertType = 'titulo' | 'certificado' | 'curso' | 'carnet'
+export type PhotoType = 'before' | 'after' | 'general'
 
 export interface RegistrationState {
   registration_step: number
@@ -34,6 +35,11 @@ export interface RegistrationState {
   contact_email: string | null
 }
 
+export interface WorkPhoto {
+  url: string
+  type: PhotoType
+}
+
 export interface PortfolioItem {
   id: string
   professional_id: string
@@ -41,7 +47,11 @@ export interface PortfolioItem {
   description: string | null
   work_date: string | null
   category: string | null
-  photo_urls: string[]
+  photo_urls: string[]       // legacy — mantener para no romper Step4Portfolio.tsx
+  photos?: WorkPhoto[]       // nuevo formato con tipo de foto
+  location?: string | null
+  request_id?: string | null
+  is_featured?: boolean
   created_at: string
 }
 
