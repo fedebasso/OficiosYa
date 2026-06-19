@@ -76,24 +76,23 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
   const secs = seconds % 60
   const timeLabel = `${mins}:${secs.toString().padStart(2, '0')}`
 
-  // Waveform bars estáticas (decorativas)
   const bars = [7, 13, 5, 11, 5, 9, 13, 6, 10, 4, 12, 8]
 
   if (micError) {
     return (
       <div
-        className="flex items-center gap-2 px-3 py-2"
-        style={{ background: '#0F6E56' }}
+        className="flex items-center gap-2 px-3 py-2.5"
+        style={{ background: '#FFFFFF', borderTop: '1px solid #EDE8DE' }}
       >
         <button
           type="button"
           onClick={onCancel}
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.55)' }}
+          className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center"
+          style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}
         >
-          <X size={14} color="rgba(255,255,255,0.8)" />
+          <X size={15} style={{ color: '#E8683A' }} />
         </button>
-        <span className="text-[11px] flex-1 text-center" style={{ color: 'rgba(255,255,255,0.7)' }}>
+        <span className="text-[11px] flex-1 text-center" style={{ color: '#999' }}>
           No se pudo acceder al micrófono
         </span>
       </div>
@@ -102,28 +101,32 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
 
   return (
     <div
-      className="flex items-center gap-2 px-3 py-2"
-      style={{ background: '#0F6E56' }}
+      className="flex items-center gap-2 px-3 py-2.5"
+      style={{
+        background: '#FFFFFF',
+        borderTop: '1px solid #EDE8DE',
+        paddingBottom: 'calc(10px + var(--safe-bottom, 0px))',
+      }}
     >
       {/* Cancelar */}
       <button
         type="button"
         onClick={cancel}
-        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-        style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.55)' }}
+        className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-transform"
+        style={{ background: '#FEF2F2', border: '1.5px solid #FECACA' }}
       >
-        <X size={14} color="rgba(255,255,255,0.8)" />
+        <X size={15} style={{ color: '#DC2626' }} />
       </button>
 
       {/* Waveform + timer */}
       <div
-        className="flex-1 flex items-center gap-2 rounded-3xl px-3 py-1.5"
-        style={{ border: '1.5px solid rgba(255,255,255,0.55)' }}
+        className="flex-1 flex items-center gap-2 rounded-3xl px-3 py-2"
+        style={{ background: '#F5F0E8', border: '1.5px solid #EDE8DE' }}
       >
-        {/* Punto rojo */}
+        {/* Punto grabando */}
         <span
           className="w-2 h-2 rounded-full flex-shrink-0"
-          style={{ background: '#ef4444' }}
+          style={{ background: '#E8683A', animation: 'pulse 1s ease-in-out infinite' }}
         />
         {/* Barras */}
         <div className="flex items-center gap-[2px] flex-1">
@@ -134,25 +137,25 @@ export function AudioRecorder({ onSend, onCancel }: Props) {
               style={{
                 width: 2,
                 height: h,
-                background: `rgba(255,255,255,${0.3 + (h / 13) * 0.6})`,
+                background: `rgba(232,104,58,${0.25 + (h / 13) * 0.65})`,
               }}
             />
           ))}
         </div>
         {/* Timer */}
-        <span className="text-[10px] font-bold flex-shrink-0" style={{ color: 'rgba(255,255,255,0.9)' }}>
+        <span className="text-[10px] font-bold flex-shrink-0" style={{ color: '#E8683A' }}>
           {timeLabel}
         </span>
       </div>
 
-      {/* Detener y enviar */}
+      {/* Enviar */}
       <button
         type="button"
         onClick={stop}
-        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-        style={{ background: '#9FE1CB', border: 'none' }}
+        className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-transform"
+        style={{ background: '#E8683A', border: 'none' }}
       >
-        <Square size={12} fill="#0F6E56" color="#0F6E56" />
+        <Square size={13} fill="white" color="white" />
       </button>
     </div>
   )
