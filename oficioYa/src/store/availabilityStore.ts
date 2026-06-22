@@ -92,6 +92,14 @@ const DEMO_SCHEDULES: Record<string, WorkingSchedule> = {
     toHour: '17:00',
     intervalMin: 30,
   },
+  // Demo pro user (mock-pro-1 = Carlos Méndez)
+  'mock-pro-1': {
+    proId: 'mock-pro-1',
+    days: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
+    fromHour: '08:00',
+    toHour: '18:00',
+    intervalMin: 30,
+  },
 }
 
 const DEMO_BLOCKED: BlockedSlot[] = [
