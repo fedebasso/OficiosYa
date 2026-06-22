@@ -122,6 +122,7 @@ function MediaStep({
   const fileRef = useRef<HTMLInputElement>(null)
   const [showText, setShowText] = useState(false)
   const [showZoneSheet, setShowZoneSheet] = useState(false)
+  const [attempted, setAttempted] = useState(false)
 
   const photoUrl = useMemo(() => {
     if (!input.photo) return null
@@ -134,7 +135,15 @@ function MediaStep({
     }
   }, [photoUrl])
 
-  const hasContent = input.photo !== null || input.text.length >= 10
+  const missingPhoto = input.photo === null
+  const missingText  = input.text.trim().length < 10
+  const missingZone  = !input.zone
+  const canAnalyze   = !missingPhoto && !missingText && !missingZone
+
+  function handleAnalyze() {
+    setAttempted(true)
+    if (canAnalyze) onAnalyze()
+  }
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -182,7 +191,7 @@ function MediaStep({
           Mostranos el problema
         </h2>
         <p className="text-sm mt-1" style={{ color: '#AAAAAA' }}>
-          Foto o descripción — lo que sea más fácil
+          Completá los tres campos para continuar
         </p>
       </div>
 
@@ -204,12 +213,13 @@ function MediaStep({
           </button>
         </div>
       ) : (
+        <>
         <motion.button
           type="button"
           onClick={() => fileRef.current?.click()}
           whileTap={{ scale: 0.98 }}
           className="flex flex-col items-center justify-center gap-2 rounded-2xl relative overflow-hidden"
-          style={{ height: 200, border: '2px dashed #E8683A', background: '#FEF0EA' }}
+          style={{ height: 200, border: `2px dashed ${attempted && missingPhoto ? '#EF4444' : '#E8683A'}`, background: attempted && missingPhoto ? '#FFF5F5' : '#FEF0EA' }}
         >
           <div style={{
             position: 'absolute', inset: 0,
@@ -230,6 +240,12 @@ function MediaStep({
             Tocá para abrir la cámara
           </span>
         </motion.button>
+        {attempted && missingPhoto && (
+          <p className="text-xs font-semibold -mt-1" style={{ color: '#EF4444' }}>
+            📷 Agregá una foto del problema
+          </p>
+        )}
+        </>
       )}
       <input
         ref={fileRef}
@@ -240,39 +256,32 @@ function MediaStep({
         onChange={(e) => onChange({ photo: e.target.files?.[0] ?? null })}
       />
 
-      {/* Texto */}
-      <motion.button
-        type="button"
-        onClick={() => setShowText((v) => !v)}
-        whileTap={{ scale: 0.94 }}
-        className="flex items-center gap-2 rounded-xl py-3 px-4"
-        style={{
-          background: showText ? 'rgba(232,104,58,.1)' : '#FFFFFF',
-          border: `1.5px solid ${showText ? '#E8683A' : '#EDE8DE'}`,
-        }}
-      >
-        <span style={{ fontSize: 20 }}>✏️</span>
-        <span className="text-sm font-bold" style={{ color: showText ? '#E8683A' : '#555' }}>
-          {showText ? 'Ocultar texto' : 'Describir con texto'}
-        </span>
-      </motion.button>
-
-      {showText && (
+      {/* Texto — siempre visible, obligatorio */}
+      <div className="flex flex-col gap-1">
         <textarea
           value={input.text}
           onChange={(e) => onChange({ text: e.target.value })}
           rows={3}
-          placeholder="Describí el problema con tus palabras..."
+          placeholder="Describí el problema con tus palabras... (mín. 10 caracteres)"
           className="rounded-xl p-3 text-sm resize-none"
           style={{
             background: '#FFFFFF',
-            border: '1.5px solid #E8E0D4',
+            border: `1.5px solid ${attempted && missingText ? '#EF4444' : '#E8E0D4'}`,
             color: '#111',
             outline: 'none',
             caretColor: '#E8683A',
           }}
         />
-      )}
+        <div className="flex items-center justify-between px-1">
+          {attempted && missingText
+            ? <p className="text-xs font-semibold" style={{ color: '#EF4444' }}>✏️ Describí el problema</p>
+            : <span />
+          }
+          <p className="text-xs" style={{ color: input.text.trim().length >= 10 ? '#16A34A' : '#AAAAAA' }}>
+            {input.text.trim().length}/10 mín.
+          </p>
+        </div>
+      </div>
 
       {/* Zona del cliente — trigger */}
       <div>
@@ -283,7 +292,7 @@ function MediaStep({
           className="w-full flex items-center justify-between rounded-xl py-3 px-4"
           style={{
             background: input.zone ? 'rgba(232,104,58,.08)' : '#FFFFFF',
-            border: `1.5px solid ${input.zone ? '#E8683A' : '#EDE8DE'}`,
+            border: `1.5px solid ${input.zone ? '#E8683A' : attempted && missingZone ? '#EF4444' : '#EDE8DE'}`,
           }}
         >
           <span className="text-sm font-bold" style={{ color: input.zone ? '#E8683A' : '#555555' }}>
@@ -301,9 +310,10 @@ function MediaStep({
             <span className="text-xs" style={{ color: '#CCC' }}>▼</span>
           )}
         </motion.button>
-        <p className="text-xs mt-1 px-1" style={{ color: '#AAAAAA' }}>
-          Opcional — te mostramos profesionales más cerca
-        </p>
+        {attempted && missingZone
+          ? <p className="text-xs mt-1 px-1 font-semibold" style={{ color: '#EF4444' }}>📍 Seleccioná tu barrio</p>
+          : <p className="text-xs mt-1 px-1" style={{ color: '#AAAAAA' }}>Necesario para encontrar profesionales cerca</p>
+        }
       </div>
 
       {/* Bottom sheet de barrios */}
@@ -370,10 +380,9 @@ function MediaStep({
 
       <button
         type="button"
-        onClick={onAnalyze}
-        disabled={!hasContent}
-        className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 disabled:opacity-40 transition-opacity"
-        style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+        onClick={handleAnalyze}
+        className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 transition-opacity"
+        style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)', opacity: canAnalyze ? 1 : 0.65 }}
       >
         Analizar con IA ✨
       </button>

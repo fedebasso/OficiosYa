@@ -65,6 +65,7 @@ export default function TicketConfirm() {
 
   const [phone, setPhone] = useState('')
   const [phoneError, setPhoneError] = useState('')
+  const [scheduleError, setScheduleError] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
   const [scheduledDate, setScheduledDate] = useState<string | null>(null)
@@ -84,6 +85,11 @@ export default function TicketConfirm() {
   const slots = scheduledDate ? getSlots(proId, scheduledDate) : []
 
   const handleSubmit = async () => {
+    if (!scheduledDate || !scheduledTime) {
+      setScheduleError('Elegí una fecha y un horario para la visita')
+      return
+    }
+    setScheduleError('')
     if (phone.length < 8) {
       setPhoneError('Ingresá tu teléfono de contacto')
       return
@@ -221,9 +227,12 @@ export default function TicketConfirm() {
                   <TimeSlotGrid
                     slots={slots}
                     selected={scheduledTime}
-                    onSelect={setScheduledTime}
+                    onSelect={(t) => { setScheduledTime(t); setScheduleError('') }}
                   />
                 </>
+              )}
+              {scheduleError && (
+                <p className="text-xs font-semibold mt-1" style={{ color: '#EF4444' }}>📅 {scheduleError}</p>
               )}
             </motion.div>
 
