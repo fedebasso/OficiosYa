@@ -60,6 +60,8 @@ function ProgressBar({ step }: { step: number }) {
 
 export function RequestWizard({ onSubmit, loading, step, onStep, proId }: Props) {
   const getSlots = useAvailabilityStore((s) => s.getSlots)
+  const schedules = useAvailabilityStore((s) => s.schedules)
+  const proHasSchedule = Boolean(schedules[proId])
 
   const [data, setData] = useState<WizardData>({
     work_type: null,
@@ -78,9 +80,8 @@ export function RequestWizard({ onSubmit, loading, step, onStep, proId }: Props)
     if (step === 1) return data.work_type !== null
     if (step === 2) return data.description.length >= 20
     if (step === 4) {
-      // Optional: si no hay slots disponibles para ese pro, puede continuar sin seleccionar
-      const hasAvailableSlots = slots.some((s) => s.status === 'available')
-      if (!hasAvailableSlots) return true
+      // Si el pro no tiene agenda configurada, puede continuar sin seleccionar
+      if (!proHasSchedule) return true
       return data.scheduled_date !== null && data.scheduled_time !== null
     }
     return true
