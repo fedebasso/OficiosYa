@@ -1,5 +1,8 @@
 // src/components/requests/RequestWizard.tsx
 import { useState } from 'react'
+import { DateStrip } from '../availability/DateStrip'
+import { TimeSlotGrid } from '../availability/TimeSlotGrid'
+import { useAvailabilityStore } from '../../store/availabilityStore'
 import type { WorkType } from '../../store/requestStore'
 
 export interface WizardData {
@@ -7,6 +10,8 @@ export interface WizardData {
   description: string
   urgent: boolean
   contact_phone: string
+  scheduled_date: string | null
+  scheduled_time: string | null
 }
 
 interface Props {
@@ -14,6 +19,7 @@ interface Props {
   loading?: boolean
   step: number
   onStep: (n: number) => void
+  proId: string
 }
 
 const WORK_TYPES: { value: WorkType; label: string; subtitle: string; emoji: string }[] = [
@@ -23,9 +29,9 @@ const WORK_TYPES: { value: WorkType; label: string; subtitle: string; emoji: str
   { value: 'otro',          label: 'Otro',          subtitle: 'Cualquier otro trabajo',        emoji: '📋' },
 ]
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 5
 
-const INPUT_STYLE = {
+const INPUT_STYLE: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1.5px solid #E8E0D4',
   color: '#111111',
@@ -34,7 +40,7 @@ const INPUT_STYLE = {
   fontSize: 16,
   width: '100%',
   outline: 'none',
-  resize: 'none' as const,
+  resize: 'none',
   caretColor: '#E8683A',
 }
 
@@ -52,15 +58,33 @@ function ProgressBar({ step }: { step: number }) {
   )
 }
 
-export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
+export function RequestWizard({ onSubmit, loading, step, onStep, proId }: Props) {
+  const getSlots = useAvailabilityStore((s) => s.getSlots)
+
   const [data, setData] = useState<WizardData>({
     work_type: null,
     description: '',
     urgent: false,
     contact_phone: '',
+    scheduled_date: null,
+    scheduled_time: null,
   })
   const [descError, setDescError] = useState('')
   const [phoneError, setPhoneError] = useState('')
+
+  const slots = data.scheduled_date ? getSlots(proId, data.scheduled_date) : []
+
+  const canNext = (): boolean => {
+    if (step === 1) return data.work_type !== null
+    if (step === 2) return data.description.length >= 20
+    if (step === 4) {
+      // Optional: si no hay slots disponibles para ese pro, puede continuar sin seleccionar
+      const hasAvailableSlots = slots.some((s) => s.status === 'available')
+      if (!hasAvailableSlots) return true
+      return data.scheduled_date !== null && data.scheduled_time !== null
+    }
+    return true
+  }
 
   const handleNext = () => {
     if (step === 2 && data.description.length < 20) {
@@ -69,12 +93,6 @@ export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
     }
     setDescError('')
     onStep(Math.min(step + 1, TOTAL_STEPS))
-  }
-
-  const canNext = (): boolean => {
-    if (step === 1) return data.work_type !== null
-    if (step === 2) return data.description.length >= 20
-    return true
   }
 
   const handleSubmit = async () => {
@@ -90,6 +108,7 @@ export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
     '¿Qué tipo de trabajo?',
     'Contanos qué necesitás',
     '¿Es urgente?',
+    '¿Cuándo lo necesitás?',
     'Confirmá tu solicitud',
   ]
 
@@ -160,7 +179,7 @@ export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
         </div>
       )}
 
-      {/* Paso 3: Urgencia — toggle */}
+      {/* Paso 3: Urgencia */}
       {step === 3 && (
         <div className="flex flex-col gap-3">
           <button
@@ -181,49 +200,77 @@ export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
                 Es urgente
               </div>
             </div>
-            {/* Toggle switch */}
             <div
               className="flex-shrink-0 transition-all duration-200"
-              style={{
-                width: 44,
-                height: 24,
-                borderRadius: 12,
-                background: data.urgent ? '#EF4444' : '#E8E0D4',
-                position: 'relative',
-              }}
+              style={{ width: 44, height: 24, borderRadius: 12, background: data.urgent ? '#EF4444' : '#E8E0D4', position: 'relative' }}
             >
               <div
                 className="absolute top-1 transition-all duration-200"
-                style={{
-                  width: 16,
-                  height: 16,
-                  borderRadius: '50%',
-                  background: '#FFFFFF',
-                  left: data.urgent ? 24 : 4,
-                  boxShadow: '0 1px 3px rgba(0,0,0,.2)',
-                }}
+                style={{ width: 16, height: 16, borderRadius: '50%', background: '#FFFFFF', left: data.urgent ? 24 : 4, boxShadow: '0 1px 3px rgba(0,0,0,.2)' }}
               />
             </div>
           </button>
         </div>
       )}
 
-      {/* Paso 4: Confirmación */}
+      {/* Paso 4: Fecha y horario */}
       {step === 4 && (
+        <div className="flex flex-col gap-4">
+          <p className="text-sm" style={{ color: '#555555' }}>
+            Seleccioná el día y horario más conveniente para vos
+          </p>
+
+          <DateStrip
+            proId={proId}
+            selected={data.scheduled_date}
+            onSelect={(date) => setData((d) => ({ ...d, scheduled_date: date, scheduled_time: null }))}
+          />
+
+          {data.scheduled_date ? (
+            <div>
+              <div className="flex gap-3 text-[10px] font-bold mb-3" style={{ color: '#888' }}>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full inline-block" style={{ background: 'linear-gradient(135deg,#16A34A,#15803D)' }} />
+                  Disponible
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full inline-block" style={{ background: 'linear-gradient(135deg,#DC2626,#B91C1C)' }} />
+                  Ocupado
+                </span>
+              </div>
+              <TimeSlotGrid
+                slots={slots}
+                selected={data.scheduled_time}
+                onSelect={(time) => setData((d) => ({ ...d, scheduled_time: time }))}
+              />
+            </div>
+          ) : (
+            <p className="text-sm text-center py-4" style={{ color: '#AAAAAA' }}>
+              Seleccioná un día para ver los horarios disponibles
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Paso 5: Confirmación */}
+      {step === 5 && (
         <div className="flex flex-col gap-4">
           <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E8E0D4' }}>
             {[
               { label: 'Tipo',        value: WORK_TYPES.find((w) => w.value === data.work_type)?.label ?? '' },
               { label: 'Descripción', value: data.description },
               { label: 'Urgencia',    value: data.urgent ? '🚨 Urgente' : 'Pedido normal' },
+              {
+                label: 'Horario',
+                value: data.scheduled_date && data.scheduled_time
+                  ? `📅 ${data.scheduled_date} · ${data.scheduled_time}hs`
+                  : 'A coordinar por chat',
+              },
             ].map((item, i, arr) => (
               <div
                 key={item.label}
                 className="flex gap-3 px-4 py-3"
-                style={{
-                  borderBottom: i < arr.length - 1 ? '1px solid #E8E0D4' : undefined,
-                  background: '#FFFFFF',
-                }}
+                style={{ borderBottom: i < arr.length - 1 ? '1px solid #E8E0D4' : undefined, background: '#FFFFFF' }}
               >
                 <span
                   className="text-xs font-bold uppercase tracking-wider flex-shrink-0 pt-0.5"
@@ -254,7 +301,7 @@ export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
         </div>
       )}
 
-      {/* Botones de navegación */}
+      {/* Navegación */}
       <div className="flex gap-3 pt-2">
         {step < TOTAL_STEPS ? (
           <button

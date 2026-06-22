@@ -104,7 +104,7 @@ export default function RequestService() {
                 )}
               </div>
             )}
-            <RequestWizard onSubmit={handleSubmit} loading={loading} step={wizardStep} onStep={setWizardStep} />
+            <RequestWizard onSubmit={handleSubmit} loading={loading} step={wizardStep} onStep={setWizardStep} proId={id ?? ''} />
           </>
         ) : (
           <div className="flex flex-col items-center gap-5 py-10 text-center">
