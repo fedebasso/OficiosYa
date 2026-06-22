@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, FileText, UserCircle } from 'lucide-react'
+import { LayoutDashboard, FileText, UserCircle, Calendar } from 'lucide-react'
 import { useProRequestsStore } from '../../store/proRequestsStore'
 
 export function ProBottomNav() {
@@ -8,9 +8,10 @@ export function ProBottomNav() {
   const pendingCount = requests.filter((r) => r.status === 'pending').length
 
   const TABS = [
-    { label: 'Dashboard',   to: '/pro/dashboard',   icon: LayoutDashboard, badge: pendingCount > 0 ? pendingCount : null },
-    { label: 'Solicitudes', to: '/pro/solicitudes',  icon: FileText, badge: null },
-    { label: 'Perfil',      to: '/pro/perfil',       icon: UserCircle, badge: null },
+    { label: 'Dashboard',   to: '/pro/dashboard',      icon: LayoutDashboard, badge: pendingCount > 0 ? pendingCount : null },
+    { label: 'Solicitudes', to: '/pro/solicitudes',     icon: FileText, badge: null },
+    { label: 'Agenda',      to: '/pro/disponibilidad',  icon: Calendar, badge: null },
+    { label: 'Perfil',      to: '/pro/perfil',          icon: UserCircle, badge: null },
   ]
 
   function isActive(to: string) {

@@ -35,6 +35,7 @@ const ProProfileEdit  = lazy(() => import('./pages/pro/ProProfileEdit'))
 const ProOnboarding   = lazy(() => import('./pages/pro/ProOnboarding'))
 const ProWorkHistory  = lazy(() => import('./pages/pro/ProWorkHistory'))
 const ProRegistration = lazy(() => import('./pages/pro/ProRegistration'))
+const ProAvailability = lazy(() => import('./pages/pro/ProAvailability'))
 
 // ── Admin
 const AdminVerificaciones = lazy(() => import('./pages/admin/AdminVerificaciones'))
@@ -94,6 +95,7 @@ function App() {
                     <Route path="perfil"        element={<ProProfile />} />
                     <Route path="perfil/editar" element={<ProProfileEdit />} />
                     <Route path="trabajos"     element={<ProWorkHistory />} />
+                    <Route path="disponibilidad" element={<ProAvailability />} />
                     <Route path="*"           element={<Navigate to="/pro/dashboard" replace />} />
                   </Routes>
                 </ProLayout>
