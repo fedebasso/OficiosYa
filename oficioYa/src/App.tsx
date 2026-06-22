@@ -113,7 +113,7 @@ function App() {
                       <Route path="/buscar"             element={<Search />} />
                       <Route path="/buscar/:categoria"  element={<Search />} />
                       <Route path="/favoritos"          element={<Favoritos />} />
-                      <Route path="/mensajes"           element={<ProtectedRoute requiredRole="client"><Mensajes /></ProtectedRoute>} />
+                      <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
                       <Route path="/mis-solicitudes"    element={<ProtectedRoute requiredRole="client"><MisSolicitudes /></ProtectedRoute>} />
                       <Route path="/solicitud/:id"      element={<ProtectedRoute requiredRole="client"><SolicitudDetail /></ProtectedRoute>} />
                       {/* /solicitud/:id/chat está en rutas compartidas arriba */}

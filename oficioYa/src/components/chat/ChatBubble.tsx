@@ -118,10 +118,10 @@ function AudioBubble({ src, duration, isOwn }: AudioBubbleProps) {
 
 interface Props {
   message: ChatMessage
+  isOwn: boolean
 }
 
-export function ChatBubble({ message }: Props) {
-  const isOwn = message.senderRole === 'client'
+export function ChatBubble({ message, isOwn }: Props) {
 
   return (
     <motion.div

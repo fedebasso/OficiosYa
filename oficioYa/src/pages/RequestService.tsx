@@ -17,6 +17,7 @@ export default function RequestService() {
   const addRequest = useRequestStore((s) => s.addRequest)
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
+  const [wizardStep, setWizardStep] = useState(1)
 
   const handleSubmit = async (data: WizardData) => {
     if (!professional) return
@@ -46,7 +47,7 @@ export default function RequestService() {
       <div className="flex items-center gap-3">
         <button
           type="button"
-          onClick={goBack}
+          onClick={wizardStep > 1 ? () => setWizardStep((s) => s - 1) : goBack}
           aria-label="Volver"
           className="p-1 -ml-1 rounded-full flex-shrink-0 active:opacity-60 transition-opacity"
         >
@@ -103,7 +104,7 @@ export default function RequestService() {
                 )}
               </div>
             )}
-            <RequestWizard onSubmit={handleSubmit} loading={loading} />
+            <RequestWizard onSubmit={handleSubmit} loading={loading} step={wizardStep} onStep={setWizardStep} />
           </>
         ) : (
           <div className="flex flex-col items-center gap-5 py-10 text-center">

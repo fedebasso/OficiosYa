@@ -228,7 +228,11 @@ export default function Chat() {
           className="flex flex-col gap-2"
         >
           {messages.map((msg) => (
-            <ChatBubble key={msg.id} message={msg} />
+            <ChatBubble
+              key={msg.id}
+              message={msg}
+              isOwn={msg.senderRole === (user?.role === 'professional' ? 'pro' : 'client')}
+            />
           ))}
           <div ref={bottomRef} />
         </motion.div>

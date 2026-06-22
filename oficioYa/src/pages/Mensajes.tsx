@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
 import { useChatStore } from '../store/chatStore'
 import { useRequestStore } from '../store/requestStore'
+import { useProRequestsStore } from '../store/proRequestsStore'
 import { useAuthStore } from '../store/authStore'
 import { PageShell } from '../components/layout/PageShell'
 import { IS_DEMO_MODE } from '../lib/env'
@@ -43,19 +44,27 @@ function lastMessagePreview(type: string, content: string) {
 export default function Mensajes() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
-  const requests = useRequestStore((s) => s.requests)
-  const loadRequests = useRequestStore((s) => s.loadRequests)
+  const isPro = user?.role === 'professional'
+
+  const clientRequests = useRequestStore((s) => s.requests)
+  const loadClientRequests = useRequestStore((s) => s.loadRequests)
+  const proRequests = useProRequestsStore((s) => s.requests)
+  const loadProRequests = useProRequestsStore((s) => s.load)
   const { messagesByRequest, initMock } = useChatStore()
 
-  useEffect(() => { loadRequests() }, [loadRequests])
+  useEffect(() => {
+    if (isPro && user?.id) loadProRequests(user.id)
+    else loadClientRequests()
+  }, [isPro, user?.id, loadClientRequests, loadProRequests])
+
+  const rawRequests = isPro ? proRequests : clientRequests
 
   // Solicitudes con chat activo: confirmadas, en curso o completadas
-  const chatRequests = requests.filter((r) => {
+  const chatRequests = rawRequests.filter((r) => {
     const hasStatus = r.status === 'confirmed' || r.status === 'in_progress' || r.status === 'completed'
     if (!hasStatus) return false
-    // En demo mode mostramos todo; en prod filtramos por client_id
     if (IS_DEMO_MODE) return true
-    return r.client_id === user?.id
+    return isPro ? r.professional_id === user?.id : r.client_id === user?.id
   })
 
   // Inicializar mensajes mock para cada request activa (preview)

@@ -1,6 +1,5 @@
 // src/components/requests/RequestWizard.tsx
 import { useState } from 'react'
-import { ChevronLeft } from 'lucide-react'
 import type { WorkType } from '../../store/requestStore'
 
 export interface WizardData {
@@ -13,6 +12,8 @@ export interface WizardData {
 interface Props {
   onSubmit: (data: WizardData) => Promise<void>
   loading?: boolean
+  step: number
+  onStep: (n: number) => void
 }
 
 const WORK_TYPES: { value: WorkType; label: string; subtitle: string; emoji: string }[] = [
@@ -51,8 +52,7 @@ function ProgressBar({ step }: { step: number }) {
   )
 }
 
-export function RequestWizard({ onSubmit, loading }: Props) {
-  const [step, setStep] = useState(1)
+export function RequestWizard({ onSubmit, loading, step, onStep }: Props) {
   const [data, setData] = useState<WizardData>({
     work_type: null,
     description: '',
@@ -62,15 +62,13 @@ export function RequestWizard({ onSubmit, loading }: Props) {
   const [descError, setDescError] = useState('')
   const [phoneError, setPhoneError] = useState('')
 
-  const back = () => setStep((s) => Math.max(s - 1, 1))
-
   const handleNext = () => {
     if (step === 2 && data.description.length < 20) {
       setDescError('Describí el trabajo (mín. 20 caracteres)')
       return
     }
     setDescError('')
-    setStep((s) => Math.min(s + 1, TOTAL_STEPS))
+    onStep(Math.min(step + 1, TOTAL_STEPS))
   }
 
   const canNext = (): boolean => {
@@ -258,17 +256,6 @@ export function RequestWizard({ onSubmit, loading }: Props) {
 
       {/* Botones de navegación */}
       <div className="flex gap-3 pt-2">
-        {step > 1 && (
-          <button
-            type="button"
-            onClick={back}
-            className="flex items-center justify-center gap-1 rounded-2xl py-3.5 px-5 text-sm font-bold active:opacity-70 transition-opacity"
-            style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #E8E0D4' }}
-          >
-            <ChevronLeft size={16} />
-            Atrás
-          </button>
-        )}
         {step < TOTAL_STEPS ? (
           <button
             type="button"
