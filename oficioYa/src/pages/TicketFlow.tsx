@@ -136,8 +136,7 @@ function MediaStep({
 
   const missingPhoto = input.photo === null
   const missingText  = input.text.trim().length < 10
-  const missingZone  = !input.zone
-  const canAnalyze   = !missingPhoto && !missingText && !missingZone
+  const canAnalyze   = !missingPhoto && !missingText
 
   function handleAnalyze() {
     setAttempted(true)
@@ -291,7 +290,7 @@ function MediaStep({
           className="w-full flex items-center justify-between rounded-xl py-3 px-4"
           style={{
             background: input.zone ? 'rgba(232,104,58,.08)' : '#FFFFFF',
-            border: `1.5px solid ${input.zone ? '#E8683A' : attempted && missingZone ? '#EF4444' : '#EDE8DE'}`,
+            border: `1.5px solid ${input.zone ? '#E8683A' : '#EDE8DE'}`,
           }}
         >
           <span className="text-sm font-bold" style={{ color: input.zone ? '#E8683A' : '#555555' }}>
@@ -309,10 +308,7 @@ function MediaStep({
             <span className="text-xs" style={{ color: '#CCC' }}>▼</span>
           )}
         </motion.button>
-        {attempted && missingZone
-          ? <p className="text-xs mt-1 px-1 font-semibold" style={{ color: '#EF4444' }}>📍 Seleccioná tu barrio</p>
-          : <p className="text-xs mt-1 px-1" style={{ color: '#AAAAAA' }}>Necesario para encontrar profesionales cerca</p>
-        }
+        <p className="text-xs mt-1 px-1" style={{ color: '#AAAAAA' }}>Opcional — te mostramos profesionales más cerca</p>
       </div>
 
       {/* Bottom sheet de barrios */}
