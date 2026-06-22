@@ -1,210 +1,330 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { MessageCircle } from 'lucide-react'
+import { ChevronLeft, MessageCircle, Search } from 'lucide-react'
 import { useChatStore } from '../store/chatStore'
 import { useRequestStore } from '../store/requestStore'
 import { useProRequestsStore } from '../store/proRequestsStore'
 import { useAuthStore } from '../store/authStore'
-import { PageShell } from '../components/layout/PageShell'
 import { IS_DEMO_MODE } from '../lib/env'
 import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
 import { getCategoryMeta } from '../lib/categories'
 import { getInitials } from '../lib/utils'
 import { fadeUp, staggerFast } from '../lib/motion'
 
-const STATUS_DOT: Record<string, string> = {
-  confirmed:   '#22c55e',
-  in_progress: '#8b5cf6',
-  completed:   '#AAAAAA',
+// ── Metadatos de estado ────────────────────────────────────────────────────
+
+const STATUS_META: Record<string, { label: string; color: string; bg: string; dot: string }> = {
+  pending:     { label: 'Pendiente',  color: '#D97706', bg: 'rgba(245,158,11,.12)', dot: '#F59E0B' },
+  confirmed:   { label: 'Confirmado', color: '#16A34A', bg: 'rgba(34,197,94,.12)',  dot: '#22C55E' },
+  in_progress: { label: 'En camino',  color: '#7C3AED', bg: 'rgba(139,92,246,.12)', dot: '#8B5CF6' },
+  completed:   { label: 'Finalizado', color: '#6B7280', bg: 'rgba(107,114,128,.12)', dot: '#9CA3AF' },
+  cancelled:   { label: 'Cancelado',  color: '#DC2626', bg: 'rgba(239,68,68,.12)',  dot: '#EF4444' },
 }
 
-const STATUS_LABEL: Record<string, string> = {
-  confirmed:   'Confirmado',
-  in_progress: 'En camino',
-  completed:   'Completado',
-}
+// ── Helpers ────────────────────────────────────────────────────────────────
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
   const m = Math.floor(diff / 60000)
   if (m < 1) return 'Ahora'
-  if (m < 60) return `hace ${m}m`
+  if (m < 60) return `${m}m`
   const h = Math.floor(m / 60)
-  if (h < 24) return `hace ${h}h`
-  return `hace ${Math.floor(h / 24)}d`
+  if (h < 24) return `${h}h`
+  const d = Math.floor(h / 24)
+  if (d < 7) return `${d}d`
+  return new Date(iso).toLocaleDateString('es', { day: 'numeric', month: 'short' })
 }
 
 function lastMessagePreview(type: string, content: string) {
   if (type === 'image') return '📷 Foto'
   if (type === 'audio') return '🎙️ Audio'
-  return content.length > 45 ? content.slice(0, 45) + '…' : content
+  return content.length > 50 ? content.slice(0, 50) + '…' : content
 }
+
+// ── Componente principal ───────────────────────────────────────────────────
 
 export default function Mensajes() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const isPro = user?.role === 'professional'
 
-  const clientRequests = useRequestStore((s) => s.requests)
-  const loadClientRequests = useRequestStore((s) => s.loadRequests)
-  const proRequests = useProRequestsStore((s) => s.requests)
-  const loadProRequests = useProRequestsStore((s) => s.load)
+  const clientRequests  = useRequestStore((s) => s.requests)
+  const loadClient      = useRequestStore((s) => s.loadRequests)
+  const proRequests     = useProRequestsStore((s) => s.requests)
+  const loadPro         = useProRequestsStore((s) => s.load)
   const { messagesByRequest, initMock } = useChatStore()
 
+  const [query, setQuery] = useState('')
+
   useEffect(() => {
-    if (isPro && user?.id) loadProRequests(user.id)
-    else loadClientRequests()
-  }, [isPro, user?.id, loadClientRequests, loadProRequests])
+    if (isPro && user?.id) loadPro(user.id)
+    else loadClient()
+  }, [isPro, user?.id, loadClient, loadPro])
 
   const rawRequests = isPro ? proRequests : clientRequests
 
-  // Solicitudes con chat activo: confirmadas, en curso o completadas
-  const chatRequests = rawRequests.filter((r) => {
+  const chatRequests = useMemo(() => rawRequests.filter((r) => {
     const hasStatus = r.status === 'confirmed' || r.status === 'in_progress' || r.status === 'completed'
     if (!hasStatus) return false
     if (IS_DEMO_MODE) return true
     return isPro ? r.professional_id === user?.id : r.client_id === user?.id
-  })
+  }), [rawRequests, isPro, user?.id])
 
-  // Inicializar mensajes mock para cada request activa (preview)
   useEffect(() => {
     chatRequests.forEach((r) => {
       if (!messagesByRequest[r.id]) initMock(r.id)
     })
   }, [chatRequests.length])
 
+  // Filtro de búsqueda
+  const filtered = useMemo(() => {
+    if (!query.trim()) return chatRequests
+    const q = query.toLowerCase()
+    return chatRequests.filter((r) => {
+      const pro = MOCK_PROFESSIONALS.find((p) => p.id === r.professional_id)
+      const name = pro?.profiles?.full_name?.toLowerCase() ?? ''
+      const { label } = getCategoryMeta(r.category)
+      return name.includes(q) || label.toLowerCase().includes(q)
+    })
+  }, [chatRequests, query])
+
+  // ── Header ────────────────────────────────────────────────────────────────
+
   const header = (
     <div
-      className="px-5 pt-12 pb-4 sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
+      className="sticky top-0 z-50"
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
     >
-      <h1 className="text-2xl font-black" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
-        Mensajes
-      </h1>
+      {/* Título */}
+      <div className="flex items-center gap-3 px-4 pt-12 pb-3">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0"
+        >
+          <ChevronLeft size={24} style={{ color: '#111111' }} />
+        </button>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.4px' }}>
+            Mensajes
+          </h1>
+          {chatRequests.length > 0 && (
+            <p className="text-xs" style={{ color: '#AAAAAA' }}>
+              {chatRequests.length} conversación{chatRequests.length !== 1 ? 'es' : ''} activa{chatRequests.length !== 1 ? 's' : ''}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Búsqueda */}
       {chatRequests.length > 0 && (
-        <p className="text-xs mt-0.5" style={{ color: '#AAAAAA' }}>
-          {chatRequests.length} conversación{chatRequests.length !== 1 ? 'es' : ''} activa{chatRequests.length !== 1 ? 's' : ''}
-        </p>
+        <div className="px-4 pb-3">
+          <div
+            className="flex items-center gap-2 rounded-2xl px-3 py-2.5"
+            style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
+          >
+            <Search size={14} style={{ color: '#AAAAAA', flexShrink: 0 }} />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar profesional o conversación…"
+              className="flex-1 bg-transparent text-sm outline-none"
+              style={{ color: '#111111', caretColor: '#E8683A' }}
+            />
+            {query && (
+              <button type="button" onClick={() => setQuery('')} style={{ color: '#AAAAAA', fontSize: 16, lineHeight: 1 }}>×</button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   )
 
-  return (
-    <PageShell header={header} showBottomNav={false}>
-      {chatRequests.length === 0 ? (
-        <div className="flex flex-col items-center gap-4 py-24 text-center px-6">
+  // ── Empty state ───────────────────────────────────────────────────────────
+
+  if (chatRequests.length === 0) {
+    return (
+      <div style={{ background: '#F5F0E8', minHeight: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
+        {header}
+        <div className="flex flex-col items-center gap-5 py-24 text-center px-8 flex-1">
           <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center"
-            style={{ background: '#FEF0EA', border: '1.5px solid #FDDCC8' }}
+            className="w-20 h-20 rounded-3xl flex items-center justify-center"
+            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
           >
-            <MessageCircle size={24} style={{ color: '#E8683A' }} />
+            <MessageCircle size={32} style={{ color: '#E8683A' }} />
           </div>
           <div>
-            <p className="font-black text-sm" style={{ color: '#111111' }}>
-              Aún no tenés conversaciones
+            <p className="font-black text-base mb-1" style={{ color: '#111111' }}>
+              💬 No tenés conversaciones todavía
             </p>
-            <p className="text-xs mt-1 leading-relaxed" style={{ color: '#AAAAAA' }}>
-              Los chats aparecen cuando un profesional acepta tu solicitud
+            <p className="text-sm leading-relaxed" style={{ color: '#AAAAAA' }}>
+              Cuando solicites un profesional, aparecerán aquí tus chats.
             </p>
           </div>
           <button
             type="button"
             onClick={() => navigate('/buscar')}
-            className="px-5 py-2.5 rounded-xl text-sm font-bold"
-            style={{ background: '#E8683A', color: '#fff' }}
+            className="px-6 py-3 rounded-2xl text-sm font-bold text-white"
+            style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
           >
             Buscar profesionales
           </button>
         </div>
-      ) : (
-        <motion.div
-          variants={staggerFast}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col"
-        >
-          {chatRequests.map((req) => {
-            const pro = MOCK_PROFESSIONALS.find((p) => p.id === req.professional_id)
-            const proName = pro?.profiles?.full_name ?? 'Profesional'
-            const proAvatar = pro?.profiles?.avatar_url
-            const proInitials = getInitials(proName)
-            const { emoji, label } = getCategoryMeta(req.category)
-            const messages = messagesByRequest[req.id] ?? []
-            const last = messages[messages.length - 1]
-            const dotColor = STATUS_DOT[req.status] ?? '#AAAAAA'
-            const statusLabel = STATUS_LABEL[req.status] ?? req.status
+      </div>
+    )
+  }
 
-            return (
-              <motion.button
-                key={req.id}
-                variants={fadeUp}
-                type="button"
-                onClick={() => navigate(`/solicitud/${req.id}/chat`)}
-                className="flex items-center gap-3 px-4 py-3.5 text-left w-full active:bg-[#F5F0E8] transition-colors"
-                style={{ borderBottom: '1px solid #F0EBE3' }}
-              >
-                {/* Avatar profesional */}
-                <div className="relative flex-shrink-0">
-                  <div
-                    className="w-13 h-13 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
-                    style={{
-                      width: 52, height: 52,
-                      background: proAvatar ? undefined : 'linear-gradient(135deg, #f5b99a, #E8683A)',
-                      color: '#fff',
-                      border: '2px solid #EDE8DE',
-                    }}
+  // ── Lista de conversaciones ───────────────────────────────────────────────
+
+  return (
+    <div style={{ background: '#F5F0E8', minHeight: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
+      {header}
+
+      <motion.div
+        variants={staggerFast}
+        initial="hidden"
+        animate="visible"
+        className="flex flex-col gap-2 p-3 flex-1"
+      >
+        {filtered.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-sm font-bold" style={{ color: '#888' }}>Sin resultados para "{query}"</p>
+          </div>
+        )}
+
+        {filtered.map((req) => {
+          const pro         = MOCK_PROFESSIONALS.find((p) => p.id === req.professional_id)
+          const proName     = pro?.profiles?.full_name ?? 'Profesional'
+          const proAvatar   = pro?.profiles?.avatar_url
+          const proInitials = getInitials(proName)
+          const proZone     = pro?.zone
+          const { emoji, label } = getCategoryMeta(req.category)
+          const messages    = messagesByRequest[req.id] ?? []
+          const last        = messages[messages.length - 1]
+          const meta        = STATUS_META[req.status] ?? STATUS_META.confirmed
+          const isOnline    = req.status === 'confirmed' || req.status === 'in_progress'
+
+          // Mensajes no leídos: último msg del "otro" lado en demo
+          const myRole      = isPro ? 'pro' : 'client'
+          const unread      = last && last.senderRole !== myRole ? 1 : 0
+
+          return (
+            <motion.button
+              key={req.id}
+              variants={fadeUp}
+              type="button"
+              onClick={() => navigate(`/solicitud/${req.id}/chat`)}
+              className="w-full text-left rounded-2xl p-3.5 flex items-center gap-3 active:scale-[0.99] transition-all"
+              style={{
+                background: '#FFFFFF',
+                border: unread ? '1.5px solid rgba(232,104,58,.3)' : '1.5px solid #EDE8DE',
+                boxShadow: unread
+                  ? '0 2px 16px rgba(232,104,58,.1), 0 1px 4px rgba(0,0,0,.06)'
+                  : '0 1px 4px rgba(0,0,0,.05)',
+              }}
+            >
+              {/* Avatar */}
+              <div className="relative flex-shrink-0">
+                <div
+                  className="overflow-hidden flex items-center justify-center font-bold text-sm"
+                  style={{
+                    width: 52, height: 52, borderRadius: '50%',
+                    background: proAvatar ? undefined : 'linear-gradient(135deg, #f5b99a, #E8683A)',
+                    color: '#fff',
+                    border: '2px solid #EDE8DE',
+                    fontSize: 16,
+                  }}
+                >
+                  {proAvatar
+                    ? <img src={proAvatar} alt={proName} className="w-full h-full object-cover" />
+                    : proInitials
+                  }
+                </div>
+                {/* Online dot */}
+                <span
+                  className="absolute bottom-0.5 right-0.5 rounded-full"
+                  style={{
+                    width: 12, height: 12,
+                    background: isOnline ? '#22C55E' : '#D1D5DB',
+                    border: '2px solid #FFFFFF',
+                  }}
+                />
+              </div>
+
+              {/* Contenido */}
+              <div className="flex-1 min-w-0">
+                {/* Fila 1: nombre + hora */}
+                <div className="flex items-center justify-between mb-0.5">
+                  <p
+                    className="text-sm truncate"
+                    style={{ color: '#111111', fontWeight: unread ? 800 : 600 }}
                   >
-                    {proAvatar
-                      ? <img src={proAvatar} alt={proName} className="w-full h-full object-cover" />
-                      : proInitials
-                    }
-                  </div>
-                  {/* Dot de estado */}
-                  <span
-                    className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full"
-                    style={{ background: dotColor, border: '2px solid #FFFFFF' }}
-                  />
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-0.5">
-                    <p className="text-sm font-black truncate" style={{ color: '#111111' }}>
-                      {proName}
-                    </p>
-                    {last && (
-                      <span className="text-[10px] flex-shrink-0 ml-2" style={{ color: '#BBBBBB' }}>
-                        {timeAgo(last.createdAt)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span
-                      className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
-                      style={{ background: 'rgba(232,104,58,0.1)', color: '#E8683A' }}
-                    >
-                      {emoji} {label}
-                    </span>
-                    <span className="text-[10px] font-semibold" style={{ color: dotColor }}>
-                      · {statusLabel}
-                    </span>
-                  </div>
-                  <p className="text-xs truncate" style={{ color: '#888888' }}>
-                    {last
-                      ? lastMessagePreview(last.type, last.content)
-                      : 'Tocá para abrir el chat'
-                    }
+                    {proName}
                   </p>
+                  {last && (
+                    <span
+                      className="text-[10px] flex-shrink-0 ml-2"
+                      style={{ color: unread ? '#E8683A' : '#BBBBBB', fontWeight: unread ? 700 : 400 }}
+                    >
+                      {timeAgo(last.createdAt)}
+                    </span>
+                  )}
                 </div>
 
-                {/* Chevron */}
-                <span style={{ color: '#DDD', fontSize: 18, flexShrink: 0 }}>›</span>
-              </motion.button>
-            )
-          })}
-        </motion.div>
-      )}
-    </PageShell>
+                {/* Fila 2: oficio + estado */}
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span
+                    className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+                    style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}
+                  >
+                    {emoji} {label}
+                  </span>
+                  <span
+                    className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+                    style={{ background: meta.bg, color: meta.color }}
+                  >
+                    {meta.label}
+                  </span>
+                </div>
+
+                {/* Fila 3: zona */}
+                {proZone && (
+                  <p className="text-[10px] mb-0.5" style={{ color: '#AAAAAA' }}>
+                    📍 {proZone}
+                  </p>
+                )}
+
+                {/* Fila 4: último mensaje */}
+                <p
+                  className="text-xs truncate"
+                  style={{ color: unread ? '#333333' : '#999999', fontWeight: unread ? 600 : 400 }}
+                >
+                  {last
+                    ? lastMessagePreview(last.type, last.content)
+                    : 'Tocá para abrir el chat'
+                  }
+                </p>
+              </div>
+
+              {/* Unread badge o chevron */}
+              <div className="flex-shrink-0 flex flex-col items-center gap-1.5">
+                {unread > 0 ? (
+                  <span
+                    className="flex items-center justify-center rounded-full font-black text-white"
+                    style={{ width: 20, height: 20, background: '#E8683A', fontSize: 10 }}
+                  >
+                    {unread}
+                  </span>
+                ) : (
+                  <span style={{ color: '#D1D5DB', fontSize: 20 }}>›</span>
+                )}
+              </div>
+            </motion.button>
+          )
+        })}
+      </motion.div>
+    </div>
   )
 }
