@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Edit2, LogOut, Phone, MapPin, Star, Briefcase, CheckCircle } from 'lucide-react'
+import { Edit2, LogOut, Phone, MapPin, Star, Briefcase, CheckCircle, Share2, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { PageShell } from '../../components/layout/PageShell'
 import { ProPortfolio } from '../../components/pro/portfolio/ProPortfolio'
@@ -16,10 +16,26 @@ export default function ProProfile() {
   const signOut = useAuthStore((s) => s.signOut)
   const { profile, loading, load } = useProfessionalStore()
   const [activeTab, setActiveTab] = useState<'datos' | 'trabajos'>('datos')
+  const [shared, setShared] = useState(false)
 
   useEffect(() => {
     if (user?.id) load(user.id)
   }, [user?.id, load])
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/profesional/${user?.id}`
+    const proName = user?.full_name ?? 'este profesional'
+    const text = `Te recomiendo a ${proName} en OficioYa`
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: proName, text, url })
+      } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(url)
+      setShared(true)
+      setTimeout(() => setShared(false), 2000)
+    }
+  }
 
   const header = (
     <div
@@ -33,14 +49,29 @@ export default function ProProfile() {
         <h1 className="text-2xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
           Mi perfil
         </h1>
-        <button
-          type="button"
-          onClick={() => navigate('/pro/perfil/editar')}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
-          style={{ background: 'rgba(232,104,58,0.12)', color: '#E8683A' }}
-        >
-          <Edit2 size={13} /> Editar
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleShare}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
+            style={{
+              background: shared ? 'rgba(34,197,94,.12)' : '#F5F0E8',
+              border: `1px solid ${shared ? 'rgba(34,197,94,.3)' : '#E8E0D4'}`,
+              color: shared ? '#16A34A' : '#E8683A',
+            }}
+          >
+            {shared ? <Check size={13} /> : <Share2 size={13} />}
+            {shared ? 'Copiado' : 'Compartir'}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/pro/perfil/editar')}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
+            style={{ background: 'rgba(232,104,58,0.12)', color: '#E8683A' }}
+          >
+            <Edit2 size={13} /> Editar
+          </button>
+        </div>
       </div>
     </div>
   )
