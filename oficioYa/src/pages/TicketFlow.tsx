@@ -120,7 +120,6 @@ function MediaStep({
   lockedPro?: ProfessionalWithProfile | null
 }) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const [showText, setShowText] = useState(false)
   const [showZoneSheet, setShowZoneSheet] = useState(false)
   const [attempted, setAttempted] = useState(false)
 
