@@ -7,6 +7,9 @@ import { motion } from 'framer-motion'
 import { useBack } from '../../hooks/useBack'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
 import { BottomNav } from '../layout/BottomNav'
+import { DateStrip } from '../availability/DateStrip'
+import { TimeSlotGrid } from '../availability/TimeSlotGrid'
+import { useAvailabilityStore } from '../../store/availabilityStore'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
 import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
@@ -115,6 +118,9 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
   const initials = getInitials(profiles.full_name)
   const [shared, setShared] = useState(false)
   const [selectedWork, setSelectedWork] = useState<PortfolioItem | null>(null)
+  const [availDate, setAvailDate] = useState<string | null>(null)
+  const getSlots = useAvailabilityStore((s) => s.getSlots)
+  const availSlots = availDate ? getSlots(id, availDate) : []
 
   const handleShare = async () => {
     const url = `${window.location.origin}/profesional/${id}`
@@ -286,6 +292,32 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
             )}
           </motion.div>
         )}
+
+        {/* Disponibilidad */}
+        <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+          <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Disponibilidad</h3>
+          <DateStrip proId={id} selected={availDate} onSelect={setAvailDate} />
+          {availDate && (
+            <div className="mt-3">
+              <div className="flex gap-3 text-[10px] font-bold mb-2" style={{ color: '#888' }}>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full inline-block" style={{ background: 'linear-gradient(135deg,#16A34A,#15803D)' }} />
+                  Disponible
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full inline-block" style={{ background: 'linear-gradient(135deg,#DC2626,#B91C1C)' }} />
+                  Ocupado
+                </span>
+              </div>
+              <TimeSlotGrid slots={availSlots} selected={null} onSelect={() => {}} />
+            </div>
+          )}
+          {!availDate && (
+            <p className="text-xs mt-2" style={{ color: '#AAAAAA' }}>
+              Tocá un día para ver los horarios disponibles
+            </p>
+          )}
+        </motion.div>
 
         {/* Reseñas */}
         <motion.div variants={fadeUp}>
