@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Avatar } from '../ui/Avatar'
+import { Button } from '../ui/Button'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
 import { getCategoryMeta } from '../../lib/categories'
 
@@ -80,19 +81,18 @@ return (
         <button
           type="button"
           onClick={handleCall}
-          className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity"
+          className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:scale-[0.97] active:opacity-80 transition-[transform,opacity] duration-150"
           style={{ background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4' }}
         >
           📞 Llamar
         </button>
-        <button
-          type="button"
+        <Button
           onClick={() => navigate(`/ticket?pro=${professional.id}`)}
-          className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:opacity-80 transition-opacity text-white"
-          style={{ background: '#0F6E56', boxShadow: '0 4px 12px rgba(15,110,86,.2)' }}
+          size="sm"
+          fullWidth
         >
           Solicitar
-        </button>
+        </Button>
       </div>
     </div>
   )
