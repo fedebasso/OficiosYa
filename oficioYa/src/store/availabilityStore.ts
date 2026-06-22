@@ -77,29 +77,26 @@ function datePlusDays(n: number): string {
 
 const req201Date = datePlusDays(2) // matches mockRequests[0].scheduled_date
 
+function makeSchedule(proId: string, days: DayOfWeek[], from = '08:00', to = '18:00'): WorkingSchedule {
+  return { proId, days, fromHour: from, toHour: to, intervalMin: 30 }
+}
+
+const WEEKDAYS: DayOfWeek[] = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes']
+const WEEKDAYS_SAT: DayOfWeek[] = [...WEEKDAYS, 'sabado']
+
 const DEMO_SCHEDULES: Record<string, WorkingSchedule> = {
-  '1': {
-    proId: '1',
-    days: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
-    fromHour: '08:00',
-    toHour: '18:00',
-    intervalMin: 30,
-  },
-  '2': {
-    proId: '2',
-    days: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'],
-    fromHour: '09:00',
-    toHour: '17:00',
-    intervalMin: 30,
-  },
+  '1':  makeSchedule('1',  WEEKDAYS_SAT),
+  '2':  makeSchedule('2',  WEEKDAYS, '09:00', '17:00'),
+  '3':  makeSchedule('3',  WEEKDAYS_SAT, '07:00', '19:00'),
+  '4':  makeSchedule('4',  WEEKDAYS),
+  '5':  makeSchedule('5',  WEEKDAYS_SAT, '08:00', '20:00'),
+  '6':  makeSchedule('6',  WEEKDAYS, '08:00', '17:00'),
+  '7':  makeSchedule('7',  WEEKDAYS_SAT),
+  '8':  makeSchedule('8',  WEEKDAYS, '09:00', '18:00'),
+  '9':  makeSchedule('9',  WEEKDAYS_SAT, '07:30', '19:00'),
+  '10': makeSchedule('10', WEEKDAYS),
   // Demo pro user (mock-pro-1 = Carlos Méndez)
-  'mock-pro-1': {
-    proId: 'mock-pro-1',
-    days: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
-    fromHour: '08:00',
-    toHour: '18:00',
-    intervalMin: 30,
-  },
+  'mock-pro-1': makeSchedule('mock-pro-1', WEEKDAYS_SAT),
 }
 
 const DEMO_BLOCKED: BlockedSlot[] = [

@@ -6,6 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { SPRING_GENTLE } from '../lib/motion'
 import { useRequestStore } from '../store/requestStore'
+import { DateStrip } from '../components/availability/DateStrip'
+import { TimeSlotGrid } from '../components/availability/TimeSlotGrid'
+import { useAvailabilityStore } from '../store/availabilityStore'
 import type { GeneratedTicket } from '../types/ticket'
 
 interface LocationState {
@@ -64,6 +67,11 @@ export default function TicketConfirm() {
   const [phoneError, setPhoneError] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
+  const [scheduledDate, setScheduledDate] = useState<string | null>(null)
+  const [scheduledTime, setScheduledTime] = useState<string | null>(null)
+
+  const getSlots = useAvailabilityStore((s) => s.getSlots)
+  const slots = scheduledDate ? getSlots(proId ?? '', scheduledDate) : []
 
   const hasState = state !== null
   useEffect(() => {
@@ -90,6 +98,9 @@ export default function TicketConfirm() {
         contact_phone: phone,
         work_type: ticket.work_type,
         location: zone || undefined,
+        scheduled_date: scheduledDate && scheduledTime
+          ? `${scheduledDate}T${scheduledTime}:00`
+          : scheduledDate ?? undefined,
       })
       setSent(true)
     } finally {
@@ -177,6 +188,42 @@ export default function TicketConfirm() {
                   </span>
                 )}
               </div>
+            </motion.div>
+
+            {/* Fecha y horario */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18, ...SPRING_GENTLE }}
+              className="flex flex-col gap-3"
+            >
+              <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
+                Elegí fecha y horario
+              </p>
+              <DateStrip
+                proId={proId ?? ''}
+                selected={scheduledDate}
+                onSelect={(date) => { setScheduledDate(date); setScheduledTime(null) }}
+              />
+              {scheduledDate && (
+                <>
+                  <div className="flex gap-3 text-[10px] font-bold" style={{ color: '#888' }}>
+                    <span className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ background: 'linear-gradient(135deg,#16A34A,#15803D)', display: 'inline-block' }} />
+                      Disponible
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ background: 'linear-gradient(135deg,#DC2626,#B91C1C)', display: 'inline-block' }} />
+                      Ocupado
+                    </span>
+                  </div>
+                  <TimeSlotGrid
+                    slots={slots}
+                    selected={scheduledTime}
+                    onSelect={setScheduledTime}
+                  />
+                </>
+              )}
             </motion.div>
 
             {/* Teléfono */}
