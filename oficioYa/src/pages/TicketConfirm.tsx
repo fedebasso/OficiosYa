@@ -71,7 +71,6 @@ export default function TicketConfirm() {
   const [scheduledTime, setScheduledTime] = useState<string | null>(null)
 
   const getSlots = useAvailabilityStore((s) => s.getSlots)
-  const slots = scheduledDate ? getSlots(proId ?? '', scheduledDate) : []
 
   const hasState = state !== null
   useEffect(() => {
@@ -81,6 +80,8 @@ export default function TicketConfirm() {
   if (!state) return null
 
   const { ticket, proId, proName, proAvatar, proRating, zone } = state
+
+  const slots = scheduledDate ? getSlots(proId, scheduledDate) : []
 
   const handleSubmit = async () => {
     if (phone.length < 8) {
