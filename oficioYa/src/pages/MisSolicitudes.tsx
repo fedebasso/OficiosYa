@@ -58,23 +58,25 @@ export default function MisSolicitudes() {
   const [reviewingId, setReviewingId] = useState<string | null>(null)
   const [cancellingId, setCancellingId] = useState<string | null>(null)
   const [query, setQuery] = useState('')
-  const [seenConfirmed, setSeenConfirmed] = useState<Set<string>>(new Set())
-  const [acceptedBanners, setAcceptedBanners] = useState<string[]>([])
+  const [seenStatuses, setSeenStatuses] = useState<Map<string, string>>(new Map())
+  const [notifBanners, setNotifBanners] = useState<string[]>([])
 
   useEffect(() => {
-    const newlyConfirmed = requests.filter(
-      (r) => r.status === 'confirmed' && !seenConfirmed.has(r.id)
+    const NOTIFY_STATUSES = ['confirmed', 'in_progress']
+    const toNotify = requests.filter(
+      (r) => NOTIFY_STATUSES.includes(r.status) && seenStatuses.get(r.id) !== r.status
     )
-    if (newlyConfirmed.length === 0) return
-    setSeenConfirmed((prev) => {
-      const next = new Set(prev)
-      newlyConfirmed.forEach((r) => next.add(r.id))
+    if (toNotify.length === 0) return
+    setSeenStatuses((prev) => {
+      const next = new Map(prev)
+      toNotify.forEach((r) => next.set(r.id, r.status))
       return next
     })
-    setAcceptedBanners((prev) => [
-      ...prev,
-      ...newlyConfirmed.map((r) => r.id).filter((id) => !prev.includes(id)),
-    ])
+    setNotifBanners((prev) => {
+      const ids = new Set(prev)
+      toNotify.forEach((r) => ids.add(r.id))
+      return Array.from(ids)
+    })
   }, [requests])
 
   useEffect(() => { loadRequests() }, [loadRequests])
@@ -330,13 +332,24 @@ export default function MisSolicitudes() {
     <div style={{ background: '#F5F0E8', minHeight: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
       {header}
 
-      {/* ── Banners de aceptación ── */}
+      {/* ── Banners de notificación ── */}
       <AnimatePresence>
-        {acceptedBanners.map((reqId) => {
+        {notifBanners.map((reqId) => {
           const req = requests.find((r) => r.id === reqId)
           if (!req) return null
           const pro = MOCK_PROFESSIONALS.find((p) => p.id === req.professional_id)
           const firstName = (pro?.profiles?.full_name ?? 'El profesional').split(' ')[0]
+          const isInProgress = req.status === 'in_progress'
+          const bg = isInProgress
+            ? 'linear-gradient(135deg, #7C3AED, #5B21B6)'
+            : 'linear-gradient(135deg, #E8683A, #c44d1f)'
+          const shadow = isInProgress
+            ? '0 4px 16px rgba(124,58,237,.35)'
+            : '0 4px 16px rgba(232,104,58,.35)'
+          const icon = isInProgress ? '🚗' : '🎉'
+          const text = isInProgress
+            ? `¡${firstName} está en camino!`
+            : `¡${firstName} aceptó tu trabajo!`
           return (
             <motion.div
               key={reqId}
@@ -345,15 +358,12 @@ export default function MisSolicitudes() {
               exit={{ opacity: 0, y: -16 }}
               transition={{ type: 'spring', stiffness: 400, damping: 35 }}
               className="mx-3 mt-3 rounded-2xl px-4 py-3 flex items-center gap-3"
-              style={{
-                background: 'linear-gradient(135deg, #E8683A, #c44d1f)',
-                boxShadow: '0 4px 16px rgba(232,104,58,.35)',
-              }}
+              style={{ background: bg, boxShadow: shadow }}
             >
-              <span style={{ fontSize: 22, flexShrink: 0 }}>🎉</span>
+              <span style={{ fontSize: 22, flexShrink: 0 }}>{icon}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-black text-white leading-tight">
-                  ¡{firstName} aceptó tu trabajo!
+                  {text}
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,.75)' }}>
                   Coordiná los detalles por chat
@@ -364,7 +374,7 @@ export default function MisSolicitudes() {
                   type="button"
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
-                    setAcceptedBanners((prev) => prev.filter((id) => id !== reqId))
+                    setNotifBanners((prev) => prev.filter((id) => id !== reqId))
                     navigate(`/solicitud/${reqId}/chat`)
                   }}
                   className="rounded-xl px-3 py-1.5 text-xs font-bold"
@@ -374,7 +384,7 @@ export default function MisSolicitudes() {
                 </motion.button>
                 <button
                   type="button"
-                  onClick={() => setAcceptedBanners((prev) => prev.filter((id) => id !== reqId))}
+                  onClick={() => setNotifBanners((prev) => prev.filter((id) => id !== reqId))}
                   style={{ color: 'rgba(255,255,255,.6)', fontSize: 18, lineHeight: 1, fontWeight: 900 }}
                 >
                   ×
