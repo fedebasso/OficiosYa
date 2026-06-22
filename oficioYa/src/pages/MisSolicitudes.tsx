@@ -345,7 +345,7 @@ export default function MisSolicitudes() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 flex items-end justify-center"
-            style={{ background: 'rgba(0,0,0,.6)', zIndex: 70 }}
+            style={{ background: 'rgba(0,0,0,.6)', zIndex: 9999 }}
           >
             <motion.div
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
@@ -369,7 +369,7 @@ export default function MisSolicitudes() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 flex items-end justify-center"
-            style={{ background: 'rgba(0,0,0,.6)', zIndex: 70 }}
+            style={{ background: 'rgba(0,0,0,.6)', zIndex: 9999 }}
             onClick={() => setCancellingId(null)}
           >
             <motion.div
