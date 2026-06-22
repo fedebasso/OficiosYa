@@ -58,6 +58,24 @@ export default function MisSolicitudes() {
   const [reviewingId, setReviewingId] = useState<string | null>(null)
   const [cancellingId, setCancellingId] = useState<string | null>(null)
   const [query, setQuery] = useState('')
+  const [seenConfirmed, setSeenConfirmed] = useState<Set<string>>(new Set())
+  const [acceptedBanners, setAcceptedBanners] = useState<string[]>([])
+
+  useEffect(() => {
+    const newlyConfirmed = requests.filter(
+      (r) => r.status === 'confirmed' && !seenConfirmed.has(r.id)
+    )
+    if (newlyConfirmed.length === 0) return
+    setSeenConfirmed((prev) => {
+      const next = new Set(prev)
+      newlyConfirmed.forEach((r) => next.add(r.id))
+      return next
+    })
+    setAcceptedBanners((prev) => [
+      ...prev,
+      ...newlyConfirmed.map((r) => r.id).filter((id) => !prev.includes(id)),
+    ])
+  }, [requests])
 
   useEffect(() => { loadRequests() }, [loadRequests])
 
@@ -223,6 +241,17 @@ export default function MisSolicitudes() {
           className="flex gap-2 px-3.5 pb-3.5"
           style={{ borderTop: req.status !== 'cancelled' ? '1px solid #F5F0E8' : undefined, paddingTop: req.status !== 'cancelled' ? 10 : 0 }}
         >
+          {req.status === 'cancelled' && (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate(`/buscar-profesional/${req.id}`)}
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-bold"
+              style={{ background: 'rgba(232,104,58,.08)', color: '#E8683A', border: '1.5px solid rgba(232,104,58,.25)' }}
+            >
+              🔍 Buscar otro profesional
+            </motion.button>
+          )}
           {(req.status === 'confirmed' || req.status === 'in_progress') && (
             <button
               type="button"
@@ -300,6 +329,61 @@ export default function MisSolicitudes() {
   return (
     <div style={{ background: '#F5F0E8', minHeight: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
       {header}
+
+      {/* ── Banners de aceptación ── */}
+      <AnimatePresence>
+        {acceptedBanners.map((reqId) => {
+          const req = requests.find((r) => r.id === reqId)
+          if (!req) return null
+          const pro = MOCK_PROFESSIONALS.find((p) => p.id === req.professional_id)
+          const firstName = (pro?.profiles?.full_name ?? 'El profesional').split(' ')[0]
+          return (
+            <motion.div
+              key={reqId}
+              initial={{ opacity: 0, y: -16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+              className="mx-3 mt-3 rounded-2xl px-4 py-3 flex items-center gap-3"
+              style={{
+                background: 'linear-gradient(135deg, #E8683A, #c44d1f)',
+                boxShadow: '0 4px 16px rgba(232,104,58,.35)',
+              }}
+            >
+              <span style={{ fontSize: 22, flexShrink: 0 }}>🎉</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-black text-white leading-tight">
+                  ¡{firstName} aceptó tu trabajo!
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,.75)' }}>
+                  Coordiná los detalles por chat
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    setAcceptedBanners((prev) => prev.filter((id) => id !== reqId))
+                    navigate(`/solicitud/${reqId}/chat`)
+                  }}
+                  className="rounded-xl px-3 py-1.5 text-xs font-bold"
+                  style={{ background: 'rgba(255,255,255,.2)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,.3)' }}
+                >
+                  Chat →
+                </motion.button>
+                <button
+                  type="button"
+                  onClick={() => setAcceptedBanners((prev) => prev.filter((id) => id !== reqId))}
+                  style={{ color: 'rgba(255,255,255,.6)', fontSize: 18, lineHeight: 1, fontWeight: 900 }}
+                >
+                  ×
+                </button>
+              </div>
+            </motion.div>
+          )
+        })}
+      </AnimatePresence>
 
       <div className="flex flex-col gap-4 p-3 pb-8 flex-1">
 
