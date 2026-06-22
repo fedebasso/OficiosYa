@@ -344,14 +344,14 @@ export default function MisSolicitudes() {
         {reviewingId && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end justify-center"
-            style={{ background: 'rgba(0,0,0,.6)' }}
+            className="fixed inset-0 flex items-end justify-center"
+            style={{ background: 'rgba(0,0,0,.6)', zIndex: 70 }}
           >
             <motion.div
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 400, damping: 40 }}
               className="w-full rounded-t-2xl p-6"
-              style={{ background: '#FFFFFF', maxWidth: 480 }}
+              style={{ background: '#FFFFFF', maxWidth: 480, paddingBottom: 'calc(24px + var(--safe-bottom, 0px))' }}
             >
               <ReviewForm
                 requestId={reviewingId}
@@ -368,15 +368,15 @@ export default function MisSolicitudes() {
         {cancellingId && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end justify-center"
-            style={{ background: 'rgba(0,0,0,.6)' }}
+            className="fixed inset-0 flex items-end justify-center"
+            style={{ background: 'rgba(0,0,0,.6)', zIndex: 70 }}
             onClick={() => setCancellingId(null)}
           >
             <motion.div
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 400, damping: 40 }}
               className="w-full rounded-t-2xl p-6 flex flex-col gap-4"
-              style={{ background: '#FFFFFF', maxWidth: 480 }}
+              style={{ background: '#FFFFFF', maxWidth: 480, paddingBottom: 'calc(24px + var(--safe-bottom, 0px))' }}
               onClick={(e) => e.stopPropagation()}
             >
               <div>
