@@ -285,6 +285,34 @@ export default function SolicitudDetail() {
 
         </motion.div>
 
+        {/* CTA buscar otro profesional (solo para solicitudes canceladas) */}
+        {isCancelled && (
+          <motion.div variants={fadeUp}>
+            <div
+              className="rounded-2xl p-4 flex flex-col gap-3"
+              style={{ background: 'rgba(232,104,58,.06)', border: '1.5px solid rgba(232,104,58,.2)' }}
+            >
+              <div>
+                <p className="text-sm font-black" style={{ color: '#111111' }}>
+                  El profesional no pudo tomar el trabajo
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: '#AAAAAA' }}>
+                  Podés enviar la misma solicitud a otro profesional.
+                </p>
+              </div>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.97 }}
+                onClick={() => navigate(`/buscar-profesional/${req.id}`)}
+                className="w-full rounded-2xl py-3.5 text-sm font-bold text-white"
+                style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
+              >
+                🔍 Buscar otro profesional
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
       </motion.div>
 
       {/* Modal reseña */}
