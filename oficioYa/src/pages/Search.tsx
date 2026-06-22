@@ -148,7 +148,8 @@ export default function Search() {
   function toggleFilter(f: Filter) {
     setActiveFilters(prev => {
       const next = new Set(prev)
-      next.has(f) ? next.delete(f) : next.add(f)
+      if (next.has(f)) next.delete(f)
+      else next.add(f)
       return next
     })
   }

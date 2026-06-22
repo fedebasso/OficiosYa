@@ -75,7 +75,7 @@ export default function Mensajes() {
     chatRequests.forEach((r) => {
       if (!messagesByRequest[r.id]) initMock(r.id)
     })
-  }, [chatRequests.length])
+  }, [chatRequests, messagesByRequest, initMock])
 
   // Filtro de búsqueda
   const filtered = useMemo(() => {

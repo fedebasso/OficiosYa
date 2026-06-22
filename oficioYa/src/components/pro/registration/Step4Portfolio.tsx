@@ -46,7 +46,7 @@ export function Step4Portfolio({ onNext, loading }: Props) {
       setForm({ title: '', description: '', category: '', work_date: '' })
       setPhotos([])
       setError('')
-    } catch (e) {
+    } catch {
       setError('Error al subir el trabajo')
     } finally {
       setUploading(false)

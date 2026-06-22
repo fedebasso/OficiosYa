@@ -57,7 +57,20 @@ export function useProfessionals(categoria?: string) {
     }
   }
 
-  useEffect(() => { load() }, [categoria])
+  useEffect(() => {
+    const run = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        setProfessionals(await professionalService.getAll(categoria))
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Error al cargar profesionales')
+      } finally {
+        setLoading(false)
+      }
+    }
+    run()
+  }, [categoria])
 
   return { professionals, loading, error, refresh: load }
 }
@@ -91,11 +104,17 @@ export function useProfessionalPhotos(professionalId: string) {
 
   useEffect(() => {
     if (!professionalId) return
-    setLoading(true)
-    professionalService.getPhotos(professionalId)
-      .then(setPhotos)
-      .catch(() => setPhotos([]))
-      .finally(() => setLoading(false))
+    const run = async () => {
+      setLoading(true)
+      try {
+        setPhotos(await professionalService.getPhotos(professionalId))
+      } catch {
+        setPhotos([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    run()
   }, [professionalId])
 
   return { photos, loading }
@@ -110,11 +129,17 @@ export function useProfessionalPortfolio(professionalId: string) {
 
   useEffect(() => {
     if (!professionalId) return
-    setLoading(true)
-    registrationService.getPortfolio(professionalId)
-      .then(setPortfolio)
-      .catch(() => setPortfolio([]))
-      .finally(() => setLoading(false))
+    const run = async () => {
+      setLoading(true)
+      try {
+        setPortfolio(await registrationService.getPortfolio(professionalId))
+      } catch {
+        setPortfolio([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    run()
   }, [professionalId])
 
   return { portfolio, loading }

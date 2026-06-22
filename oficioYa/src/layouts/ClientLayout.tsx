@@ -8,7 +8,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const loadRequests = useRequestStore((s) => s.loadRequests)
 
   useEffect(() => {
-    if (user) loadRequests()
+    if (user?.id) loadRequests()
   }, [user?.id, loadRequests])
 
   return (

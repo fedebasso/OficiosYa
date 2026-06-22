@@ -61,14 +61,19 @@ export function ProPortfolio() {
 
   useEffect(() => {
     if (!user?.id) return
-    if (IS_DEMO_MODE) {
-      setItems(MOCK_PORTFOLIO)
-      setLoading(false)
-      return
+    const run = async () => {
+      if (IS_DEMO_MODE) {
+        setItems(MOCK_PORTFOLIO)
+        setLoading(false)
+        return
+      }
+      try {
+        setItems(await registrationService.getPortfolio(user.id))
+      } finally {
+        setLoading(false)
+      }
     }
-    registrationService.getPortfolio(user.id)
-      .then(setItems)
-      .finally(() => setLoading(false))
+    run()
   }, [user?.id])
 
   function handleSaved(saved: PortfolioItem) {

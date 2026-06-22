@@ -1,5 +1,5 @@
 // src/pages/BuscarOtroProfesional.tsx
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -29,11 +29,9 @@ export default function BuscarOtroProfesional() {
     .sort((a, b) => b.score - a.score)
     .map(({ pro }) => pro)
 
-  useEffect(() => {
-    if (sorted.length > 0 && selectedId === null) setSelectedId(sorted[0].id)
-  }, [sorted.length])
-
-  const selectedPro = sorted.find((p) => p.id === selectedId) ?? null
+  // Selección efectiva: la del usuario, o el primero por defecto
+  const effectiveId = selectedId ?? sorted[0]?.id ?? null
+  const selectedPro = sorted.find((p) => p.id === effectiveId) ?? null
 
   function handleContinuar() {
     if (!selectedPro || !req) return
@@ -156,7 +154,7 @@ export default function BuscarOtroProfesional() {
               className="flex flex-col gap-3"
             >
               {sorted.slice(0, 8).map((pro) => {
-                const selected = pro.id === selectedId
+                const selected = pro.id === effectiveId
                 return (
                   <motion.button
                     key={pro.id}

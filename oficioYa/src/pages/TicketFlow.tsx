@@ -512,10 +512,9 @@ function ResultsStep({
     .map(({ pro }) => pro)
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  useEffect(() => {
-    if (sorted.length > 0 && selectedId === null) setSelectedId(sorted[0].id)
-  }, [sorted.length])
-  const selectedPro = sorted.find((p) => p.id === selectedId) ?? null
+  // Selección efectiva: la del usuario, o el primero por defecto
+  const effectiveId = selectedId ?? sorted[0]?.id ?? null
+  const selectedPro = sorted.find((p) => p.id === effectiveId) ?? null
 
   return (
     <div className="flex flex-col pb-24" style={{ minHeight: '100%' }}>
@@ -592,7 +591,7 @@ function ResultsStep({
           animate="visible"
         >
           {sorted.slice(0, 5).map((pro) => {
-            const selected = pro.id === selectedId
+            const selected = pro.id === effectiveId
             return (
               <motion.button
                 key={pro.id}

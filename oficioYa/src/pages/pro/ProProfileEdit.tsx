@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Camera, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -50,15 +50,17 @@ export default function ProProfileEdit() {
   const [years, setYears] = useState(String(profile?.years_experience ?? ''))
   const [hasRut, setHasRut] = useState(false)
 
-  useEffect(() => {
-    if (profile) {
-      setBio(profile.bio ?? '')
-      setWhatsapp(profile.whatsapp ?? '')
-      setSpecialties(profile.specialties ?? [])
-      setZones(profile.coverage_departments ?? [])
-      setYears(String(profile.years_experience ?? ''))
-    }
-  }, [profile])
+  // Sync form fields from profile when it loads/changes, during render
+  // (React's "adjust state when a prop changes" pattern — no effect needed).
+  const [prevProfile, setPrevProfile] = useState(profile)
+  if (profile && profile !== prevProfile) {
+    setPrevProfile(profile)
+    setBio(profile.bio ?? '')
+    setWhatsapp(profile.whatsapp ?? '')
+    setSpecialties(profile.specialties ?? [])
+    setZones(profile.coverage_departments ?? [])
+    setYears(String(profile.years_experience ?? ''))
+  }
 
   function toggleSpecialty(id: string) {
     setSpecialties((prev) =>

@@ -102,7 +102,7 @@ export function PortfolioItemForm({ item, proId, onSave, onClose, prefill }: Pro
           })
         }
       }
-    } catch (e) {
+    } catch {
       setError('Error al guardar el trabajo')
     } finally {
       setSaving(false)

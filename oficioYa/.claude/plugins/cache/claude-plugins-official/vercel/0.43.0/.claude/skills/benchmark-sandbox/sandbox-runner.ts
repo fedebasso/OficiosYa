@@ -89,7 +89,7 @@ const JSON_MODE = flags.json!;
 const LOG_FORMAT = (flags["log-format"] === "json" ? "json" : "human") as LogFormat;
 
 // runId declared early so Logger can use it; the timestamped form is set later in main()
-let runId = `run-${new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)}`;
+const runId = `run-${new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)}`;
 const logger = new Logger({ format: LOG_FORMAT, runId });
 
 /** Shorthand — all human output goes to stderr (stdout reserved for --json RunSummary). */

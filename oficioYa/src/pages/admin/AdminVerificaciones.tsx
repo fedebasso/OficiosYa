@@ -25,18 +25,30 @@ export default function AdminVerificaciones() {
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
 
-  async function load() {
-    setLoading(true)
+  async function fetchPending(): Promise<PendingPro[]> {
     const { data } = await supabase
       .from('professionals')
       .select('id, trade, quality_score, profiles(full_name, avatar_url), identity_verification(id, cedula_front_url, cedula_back_url, selfie_url, status)')
       .eq('registration_completed', true)
       .eq('verification_status', 'pending')
-    setPros((data as unknown as PendingPro[]) ?? [])
+    return (data as unknown as PendingPro[]) ?? []
+  }
+
+  async function load() {
+    setLoading(true)
+    setPros(await fetchPending())
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    let active = true
+    fetchPending().then((data) => {
+      if (!active) return
+      setPros(data)
+      setLoading(false)
+    })
+    return () => { active = false }
+  }, [])
 
   async function openModal(pro: PendingPro) {
     setSelected(pro)

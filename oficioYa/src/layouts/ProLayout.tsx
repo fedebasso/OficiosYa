@@ -14,10 +14,10 @@ export function ProLayout({ children }: { children: ReactNode }) {
   }, [user?.id, load])
 
   useEffect(() => {
-    if (profile && profile.registration_completed === false) {
+    if (profile?.registration_completed === false) {
       navigate('/pro/onboarding', { replace: true })
     }
-  }, [profile?.registration_completed])
+  }, [profile?.registration_completed, navigate])
 
   return (
     <>

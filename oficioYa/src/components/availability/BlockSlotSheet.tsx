@@ -1,12 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAvailabilityStore } from '../../store/availabilityStore'
-
-export const TIME_OPTIONS = Array.from({ length: 48 }, (_, i) => {
-  const h = Math.floor(i / 2).toString().padStart(2, '0')
-  const m = i % 2 === 0 ? '00' : '30'
-  return `${h}:${m}`
-})
+import { TIME_OPTIONS } from './timeOptions'
 
 const INPUT: React.CSSProperties = {
   background: '#FFFFFF',

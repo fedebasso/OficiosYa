@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { registrationService } from '../services/registrationService'
 import { supabase } from '../lib/supabase'
@@ -12,14 +12,20 @@ export function useRegistration() {
 
   useEffect(() => {
     if (!user?.id) return
-    setLoading(true)
-    registrationService.load(user.id)
-      .then(setState)
-      .catch((e) => setError(e instanceof Error ? e.message : 'Error al cargar registro'))
-      .finally(() => setLoading(false))
+    const run = async () => {
+      setLoading(true)
+      try {
+        setState(await registrationService.load(user.id))
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Error al cargar registro')
+      } finally {
+        setLoading(false)
+      }
+    }
+    run()
   }, [user?.id])
 
-  const saveStep = useCallback(async (step: number, data: Partial<RegistrationState>) => {
+  const saveStep = async (step: number, data: Partial<RegistrationState>) => {
     if (!user?.id) return
     setLoading(true)
     try {
@@ -31,14 +37,14 @@ export function useRegistration() {
     } finally {
       setLoading(false)
     }
-  }, [user?.id])
+  }
 
-  const goBack = useCallback(async () => {
+  const goBack = async () => {
     if (!user?.id || !state || state.registration_step <= 1) return
     const prevStep = state.registration_step - 1
     await supabase.from('professionals').update({ registration_step: prevStep }).eq('id', user.id)
     setState((prev) => prev ? { ...prev, registration_step: prevStep } : prev)
-  }, [user?.id, state?.registration_step])
+  }
 
   return { state, loading, error, saveStep, goBack }
 }

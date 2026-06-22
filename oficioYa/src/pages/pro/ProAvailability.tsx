@@ -7,7 +7,7 @@ import { DateStrip } from '../../components/availability/DateStrip'
 import { TimeSlotGrid } from '../../components/availability/TimeSlotGrid'
 import { BlockSlotSheet } from '../../components/availability/BlockSlotSheet'
 import { VacationSheet } from '../../components/availability/VacationSheet'
-import { TIME_OPTIONS } from '../../components/availability/BlockSlotSheet'
+import { TIME_OPTIONS } from '../../components/availability/timeOptions'
 import { useAvailabilityStore, type DayOfWeek } from '../../store/availabilityStore'
 import { useAuthStore } from '../../store/authStore'
 

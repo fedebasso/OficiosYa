@@ -61,23 +61,28 @@ export default function MisSolicitudes() {
   const [seenStatuses, setSeenStatuses] = useState<Map<string, string>>(new Map())
   const [notifBanners, setNotifBanners] = useState<string[]>([])
 
-  useEffect(() => {
+  // Detecta cambios de estado a "confirmed"/"in_progress" y muestra banner,
+  // recalculando durante el render cuando cambia la lista (sin efecto).
+  const [prevRequests, setPrevRequests] = useState(requests)
+  if (requests !== prevRequests) {
+    setPrevRequests(requests)
     const NOTIFY_STATUSES = ['confirmed', 'in_progress']
     const toNotify = requests.filter(
       (r) => NOTIFY_STATUSES.includes(r.status) && seenStatuses.get(r.id) !== r.status
     )
-    if (toNotify.length === 0) return
-    setSeenStatuses((prev) => {
-      const next = new Map(prev)
-      toNotify.forEach((r) => next.set(r.id, r.status))
-      return next
-    })
-    setNotifBanners((prev) => {
-      const ids = new Set(prev)
-      toNotify.forEach((r) => ids.add(r.id))
-      return Array.from(ids)
-    })
-  }, [requests])
+    if (toNotify.length > 0) {
+      setSeenStatuses((prev) => {
+        const next = new Map(prev)
+        toNotify.forEach((r) => next.set(r.id, r.status))
+        return next
+      })
+      setNotifBanners((prev) => {
+        const ids = new Set(prev)
+        toNotify.forEach((r) => ids.add(r.id))
+        return Array.from(ids)
+      })
+    }
+  }
 
   useEffect(() => { loadRequests() }, [loadRequests])
 
