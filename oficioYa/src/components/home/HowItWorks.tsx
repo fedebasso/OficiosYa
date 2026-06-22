@@ -30,10 +30,10 @@ export function HowItWorks() {
       <motion.div variants={fadeUp} className="flex items-center justify-between px-4 pt-4 pb-3">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#E8683A' }}>
-            Bienvenido
+            👋 Bienvenido
           </p>
           <h3 className="text-base font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
-            ¿Cómo funciona OficioYa? 👋
+            ¿Cómo funciona OficioYa?
           </h3>
         </div>
       </motion.div>
@@ -42,35 +42,23 @@ export function HowItWorks() {
       <div className="flex flex-col gap-3 px-4 pb-4">
         {[
           {
-            n: 1,
+            n: '1️⃣',
             title: 'Encontrá al profesional ideal',
-            desc: 'Buscá por categoría, leé reseñas reales y elegí según calificación y zona.',
+            desc: 'Buscá por categoría, leé reseñas reales y elegí según calificación, experiencia y zona.',
           },
           {
-            n: 2,
-            title: 'Pedí en menos de 1 minuto',
-            desc: 'Completá 4 pasos simples: qué necesitás, descripción, urgencia y tu teléfono.',
+            n: '2️⃣',
+            title: 'Hacé tu solicitud en menos de 1 minuto',
+            desc: 'Completá unos simples pasos explicando qué necesitás y cuándo lo necesitás.',
           },
           {
-            n: 3,
-            title: 'Coordiná directo por WhatsApp',
-            desc: 'El profesional recibe tu pedido y te contacta para acordar fecha y precio.',
+            n: '3️⃣',
+            title: 'Chateá y coordiná dentro de la app',
+            desc: 'Hablá directamente con el profesional, enviá mensajes y coordiná fecha, precio y detalles sin salir de OficioYa.',
           },
         ].map((step) => (
           <motion.div key={step.n} variants={fadeUp} className="flex items-start gap-3">
-            <div
-              className="flex items-center justify-center flex-shrink-0 font-black text-white"
-              style={{
-                width: 26,
-                height: 26,
-                borderRadius: '50%',
-                background: '#E8683A',
-                fontSize: 12,
-                marginTop: 1,
-              }}
-            >
-              {step.n}
-            </div>
+            <span className="flex-shrink-0 text-xl leading-none mt-0.5">{step.n}</span>
             <div className="flex-1">
               <p className="text-sm font-bold leading-tight mb-0.5" style={{ color: '#111111' }}>
                 {step.title}
