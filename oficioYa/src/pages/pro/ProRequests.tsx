@@ -46,12 +46,14 @@ function RequestCard({
   onReject,
   onProgress,
   onChat,
+  sentProgressId,
 }: {
   req: ServiceRequest
   onAccept?: () => void
   onReject?: () => void
   onProgress?: (s: ServiceRequest['status']) => void
   onChat?: () => void
+  sentProgressId?: string
 }) {
   const { emoji, label } = getCategoryMeta(req.category)
   const meta = STATUS_META[req.status] ?? STATUS_META.pending
@@ -183,12 +185,18 @@ function RequestCard({
               whileTap={{ scale: 0.97 }}
               className="flex-1 rounded-xl py-3 text-sm font-bold"
               style={{
-                background: isInProgress ? '#DCFCE7' : '#EEF2FF',
-                color: isInProgress ? '#16A34A' : '#4F46E5',
-                border: `1px solid ${isInProgress ? '#BBF7D0' : '#C7D2FE'}`,
+                background: sentProgressId === req.id
+                  ? '#DCFCE7'
+                  : isInProgress ? '#DCFCE7' : '#EEF2FF',
+                color: sentProgressId === req.id
+                  ? '#16A34A'
+                  : isInProgress ? '#16A34A' : '#4F46E5',
+                border: `1px solid ${sentProgressId === req.id || isInProgress ? '#BBF7D0' : '#C7D2FE'}`,
               }}
             >
-              {isInProgress ? '🏁 Completado' : '🚗 En camino'}
+              {sentProgressId === req.id
+                ? '✓ Cliente notificado'
+                : isInProgress ? '🏁 Completado' : '🚗 En camino'}
             </motion.button>
             <motion.button
               type="button"
@@ -215,11 +223,18 @@ export default function ProRequests() {
   const [historyOpen, setHistoryOpen] = useState(true)
   const [query, setQuery] = useState('')
   const [rejectingId, setRejectingId] = useState<string | null>(null)
+  const [sentProgress, setSentProgress] = useState<string | null>(null)
 
   function handleConfirmReject() {
     if (!rejectingId) return
     updateStatus(rejectingId, 'cancelled')
     setRejectingId(null)
+  }
+
+  function handleInProgress(reqId: string) {
+    updateStatus(reqId, 'in_progress')
+    setSentProgress(reqId)
+    setTimeout(() => setSentProgress(null), 1500)
   }
 
   // Filtro de búsqueda
@@ -400,8 +415,15 @@ export default function ProRequests() {
                 <RequestCard
                   key={req.id}
                   req={req}
-                  onProgress={(s) => updateStatus(req.id, s)}
+                  onProgress={(s) => {
+                    if (s === 'in_progress') {
+                      handleInProgress(req.id)
+                    } else {
+                      updateStatus(req.id, s)
+                    }
+                  }}
                   onChat={() => navigate(`/solicitud/${req.id}/chat`)}
+                  sentProgressId={sentProgress ?? undefined}
                 />
               ))}
             </motion.div>
