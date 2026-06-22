@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useProRequestsStore } from '../../store/proRequestsStore'
 import { PageShell } from '../../components/layout/PageShell'
-import { MessageCircle, ChevronRight, Bell, User, Briefcase, Star, Clock } from 'lucide-react'
+import { getCategoryMeta } from '../../lib/categories'
+import { MessageCircle, ChevronRight, Bell, User, Briefcase, Star, Clock, Calendar } from 'lucide-react'
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -113,75 +114,99 @@ export default function ProDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
               En curso · {active.length}
             </p>
-            {active.map((req) => (
-              <div
-                key={req.id}
-                className="rounded-2xl overflow-hidden"
-                style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
-              >
+            {active.map((req) => {
+              const { emoji, label } = getCategoryMeta(req.category)
+              const isInProgress = req.status === 'in_progress'
+              return (
                 <div
-                  className="flex items-center justify-between px-4 py-2.5"
-                  style={{
-                    background: req.status === 'in_progress' ? 'rgba(139,92,246,.06)' : 'rgba(34,197,94,.06)',
-                    borderBottom: `1px solid ${req.status === 'in_progress' ? 'rgba(139,92,246,.15)' : 'rgba(34,197,94,.15)'}`,
-                  }}
+                  key={req.id}
+                  className="rounded-2xl overflow-hidden"
+                  style={{ background: '#FFFFFF', border: '1.5px solid rgba(232,104,58,.2)', boxShadow: '0 2px 12px rgba(232,104,58,.08)' }}
                 >
-                  <span
-                    className="text-[10px] font-black uppercase tracking-widest"
-                    style={{ color: req.status === 'in_progress' ? '#8b5cf6' : '#22c55e' }}
+                  {/* Top bar */}
+                  <div
+                    className="flex items-center justify-between px-3.5 py-2"
+                    style={{
+                      background: isInProgress ? 'rgba(139,92,246,.06)' : 'rgba(34,197,94,.06)',
+                      borderBottom: `1px solid ${isInProgress ? 'rgba(139,92,246,.12)' : 'rgba(34,197,94,.12)'}`,
+                    }}
                   >
-                    {req.status === 'in_progress' ? '🚗 En camino' : '✅ Aceptado'}
-                  </span>
-                  <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAA' }}>
-                    <Clock size={9} /> {timeAgo(req.created_at)}
-                  </span>
-                </div>
-                <div className="px-4 pt-3 pb-4 flex flex-col gap-3">
-                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: '#333' }}>
-                    {req.description}
-                  </p>
-                  {req.scheduled_date && (
-                    <div
-                      className="flex items-center gap-1.5 rounded-xl px-3 py-2"
-                      style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}
-                    >
-                      <span style={{ fontSize: 12 }}>📅</span>
-                      <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
-                        {(() => {
-                          const d = new Date(req.scheduled_date)
-                          const date = d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })
-                          const hasTime = req.scheduled_date.includes('T') && !req.scheduled_date.endsWith('T00:00:00')
-                          const time = hasTime ? d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : null
-                          return time ? `${date} · ${time}hs` : date
-                        })()}
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: isInProgress ? '#8B5CF6' : '#22C55E' }} />
+                      <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: isInProgress ? '#7C3AED' : '#16A34A' }}>
+                        {isInProgress ? '🚗 En camino' : '✅ Confirmado'}
                       </span>
                     </div>
-                  )}
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => updateStatus(req.id, req.status === 'in_progress' ? 'completed' : 'in_progress')}
-                      className="flex-1 rounded-xl py-2.5 text-sm font-bold"
-                      style={{
-                        background: req.status === 'in_progress' ? '#DCFCE7' : '#EEF2FF',
-                        color: req.status === 'in_progress' ? '#16A34A' : '#4F46E5',
-                        border: `1px solid ${req.status === 'in_progress' ? '#BBF7D0' : '#C7D2FE'}`,
-                      }}
-                    >
-                      {req.status === 'in_progress' ? '🏁 Marcar completado' : '🚗 Marcar en camino'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => navigate(`/solicitud/${req.id}/chat`)}
-                      className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
-                      style={{ background: '#EEF2FF', color: '#4F46E5', border: '1px solid #C7D2FE' }}
-                    >
-                      <MessageCircle size={15} />
-                    </button>
+                    <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAA' }}>
+                      <Clock size={9} /> {timeAgo(req.created_at)}
+                    </span>
+                  </div>
+
+                  <div className="px-3.5 pt-3 pb-3.5 flex flex-col gap-2.5">
+                    {/* Chips */}
+                    <div className="flex gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+                        {emoji} {label}
+                      </span>
+                      {req.urgency && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
+                          🚨 Urgente
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-sm leading-relaxed line-clamp-2" style={{ color: '#333' }}>
+                      {req.description}
+                    </p>
+
+                    {req.scheduled_date && (
+                      <div className="flex items-center gap-1.5 rounded-xl px-3 py-2" style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}>
+                        <Calendar size={11} style={{ color: '#E8683A', flexShrink: 0 }} />
+                        <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
+                          {(() => {
+                            const d = new Date(req.scheduled_date)
+                            const date = d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })
+                            const hasTime = req.scheduled_date.includes('T') && !req.scheduled_date.endsWith('T00:00:00')
+                            const time = hasTime ? d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : null
+                            return time ? `${date} · ${time}hs` : date
+                          })()}
+                        </span>
+                      </div>
+                    )}
+
+                    {req.contact_phone && (
+                      <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}>
+                        <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
+                        <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
+                      </div>
+                    )}
+
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => updateStatus(req.id, isInProgress ? 'completed' : 'in_progress')}
+                        className="flex-1 rounded-xl py-2.5 text-sm font-bold"
+                        style={{
+                          background: isInProgress ? '#DCFCE7' : '#EEF2FF',
+                          color: isInProgress ? '#16A34A' : '#4F46E5',
+                          border: `1px solid ${isInProgress ? '#BBF7D0' : '#C7D2FE'}`,
+                        }}
+                      >
+                        {isInProgress ? '🏁 Completado' : '🚗 En camino'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/solicitud/${req.id}/chat`)}
+                        className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
+                        style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A', border: '1px solid rgba(232,104,58,.2)' }}
+                      >
+                        <MessageCircle size={15} />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 

@@ -1,27 +1,29 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useIncomingRequests } from '../../hooks/useRequests'
-import { PageShell } from '../../components/layout/PageShell'
-import { CheckCircle, XCircle, MessageCircle, Clock, Inbox, ChevronDown, ChevronUp, Zap } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircle, XCircle, MessageCircle, Inbox, Search, ChevronDown, ChevronUp, Zap, Clock } from 'lucide-react'
 import type { ServiceRequest } from '../../store/requestStore'
-import { motion } from 'framer-motion'
+import { getCategoryMeta } from '../../lib/categories'
 import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
-import { isInRadius } from '../../lib/barrio-coords'
-import { MOCK_PROFESSIONALS } from '../../data/mockProfessionals'
 
-const STATUS_META: Record<ServiceRequest['status'], { label: string; color: string; bg: string }> = {
-  pending:     { label: 'Pendiente',  color: '#f59e0b', bg: 'rgba(245,158,11,.1)' },
-  confirmed:   { label: 'Aceptado',   color: '#22c55e', bg: 'rgba(34,197,94,.1)'  },
-  in_progress: { label: 'En camino',  color: '#8b5cf6', bg: 'rgba(139,92,246,.1)' },
-  completed:   { label: 'Completado', color: '#3b82f6', bg: 'rgba(59,130,246,.1)' },
-  cancelled:   { label: 'Rechazado',  color: '#ef4444', bg: 'rgba(239,68,68,.1)'  },
+// ── Metadatos de estado ─────────────────────────────────────────────────────
+
+const STATUS_META: Record<string, { label: string; color: string; bg: string; dot: string }> = {
+  pending:     { label: 'Pendiente',  color: '#D97706', bg: 'rgba(245,158,11,.12)', dot: '#F59E0B' },
+  confirmed:   { label: 'Confirmado', color: '#16A34A', bg: 'rgba(34,197,94,.12)',  dot: '#22C55E' },
+  in_progress: { label: 'En camino',  color: '#7C3AED', bg: 'rgba(139,92,246,.12)', dot: '#8B5CF6' },
+  completed:   { label: 'Completado', color: '#2563EB', bg: 'rgba(37,99,235,.12)',  dot: '#3B82F6' },
+  cancelled:   { label: 'Cancelado',  color: '#DC2626', bg: 'rgba(239,68,68,.12)',  dot: '#EF4444' },
 }
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
   const m = Math.floor(diff / 60000)
-  if (m < 1)  return 'Ahora mismo'
+  if (m < 1) return 'Ahora'
   if (m < 60) return `hace ${m}m`
   const h = Math.floor(m / 60)
   if (h < 24) return `hace ${h}h`
@@ -36,55 +38,60 @@ function formatScheduled(iso: string) {
   return time ? `${date} · ${time}hs` : date
 }
 
-function ScheduledBadge({ date }: { date: string }) {
-  return (
-    <div
-      className="flex items-center gap-1.5 rounded-xl px-3 py-2"
-      style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}
-    >
-      <span style={{ fontSize: 12 }}>📅</span>
-      <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
-        {formatScheduled(date)}
-      </span>
-    </div>
-  )
-}
+// ── Card de solicitud ────────────────────────────────────────────────────────
 
-function PendingCard({ req, onAccept, onReject }: {
+function RequestCard({
+  req,
+  onAccept,
+  onReject,
+  onProgress,
+  onChat,
+}: {
   req: ServiceRequest
-  onAccept: () => void
-  onReject: () => void
+  onAccept?: () => void
+  onReject?: () => void
+  onProgress?: (s: ServiceRequest['status']) => void
+  onChat?: () => void
 }) {
+  const { emoji, label } = getCategoryMeta(req.category)
+  const meta = STATUS_META[req.status] ?? STATUS_META.pending
+  const isPending    = req.status === 'pending'
+  const isInProgress = req.status === 'in_progress'
+  const isActive     = req.status === 'confirmed' || isInProgress
+
   return (
-    <div
+    <motion.div
+      variants={fadeUp}
       className="rounded-2xl overflow-hidden"
       style={{
         background: '#FFFFFF',
-        border: req.urgency ? '1.5px solid #FECACA' : '1.5px solid #E8E0D4',
-        boxShadow: req.urgency
-          ? '0 2px 12px rgba(239,68,68,.08), 0 1px 3px rgba(0,0,0,.04)'
-          : '0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04)',
+        border: isPending
+          ? `1.5px solid ${req.urgency ? 'rgba(239,68,68,.3)' : 'rgba(232,104,58,.25)'}`
+          : '1.5px solid #EDE8DE',
+        boxShadow: isPending
+          ? `0 2px 16px ${req.urgency ? 'rgba(239,68,68,.08)' : 'rgba(232,104,58,.08)'}, 0 1px 4px rgba(0,0,0,.05)`
+          : '0 1px 4px rgba(0,0,0,.05)',
       }}
     >
       {/* Top bar */}
       <div
-        className="flex items-center justify-between px-4 py-2.5"
+        className="flex items-center justify-between px-3.5 py-2"
         style={{
-          background: req.urgency ? '#FFF5F5' : '#FEF0EA',
-          borderBottom: `1px solid ${req.urgency ? '#FECACA' : '#FDDCC8'}`,
+          background: isPending
+            ? req.urgency ? 'rgba(239,68,68,.06)' : 'rgba(232,104,58,.06)'
+            : `${meta.bg}`,
+          borderBottom: `1px solid ${isPending ? (req.urgency ? 'rgba(239,68,68,.12)' : 'rgba(232,104,58,.12)') : 'rgba(0,0,0,.05)'}`,
         }}
       >
-        <div className="flex items-center gap-2">
-          {req.urgency ? (
-            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest" style={{ color: '#DC2626' }}>
-              <Zap size={10} fill="currentColor" />
-              Urgente
-            </span>
-          ) : (
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#E8683A' }}>
-              Nueva solicitud
-            </span>
+        <div className="flex items-center gap-1.5">
+          {isPending && req.urgency && (
+            <Zap size={10} style={{ color: '#DC2626' }} fill="#DC2626" />
           )}
+          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: isPending ? (req.urgency ? '#DC2626' : '#E8683A') : meta.color }}>
+            {isPending ? (req.urgency ? 'Urgente' : 'Nueva solicitud') : meta.label}
+          </span>
+          {/* Dot de estado */}
+          <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: meta.dot }} />
         </div>
         <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAAAAA' }}>
           <Clock size={9} />
@@ -92,222 +99,220 @@ function PendingCard({ req, onAccept, onReject }: {
         </span>
       </div>
 
-      {/* Body */}
-      <div className="px-4 pt-3.5 pb-4 flex flex-col gap-3.5">
-        <p className="text-sm leading-relaxed" style={{ color: '#333333' }}>
-          {req.description}
-        </p>
-
-        {req.scheduled_date && <ScheduledBadge date={req.scheduled_date} />}
-
-        <div className="flex gap-2 flex-wrap">
-          {req.category && (
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: '#F5F0E8', color: '#666' }}>
-              {req.category.replace('_', ' ')}
+      {/* Cuerpo */}
+      <div className="p-3.5 flex flex-col gap-2.5">
+        {/* Chips: categoría + urgencia */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+            {emoji} {label}
+          </span>
+          {req.urgency && (
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
+              🚨 Urgente
             </span>
           )}
           {req.work_type && (
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: '#EEF2FF', color: '#4F46E5' }}>
-              {req.work_type === 'reparacion' ? 'Reparación' : req.work_type === 'instalacion' ? 'Instalación' : req.work_type === 'mantenimiento' ? 'Mantenimiento' : 'Otro'}
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#F5F0E8', color: '#777' }}>
+              {req.work_type === 'reparacion' ? '🔧 Reparación' : req.work_type === 'instalacion' ? '⚙️ Instalación' : req.work_type === 'mantenimiento' ? '🛠️ Mantenimiento' : '📋 Otro'}
             </span>
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-2 pt-0.5">
-          <motion.button
-            type="button"
-            onClick={onAccept}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
-            style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
-          >
-            <CheckCircle size={14} />
-            Aceptar
-          </motion.button>
-          <motion.button
-            type="button"
-            onClick={onReject}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
-            style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}
-          >
-            <XCircle size={14} />
-            Rechazar
-          </motion.button>
-        </div>
-      </div>
-    </div>
-  )
-}
+        {/* Descripción */}
+        <p className="text-sm leading-relaxed line-clamp-3" style={{ color: '#333333' }}>
+          {req.description}
+        </p>
 
-function ActiveCard({ req, onProgress, onChat }: {
-  req: ServiceRequest
-  onProgress: (status: ServiceRequest['status']) => void
-  onChat: () => void
-}) {
-  const isInProgress = req.status === 'in_progress'
-  return (
-    <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 1px 3px rgba(0,0,0,.06)' }}>
-      <div className="flex items-center justify-between px-4 py-2.5" style={{ background: isInProgress ? 'rgba(139,92,246,.06)' : 'rgba(34,197,94,.06)', borderBottom: `1px solid ${isInProgress ? 'rgba(139,92,246,.15)' : 'rgba(34,197,94,.15)'}` }}>
-        <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: isInProgress ? '#8b5cf6' : '#22c55e' }}>
-          {isInProgress ? '🚗 En camino' : '✅ Aceptado'}
-        </span>
-        <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAAAAA' }}>
-          <Clock size={9} />{timeAgo(req.created_at)}
-        </span>
-      </div>
-      <div className="px-4 pt-3.5 pb-4 flex flex-col gap-3">
-        <p className="text-sm leading-relaxed" style={{ color: '#333333' }}>{req.description}</p>
-        {req.scheduled_date && <ScheduledBadge date={req.scheduled_date} />}
-        {req.contact_phone && (
-          <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}>
+        {/* Fecha agendada */}
+        {req.scheduled_date && (
+          <div
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2"
+            style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}
+          >
+            <span style={{ fontSize: 12 }}>📅</span>
+            <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
+              {formatScheduled(req.scheduled_date)}
+            </span>
+          </div>
+        )}
+
+        {/* Teléfono (solo activos) */}
+        {isActive && req.contact_phone && (
+          <div
+            className="flex items-center gap-2 rounded-xl px-3 py-2"
+            style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
+          >
             <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
             <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
           </div>
         )}
-        <div className="flex gap-2">
-          <motion.button
-            type="button"
-            onClick={() => onProgress(isInProgress ? 'completed' : 'in_progress')}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 rounded-xl py-3 text-sm font-bold"
-            style={{ background: isInProgress ? '#DCFCE7' : '#EEF2FF', color: isInProgress ? '#16A34A' : '#4F46E5', border: `1px solid ${isInProgress ? '#BBF7D0' : '#C7D2FE'}` }}
-          >
-            {isInProgress ? '🏁 Marcar completado' : '🚗 Marcar en camino'}
-          </motion.button>
-          <motion.button
-            type="button"
-            onClick={onChat}
-            whileTap={{ scale: 0.97 }}
-            className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
-            style={{ background: '#EEF2FF', color: '#4F46E5', border: '1px solid #C7D2FE' }}
-          >
-            <MessageCircle size={15} />
-          </motion.button>
-        </div>
       </div>
-    </div>
+
+      {/* Acciones */}
+      <div className="px-3.5 pb-3.5 flex gap-2">
+        {isPending && onAccept && onReject && (
+          <>
+            <motion.button
+              type="button"
+              onClick={onAccept}
+              whileTap={{ scale: 0.97 }}
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
+              style={{ background: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0' }}
+            >
+              <CheckCircle size={14} />
+              Aceptar
+            </motion.button>
+            <motion.button
+              type="button"
+              onClick={onReject}
+              whileTap={{ scale: 0.97 }}
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
+              style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}
+            >
+              <XCircle size={14} />
+              Rechazar
+            </motion.button>
+          </>
+        )}
+
+        {isActive && onProgress && onChat && (
+          <>
+            <motion.button
+              type="button"
+              onClick={() => onProgress(isInProgress ? 'completed' : 'in_progress')}
+              whileTap={{ scale: 0.97 }}
+              className="flex-1 rounded-xl py-3 text-sm font-bold"
+              style={{
+                background: isInProgress ? '#DCFCE7' : '#EEF2FF',
+                color: isInProgress ? '#16A34A' : '#4F46E5',
+                border: `1px solid ${isInProgress ? '#BBF7D0' : '#C7D2FE'}`,
+              }}
+            >
+              {isInProgress ? '🏁 Completado' : '🚗 En camino'}
+            </motion.button>
+            <motion.button
+              type="button"
+              onClick={onChat}
+              whileTap={{ scale: 0.97 }}
+              className="w-12 flex items-center justify-center rounded-xl flex-shrink-0"
+              style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A', border: '1px solid rgba(232,104,58,.2)' }}
+            >
+              <MessageCircle size={15} />
+            </motion.button>
+          </>
+        )}
+      </div>
+    </motion.div>
   )
 }
 
-function HistoryCard({ req }: { req: ServiceRequest }) {
-  const meta = STATUS_META[req.status] ?? STATUS_META.pending
-  return (
-    <div
-      className="flex items-center gap-3 rounded-xl px-3.5 py-3"
-      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
-    >
-      <div
-        className="w-2 h-2 rounded-full flex-shrink-0"
-        style={{ background: meta.color, boxShadow: `0 0 6px ${meta.color}66` }}
-      />
-      <p className="flex-1 text-xs truncate" style={{ color: '#777' }}>
-        {req.description}
-      </p>
-      <div className="flex items-center gap-2 flex-shrink-0">
-        <span
-          className="text-[9px] font-bold uppercase tracking-wide px-2 py-1 rounded-full"
-          style={{ background: meta.bg, color: meta.color }}
-        >
-          {meta.label}
-        </span>
-        <span className="text-[9px]" style={{ color: '#AAAAAA' }}>{timeAgo(req.created_at)}</span>
-      </div>
-    </div>
-  )
-}
+// ── Componente principal ─────────────────────────────────────────────────────
 
 export default function ProRequests() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const { requests, loading, error, updateStatus } = useIncomingRequests(user?.id ?? '')
   const [historyOpen, setHistoryOpen] = useState(true)
+  const [query, setQuery] = useState('')
 
-  const currentPro = MOCK_PROFESSIONALS.find((p) => p.profiles.id === user?.id)
+  // Filtro de búsqueda
+  const filtered = useMemo(() => {
+    if (!query.trim()) return requests
+    const q = query.toLowerCase()
+    return requests.filter((r) => {
+      const { label } = getCategoryMeta(r.category)
+      return r.description.toLowerCase().includes(q) || label.toLowerCase().includes(q)
+    })
+  }, [requests, query])
 
-  const visibleRequests = requests.filter((req) =>
-    isInRadius(
-      currentPro?.zone ?? '',
-      currentPro?.radius_km ?? null,
-      req.location ?? ''
-    )
-  )
+  const pending  = filtered.filter((r) => r.status === 'pending')
+  const active   = filtered.filter((r) => r.status === 'confirmed' || r.status === 'in_progress')
+  const history  = filtered.filter((r) => r.status !== 'pending' && r.status !== 'confirmed' && r.status !== 'in_progress')
 
-  const pending = visibleRequests.filter((r) => r.status === 'pending')
-  const active  = visibleRequests.filter((r) => r.status === 'confirmed' || r.status === 'in_progress')
-  const others  = visibleRequests.filter((r) => r.status !== 'pending' && r.status !== 'confirmed' && r.status !== 'in_progress')
-
+  // ── Header ──────────────────────────────────────────────────────────────
 
   const header = (
     <div
-      className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
+      className="sticky top-0 z-50"
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
     >
-      <div className="flex items-end justify-between">
+      <div className="px-4 pt-12 pb-3 flex items-end justify-between">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#e8683a' }}>
+          <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#E8683A' }}>
             Panel profesional
           </p>
-          <h1 className="text-2xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-0.5px' }}>
+          <h1 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.4px' }}>
             Solicitudes
           </h1>
+          {!loading && (
+            <p className="text-xs" style={{ color: '#AAAAAA' }}>
+              {pending.length} pendiente{pending.length !== 1 ? 's' : ''} · {active.length} en curso
+            </p>
+          )}
         </div>
-        {!loading && pending.length > 0 && (
-          <div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-            style={{ background: 'rgba(232,104,58,.12)', border: '1px solid rgba(232,104,58,.25)' }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: '#e8683a', animation: 'ping-slow 2s ease-in-out infinite' }}
-            />
-            <span className="text-xs font-black" style={{ color: '#e8683a' }}>
-              {pending.length} nueva{pending.length !== 1 ? 's' : ''}
-            </span>
+
+        {/* Stats chips */}
+        {!loading && (
+          <div className="flex gap-1.5">
+            {[
+              { count: pending.length,  color: '#D97706', bg: 'rgba(245,158,11,.12)' },
+              { count: active.length,   color: '#7C3AED', bg: 'rgba(139,92,246,.12)' },
+              { count: requests.filter(r => r.status === 'completed').length, color: '#2563EB', bg: 'rgba(37,99,235,.12)' },
+            ].map((s, i) => (
+              <div
+                key={i}
+                className="rounded-xl px-2.5 py-1.5 text-center"
+                style={{ background: s.bg }}
+              >
+                <div className="text-sm font-black leading-none" style={{ color: s.color }}>{s.count}</div>
+              </div>
+            ))}
           </div>
         )}
       </div>
-      {/* Stats */}
-      {!loading && (
-        <div className="flex gap-2 mt-3">
-          {[
-            { label: 'Pendientes', count: pending.length, color: '#f59e0b', bg: 'rgba(245,158,11,.1)' },
-            { label: 'Activos', count: requests.filter(r => r.status === 'confirmed' || r.status === 'in_progress').length, color: '#8b5cf6', bg: 'rgba(139,92,246,.1)' },
-            { label: 'Completados', count: requests.filter(r => r.status === 'completed').length, color: '#22c55e', bg: 'rgba(34,197,94,.1)' },
-          ].map(s => (
-            <div key={s.label} className="flex-1 rounded-xl px-3 py-2 text-center" style={{ background: s.bg }}>
-              <div className="text-lg font-black leading-none" style={{ color: s.color }}>{s.count}</div>
-              <div className="text-[9px] font-bold mt-0.5" style={{ color: s.color }}>{s.label}</div>
-            </div>
-          ))}
+
+      {/* Búsqueda */}
+      <div className="px-4 pb-3">
+        <div
+          className="flex items-center gap-2 rounded-2xl px-3 py-2.5"
+          style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
+        >
+          <Search size={14} style={{ color: '#AAAAAA', flexShrink: 0 }} />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar por descripción u oficio…"
+            className="flex-1 bg-transparent text-sm outline-none"
+            style={{ color: '#111111', caretColor: '#E8683A' }}
+          />
+          {query && (
+            <button type="button" onClick={() => setQuery('')} style={{ color: '#AAAAAA', fontSize: 16, lineHeight: 1 }}>×</button>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 
+  // ── Render ────────────────────────────────────────────────────────────────
+
   return (
-    <PageShell header={header}>
-      <style>{`
-        @keyframes ping-slow {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50%       { opacity: .5; transform: scale(1.4); }
-        }
-      `}</style>
+    <div style={{ background: '#F5F0E8', minHeight: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
+      {header}
 
-      <div className="p-4 flex flex-col gap-4" style={{ minHeight: '100%' }}>
+      <div className="flex flex-col gap-4 p-3 pb-8 flex-1">
 
+        {/* Loading */}
         {loading && (
-          <div className="flex flex-col gap-3 pt-2">
+          <div className="flex flex-col gap-2">
             {[0, 1].map((i) => (
               <div
                 key={i}
-                className="h-40 rounded-2xl"
+                className="h-44 rounded-2xl"
                 style={{
                   background: 'linear-gradient(90deg,#EDE8DE 25%,#F5F0E8 50%,#EDE8DE 75%)',
                   backgroundSize: '200% 100%',
-                  animation: `shimmer 1.4s ease-in-out ${i * .15}s infinite`,
-                  animationDelay: `${i * 0.15}s`,
+                  animation: `shimmer 1.4s ease-in-out ${i * 0.15}s infinite`,
                   border: '1.5px solid #E8E0D4',
                 }}
               />
@@ -315,115 +320,166 @@ export default function ProRequests() {
           </div>
         )}
 
+        {/* Error */}
         {error && (
-          <div
-            className="rounded-xl px-4 py-3 text-sm"
-            style={{ background: 'rgba(239,68,68,.08)', border: '1px solid rgba(239,68,68,.2)', color: '#ef4444' }}
-          >
+          <div className="rounded-xl px-4 py-3 text-sm" style={{ background: 'rgba(239,68,68,.08)', border: '1px solid rgba(239,68,68,.2)', color: '#DC2626' }}>
             {error}
           </div>
         )}
 
-        {!loading && pending.length === 0 && others.length === 0 && (
+        {/* Empty */}
+        {!loading && pending.length === 0 && active.length === 0 && history.length === 0 && (
           <motion.div
             variants={scaleIn}
             initial="hidden"
             animate="visible"
-            className="flex flex-col items-center gap-4 py-20 text-center"
+            className="flex flex-col items-center gap-5 py-20 text-center px-8"
           >
             <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+              className="w-20 h-20 rounded-3xl flex items-center justify-center"
+              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
             >
-              <Inbox size={24} style={{ color: '#CCCCCC' }} />
+              <Inbox size={32} style={{ color: '#CCCCCC' }} />
             </div>
             <div>
-              <p className="font-black text-sm" style={{ color: '#111111' }}>Sin solicitudes aún</p>
-              <p className="text-xs mt-1" style={{ color: '#AAAAAA' }}>Las nuevas solicitudes aparecerán acá</p>
+              <p className="font-black text-base mb-1" style={{ color: '#111111' }}>Sin solicitudes aún</p>
+              <p className="text-sm leading-relaxed" style={{ color: '#AAAAAA' }}>
+                Las nuevas solicitudes aparecerán acá cuando los clientes te contacten.
+              </p>
             </div>
           </motion.div>
         )}
 
-        {/* Pendientes */}
+        {/* Sin resultados de búsqueda */}
+        {!loading && query && pending.length === 0 && active.length === 0 && history.length === 0 && (
+          <p className="text-sm text-center py-10 font-bold" style={{ color: '#888' }}>
+            Sin resultados para "{query}"
+          </p>
+        )}
+
+        {/* Por responder */}
         {pending.length > 0 && (
-          <section className="flex flex-col gap-2.5">
-            <p className="text-[10px] font-bold uppercase tracking-widest px-0.5" style={{ color: '#AAAAAA' }}>
-              Por responder · {pending.length}
-            </p>
-            <motion.div
-              variants={staggerFast}
-              initial="hidden"
-              animate="visible"
-              className="flex flex-col gap-2.5"
-            >
+          <section className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 px-1">
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ background: '#F59E0B', animation: 'ping-slow 2s ease-in-out infinite' }}
+              />
+              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
+                Por responder · {pending.length}
+              </p>
+            </div>
+            <motion.div variants={staggerFast} initial="hidden" animate="visible" className="flex flex-col gap-2">
               {pending.map((req) => (
-                <motion.div key={req.id} variants={fadeUp}>
-                  <PendingCard
-                    req={req}
-                    onAccept={() => updateStatus(req.id, 'confirmed')}
-                    onReject={() => updateStatus(req.id, 'cancelled')}
-                  />
-                </motion.div>
+                <RequestCard
+                  key={req.id}
+                  req={req}
+                  onAccept={() => updateStatus(req.id, 'confirmed')}
+                  onReject={() => updateStatus(req.id, 'cancelled')}
+                />
               ))}
             </motion.div>
           </section>
         )}
 
-        {/* Activos (confirmed + in_progress) */}
+        {/* En curso */}
         {active.length > 0 && (
-          <section className="flex flex-col gap-2.5">
-            <p className="text-[10px] font-bold uppercase tracking-widest px-0.5" style={{ color: '#AAAAAA' }}>
+          <section className="flex flex-col gap-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest px-1" style={{ color: '#AAAAAA' }}>
               En curso · {active.length}
             </p>
-            <motion.div variants={staggerFast} initial="hidden" animate="visible" className="flex flex-col gap-2.5">
+            <motion.div variants={staggerFast} initial="hidden" animate="visible" className="flex flex-col gap-2">
               {active.map((req) => (
-                <motion.div key={req.id} variants={fadeUp}>
-                  <ActiveCard
-                    req={req}
-                    onProgress={(status) => updateStatus(req.id, status)}
-
-                    onChat={() => navigate(`/solicitud/${req.id}/chat`)}
-                  />
-                </motion.div>
+                <RequestCard
+                  key={req.id}
+                  req={req}
+                  onProgress={(s) => updateStatus(req.id, s)}
+                  onChat={() => navigate(`/solicitud/${req.id}/chat`)}
+                />
               ))}
             </motion.div>
           </section>
         )}
 
         {/* Historial */}
-        {others.length > 0 && (
+        {history.length > 0 && (
           <section className="flex flex-col gap-2">
             <button
               type="button"
               onClick={() => setHistoryOpen((v) => !v)}
-              className="flex items-center justify-between px-0.5"
+              className="flex items-center justify-between px-1"
             >
               <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#AAAAAA' }}>
-                Historial · {others.length}
+                Historial · {history.length}
               </p>
               {historyOpen
                 ? <ChevronUp size={13} style={{ color: '#AAAAAA' }} />
                 : <ChevronDown size={13} style={{ color: '#AAAAAA' }} />
               }
             </button>
-            {historyOpen && (
-              <motion.div
-                variants={staggerFast}
-                initial="hidden"
-                animate="visible"
-                className="flex flex-col gap-1.5"
-              >
-                {others.map((req) => (
-                  <motion.div key={req.id} variants={fadeUp}>
-                    <HistoryCard req={req} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
+
+            <AnimatePresence>
+              {historyOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex flex-col gap-2 overflow-hidden"
+                >
+                  {history.map((req) => {
+                    const { emoji, label } = getCategoryMeta(req.category)
+                    const meta = STATUS_META[req.status] ?? STATUS_META.completed
+                    return (
+                      <motion.div
+                        key={req.id}
+                        variants={fadeUp}
+                        className="flex items-center gap-3 rounded-2xl px-3.5 py-3"
+                        style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}
+                      >
+                        <span
+                          className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                          style={{ background: meta.dot, boxShadow: `0 0 6px ${meta.dot}66` }}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+                              {emoji} {label}
+                            </span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: meta.bg, color: meta.color }}>
+                              {meta.label}
+                            </span>
+                          </div>
+                          <p className="text-xs truncate" style={{ color: '#777' }}>{req.description}</p>
+                          {req.scheduled_date && (
+                            <p className="text-[10px] mt-0.5 font-semibold" style={{ color: '#E8683A' }}>
+                              📅 {formatScheduled(req.scheduled_date)}
+                            </p>
+                          )}
+                        </div>
+                        <span className="text-[10px] flex-shrink-0" style={{ color: '#CCCCCC' }}>
+                          {timeAgo(req.created_at)}
+                        </span>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </section>
         )}
 
       </div>
-    </PageShell>
+
+      <style>{`
+        @keyframes ping-slow {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: .4; transform: scale(1.5); }
+        }
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}</style>
+    </div>
   )
 }
