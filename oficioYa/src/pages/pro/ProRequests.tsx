@@ -28,6 +28,28 @@ function timeAgo(iso: string) {
   return `hace ${Math.floor(h / 24)}d`
 }
 
+function formatScheduled(iso: string) {
+  const d = new Date(iso)
+  const date = d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })
+  const hasTime = iso.includes('T') && !iso.endsWith('T00:00:00')
+  const time = hasTime ? d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : null
+  return time ? `${date} · ${time}hs` : date
+}
+
+function ScheduledBadge({ date }: { date: string }) {
+  return (
+    <div
+      className="flex items-center gap-1.5 rounded-xl px-3 py-2"
+      style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}
+    >
+      <span style={{ fontSize: 12 }}>📅</span>
+      <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
+        {formatScheduled(date)}
+      </span>
+    </div>
+  )
+}
+
 function PendingCard({ req, onAccept, onReject }: {
   req: ServiceRequest
   onAccept: () => void
@@ -75,6 +97,8 @@ function PendingCard({ req, onAccept, onReject }: {
         <p className="text-sm leading-relaxed" style={{ color: '#333333' }}>
           {req.description}
         </p>
+
+        {req.scheduled_date && <ScheduledBadge date={req.scheduled_date} />}
 
         <div className="flex gap-2 flex-wrap">
           {req.category && (
@@ -135,6 +159,7 @@ function ActiveCard({ req, onProgress, onChat }: {
       </div>
       <div className="px-4 pt-3.5 pb-4 flex flex-col gap-3">
         <p className="text-sm leading-relaxed" style={{ color: '#333333' }}>{req.description}</p>
+        {req.scheduled_date && <ScheduledBadge date={req.scheduled_date} />}
         {req.contact_phone && (
           <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}>
             <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>

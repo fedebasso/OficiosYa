@@ -140,6 +140,23 @@ export default function ProDashboard() {
                   <p className="text-sm leading-relaxed line-clamp-2" style={{ color: '#333' }}>
                     {req.description}
                   </p>
+                  {req.scheduled_date && (
+                    <div
+                      className="flex items-center gap-1.5 rounded-xl px-3 py-2"
+                      style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}
+                    >
+                      <span style={{ fontSize: 12 }}>📅</span>
+                      <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
+                        {(() => {
+                          const d = new Date(req.scheduled_date)
+                          const date = d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })
+                          const hasTime = req.scheduled_date.includes('T') && !req.scheduled_date.endsWith('T00:00:00')
+                          const time = hasTime ? d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : null
+                          return time ? `${date} · ${time}hs` : date
+                        })()}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex gap-2">
                     <button
                       type="button"
