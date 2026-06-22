@@ -214,6 +214,13 @@ export default function ProRequests() {
   const { requests, loading, error, updateStatus } = useIncomingRequests(user?.id ?? '')
   const [historyOpen, setHistoryOpen] = useState(true)
   const [query, setQuery] = useState('')
+  const [rejectingId, setRejectingId] = useState<string | null>(null)
+
+  function handleConfirmReject() {
+    if (!rejectingId) return
+    updateStatus(rejectingId, 'cancelled')
+    setRejectingId(null)
+  }
 
   // Filtro de búsqueda
   const filtered = useMemo(() => {
@@ -375,7 +382,7 @@ export default function ProRequests() {
                   key={req.id}
                   req={req}
                   onAccept={() => updateStatus(req.id, 'confirmed')}
-                  onReject={() => updateStatus(req.id, 'cancelled')}
+                  onReject={() => setRejectingId(req.id)}
                 />
               ))}
             </motion.div>
@@ -469,6 +476,63 @@ export default function ProRequests() {
         )}
 
       </div>
+
+      {/* ── Modal confirmación de rechazo ── */}
+      <AnimatePresence>
+        {rejectingId && (
+          <>
+            <motion.div
+              key="overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40"
+              style={{ background: 'rgba(0,0,0,.45)' }}
+              onClick={() => setRejectingId(null)}
+            />
+            <motion.div
+              key="sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl p-6 flex flex-col gap-4"
+              style={{ background: '#FFFFFF', maxWidth: 480, margin: '0 auto' }}
+            >
+              <div className="text-center">
+                <div className="text-3xl mb-2">⚠️</div>
+                <p className="text-base font-black" style={{ color: '#111111' }}>
+                  ¿Rechazar esta solicitud?
+                </p>
+                <p className="text-sm mt-1" style={{ color: '#AAAAAA' }}>
+                  Esta acción no se puede deshacer.
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <motion.button
+                  type="button"
+                  onClick={() => setRejectingId(null)}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 rounded-2xl py-3.5 text-sm font-bold"
+                  style={{ background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4' }}
+                >
+                  Cancelar
+                </motion.button>
+                <motion.button
+                  type="button"
+                  onClick={handleConfirmReject}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 rounded-2xl py-3.5 text-sm font-bold text-white"
+                  style={{ background: '#DC2626', boxShadow: '0 4px 14px rgba(220,38,38,.3)' }}
+                >
+                  Rechazar →
+                </motion.button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <style>{`
         @keyframes ping-slow {
