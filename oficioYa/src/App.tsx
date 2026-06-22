@@ -80,6 +80,7 @@ function App() {
           <Route path="/pro/registro"   element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
           <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
           <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+          <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
 
           {/* ── Rutas profesional */}
           <Route
@@ -113,7 +114,7 @@ function App() {
                       <Route path="/buscar"             element={<Search />} />
                       <Route path="/buscar/:categoria"  element={<Search />} />
                       <Route path="/favoritos"          element={<Favoritos />} />
-                      <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
+                      {/* /mensajes está en rutas compartidas arriba para que los pros también accedan */}
                       <Route path="/mis-solicitudes"    element={<ProtectedRoute requiredRole="client"><MisSolicitudes /></ProtectedRoute>} />
                       <Route path="/solicitud/:id"      element={<ProtectedRoute requiredRole="client"><SolicitudDetail /></ProtectedRoute>} />
                       {/* /solicitud/:id/chat está en rutas compartidas arriba */}
