@@ -26,6 +26,7 @@ const SolicitudDetail = lazy(() => import('./pages/SolicitudDetail'))
 const Chat           = lazy(() => import('./pages/Chat'))
 const ClientProfile  = lazy(() => import('./pages/ClientProfile'))
 const Mensajes       = lazy(() => import('./pages/Mensajes'))
+const BuscarOtroProfesional = lazy(() => import('./pages/BuscarOtroProfesional'))
 
 // ── Profesional
 const ProDashboard    = lazy(() => import('./pages/pro/ProDashboard'))
@@ -76,6 +77,7 @@ function App() {
           <Route path="/urgencias"       element={<Urgencias />} />
           <Route path="/ticket"          element={<TicketFlow />} />
           <Route path="/ticket/confirmar" element={<TicketConfirm />} />
+          <Route path="/buscar-profesional/:requestId" element={<ProtectedRoute><BuscarOtroProfesional /></ProtectedRoute>} />
           <Route path="/solicitar/:id"   element={<RequestService />} />
           <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
           <Route path="/pro/registro"   element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
