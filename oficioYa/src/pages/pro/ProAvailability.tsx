@@ -37,6 +37,18 @@ const SECTION_LABEL: React.CSSProperties = {
   marginBottom: 10,
 }
 
+const SELECT: React.CSSProperties = {
+  background: '#F5F0E8',
+  border: '1.5px solid #E8E0D4',
+  borderRadius: 10,
+  padding: '8px 10px',
+  fontSize: 13,
+  fontWeight: 700,
+  color: '#111111',
+  outline: 'none',
+  flex: 1,
+}
+
 export default function ProAvailability() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
@@ -81,18 +93,6 @@ export default function ProAvailability() {
       return `${day}/${m}`
     }
     return `${fmt(from)} → ${fmt(to)}`
-  }
-
-  const SELECT: React.CSSProperties = {
-    background: '#F5F0E8',
-    border: '1.5px solid #E8E0D4',
-    borderRadius: 10,
-    padding: '8px 10px',
-    fontSize: 13,
-    fontWeight: 700,
-    color: '#111111',
-    outline: 'none',
-    flex: 1,
   }
 
   const proBlocks = blockedSlots.filter((b) => b.proId === proId)

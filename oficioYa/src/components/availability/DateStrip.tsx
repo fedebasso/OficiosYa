@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useAvailabilityStore } from '../../store/availabilityStore'
 
 interface Props {
@@ -24,7 +24,7 @@ function formatDay(dateStr: string): { letter: string; num: number } {
 
 export function DateStrip({ proId, selected, onSelect }: Props) {
   const isDateAvailable = useAvailabilityStore((s) => s.isDateAvailable)
-  const days = getNext14Days()
+  const days = useMemo(() => getNext14Days(), [])
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Scroll selected day into view
