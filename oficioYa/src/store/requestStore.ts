@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { requestService } from '../services/requestService'
+import { useAvailabilityStore } from './availabilityStore'
 
 export type WorkType = 'reparacion' | 'instalacion' | 'mantenimiento' | 'otro'
 export type UrgencyLevel = 'ahora' | 'hoy' | 'esta_semana' | 'sin_apuro'
@@ -41,6 +42,27 @@ export const useRequestStore = create<RequestStore>((set) => ({
   addRequest: async (req) => {
     const newReq = await requestService.create(req)
     set((s) => ({ requests: [newReq, ...s.requests] }))
+
+    // Auto-bloquear slot si la solicitud tiene fecha y hora
+    if (req.scheduled_date) {
+      const parts = req.scheduled_date.split('T')
+      const dateStr = parts[0]   // 'YYYY-MM-DD'
+      const timeStr = parts[1]   // 'HH:MM:SS' or undefined
+      if (timeStr) {
+        const fromTime = timeStr.slice(0, 5)  // 'HH:MM'
+        const [hh, mm] = fromTime.split(':').map(Number)
+        const toMin = hh * 60 + mm + 60       // +60 min de duración
+        const toTime = `${Math.floor(toMin / 60).toString().padStart(2, '0')}:${(toMin % 60).toString().padStart(2, '0')}`
+        useAvailabilityStore.getState().addBooking({
+          proId: req.professional_id,
+          requestId: newReq.id,
+          date: dateStr,
+          fromTime,
+          toTime,
+        })
+      }
+    }
+
     return newReq
   },
 

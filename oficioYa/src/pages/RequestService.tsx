@@ -23,6 +23,11 @@ export default function RequestService() {
     if (!professional) return
     setLoading(true)
     try {
+      const scheduledDate =
+        data.scheduled_date && data.scheduled_time
+          ? `${data.scheduled_date}T${data.scheduled_time}:00`
+          : data.scheduled_date ?? undefined
+
       await addRequest({
         professional_id: professional.id,
         category: professional.categories[0] ?? '',
@@ -30,6 +35,7 @@ export default function RequestService() {
         urgency: data.urgent,
         contact_phone: data.contact_phone,
         work_type: data.work_type || undefined,
+        scheduled_date: scheduledDate,
       })
       setSent(true)
     } finally {
