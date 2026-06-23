@@ -78,7 +78,7 @@ export default function Login() {
             className="text-[40px] font-black tracking-tight leading-none"
             style={{ color: '#FFFFFF', letterSpacing: '-2px' }}
           >
-            Ofix
+            <span style={{ color: '#FFFFFF' }}>O</span><span style={{ color: 'rgba(255,255,255,.7)' }}>fix</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 8 }}
