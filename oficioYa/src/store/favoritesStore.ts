@@ -17,6 +17,6 @@ export const useFavoritesStore = create<FavoritesStore>()(
         })),
       isFavorite: (id) => get().ids.includes(id),
     }),
-    { name: 'oficioya-favorites' }
+    { name: 'ofix-favorites' }
   )
 )

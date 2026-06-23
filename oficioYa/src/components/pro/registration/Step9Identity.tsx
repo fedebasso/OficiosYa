@@ -46,7 +46,7 @@ export function Step9Identity({ onNext, loading }: Props) {
       <div className="rounded-2xl p-4" style={{ background: '#EFF6FF', border: '1.5px solid #BFDBFE' }}>
         <p className="text-sm font-bold" style={{ color: '#1E40AF' }}>🔒 Verificación segura</p>
         <p className="text-xs mt-1" style={{ color: '#1E40AF' }}>
-          Tus documentos se almacenan con acceso restringido y solo los revisa el equipo de OficiosYa. Nunca se muestran a clientes.
+          Tus documentos se almacenan con acceso restringido y solo los revisa el equipo de Ofix. Nunca se muestran a clientes.
         </p>
       </div>
 

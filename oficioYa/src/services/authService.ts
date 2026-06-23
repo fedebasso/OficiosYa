@@ -13,7 +13,7 @@ const MOCK_USERS: Record<string, { password: string; profile: UserProfile }> = {
   },
 }
 
-const STORAGE_KEY = 'oficioYa_mock_user'
+const STORAGE_KEY = 'ofix_mock_user'
 
 export const authService = {
   async getSession(): Promise<UserProfile | null> {

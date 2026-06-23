@@ -30,7 +30,7 @@ const STEPS = ['pending', 'confirmed', 'in_progress', 'completed'] as const
 function openWhatsApp(phone: string) {
   const clean = phone.replace(/[\s\-().+]/g, '')
   if (!clean) return
-  const msg = encodeURIComponent('Hola, te contacto por mi solicitud en OficioYa.')
+  const msg = encodeURIComponent('Hola, te contacto por mi solicitud en Ofix.')
   window.open(`https://wa.me/${clean}?text=${msg}`, '_blank')
 }
 

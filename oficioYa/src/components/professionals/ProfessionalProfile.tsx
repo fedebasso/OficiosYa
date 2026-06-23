@@ -124,7 +124,7 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
 
   const handleShare = async () => {
     const url = `${window.location.origin}/profesional/${id}`
-    const text = `Te recomiendo a ${profiles.full_name} — ${specialty} en OficioYa`
+    const text = `Te recomiendo a ${profiles.full_name} — ${specialty} en Ofix`
     if (navigator.share) {
       try {
         await navigator.share({ title: profiles.full_name, text, url })

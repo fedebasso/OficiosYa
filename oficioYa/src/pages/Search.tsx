@@ -39,7 +39,7 @@ const AUTOCOMPLETE_CATEGORIES = [
   { id: 'cerrajero',          emoji: '🔒', label: 'Urgencias 24hs',    keywords: ['urgent', 'emergencia', '24hs', 'ahora'] },
 ]
 
-const HISTORY_KEY = 'oficioya_search_history'
+const HISTORY_KEY = 'ofix_search_history'
 
 function getHistory(): string[] {
   try {

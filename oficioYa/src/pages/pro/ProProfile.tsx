@@ -25,7 +25,7 @@ export default function ProProfile() {
   const handleShare = async () => {
     const url = `${window.location.origin}/profesional/${user?.id}`
     const proName = user?.full_name ?? 'este profesional'
-    const text = `Te recomiendo a ${proName} en OficioYa`
+    const text = `Te recomiendo a ${proName} en Ofix`
     if (navigator.share) {
       try {
         await navigator.share({ title: proName, text, url })
