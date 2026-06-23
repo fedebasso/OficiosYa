@@ -25,7 +25,7 @@ export default function Home() {
           className="font-black leading-none"
           style={{ fontSize: 32, color: '#111111', letterSpacing: '-1px' }}
         >
-          Oficio<span style={{ color: '#E8683A' }}>Ya</span>
+          Ofix
         </h1>
       </div>
       <div style={{ padding: '0 var(--px-container) 12px' }}>

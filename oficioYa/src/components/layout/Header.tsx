@@ -36,7 +36,7 @@ export function Header({ title, showBack = false, onBack }: HeaderProps) {
           className="font-black tracking-tight"
           style={{ color: '#111111', fontSize: 'var(--text-xl)' }}
         >
-          Oficio<span style={{ color: '#E8683A' }}>Ya</span>
+          Ofix
         </span>
       )}
 

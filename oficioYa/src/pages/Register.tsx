@@ -71,7 +71,7 @@ export default function Register() {
             className="text-[40px] font-black tracking-tight leading-none"
             style={{ color: '#FFFFFF', letterSpacing: '-2px' }}
           >
-            Oficio<span style={{ color: 'rgba(255,255,255,.7)' }}>Ya</span>
+            Ofix
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 8 }}
