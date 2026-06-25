@@ -48,7 +48,7 @@ export function DateStripGeneric({ selected, onSelect, isDateAvailable }: Props)
           <button
             key={date}
             type="button"
-            onClick={() => available ? onSelect(date) : undefined}
+            onClick={() => onSelect(date)}
             disabled={!available}
             className="flex flex-col items-center gap-0.5 flex-shrink-0 transition-all duration-150 active:scale-95"
             style={{
