@@ -102,8 +102,8 @@ export default function OfficialServicesPage() {
 
       {/* Chips de categoría */}
       <div
-        className="flex gap-2 overflow-x-auto"
-        style={{ padding: '0 var(--px-container) 10px', scrollbarWidth: 'none' }}
+        className="flex gap-2 overflow-x-auto scrollbar-hide"
+        style={{ padding: '0 var(--px-container) 10px' }}
       >
         {CATEGORIES.map((cat) => (
           <button
@@ -128,8 +128,8 @@ export default function OfficialServicesPage() {
 
       {/* Chips de zona */}
       <div
-        className="flex gap-2 overflow-x-auto"
-        style={{ padding: '0 var(--px-container) 12px', scrollbarWidth: 'none' }}
+        className="flex gap-2 overflow-x-auto scrollbar-hide"
+        style={{ padding: '0 var(--px-container) 12px' }}
       >
         {ZONES.map((zone) => (
           <button
