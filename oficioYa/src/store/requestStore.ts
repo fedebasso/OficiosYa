@@ -51,7 +51,10 @@ export const useRequestStore = create<RequestStore>((set) => ({
       if (timeStr) {
         const fromTime = timeStr.slice(0, 5)  // 'HH:MM'
         const [hh, mm] = fromTime.split(':').map(Number)
-        const toMin = hh * 60 + mm + 60       // +60 min de duración
+        const schedules = useAvailabilityStore.getState().schedules
+        const proSchedule = schedules[req.professional_id]
+        const durationMin = proSchedule?.serviceDurationMin ?? proSchedule?.intervalMin ?? 60
+        const toMin = hh * 60 + mm + durationMin
         const toTime = `${Math.floor(toMin / 60).toString().padStart(2, '0')}:${(toMin % 60).toString().padStart(2, '0')}`
         useAvailabilityStore.getState().addBooking({
           proId: req.professional_id,
