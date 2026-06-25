@@ -27,6 +27,8 @@ const Chat           = lazy(() => import('./pages/Chat'))
 const ClientProfile  = lazy(() => import('./pages/ClientProfile'))
 const Mensajes       = lazy(() => import('./pages/Mensajes'))
 const BuscarOtroProfesional = lazy(() => import('./pages/BuscarOtroProfesional'))
+const OfficialServicesPage  = lazy(() => import('./pages/OfficialServicesPage'))
+const OfficialServiceDetail = lazy(() => import('./pages/OfficialServiceDetail'))
 
 // ── Profesional
 const ProDashboard    = lazy(() => import('./pages/pro/ProDashboard'))
@@ -84,6 +86,8 @@ function App() {
           <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
           <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
+          <Route path="/servicios-oficiales"     element={<OfficialServicesPage />} />
+          <Route path="/servicios-oficiales/:id" element={<OfficialServiceDetail />} />
 
           {/* ── Rutas profesional */}
           <Route
