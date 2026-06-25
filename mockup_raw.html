@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OficioYa — Mockup flujo solicitud</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a1a; display: flex; gap: 32px; justify-content: center; padding: 32px 24px; min-height: 100vh; flex-wrap: wrap; }
+
+  .col { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  .col-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #666; }
+  .col-label.bad { color: #ef4444; }
+  .col-label.good { color: #22c55e; }
+
+  /* Phone shell */
+  .phone { width: 320px; background: #F5F0E8; border-radius: 36px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06); position: relative; flex-shrink: 0; }
+  .phone-screen { height: 620px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+
+  /* Header */
+  .header { background: #fff; padding: 44px 16px 12px; border-bottom: 1px solid #E8E0D4; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .back-btn { width: 32px; height: 32px; border-radius: 50%; background: #F5F0E8; border: 1px solid #E8E0D4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .back-btn svg { width: 14px; height: 14px; stroke: #111; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .header-text { flex: 1; }
+  .header-title { font-size: 14px; font-weight: 900; color: #111; line-height: 1.2; }
+  .header-sub { font-size: 10px; color: #AAA; margin-top: 2px; }
+
+  /* Progress dots */
+  .progress { display: flex; align-items: center; gap: 4px; padding: 10px 16px 4px; background: #fff; border-bottom: 1px solid #F0EBE1; flex-shrink: 0; }
+  .dot { height: 3px; border-radius: 2px; transition: all .3s; }
+  .dot.active { background: #E8683A; }
+  .dot.done { background: #E8683A; opacity: .35; }
+  .dot.pending { background: #E8E0D4; }
+
+  /* Content */
+  .content { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* Pro banner */
+  .pro-banner { background: #fff; border: 1.5px solid #E8E0D4; border-radius: 16px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+  .pro-avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg,#E8683A,#c44d1f); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 16px; flex-shrink: 0; overflow: hidden; }
+  .pro-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pro-info { flex: 1; min-width: 0; }
+  .pro-name { font-size: 13px; font-weight: 800; color: #111; }
+  .pro-spec { font-size: 10px; color: #AAA; margin-top: 1px; }
+  .pro-badge { font-size: 9px; font-weight: 700; color: #22c55e; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.2); border-radius: 20px; padding: 2px 7px; }
+
+  /* Category grid */
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cat-btn { background: #F5F0E8; border: 1.5px solid #EDE8DE; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .cat-btn.active { background: #E8683A; border-color: #E8683A; }
+  .cat-btn .emoji { font-size: 20px; }
+  .cat-btn .cat-text .name { font-size: 11px; font-weight: 800; color: #111; }
+  .cat-btn.active .cat-text .name { color: #fff; }
+  .cat-btn .cat-text .desc { font-size: 9px; color: #999; }
+  .cat-btn.active .cat-text .desc { color: rgba(255,255,255,.7); }
+
+  /* Input area */
+  .input-area { background: #fff; border: 1.5px solid #E8E0D4; border-radius: 16px; overflow: hidden; }
+  .input-area-header { padding: 10px 12px 8px; border-bottom: 1px solid #F0EBE1; font-size: 9px; font-weight: 800; color: #AAA; text-transform: uppercase; letter-spacing: 1px; }
+  .upload-zone { height: 100px; background: #FEF0EA; border: 2px dashed rgba(232,104,58,.3); border-radius: 12px; margin: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .upload-zone .icon { font-size: 24px; }
+  .upload-zone .label { font-size: 10px; color: #E8683A; font-weight: 700; }
+  .text-hint { padding: 8px 12px 10px; font-size: 10px; color: #CCC; text-align: center; }
+
+  /* CTA button */
+  .cta { background: #E8683A; color: #fff; border: none; border-radius: 16px; padding: 14px; font-size: 13px; font-weight: 800; width: 100%; cursor: pointer; box-shadow: 0 4px 14px rgba(232,104,58,.3); margin-top: auto; flex-shrink: 0; }
+  .cta:disabled { opacity: .35; }
+  .cta.skip { background: #EDE8DE; color: #555; box-shadow: none; }
+
+  /* Step labels inside content */
+  .step-label { font-size: 9px; font-weight: 800; color: #E8683A; text-transform: uppercase; letter-spacing: 1.5px; }
+  .step-title { font-size: 17px; font-weight: 900; color: #111; letter-spacing: -.3px; line-height: 1.2; margin-top: 4px; }
+  .step-sub { font-size: 11px; color: #AAA; margin-top: 4px; }
+
+  /* Pro list */
+  .pro-list { display: flex; flex-direction: column; gap: 6px; }
+  .pro-card { background: #fff; border: 1.5px solid #E8E0D4; border-radius: 14px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+  .pro-card.selected { border-color: #E8683A; background: rgba(232,104,58,.04); }
+  .pro-card-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg,#E8683A,#c44d1f); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 13px; flex-shrink: 0; overflow: hidden; }
+  .pro-card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pro-card-info { flex: 1; min-width: 0; }
+  .pro-card-name { font-size: 12px; font-weight: 800; color: #111; }
+  .pro-card-meta { font-size: 9px; color: #AAA; margin-top: 1px; }
+  .pro-card-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #E8E0D4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .pro-card.selected .pro-card-check { background: #E8683A; border-color: #E8683A; }
+  .pro-card.selected .pro-card-check::after { content: '✓'; font-size: 9px; color: #fff; font-weight: 900; }
+
+  /* AI step */
+  .ai-step { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; flex: 1; padding: 24px 16px; }
+  .ai-spinner { width: 52px; height: 52px; border-radius: 16px; background: rgba(232,104,58,.12); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .ai-title { font-size: 15px; font-weight: 900; color: #111; text-align: center; }
+  .ai-items { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .ai-item { display: flex; align-items: center; gap: 8px; }
+  .ai-dot { width: 18px; height: 18px; border-radius: 50%; background: #E8683A; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #fff; font-weight: 900; flex-shrink: 0; }
+  .ai-dot.pending { background: transparent; border: 1.5px solid #DDD; }
+  .ai-item-label { font-size: 11px; color: #555; font-weight: 600; }
+  .ai-item.pending .ai-item-label { color: #CCC; }
+
+  /* Divider */
+  .divider { display: flex; align-items: center; gap: 12px; padding: 4px 0; }
+  .divider-line { flex: 1; height: 1px; background: #EDE8DE; }
+  .divider-label { font-size: 9px; font-weight: 700; color: #CCC; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+
+  /* Arrow between phones */
+  .arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #444; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; align-self: center; }
+  .arrow svg { width: 28px; height: 28px; stroke: #444; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Tag */
+  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800; border-radius: 20px; padding: 3px 8px; }
+  .tag.orange { background: rgba(232,104,58,.1); color: #E8683A; border: 1px solid rgba(232,104,58,.2); }
+  .tag.red { background: rgba(239,68,68,.1); color: #ef4444; border: 1px solid rgba(239,68,68,.2); }
+  .tag.green { background: rgba(34,197,94,.1); color: #22c55e; border: 1px solid rgba(34,197,94,.2); }
+  .tag.blue { background: rgba(59,130,246,.1); color: #3b82f6; border: 1px solid rgba(59,130,246,.2); }
+
+  /* Ticket card */
+  .ticket-card { background: #fff; border: 1.5px solid rgba(232,104,58,.2); border-radius: 14px; overflow: hidden; }
+  .ticket-header { background: rgba(232,104,58,.06); border-bottom: 1px solid rgba(232,104,58,.12); padding: 8px 12px; display: flex; align-items: center; gap: 6px; }
+  .ticket-body { padding: 10px 12px; }
+  .ticket-title { font-size: 12px; font-weight: 800; color: #111; margin-bottom: 4px; }
+  .ticket-desc { font-size: 10px; color: #777; line-height: 1.5; }
+
+  /* Compare layout */
+  .compare { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  .flow { display: flex; gap: 12px; align-items: flex-start; }
+  .flow-arrow { align-self: center; color: #444; font-size: 18px; line-height: 1; padding-top: 48px; }
+
+  /* Section title */
+  .section-title { font-size: 13px; font-weight: 800; letter-spacing: -.2px; color: #fff; margin-bottom: 16px; text-align: center; }
+  .section-sub { font-size: 10px; color: #555; text-align: center; margin-top: -12px; margin-bottom: 16px; letter-spacing: .5px; text-transform: uppercase; font-weight: 700; }
+
+  .cross { font-size: 18px; color: #ef4444; }
+  .check { font-size: 18px; color: #22c55e; }
+</style>
+</head>
+<body>
+
+<!-- FLUJO ACTUAL (roto) -->
+<div class="col">
+  <div class="col-label bad">❌ Flujo actual (roto)</div>
+  <div class="section-sub" style="color:#555">Viene de perfil de Martín Suárez</div>
+
+  <div class="flow">
+
+    <!-- Pantalla 1: Categorías (INNECESARIO) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="font-size:9px;color:#ef4444;font-weight:800;letter-spacing:1px">PASO 1 — INNECESARIO</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="header">
+            <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+            <div class="header-text">
+              <div class="header-title">Nuevo ticket</div>
+              <div class="header-sub">Paso 1 de 4</div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="step-label">✨ Nuevo ticket</div>
+            <div class="step-title">¿Qué tipo de trabajo necesitás?</div>
+            <div class="step-sub">El usuario ya eligió a Martín Suárez 🤦</div>
+            <div class="cat-grid">
+              <div class="cat-btn active"><span class="emoji">⚡</span><div class="cat-text"><div class="name">Electricidad</div><div class="desc">Tomacorrientes</div></div></div>
+              <div class="cat-btn"><span class="emoji">🚿</span><div class="cat-text"><div class="name">Sanitario</div><div class="desc">Caños, pérdidas</div></div></div>
+              <div class="cat-btn"><span class="emoji">❄️</span><div class="cat-text"><div class="name">Aire Ac.</div><div class="desc">Instalación</div></div></div>
+              <div class="cat-btn"><span class="emoji">🔑</span><div class="cat-text"><div class="name">Cerrajería</div><div class="desc">Cerraduras</div></div></div>
+              <div class="cat-btn"><span class="emoji">🎨</span><div class="cat-text"><div class="name">Pintura</div><div class="desc">Interior/exterior</div></div></div>
+              <div class="cat-btn"><span class="emoji">🧱</span><div class="cat-text"><div class="name">Albañilería</div><div class="desc">Reparaciones</div></div></div>
+            </div>
+            <button class="cta" style="margin-top:8px">Continuar →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <!-- Pantalla 4: Lista de pros (INCORRECTO) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="font-size:9px;color:#ef4444;font-weight:800;letter-spacing:1px">PASO 4 — INCORRECTO</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="header">
+            <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+            <div class="header-text">
+              <div class="header-title">Profesionales para vos</div>
+              <div class="header-sub">Paso 4 de 4</div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="ticket-card">
+              <div class="ticket-header"><span class="tag orange">✨ IA</span></div>
+              <div class="ticket-body">
+                <div class="ticket-title">Revisión tablero eléctrico</div>
+                <div class="ticket-desc">Problema en el tablero del pasillo, posible cortocircuito.</div>
+              </div>
+            </div>
+            <div class="divider"><div class="divider-line"></div><div class="divider-label">Elegí un profesional</div><div class="divider-line"></div></div>
+            <div class="pro-list">
+              <div class="pro-card selected">
+                <div class="pro-card-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80"/></div>
+                <div class="pro-card-info"><div class="pro-card-name">Martín Suárez</div><div class="pro-card-meta">⚡ ★4.9 · 89 trabajos</div></div>
+                <div class="pro-card-check"></div>
+              </div>
+              <div class="pro-card">
+                <div class="pro-card-avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">C</div>
+                <div class="pro-card-info"><div class="pro-card-name">Carlos Méndez</div><div class="pro-card-meta">⚡ ★4.8 · 127 trabajos</div></div>
+                <div class="pro-card-check"></div>
+              </div>
+              <div class="pro-card">
+                <div class="pro-card-avatar" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">D</div>
+                <div class="pro-card-info"><div class="pro-card-name">Diego Fernández</div><div class="pro-card-meta">⚡ ★4.7 · 203 trabajos</div></div>
+                <div class="pro-card-check"></div>
+              </div>
+            </div>
+            <button class="cta" style="margin-top:4px">Continuar con Martín →</button>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:#ef4444;font-weight:700;text-align:center;max-width:200px">Muestra otros profesionales<br>que nadie pidió ver</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SPACER -->
+<div style="display:flex;align-items:center;align-self:center;color:#333;font-size:28px;font-weight:900;padding-top:48px">VS</div>
+
+<!-- FLUJO NUEVO (correcto) -->
+<div class="col">
+  <div class="col-label good">✅ Flujo corregido</div>
+  <div class="section-sub" style="color:#555">Viene de perfil de Martín Suárez</div>
+
+  <div class="flow">
+
+    <!-- Pantalla 2: Describí el problema (DIRECTO) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="font-size:9px;color:#22c55e;font-weight:800;letter-spacing:1px">PASO 1 — DESCRIPCIÓN</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="header">
+            <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+            <div class="header-text">
+              <div class="header-title">Solicitar a Martín Suárez</div>
+              <div class="header-sub">Paso 1 de 2 · Electricista</div>
+            </div>
+          </div>
+          <div class="content">
+            <!-- Pro banner fijo -->
+            <div class="pro-banner">
+              <div class="pro-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80"/></div>
+              <div class="pro-info">
+                <div class="pro-name">Martín Suárez</div>
+                <div class="pro-spec">⚡ Electricista · Pocitos</div>
+              </div>
+              <div class="pro-badge">★ 4.9</div>
+            </div>
+
+            <div style="margin-top:4px">
+              <div class="step-title" style="font-size:15px">Mostranos el problema</div>
+              <div class="step-sub">Lo que sea más fácil para vos</div>
+            </div>
+
+            <div class="input-area">
+              <div class="input-area-header">📷 Foto / video</div>
+              <div class="upload-zone">
+                <div class="icon">📷</div>
+                <div class="label">Tocá para agregar foto</div>
+              </div>
+              <div class="text-hint">o escribí / grabá audio abajo</div>
+            </div>
+
+            <button class="cta">Analizar con IA →</button>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:#22c55e;font-weight:700;text-align:center;max-width:200px">Categoría pre-cargada<br>Pro visible desde el inicio</div>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <!-- Pantalla 3: AI procesando -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="font-size:9px;color:#22c55e;font-weight:800;letter-spacing:1px">PASO 2 — IA</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="header">
+            <div class="header-text">
+              <div class="header-title">Analizando...</div>
+              <div class="header-sub">Paso 2 de 2 · Electricista</div>
+            </div>
+          </div>
+          <div class="ai-step">
+            <div class="ai-spinner">✨</div>
+            <div class="ai-title">Preparando tu solicitud<br>para Martín</div>
+            <div class="ai-items">
+              <div class="ai-item"><div class="ai-dot">✓</div><div class="ai-item-label">Tipo de trabajo detectado</div></div>
+              <div class="ai-item"><div class="ai-dot">✓</div><div class="ai-item-label">Urgencia evaluada</div></div>
+              <div class="ai-item"><div class="ai-dot" style="animation: pulse 1s ease-in-out infinite; background: rgba(232,104,58,.3); border: 1.5px solid #E8683A;"></div><div class="ai-item-label" style="color:#E8683A">Generando resumen...</div></div>
+              <div class="ai-item pending"><div class="ai-dot pending"></div><div class="ai-item-label">Listo para enviar</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:#22c55e;font-weight:700;text-align:center;max-width:200px">Después de esto va directo<br>a confirmar — sin paso 4</div>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <!-- Pantalla Confirmar (DIRECTO) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="font-size:9px;color:#22c55e;font-weight:800;letter-spacing:1px">CONFIRMAR</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="header">
+            <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+            <div class="header-text">
+              <div class="header-title">Confirmar solicitud</div>
+              <div class="header-sub"></div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="pro-banner">
+              <div class="pro-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80"/></div>
+              <div class="pro-info">
+                <div class="pro-name">Martín Suárez</div>
+                <div class="pro-spec">⚡ Electricista · Pocitos</div>
+              </div>
+              <div class="pro-badge">★ 4.9</div>
+            </div>
+
+            <div class="ticket-card">
+              <div class="ticket-header"><span class="tag orange">✨ Generado por IA</span></div>
+              <div class="ticket-body">
+                <div class="ticket-title">Revisión tablero eléctrico</div>
+                <div class="ticket-desc">Posible cortocircuito en el tablero del pasillo. Requiere revisión urgente.</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:9px;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:1px">Tu teléfono de contacto</div>
+              <div style="background:#fff;border:1.5px solid #E8E0D4;border-radius:12px;padding:12px 14px;font-size:13px;color:#CCC">Ej: 099 123 456</div>
+            </div>
+
+            <button class="cta">Enviar solicitud</button>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:#22c55e;font-weight:700;text-align:center;max-width:200px">Flujo cerrado — solo<br>el pro elegido</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+</style>
+</body>
+</html>
+

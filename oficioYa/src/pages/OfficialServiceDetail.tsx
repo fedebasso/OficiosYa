@@ -33,6 +33,7 @@ export default function OfficialServiceDetail() {
 
   useEffect(() => {
     if (services.length === 0) fetchServices()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

@@ -97,12 +97,12 @@ export const useOfficialServiceStore = create<OfficialServiceState>((set, get) =
   confirmBooking: (serviceId, date, time) => {
     const booking: PendingBooking = { serviceId, date, time, createdAt: new Date().toISOString() }
     // Persiste para fase 2 (oficial_bookings en Supabase)
-    try { localStorage.setItem('ofix_pending_booking', JSON.stringify(booking)) } catch {}
+    try { localStorage.setItem('ofix_pending_booking', JSON.stringify(booking)) } catch (_e) { /* storage not available */ }
     set({ pendingBooking: booking })
   },
 
   clearPendingBooking: () => {
-    try { localStorage.removeItem('ofix_pending_booking') } catch {}
+    try { localStorage.removeItem('ofix_pending_booking') } catch (_e) { /* storage not available */ }
     set({ pendingBooking: null })
   },
 }))
