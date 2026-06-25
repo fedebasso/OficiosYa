@@ -6,6 +6,7 @@ import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { HowItWorks } from '../components/home/HowItWorks'
 import { TicketEntryCard } from '../components/ticket/TicketEntryCard'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
+import { FEATURES } from '../lib/featureFlags'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -56,8 +57,8 @@ export default function Home() {
       <div className="flex flex-col gap-4 pt-4 pb-4">
         <HowItWorks />
         <TicketEntryCard />
-        {/* Banner Servicios Oficiales */}
-        <motion.button
+        {/* Banner Servicios Oficiales — Fase 2: activar en featureFlags.ts */}
+        {FEATURES.SERVICIOS_OFICIALES && <motion.button
           type="button"
           onClick={() => navigate('/servicios-oficiales')}
           whileTap={{ scale: 0.98 }}
@@ -85,7 +86,7 @@ export default function Home() {
             </div>
             <span style={{ fontSize: 36 }}>🏷️</span>
           </div>
-        </motion.button>
+        </motion.button>}
         <section>
           <FeaturedProfessionals />
         </section>

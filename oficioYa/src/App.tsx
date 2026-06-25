@@ -4,6 +4,7 @@ import { useAuthStore } from './store/authStore'
 import { ClientLayout } from './layouts/ClientLayout'
 import { ProLayout } from './layouts/ProLayout'
 import { PageSkeleton } from './components/layout/PageSkeleton'
+import { FEATURES } from './lib/featureFlags'
 
 // ── Páginas compartidas (estáticas — pequeñas, las usan ambos roles)
 import Login from './pages/Login'
@@ -86,8 +87,8 @@ function App() {
           <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
           <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
-          <Route path="/servicios-oficiales"     element={<OfficialServicesPage />} />
-          <Route path="/servicios-oficiales/:id" element={<OfficialServiceDetail />} />
+          {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales"     element={<OfficialServicesPage />} />}
+          {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales/:id" element={<OfficialServiceDetail />} />}
 
           {/* ── Rutas profesional */}
           <Route
