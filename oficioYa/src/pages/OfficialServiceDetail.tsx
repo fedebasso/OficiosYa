@@ -24,12 +24,16 @@ export default function OfficialServiceDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
-  const { services, fetchSlots, getSlotsForDate, isDateAvailable, confirmBooking } = useOfficialServiceStore()
+  const { services, fetchServices, fetchSlots, getSlotsForDate, isDateAvailable, confirmBooking } = useOfficialServiceStore()
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [toastVisible, setToastVisible] = useState(false)
 
   const service = services.find((s) => s.id === id)
+
+  useEffect(() => {
+    if (services.length === 0) fetchServices()
+  }, [])
 
   useEffect(() => {
     if (!service || service.plan === 'presencia') return
