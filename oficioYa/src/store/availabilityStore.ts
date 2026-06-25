@@ -9,8 +9,26 @@ export interface WorkingSchedule {
   days: DayOfWeek[]
   fromHour: string   // 'HH:MM'
   toHour: string     // 'HH:MM'
-  intervalMin: number
+  intervalMin: number           // legado — usado si serviceDurationMin no está presente
+  serviceDurationMin?: number   // duración del servicio en minutos
+  bufferMin?: number            // tiempo de pausa entre servicios (default 0)
 }
+
+export const DURATION_OPTIONS = [
+  { label: '30 min',  value: 30  },
+  { label: '45 min',  value: 45  },
+  { label: '60 min',  value: 60  },
+  { label: '90 min',  value: 90  },
+  { label: '2 horas', value: 120 },
+]
+
+export const BUFFER_OPTIONS = [
+  { label: 'Sin pausa', value: 0  },
+  { label: '15 min',    value: 15 },
+  { label: '30 min',    value: 30 },
+  { label: '45 min',    value: 45 },
+  { label: '60 min',    value: 60 },
+]
 
 export interface BlockedSlot {
   id: string
@@ -159,33 +177,43 @@ export const useAvailabilityStore = create<AvailabilityStore>((set, get) => ({
     if (inVacation) return []
 
     const fromMin = timeToMin(schedule.fromHour)
-    const toMin = timeToMin(schedule.toHour)
+    const toMin   = timeToMin(schedule.toHour)
+    const efectiveDuration = schedule.serviceDurationMin ?? schedule.intervalMin
+    const efectiveBuffer   = schedule.bufferMin ?? 0
+    const paso             = efectiveDuration + efectiveBuffer
+
     const slots: TimeSlot[] = []
 
-    for (let min = fromMin; min < toMin; min += schedule.intervalMin) {
-      const time = minToTime(min)
-      const slotEnd = min + schedule.intervalMin
+    for (let cursor = fromMin; cursor + efectiveDuration <= toMin; cursor += paso) {
+      const slotStart = cursor
+      const slotEnd   = cursor + efectiveDuration
+      const bufferEnd = slotEnd + efectiveBuffer
 
       const isBooked = bookings.some(
         (b) =>
           b.proId === proId &&
-          b.date === date &&
+          b.date  === date  &&
           timeToMin(b.fromTime) < slotEnd &&
-          timeToMin(b.toTime) > min
+          timeToMin(b.toTime)   > slotStart
       )
 
       const isBlocked = blockedSlots.some(
         (bs) =>
           bs.proId === proId &&
-          bs.date === date &&
+          bs.date  === date  &&
           timeToMin(bs.fromTime) < slotEnd &&
-          timeToMin(bs.toTime) > min
+          timeToMin(bs.toTime)   > slotStart
       )
 
       slots.push({
-        time,
+        time:   minToTime(slotStart),
         status: isBooked ? 'booked' : isBlocked ? 'blocked' : 'available',
       })
+
+      // Slots de buffer: visibles como 'blocked' para que el cliente entienda el hueco
+      for (let b = slotEnd; b < bufferEnd; b += 30) {
+        slots.push({ time: minToTime(b), status: 'blocked' })
+      }
     }
 
     return slots
