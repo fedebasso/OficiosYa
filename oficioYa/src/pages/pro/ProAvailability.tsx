@@ -8,7 +8,7 @@ import { TimeSlotGrid } from '../../components/availability/TimeSlotGrid'
 import { BlockSlotSheet } from '../../components/availability/BlockSlotSheet'
 import { VacationSheet } from '../../components/availability/VacationSheet'
 import { TIME_OPTIONS } from '../../components/availability/timeOptions'
-import { useAvailabilityStore, type DayOfWeek } from '../../store/availabilityStore'
+import { useAvailabilityStore, type DayOfWeek, DURATION_OPTIONS, BUFFER_OPTIONS } from '../../store/availabilityStore'
 import { useAuthStore } from '../../store/authStore'
 
 const DAYS_CONFIG: { value: DayOfWeek; label: string }[] = [
@@ -64,6 +64,15 @@ export default function ProAvailability() {
   const [fromHour, setFromHour] = useState(schedule?.fromHour ?? '08:00')
   const [toHour, setToHour] = useState(schedule?.toHour ?? '18:00')
   const [scheduleSaved, setScheduleSaved] = useState(false)
+  const [localDuration, setLocalDuration] = useState<number>(
+    schedule?.serviceDurationMin ?? 60
+  )
+  const [localBuffer, setLocalBuffer] = useState<number>(
+    schedule?.bufferMin ?? 0
+  )
+  const [showBuffer, setShowBuffer] = useState<boolean>(
+    (schedule?.bufferMin ?? 0) > 0
+  )
 
   // Preview state
   const today = new Date().toISOString().split('T')[0]
@@ -82,7 +91,14 @@ export default function ProAvailability() {
   }
 
   function handleSaveSchedule() {
-    setSchedule(proId, { days: localDays, fromHour, toHour, intervalMin: 30 })
+    setSchedule(proId, {
+      days: localDays,
+      fromHour,
+      toHour,
+      intervalMin: schedule?.intervalMin ?? 30,
+      serviceDurationMin: localDuration,
+      bufferMin: localBuffer,
+    })
     setScheduleSaved(true)
     setTimeout(() => setScheduleSaved(false), 2000)
   }
@@ -164,6 +180,80 @@ export default function ProAvailability() {
               <select value={toHour} onChange={(e) => { setToHour(e.target.value); setScheduleSaved(false) }} style={SELECT}>
                 {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
+            </div>
+
+            {/* Duración del servicio */}
+            <div style={{ marginTop: 16 }}>
+              <p style={SECTION_LABEL}>Duración del servicio</p>
+              <div className="flex flex-wrap gap-2">
+                {DURATION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => { setLocalDuration(opt.value); setScheduleSaved(false) }}
+                    className="font-bold transition-all active:scale-95"
+                    style={{
+                      padding: '7px 14px',
+                      borderRadius: 10,
+                      fontSize: 'var(--text-sm)',
+                      background: localDuration === opt.value ? '#0F6E56' : '#F5F0E8',
+                      color:      localDuration === opt.value ? '#FFFFFF'  : '#555555',
+                      border: '1.5px solid',
+                      borderColor: localDuration === opt.value ? '#0F6E56' : '#E8E0D4',
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Pausa entre servicios */}
+            <div style={{ marginTop: 16 }}>
+              <p style={SECTION_LABEL}>Pausa entre servicios</p>
+              {!showBuffer ? (
+                <button
+                  type="button"
+                  onClick={() => setShowBuffer(true)}
+                  className="font-bold"
+                  style={{
+                    fontSize: 'var(--text-sm)',
+                    color: '#0F6E56',
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                  }}
+                >
+                  + Agregar pausa entre servicios
+                </button>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {BUFFER_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => {
+                        setLocalBuffer(opt.value)
+                        setScheduleSaved(false)
+                        if (opt.value === 0) setShowBuffer(false)
+                      }}
+                      className="font-bold transition-all active:scale-95"
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: 10,
+                        fontSize: 'var(--text-sm)',
+                        background: localBuffer === opt.value ? '#E8683A' : '#F5F0E8',
+                        color:      localBuffer === opt.value ? '#FFFFFF'  : '#555555',
+                        border: '1.5px solid',
+                        borderColor: localBuffer === opt.value ? '#E8683A' : '#E8E0D4',
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button
