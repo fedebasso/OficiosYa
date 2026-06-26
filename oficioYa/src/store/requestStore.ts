@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 import { requestService } from '../services/requestService'
 import { useAvailabilityStore } from './availabilityStore'
+import { useNotificationStore } from './notificationStore'
+import type { NotifPayload } from '../types/notifications'
+import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
 
 export type WorkType = 'reparacion' | 'instalacion' | 'mantenimiento' | 'otro'
 export type UrgencyLevel = 'ahora' | 'hoy' | 'esta_semana' | 'sin_apuro'
@@ -34,7 +37,7 @@ interface RequestStore {
   submitReview: (requestId: string, rating: number, comment: string) => Promise<void>
 }
 
-export const useRequestStore = create<RequestStore>((set) => ({
+export const useRequestStore = create<RequestStore>((set, get) => ({
   requests: [],
   loading: false,
   error: null,
@@ -42,6 +45,16 @@ export const useRequestStore = create<RequestStore>((set) => ({
   addRequest: async (req) => {
     const newReq = await requestService.create(req)
     set((s) => ({ requests: [newReq, ...s.requests] }))
+
+    // Notificar al profesional sobre la nueva solicitud
+    const { category, professional_id, location } = req
+    const notifPayload: NotifPayload = {
+      eventId: 'nueva_solicitud',
+      title: 'Nueva solicitud 🔧',
+      body: `Nueva solicitud de ${category}${location ? ` en ${location}` : ''}`,
+      url: '/pro/solicitudes',
+    }
+    useNotificationStore.getState().sendLocalNotification(notifPayload)
 
     // Auto-bloquear slot si la solicitud tiene fecha y hora
     if (req.scheduled_date) {
@@ -80,7 +93,36 @@ export const useRequestStore = create<RequestStore>((set) => ({
 
   updateStatus: async (id, status) => {
     await requestService.updateStatus(id, status)
-    set((s) => ({ requests: s.requests.map((r) => r.id === id ? { ...r, status } : r) }))
+
+    let updatedReq: ServiceRequest | undefined
+    set((s) => {
+      const updated = s.requests.map((r) => r.id === id ? { ...r, status } : r)
+      updatedReq = updated.find((r) => r.id === id)
+      return { requests: updated }
+    })
+
+    if (!updatedReq) return
+
+    const pro = MOCK_PROFESSIONALS.find((p) => p.id === updatedReq!.professional_id)
+    const proName = pro?.profiles?.full_name ?? 'El profesional'
+
+    if (status === 'confirmed') {
+      useNotificationStore.getState().sendLocalNotification({
+        eventId: 'solicitud_aceptada',
+        title: 'Solicitud aceptada ✅',
+        body: `${proName} aceptó tu solicitud`,
+        url: '/mis-solicitudes',
+      })
+    }
+
+    if (status === 'in_progress') {
+      useNotificationStore.getState().sendLocalNotification({
+        eventId: 'pro_en_camino',
+        title: 'El pro está en camino 🚗',
+        body: `${proName} está en camino a tu domicilio`,
+        url: `/solicitud/${id}`,
+      })
+    }
   },
 
   submitReview: async (requestId, rating, comment) => {
