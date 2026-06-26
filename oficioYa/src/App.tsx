@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
 import { ClientLayout } from './layouts/ClientLayout'
@@ -67,20 +67,8 @@ function ProtectedRoute({
 
 function AppInner() {
   const initNotifications = useNotificationStore((s) => s.init)
-  const navigate = useNavigate()
 
   useEffect(() => { initNotifications() }, [initNotifications])
-
-  useEffect(() => {
-    if (!('serviceWorker' in navigator)) return
-    const handler = (event: MessageEvent) => {
-      if (event.data?.type === 'NAVIGATE' && typeof event.data.url === 'string') {
-        navigate(event.data.url)
-      }
-    }
-    navigator.serviceWorker.addEventListener('message', handler)
-    return () => navigator.serviceWorker.removeEventListener('message', handler)
-  }, [navigate])
 
   return null
 }

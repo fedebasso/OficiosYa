@@ -47,7 +47,7 @@ export const useRequestStore = create<RequestStore>((set, get) => ({
     set((s) => ({ requests: [newReq, ...s.requests] }))
 
     // Notificar al profesional sobre la nueva solicitud
-    const { category, professional_id, location } = req
+    const { category, location } = req
     const notifPayload: NotifPayload = {
       eventId: 'nueva_solicitud',
       title: 'Nueva solicitud 🔧',
