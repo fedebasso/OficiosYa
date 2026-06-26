@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useProRequestsStore } from '../../store/proRequestsStore'
 import { PageShell } from '../../components/layout/PageShell'
+import { NotificationBanner } from '../../components/notifications/NotificationBanner'
 import { getCategoryMeta } from '../../lib/categories'
 import { MessageCircle, ChevronRight, Bell, User, Briefcase, Star, Clock, Calendar } from 'lucide-react'
 
@@ -77,6 +78,8 @@ export default function ProDashboard() {
   return (
     <PageShell header={header} showBottomNav={false}>
       <div className="flex flex-col gap-4 py-4">
+
+        <NotificationBanner message="Activá las notificaciones para recibir alertas de nuevas solicitudes en tiempo real." />
 
         {/* Alerta de pendientes */}
         {!loading && pending.length > 0 && (

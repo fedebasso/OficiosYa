@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Search, MessageCircle, Star, XCircle } from 'lucide-react'
 import { useRequestStore } from '../store/requestStore'
 import { ReviewForm } from '../components/requests/ReviewForm'
+import { NotificationBanner } from '../components/notifications/NotificationBanner'
 import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
 import { getCategoryMeta } from '../lib/categories'
 import { getInitials } from '../lib/utils'
@@ -401,6 +402,10 @@ export default function MisSolicitudes() {
       </AnimatePresence>
 
       <div className="flex flex-col gap-4 p-3 pb-8 flex-1">
+
+        {requests.some((r) => r.status === 'confirmed' || r.status === 'in_progress') && (
+          <NotificationBanner message="Activá las notificaciones para saber cuándo tu profesional aceptó o está en camino." />
+        )}
 
         {loading && [0, 1, 2].map((i) => <SolicitudSkeleton key={i} />)}
 

@@ -5,6 +5,7 @@ import { useIncomingRequests } from '../../hooks/useRequests'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, XCircle, MessageCircle, Inbox, Search, ChevronDown, ChevronUp, Zap, Clock } from 'lucide-react'
 import type { ServiceRequest } from '../../store/requestStore'
+import { NotificationBanner } from '../../components/notifications/NotificationBanner'
 import { getCategoryMeta } from '../../lib/categories'
 import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
 
@@ -323,6 +324,8 @@ export default function ProRequests() {
       {header}
 
       <div className="flex flex-col gap-4 p-3 pb-8 flex-1">
+
+        <NotificationBanner message="Activá las notificaciones para recibir alertas de nuevas solicitudes en tiempo real." />
 
         {/* Loading */}
         {loading && (
