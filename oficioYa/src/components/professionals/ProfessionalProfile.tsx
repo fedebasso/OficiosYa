@@ -16,12 +16,21 @@ import { getInitials } from '../../lib/utils'
 import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT, SPRING_GENTLE } from '../../lib/motion'
 
 /* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
+/* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
 const MOCK_REVIEWS: Record<string, { name: string; initials: string; color: string; rating: number; date: string; text: string }[]> = {
   default: [
     { name: 'Ana Martínez', initials: 'AM', color: '#e8683a', rating: 5, date: 'hace 2 días', text: 'Excelente profesional. Llegó puntual, resolvió el problema rápido y dejó todo limpio. 100% recomendado.' },
     { name: 'Juan González', initials: 'JG', color: '#3b82f6', rating: 5, date: 'hace 1 semana', text: 'Muy prolijo el trabajo y el precio fue justo. Ya lo tengo agendado para el próximo arreglo.' },
     { name: 'Laura Pérez', initials: 'LP', color: '#8b5cf6', rating: 4, date: 'hace 2 semanas', text: 'Buen trabajo, explicó todo lo que hacía. Llegó 10 minutos tarde pero avisó con anticipación.' },
   ],
+}
+
+function formatDuration(minutes: number): string {
+  if (minutes < 60) return `${minutes} min`
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  if (m === 0) return h === 1 ? '1 hora' : `${h} horas`
+  return `${h} hora ${m} min`
 }
 
 function StarRow({ rating }: { rating: number }) {
@@ -120,6 +129,9 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
   const [selectedWork, setSelectedWork] = useState<PortfolioItem | null>(null)
   const [availDate, setAvailDate] = useState<string | null>(null)
   const getSlots = useAvailabilityStore((s) => s.getSlots)
+  const schedules = useAvailabilityStore((s) => s.schedules)
+  const proSchedule = schedules[id]
+  const estimatedDuration = proSchedule?.serviceDurationMin ?? proSchedule?.intervalMin ?? null
   const availSlots = availDate ? getSlots(id, availDate) : []
 
   const handleShare = async () => {
@@ -237,6 +249,12 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
             <span style={{ fontSize: 14 }}>📍</span>
             <span className="font-semibold text-sm" style={{ color: '#555555' }}>{zone}</span>
           </div>
+          {estimatedDuration !== null && (
+            <div className="flex items-center gap-1">
+              <span>⏱</span>
+              <span className="font-semibold text-sm" style={{ color: '#555555' }}>Duración estimada: {formatDuration(estimatedDuration)}</span>
+            </div>
+          )}
         </motion.div>
       </div>
       </motion.div>
