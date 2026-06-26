@@ -94,16 +94,14 @@ export const useRequestStore = create<RequestStore>((set, get) => ({
   updateStatus: async (id, status) => {
     await requestService.updateStatus(id, status)
 
-    let updatedReq: ServiceRequest | undefined
-    set((s) => {
-      const updated = s.requests.map((r) => r.id === id ? { ...r, status } : r)
-      updatedReq = updated.find((r) => r.id === id)
-      return { requests: updated }
-    })
+    // Leer el request ANTES del set, con get()
+    const currentReq = get().requests.find((r) => r.id === id)
 
-    if (!updatedReq) return
+    set((s) => ({ requests: s.requests.map((r) => r.id === id ? { ...r, status } : r) }))
 
-    const pro = MOCK_PROFESSIONALS.find((p) => p.id === updatedReq!.professional_id)
+    if (!currentReq) return
+
+    const pro = MOCK_PROFESSIONALS.find((p) => p.id === currentReq.professional_id)
     const proName = pro?.profiles?.full_name ?? 'El profesional'
 
     if (status === 'confirmed') {

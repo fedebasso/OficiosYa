@@ -18,11 +18,14 @@ interface NotificationState {
 export const useNotificationStore = create<NotificationState>((set, get) => ({
   permission: 'default',
   subscription: null,
-  bannerDismissed: localStorage.getItem(STORAGE_BANNER_KEY) === 'true',
+  bannerDismissed: false,
 
   init: () => {
     if (!('Notification' in window)) return
-    set({ permission: Notification.permission as NotifPermission })
+    set({
+      permission: Notification.permission as NotifPermission,
+      bannerDismissed: localStorage.getItem(STORAGE_BANNER_KEY) === 'true',
+    })
   },
 
   requestPermission: async () => {

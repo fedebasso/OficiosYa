@@ -17,12 +17,15 @@ self.addEventListener('notificationclick', (event) => {
   const url = event.notification.data?.url ?? '/'
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      const existing = clientList.find((c) => 'focus' in c)
+      // Buscar una pestaña existente del mismo scope
+      const existing = clientList.find(
+        (c) => c.url.startsWith(self.registration.scope) && 'focus' in c
+      )
       if (existing) {
-        existing.focus()
-        existing.postMessage({ type: 'NAVIGATE', url })
-        return
+        // Usar navigate() en vez de postMessage — no depende del listener React
+        return existing.focus().then(() => existing.navigate(url))
       }
+      // Cold start: openWindow ya navega a la URL correcta
       return clients.openWindow(url)
     })
   )
