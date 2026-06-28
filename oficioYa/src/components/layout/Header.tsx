@@ -32,12 +32,7 @@ export function Header({ title, showBack = false, onBack }: HeaderProps) {
       )}
 
       {!showBack && (
-        <span
-          className="font-black tracking-tight"
-          style={{ color: '#111111', fontSize: 'var(--text-xl)' }}
-        >
-          <span style={{ color: '#E8683A' }}>O</span>fix
-        </span>
+        <img src="/logo.svg" alt="Ofix" height={28} style={{ display: 'block' }} />
       )}
 
       {title && showBack && (
