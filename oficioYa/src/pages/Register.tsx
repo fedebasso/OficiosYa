@@ -69,7 +69,9 @@ export default function Register() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           >
-            <img src="/logo.svg" alt="Ofix" height={44} style={{ display: 'block', filter: 'brightness(0) invert(1)' }} />
+            <span className="font-black" style={{ fontSize: 40, letterSpacing: '-2px', color: '#fff', lineHeight: 1 }}>
+              <span style={{ color: '#fff' }}>O</span><span style={{ color: 'rgba(255,255,255,0.75)' }}>fix</span>
+            </span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 8 }}

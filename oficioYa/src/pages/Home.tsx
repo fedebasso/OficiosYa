@@ -23,7 +23,18 @@ export default function Home() {
         className="flex items-center"
         style={{ padding: 'calc(14px + var(--safe-top)) var(--px-container) 10px' }}
       >
-        <img src="/logo.svg" alt="Ofix" height={36} style={{ display: 'block' }} />
+        <span
+          className="font-black"
+          style={{
+            fontSize: 32,
+            letterSpacing: '-1.5px',
+            background: 'linear-gradient(90deg, #E8683A 0%, #B64A24 55%, #2A2A2A 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            lineHeight: 1,
+          }}
+        >Ofix</span>
       </div>
       <div style={{ padding: '0 var(--px-container) 12px' }}>
         <button
