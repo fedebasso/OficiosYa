@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { reviewService, type Review } from '../../services/reviewService'
+import { ReviewCard } from './ReviewCard'
 import { useNavigate } from 'react-router-dom'
 import { PortfolioWorkModal } from '../pro/portfolio/PortfolioWorkModal'
 import type { PortfolioItem } from '../../types/registration'
@@ -14,16 +16,6 @@ import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessi
 import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
 import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT, SPRING_GENTLE } from '../../lib/motion'
-
-/* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
-/* ── Mock reviews — reemplazar con datos reales de Supabase cuando estén disponibles ── */
-const MOCK_REVIEWS: Record<string, { name: string; initials: string; color: string; rating: number; date: string; text: string }[]> = {
-  default: [
-    { name: 'Ana Martínez', initials: 'AM', color: '#e8683a', rating: 5, date: 'hace 2 días', text: 'Excelente profesional. Llegó puntual, resolvió el problema rápido y dejó todo limpio. 100% recomendado.' },
-    { name: 'Juan González', initials: 'JG', color: '#3b82f6', rating: 5, date: 'hace 1 semana', text: 'Muy prolijo el trabajo y el precio fue justo. Ya lo tengo agendado para el próximo arreglo.' },
-    { name: 'Laura Pérez', initials: 'LP', color: '#8b5cf6', rating: 4, date: 'hace 2 semanas', text: 'Buen trabajo, explicó todo lo que hacía. Llegó 10 minutos tarde pero avisó con anticipación.' },
-  ],
-}
 
 function formatDuration(minutes: number): string {
   if (minutes < 60) return `${minutes} min`
@@ -43,63 +35,70 @@ function StarRow({ rating }: { rating: number }) {
   )
 }
 
-function ReviewsSection({ rating, jobsCount, professionalId }: { rating: number | null; jobsCount: number; professionalId: string }) {
-  const reviews = MOCK_REVIEWS[professionalId] ?? MOCK_REVIEWS.default
-  if (!rating) return null
+function ReviewsSection({ rating, professionalId }: { rating: number | null; professionalId: string }) {
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const fullStars = Math.round(rating)
+  useEffect(() => {
+    reviewService.fetchByProfessional(professionalId)
+      .then(setReviews)
+      .finally(() => setLoading(false))
+  }, [professionalId])
+
+  if (!rating && reviews.length === 0) return null
+
+  const fullStars = Math.round(rating ?? 0)
   const bars = [5,4,3,2,1]
-  const fakeCounts = [Math.round(jobsCount * .75), Math.round(jobsCount * .15), Math.round(jobsCount * .06), Math.round(jobsCount * .02), Math.round(jobsCount * .02)]
+  const total = reviews.length
+  const countByRating = (r: number) => reviews.filter(rv => rv.rating === r).length
 
   return (
-    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-      <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-4">Reseñas</h3>
+    <div className="flex flex-col gap-4">
+      <h3 className="font-black text-base" style={{ color: '#111', letterSpacing: '-0.3px' }}>
+        Reseñas
+      </h3>
 
-      {/* Rating overview */}
-      <div className="flex gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid #E8E0D4' }}>
-        <div className="text-center flex-shrink-0">
-          <div className="text-4xl font-black leading-none" style={{ color: '#111111', letterSpacing: '-2px' }}>
-            {rating}
-          </div>
-          <div className="mt-1.5"><StarRow rating={fullStars} /></div>
-          <div className="text-[9px] mt-1" style={{ color: '#999999' }}>{jobsCount} reseñas</div>
-        </div>
-        <div className="flex-1 flex flex-col justify-center gap-1">
-          {bars.map((star, i) => {
-            const pct = jobsCount > 0 ? Math.round((fakeCounts[i] / jobsCount) * 100) : 0
-            return (
-              <div key={star} className="flex items-center gap-2">
-                <span className="text-[10px] w-2" style={{ color: '#999999' }}>{star}</span>
-                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#E8E0D4' }}>
-                  <div className="h-full rounded-full" style={{ width: `${pct}%`, background: '#f59e0b' }} />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Review cards */}
-      <div className="flex flex-col gap-3">
-        {reviews.map((r, i) => (
-          <div key={i} className="flex flex-col gap-2">
-            <div className="flex items-center gap-2.5">
-              <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-black flex-shrink-0"
-                style={{ background: r.color }}
-              >
-                {r.initials}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-bold leading-tight" style={{ color: '#111111' }}>{r.name}</div>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <StarRow rating={r.rating} />
-                  <span className="text-[10px]" style={{ color: '#999999' }}>{r.date}</span>
-                </div>
-              </div>
+      {rating && total > 0 && (
+        <div className="flex gap-4 items-center p-4 rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}>
+          <div className="text-center flex-shrink-0">
+            <div className="text-4xl font-black leading-none" style={{ color: '#111', letterSpacing: '-2px' }}>
+              {rating.toFixed(1)}
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: '#555555', paddingLeft: 44 }}>{r.text}</p>
-            {i < reviews.length - 1 && <div style={{ height: 1, background: '#E8E0D4', marginTop: 4 }} />}
+            <div className="mt-1.5">
+              {[1,2,3,4,5].map(i => (
+                <span key={i} style={{ color: i <= fullStars ? '#f59e0b' : '#ddd', fontSize: 12 }}>★</span>
+              ))}
+            </div>
+            <div className="text-[9px] mt-1" style={{ color: '#999' }}>{total} reseña{total !== 1 ? 's' : ''}</div>
+          </div>
+          <div className="flex-1 flex flex-col gap-1">
+            {bars.map((star) => {
+              const count = countByRating(star)
+              const pct = total > 0 ? (count / total) * 100 : 0
+              return (
+                <div key={star} className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold w-3" style={{ color: '#999' }}>{star}</span>
+                  <div className="flex-1 rounded-full overflow-hidden" style={{ height: 5, background: '#EDE8DE' }}>
+                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: '#F59E0B' }} />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {loading && <p className="text-sm text-center" style={{ color: '#999' }}>Cargando reseñas...</p>}
+
+      {!loading && reviews.length === 0 && (
+        <p className="text-sm text-center py-4" style={{ color: '#999' }}>Aún no tiene reseñas</p>
+      )}
+
+      <div className="flex flex-col gap-4">
+        {reviews.map((r, i) => (
+          <div key={r.id}>
+            <ReviewCard review={r} />
+            {i < reviews.length - 1 && <div style={{ height: 1, background: '#EDE8DE', marginTop: 16 }} />}
           </div>
         ))}
       </div>
@@ -339,7 +338,7 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
 
         {/* Reseñas */}
         <motion.div variants={fadeUp}>
-          <ReviewsSection rating={avg_rating} jobsCount={jobs_count} professionalId={id} />
+          <ReviewsSection rating={avg_rating} professionalId={id} />
         </motion.div>
       </div>
 
