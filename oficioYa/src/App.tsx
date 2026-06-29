@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
 import { SplashScreen } from './components/SplashScreen'
 import { OnboardingFlow } from './components/onboarding/OnboardingFlow'
-import { AnimatedRoutes } from './components/layout/AnimatedRoutes'
+import { PageSkeleton } from './components/layout/PageSkeleton'
+
+const AnimatedRoutes = lazy(() =>
+  import('./components/layout/AnimatedRoutes').then((m) => ({ default: m.AnimatedRoutes }))
+)
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -40,7 +44,9 @@ function App() {
       )}
       <AppInner />
       <ScrollToTop />
-      <AnimatedRoutes />
+      <Suspense fallback={<PageSkeleton />}>
+        <AnimatedRoutes />
+      </Suspense>
     </BrowserRouter>
   )
 }
