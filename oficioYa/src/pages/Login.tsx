@@ -50,10 +50,10 @@ export default function Login() {
     <PageShell showBottomNav={false}>
       <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
-        {/* Hero naranja */}
+        {/* Hero negro */}
         <div
           className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative overflow-hidden"
-          style={{ background: 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' }}
+          style={{ background: '#000000' }}
         >
           <button
             type="button"
@@ -63,13 +63,15 @@ export default function Login() {
           >
             <ChevronLeft size={24} color="#FFFFFF" />
           </button>
-          <div
-            className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
-          />
-          <div
-            className="absolute -bottom-1 -left-8 w-32 h-32 rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%)' }}
+          <motion.img
+            src="/ofix-icon.svg"
+            alt="OFIX"
+            width={72}
+            height={72}
+            style={{ borderRadius: 16 }}
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
           />
           <motion.h1
             initial={{ opacity: 0, scale: 0.9 }}
@@ -77,7 +79,7 @@ export default function Login() {
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           >
             <span className="font-black" style={{ fontSize: 40, letterSpacing: '-2px', color: '#fff', lineHeight: 1 }}>
-              <span style={{ color: '#fff' }}>O</span><span style={{ color: 'rgba(255,255,255,0.75)' }}>fix</span>
+              OFIX
             </span>
           </motion.h1>
           <motion.p
