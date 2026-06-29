@@ -42,7 +42,7 @@ export default function ProProfile() {
       className="px-4 pt-10 pb-4 sticky top-0 z-50"
       style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
     >
-      <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#E8683A' }}>
+      <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#999999' }}>
         Panel profesional
       </p>
       <div className="flex items-center justify-between">
