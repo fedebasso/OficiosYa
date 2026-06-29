@@ -76,7 +76,18 @@ export default function Login() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           >
-            <span className="font-black" style={{ fontSize: 40, letterSpacing: '-2px', color: '#fff', lineHeight: 1 }}>
+            <span
+              className="font-black"
+              style={{
+                fontSize: 40,
+                letterSpacing: '-2px',
+                lineHeight: 1,
+                background: 'linear-gradient(90deg, #FF6B00 0%, #cc5500 60%, #1a1a1a 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
               OFIX
             </span>
           </motion.h1>
