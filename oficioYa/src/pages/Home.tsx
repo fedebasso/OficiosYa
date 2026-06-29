@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
+import { BrandLogo } from '../components/common/BrandLogo'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { HowItWorks } from '../components/home/HowItWorks'
 import { TicketEntryCard } from '../components/ticket/TicketEntryCard'
@@ -23,23 +24,7 @@ export default function Home() {
         className="flex items-center"
         style={{ padding: 'calc(14px + var(--safe-top)) var(--px-container) 10px' }}
       >
-        <motion.span
-          className="font-black"
-          style={{
-            fontSize: 32,
-            letterSpacing: '-1.5px',
-            background: 'linear-gradient(90deg, #FF6B00 0%, #cc5500 60%, #1a1a1a 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            lineHeight: 1,
-          }}
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          OFIX
-        </motion.span>
+        <BrandLogo size="md" />
       </div>
       <div style={{ padding: '0 var(--px-container) 12px' }}>
         <button

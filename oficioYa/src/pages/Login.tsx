@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { BrandLogo } from '../components/common/BrandLogo'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
 import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
@@ -71,24 +72,7 @@ export default function Login() {
             className="absolute -bottom-1 -left-8 w-32 h-32 rounded-full pointer-events-none"
             style={{ background: 'radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%)' }}
           />
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          >
-            <span className="font-black" style={{ fontSize: 40, letterSpacing: '-2px', color: '#fff', lineHeight: 1 }}>
-              OFIX
-            </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, type: 'spring', stiffness: 300, damping: 28 }}
-            className="text-sm font-medium"
-            style={{ color: 'rgba(255,255,255,.8)' }}
-          >
-            Profesionales de confianza en Montevideo
-          </motion.p>
+          <BrandLogo size="lg" showSubtitle centered />
           <div
             className="absolute bottom-0 left-0 right-0 h-10 rounded-t-[32px]"
             style={{ background: '#F5F0E8' }}

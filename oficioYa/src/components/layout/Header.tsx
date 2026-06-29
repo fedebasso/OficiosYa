@@ -1,4 +1,5 @@
 import { ChevronLeft } from 'lucide-react'
+import { BrandLogo } from '../common/BrandLogo'
 
 interface HeaderProps {
   title?: string
@@ -31,20 +32,7 @@ export function Header({ title, showBack = false, onBack }: HeaderProps) {
         </button>
       )}
 
-      {!showBack && (
-        <span
-          className="font-black"
-          style={{
-            fontSize: 22,
-            letterSpacing: '-1px',
-            lineHeight: 1,
-            background: 'linear-gradient(90deg, #FF6B00 0%, #cc5500 60%, #1a1a1a 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-        >OFIX</span>
-      )}
+      {!showBack && <BrandLogo size="sm" />}
 
       {title && showBack && (
         <span
