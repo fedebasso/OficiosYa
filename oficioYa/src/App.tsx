@@ -9,6 +9,7 @@ import { FEATURES } from './lib/featureFlags'
 
 // ── Páginas compartidas (estáticas — pequeñas, las usan ambos roles)
 import Login from './pages/Login'
+import { SplashScreen } from './components/SplashScreen'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
 
@@ -79,6 +80,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <SplashScreen />
       <AppInner />
       <ScrollToTop />
       <Suspense fallback={<PageSkeleton />}>
