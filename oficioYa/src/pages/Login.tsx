@@ -50,10 +50,10 @@ export default function Login() {
     <PageShell showBottomNav={false}>
       <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
 
-        {/* Hero negro */}
+        {/* Hero naranja */}
         <div
           className="px-6 pt-16 pb-14 flex flex-col items-center gap-2 relative overflow-hidden"
-          style={{ background: '#000000' }}
+          style={{ background: 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' }}
         >
           <button
             type="button"
@@ -63,15 +63,13 @@ export default function Login() {
           >
             <ChevronLeft size={24} color="#FFFFFF" />
           </button>
-          <motion.img
-            src="/ofix-icon.svg"
-            alt="OFIX"
-            width={72}
-            height={72}
-            style={{ borderRadius: 16 }}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+          <div
+            className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute -bottom-1 -left-8 w-32 h-32 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%)' }}
           />
           <motion.h1
             initial={{ opacity: 0, scale: 0.9 }}
