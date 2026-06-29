@@ -79,10 +79,13 @@ function App() {
   const user = useAuthStore((s) => s.user)
   const isPro = user?.role === 'professional'
 
-  const [showOnboarding, setShowOnboarding] = useState(() => {
-    if (!user) return false
-    return !localStorage.getItem(`onboarding_done_${user.id}`)
-  })
+  const [showOnboarding, setShowOnboarding] = useState(false)
+
+  useEffect(() => {
+    if (user && !localStorage.getItem(`onboarding_done_${user.id}`)) {
+      setShowOnboarding(true)
+    }
+  }, [user?.id])
 
   return (
     <BrowserRouter>
