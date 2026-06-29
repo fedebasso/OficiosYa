@@ -21,18 +21,20 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Ofix',
-        short_name: 'Ofix',
+        name: 'OFIX',
+        short_name: 'OFIX',
         description: 'Encontrá profesionales de confianza en Montevideo',
-        theme_color: '#0F6E56',
-        background_color: '#ffffff',
+        theme_color: '#000000',
+        background_color: '#000000',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
         icons: [
-          { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
-          { src: '/logo-icon.svg', sizes: 'any',    type: 'image/svg+xml', purpose: 'any' },
+          { src: '/icon-192.png',         sizes: '192x192',   type: 'image/png',    purpose: 'any' },
+          { src: '/icon-512.png',         sizes: '512x512',   type: 'image/png',    purpose: 'any maskable' },
+          { src: '/icon-1024.png',        sizes: '1024x1024', type: 'image/png',    purpose: 'any' },
+          { src: '/apple-touch-icon.png', sizes: '180x180',   type: 'image/png',    purpose: 'any' },
+          { src: '/ofix-icon.svg',        sizes: 'any',       type: 'image/svg+xml', purpose: 'any' },
         ],
       },
       workbox: {
