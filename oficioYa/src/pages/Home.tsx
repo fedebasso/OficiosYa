@@ -15,26 +15,33 @@ export default function Home() {
     <header
       className="sticky top-0 z-50"
       style={{
-        background: '#FFFFFF',
-        boxShadow: '0 1px 0 #EDE8DE, 0 2px 8px rgba(0,0,0,.04)',
+        background: '#000000',
+        boxShadow: '0 1px 0 rgba(255,255,255,0.08)',
       }}
     >
       <div
-        className="flex items-center"
+        className="flex items-center gap-3"
         style={{ padding: 'calc(14px + var(--safe-top)) var(--px-container) 10px' }}
       >
-        <span
+        <motion.img
+          src="/ofix-icon.svg"
+          alt="OFIX"
+          width={36}
+          height={36}
+          style={{ borderRadius: 8 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+        />
+        <motion.span
           className="font-black"
-          style={{
-            fontSize: 32,
-            letterSpacing: '-1.5px',
-            background: 'linear-gradient(90deg, #E8683A 0%, #B64A24 55%, #2A2A2A 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            lineHeight: 1,
-          }}
-        >Ofix</span>
+          style={{ fontSize: 28, letterSpacing: '-1px', color: '#FFFFFF', lineHeight: 1 }}
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          OFIX
+        </motion.span>
       </div>
       <div style={{ padding: '0 var(--px-container) 12px' }}>
         <button
@@ -43,14 +50,14 @@ export default function Home() {
           className="w-full flex items-center gap-3 active:opacity-80 transition-opacity"
           style={{
             height: 44,
-            background: '#F5F0E8',
-            border: '1.5px solid #EDE8DE',
+            background: '#1a1a1a',
+            border: '1.5px solid #333333',
             borderRadius: 14,
             padding: '0 14px',
           }}
         >
           <span style={{ fontSize: 15 }}>🔍</span>
-          <span style={{ fontSize: 'var(--text-sm)', color: '#BBBBBB' }}>
+          <span style={{ fontSize: 'var(--text-sm)', color: '#888888' }}>
             ¿Qué servicio necesitás?
           </span>
         </button>
