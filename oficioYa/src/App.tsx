@@ -1,4 +1,4 @@
-import { lazy, Suspense, type ReactNode, useEffect } from 'react'
+import { lazy, Suspense, type ReactNode, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
@@ -10,6 +10,7 @@ import { FEATURES } from './lib/featureFlags'
 // ── Páginas compartidas (estáticas — pequeñas, las usan ambos roles)
 import Login from './pages/Login'
 import { SplashScreen } from './components/SplashScreen'
+import { OnboardingFlow } from './components/onboarding/OnboardingFlow'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
 
@@ -78,9 +79,21 @@ function App() {
   const user = useAuthStore((s) => s.user)
   const isPro = user?.role === 'professional'
 
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    if (!user) return false
+    return !localStorage.getItem(`onboarding_done_${user.id}`)
+  })
+
   return (
     <BrowserRouter>
       <SplashScreen />
+      {showOnboarding && user && (
+        <OnboardingFlow
+          role={user.role}
+          userId={user.id}
+          onDone={() => setShowOnboarding(false)}
+        />
+      )}
       <AppInner />
       <ScrollToTop />
       <Suspense fallback={<PageSkeleton />}>
