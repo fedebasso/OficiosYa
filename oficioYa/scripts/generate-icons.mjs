@@ -1,37 +1,32 @@
-/**
- * Genera icon-192.png e icon-512.png desde logo-icon.svg
- * Requiere: npm install --save-dev @resvg/resvg-js
- * Uso: node scripts/generate-icons.mjs
- */
-
-import { readFileSync, writeFileSync, mkdirSync } from 'fs'
-import { join, dirname } from 'path'
+import sharp from 'sharp'
+import { readFileSync } from 'fs'
+import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const root = join(__dirname, '..')
+const root = resolve(__dirname, '..')
+const svgPath = resolve(root, 'public/ofix-icon.svg')
+const svgBuffer = readFileSync(svgPath)
 
-let Resvg
-try {
-  const mod = await import('@resvg/resvg-js')
-  Resvg = mod.Resvg
-} catch {
-  console.error('Instalá el paquete primero: npm install --save-dev @resvg/resvg-js')
-  process.exit(1)
+const sizes = [
+  { name: 'icon-192.png',         size: 192 },
+  { name: 'icon-512.png',         size: 512 },
+  { name: 'icon-1024.png',        size: 1024 },
+  { name: 'apple-touch-icon.png', size: 180 },
+]
+
+for (const { name, size } of sizes) {
+  await sharp(svgBuffer)
+    .resize(size, size)
+    .png({ quality: 100 })
+    .toFile(resolve(root, 'public', name))
+  console.log(`✓ ${name}`)
 }
 
-const svgPath = join(root, 'public', 'logo-icon.svg')
-const svg = readFileSync(svgPath, 'utf8')
+await sharp(svgBuffer)
+  .resize(32, 32)
+  .png()
+  .toFile(resolve(root, 'public/favicon.png'))
+console.log('✓ favicon.png')
 
-for (const size of [192, 512]) {
-  const resvg = new Resvg(svg, {
-    fitTo: { mode: 'width', value: size },
-    background: 'transparent',
-  })
-  const png = resvg.render().asPng()
-  const outPath = join(root, 'public', `icon-${size}.png`)
-  writeFileSync(outPath, png)
-  console.log(`✓ icon-${size}.png generado`)
-}
-
-console.log('Iconos listos en public/')
+console.log('Done.')
