@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useRequestStore } from '../store/requestStore'
 import { ReviewForm } from '../components/requests/ReviewForm'
+import { ReviewSheet } from '../components/requests/ReviewSheet'
 import { PortfolioItemForm } from '../components/pro/portfolio/PortfolioItemForm'
 import { useAuthStore } from '../store/authStore'
 import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT } from '../lib/motion'
@@ -46,6 +47,10 @@ export default function SolicitudDetail() {
   const [portfolioAdded, setPortfolioAdded] = useState(false)
 
   const req = requests.find((r) => r.id === id)
+  const alreadyReviewed = !!localStorage.getItem(`reviewed_${req?.id}`)
+  const [showReviewSheet, setShowReviewSheet] = useState(
+    req?.status === 'completed' && !alreadyReviewed && user?.role === 'client'
+  )
 
   if (!req) {
     return (
@@ -248,6 +253,17 @@ export default function SolicitudDetail() {
             </motion.button>
           )}
 
+          {req.status === 'completed' && user?.role === 'client' && !alreadyReviewed && (
+            <button
+              type="button"
+              onClick={() => setShowReviewSheet(true)}
+              className="w-full rounded-2xl py-3.5 text-sm font-bold text-white"
+              style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.25)' }}
+            >
+              ⭐ Dejar reseña
+            </button>
+          )}
+
           {/* Agregar a portfolio — solo si completado y es profesional */}
           {req.status === 'completed' && user?.role === 'professional' && !portfolioAdded && (
             <button
@@ -424,6 +440,38 @@ export default function SolicitudDetail() {
                   {cancelling ? 'Cancelando...' : 'Sí, cancelar'}
                 </motion.button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* ReviewSheet overlay */}
+      <AnimatePresence>
+        {showReviewSheet && req && user && (
+          <motion.div
+            key="review-sheet"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-end justify-center"
+            style={{ background: 'rgba(0,0,0,0.45)' }}
+            onClick={() => setShowReviewSheet(false)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+              className="w-full rounded-t-3xl p-6"
+              style={{ background: '#FFFFFF', maxWidth: 480 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ReviewSheet
+                requestId={req.id}
+                clientId={user.id}
+                professionalId={req.professional_id ?? ''}
+                professionalName="el profesional"
+                onClose={() => setShowReviewSheet(false)}
+              />
             </motion.div>
           </motion.div>
         )}
