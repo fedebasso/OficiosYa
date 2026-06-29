@@ -7,6 +7,7 @@ import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { HowItWorks } from '../components/home/HowItWorks'
 import { TicketEntryCard } from '../components/ticket/TicketEntryCard'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
+import { TopRated } from '../components/home/TopRated'
 import { FEATURES } from '../lib/featureFlags'
 
 export default function Home() {
@@ -52,6 +53,7 @@ export default function Home() {
     <PageShell header={homeHeader} showBottomNav>
       <div className="flex flex-col gap-4 pt-4 pb-4">
         <HowItWorks />
+        <TopRated />
         <TicketEntryCard />
         {/* Banner Servicios Oficiales — Fase 2: activar en featureFlags.ts */}
         {FEATURES.SERVICIOS_OFICIALES && <motion.button
