@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { X, Camera } from 'lucide-react'
 import { reviewService } from '../../services/reviewService'
 

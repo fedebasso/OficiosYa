@@ -25,16 +25,6 @@ function formatDuration(minutes: number): string {
   return `${h} hora ${m} min`
 }
 
-function StarRow({ rating }: { rating: number }) {
-  return (
-    <span>
-      {[1,2,3,4,5].map(i => (
-        <span key={i} style={{ color: i <= rating ? '#f59e0b' : '#333', fontSize: 12 }}>★</span>
-      ))}
-    </span>
-  )
-}
-
 function ReviewsSection({ rating, professionalId }: { rating: number | null; professionalId: string }) {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
