@@ -112,13 +112,16 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           </button>
 
           {/* Rating */}
-          {avg_rating != null && (
-            <div className="flex items-center gap-1">
+          {avg_rating != null ? (
+            <div className="flex items-center gap-0.5">
               <span style={{ color: '#F59E0B', fontSize: 'var(--text-base)' }}>★</span>
-              <span className="font-black" style={{ color: '#111111', fontSize: 'var(--text-lg)', lineHeight: 1 }}>
-                {avg_rating}
+              <span className="font-black" style={{ color: '#111', fontSize: 'var(--text-base)', lineHeight: 1 }}>
+                {avg_rating.toFixed(1)}
               </span>
+              <span style={{ color: '#999', fontSize: 10, fontWeight: 600 }}>({jobs_count})</span>
             </div>
+          ) : (
+            <span style={{ fontSize: 10, color: '#CCC', fontWeight: 600 }}>Sin reseñas</span>
           )}
         </div>
 
