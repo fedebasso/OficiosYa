@@ -30,7 +30,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region node_modules/.pnpm/react@19.2.7/node_modules/react/cjs/react.development.js
+//#region node_modules/react/cjs/react.development.js
 /**
 * @license React
 * react.development.js
@@ -789,11 +789,11 @@ var require_react_development = /* @__PURE__ */ __commonJSMin(((exports, module)
 	})();
 }));
 //#endregion
-//#region node_modules/.pnpm/react@19.2.7/node_modules/react/index.js
+//#region node_modules/react/index.js
 var require_react = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_react_development();
 }));
 //#endregion
 export { __toESM as i, __commonJSMin as n, __exportAll as r, require_react as t };
 
-//# sourceMappingURL=react-D8g6Ew7f.js.map
+//# sourceMappingURL=react-CZunmVaX.js.map

@@ -34,16 +34,8 @@ export function Header({ title, showBack = false, onBack }: HeaderProps) {
       {!showBack && (
         <span
           className="font-black"
-          style={{
-            fontSize: 22,
-            letterSpacing: '-1px',
-            background: 'linear-gradient(90deg, #E8683A 0%, #B64A24 55%, #2A2A2A 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            lineHeight: 1,
-          }}
-        >Ofix</span>
+          style={{ fontSize: 22, letterSpacing: '-1px', color: '#FFFFFF', lineHeight: 1 }}
+        >OFIX</span>
       )}
 
       {title && showBack && (

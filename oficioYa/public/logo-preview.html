@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7A vs 7B — Ofix</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0E0E0E; color: #fff; padding-bottom: 60px; }
+  .section { padding: 28px 20px 16px; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #555; text-transform: uppercase; }
+  .sep { height: 1px; background: #1e1e1e; margin: 24px 20px 0; }
+
+  /* COMPARISON ROW */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .col-label { font-size: 12px; color: #E8683A; font-weight: 800; letter-spacing: 1px; }
+  .col-desc { font-size: 10px; color: #555; text-align: center; line-height: 1.5; }
+
+  /* icon sizes */
+  .sz-big { width: 120px; height: 120px; border-radius: 27px; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .sz-med { width: 76px; height: 76px; border-radius: 17px; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .sz-sm  { width: 54px; height: 54px; border-radius: 12px; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .size-label { font-size: 9px; color: #444; }
+
+  /* 7A styles */
+  .a-main { font-size: 30px; font-weight: 900; letter-spacing: -1.5px; color: #fff; }
+  .a-main span { color: #E8683A; }
+  .a-sub { font-size: 9px; font-weight: 600; letter-spacing: 3px; color: #555; text-transform: uppercase; margin-top: 4px; }
+
+  .a-main-med { font-size: 20px; font-weight: 900; letter-spacing: -1px; color: #fff; }
+  .a-main-med span { color: #E8683A; }
+  .a-sub-med { font-size: 7px; font-weight: 600; letter-spacing: 2px; color: #444; text-transform: uppercase; margin-top: 3px; }
+
+  .a-main-sm { font-size: 14px; font-weight: 900; letter-spacing: -0.5px; color: #fff; }
+  .a-main-sm span { color: #E8683A; }
+  .a-sub-sm { font-size: 5px; font-weight: 600; letter-spacing: 1.5px; color: #444; text-transform: uppercase; margin-top: 2px; }
+
+  /* 7B styles */
+  .b-main { font-size: 26px; font-weight: 900; letter-spacing: 1px;
+    background: linear-gradient(90deg, #E8683A, #B64A24, #666);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .b-line { width: 48px; height: 3.5px; border-radius: 2px; background: linear-gradient(90deg, #E8683A, #B64A24); margin-top: 7px; }
+
+  .b-main-med { font-size: 17px; font-weight: 900; letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #E8683A, #B64A24, #666);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .b-line-med { width: 32px; height: 2.5px; border-radius: 1.5px; background: linear-gradient(90deg, #E8683A, #B64A24); margin-top: 5px; }
+
+  .b-main-sm { font-size: 11px; font-weight: 900; letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #E8683A, #B64A24, #666);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .b-line-sm { width: 20px; height: 2px; border-radius: 1px; background: linear-gradient(90deg, #E8683A, #B64A24); margin-top: 4px; }
+
+  /* phone sim */
+  .phones { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px; }
+  .phone { background: #000; border-radius: 30px; padding: 20px 12px 30px; border: 1px solid #222; }
+  .ph-title { font-size: 10px; color: #E8683A; font-weight: 700; letter-spacing: 1px; text-align: center; margin-bottom: 16px; }
+  .phone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .ph { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .ph-ic { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; }
+  .ph-t { font-size: 8px; color: rgba(255,255,255,0.7); }
+  .f1 { background: linear-gradient(135deg,#007AFF,#00A2FF); }
+  .f2 { background: linear-gradient(135deg,#34C759,#00B45A); }
+  .f3 { background: linear-gradient(135deg,#FF9500,#FF6D00); }
+  .f4 { background: linear-gradient(135deg,#FF2D55,#FF0A54); }
+  .f5 { background: linear-gradient(135deg,#5856D6,#8E44AD); }
+  .f6 { background: linear-gradient(135deg,#636366,#3A3A3C); }
+
+  /* app header mock */
+  .app-mocks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px; }
+  .app-header { background: #fff; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; }
+  .app-label { font-size: 10px; color: #E8683A; font-weight: 700; letter-spacing: 1px; text-align: center; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- SIZES COMPARISON -->
+<div class="section">Comparación 7A vs 7B — todos los tamaños</div>
+<div class="compare">
+
+  <!-- 7A -->
+  <div class="col">
+    <div class="col-label">7A</div>
+    <div class="sz-big">
+      <div class="a-main"><span>O</span>fix</div>
+      <div class="a-sub">servicios</div>
+    </div>
+    <div class="size-label">120px</div>
+    <div class="sz-med">
+      <div class="a-main-med"><span>O</span>fix</div>
+      <div class="a-sub-med">servicios</div>
+    </div>
+    <div class="size-label">76px</div>
+    <div class="sz-sm">
+      <div class="a-main-sm"><span>O</span>fix</div>
+      <div class="a-sub-sm">srv</div>
+    </div>
+    <div class="size-label">54px</div>
+    <div class="col-desc">O naranja + fix blanco<br>subtítulo "servicios"</div>
+  </div>
+
+  <!-- 7B -->
+  <div class="col">
+    <div class="col-label">7B</div>
+    <div class="sz-big">
+      <div class="b-main">OFIX</div>
+      <div class="b-line"></div>
+    </div>
+    <div class="size-label">120px</div>
+    <div class="sz-med">
+      <div class="b-main-med">OFIX</div>
+      <div class="b-line-med"></div>
+    </div>
+    <div class="size-label">76px</div>
+    <div class="sz-sm">
+      <div class="b-main-sm">OFIX</div>
+      <div class="b-line-sm"></div>
+    </div>
+    <div class="size-label">54px</div>
+    <div class="col-desc">OFIX degradado<br>línea naranja</div>
+  </div>
+
+</div>
+
+<div class="sep"></div>
+
+<!-- APP HEADER CONTEXT -->
+<div class="section">Cómo se ve en el header de la app</div>
+<div class="app-mocks">
+  <div>
+    <div class="app-label">7A</div>
+    <div class="app-header">
+      <div style="font-size:22px;font-weight:900;letter-spacing:-1px;color:#111">
+        <span style="color:#E8683A">O</span>fix
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="app-label">7B</div>
+    <div class="app-header">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <div style="font-size:20px;font-weight:900;letter-spacing:0.5px;background:linear-gradient(90deg,#E8683A,#B64A24,#333);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">OFIX</div>
+        <div style="width:36px;height:2.5px;border-radius:1.5px;background:linear-gradient(90deg,#E8683A,#B64A24)"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- PHONE SIMULATION -->
+<div class="section">En el escritorio del teléfono</div>
+<div class="phones">
+
+  <!-- Phone 7A -->
+  <div class="phone">
+    <div class="ph-title">7A</div>
+    <div class="phone-grid">
+      <div class="ph"><div class="ph-ic f1"></div><div class="ph-t">Maps</div></div>
+      <div class="ph"><div class="ph-ic f2"></div><div class="ph-t">Pay</div></div>
+      <div class="ph">
+        <div class="ph-ic" style="background:#111;border-radius:12px">
+          <div style="font-size:16px;font-weight:900;letter-spacing:-0.8px;color:#fff;line-height:1.1"><span style="color:#E8683A">O</span>fix</div>
+          <div style="font-size:5px;font-weight:700;letter-spacing:1.5px;color:#555;text-transform:uppercase">SERV.</div>
+        </div>
+        <div class="ph-t">Ofix</div>
+      </div>
+      <div class="ph"><div class="ph-ic f3"></div><div class="ph-t">Music</div></div>
+      <div class="ph"><div class="ph-ic f4"></div><div class="ph-t">Cam</div></div>
+      <div class="ph"><div class="ph-ic f5"></div><div class="ph-t">Store</div></div>
+    </div>
+  </div>
+
+  <!-- Phone 7B -->
+  <div class="phone">
+    <div class="ph-title">7B</div>
+    <div class="phone-grid">
+      <div class="ph"><div class="ph-ic f1"></div><div class="ph-t">Maps</div></div>
+      <div class="ph"><div class="ph-ic f2"></div><div class="ph-t">Pay</div></div>
+      <div class="ph">
+        <div class="ph-ic" style="background:#111;border-radius:12px;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:900;letter-spacing:0.5px;background:linear-gradient(90deg,#E8683A,#B64A24,#666);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">OFIX</div>
+          <div style="width:22px;height:2px;border-radius:1px;background:linear-gradient(90deg,#E8683A,#B64A24)"></div>
+        </div>
+        <div class="ph-t">Ofix</div>
+      </div>
+      <div class="ph"><div class="ph-ic f3"></div><div class="ph-t">Music</div></div>
+      <div class="ph"><div class="ph-ic f4"></div><div class="ph-t">Cam</div></div>
+      <div class="ph"><div class="ph-ic f5"></div><div class="ph-t">Store</div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-//#region node_modules/.pnpm/zustand@5.0.14_@types+react@19.2.17_react@19.2.7/node_modules/zustand/esm/middleware.mjs
+//#region node_modules/zustand/esm/middleware.mjs
 var reduxImpl = (reducer, initial) => (set, _get, api) => {
 	api.dispatch = (action) => {
 		set((state) => reducer(state, action), false, action);

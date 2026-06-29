@@ -1,4 +1,4 @@
-//#region node_modules/.pnpm/tslib@2.8.1/node_modules/tslib/tslib.es6.mjs
+//#region node_modules/tslib/tslib.es6.mjs
 function __rest(s, e) {
 	var t = {};
 	for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
@@ -35,13 +35,13 @@ function __awaiter$1(thisArg, _arguments, P, generator) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+functions-js@2.108.1/node_modules/@supabase/functions-js/dist/module/helper.js
+//#region node_modules/@supabase/functions-js/dist/module/helper.js
 var resolveFetch$3 = (customFetch) => {
 	if (customFetch) return (...args) => customFetch(...args);
 	return (...args) => fetch(...args);
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+functions-js@2.108.1/node_modules/@supabase/functions-js/dist/module/types.js
+//#region node_modules/@supabase/functions-js/dist/module/types.js
 /**
 * Base error for Supabase Edge Function invocations.
 *
@@ -132,7 +132,7 @@ var FunctionRegion;
 	FunctionRegion["UsWest2"] = "us-west-2";
 })(FunctionRegion || (FunctionRegion = {}));
 //#endregion
-//#region node_modules/.pnpm/@supabase+functions-js@2.108.1/node_modules/@supabase/functions-js/dist/module/FunctionsClient.js
+//#region node_modules/@supabase/functions-js/dist/module/FunctionsClient.js
 /**
 * Client for invoking Supabase Edge Functions.
 */
@@ -379,7 +379,7 @@ var FunctionsClient = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+postgrest-js@2.108.1/node_modules/@supabase/postgrest-js/dist/index.mjs
+//#region node_modules/@supabase/postgrest-js/dist/index.mjs
 /**
 * Default number of retry attempts.
 */
@@ -540,7 +540,6 @@ var PostgrestBuilder = class {
 	* {@link https://github.com/supabase/supabase-js/issues/92}
 	*
 	* @category Database
-	* @subcategory Using modifiers
 	*/
 	throwOnError() {
 		this.shouldThrowOnError = true;
@@ -602,20 +601,9 @@ var PostgrestBuilder = class {
 		return this;
 	}
 	/**
-	* Set an HTTP header on this single PostgREST request, overriding any header
-	* with the same name set on the client.
-	*
-	* This is an advanced escape hatch for one-off needs (passing a custom
-	* `Authorization` for a single query, attaching a tracing header, etc.).
-	* Most callers do not need it: configure client-wide headers via the
-	* `headers` option when constructing the client, and authentication via
-	* Supabase Auth.
-	*
-	* @param name - HTTP header name
-	* @param value - HTTP header value
+	* Set an HTTP header for the request.
 	*
 	* @category Database
-	* @subcategory Using modifiers
 	*/
 	setHeader(name, value) {
 		this.headers = new Headers(this.headers);
@@ -624,7 +612,6 @@ var PostgrestBuilder = class {
 	}
 	/**
 	* @category Database
-	* @subcategory Using modifiers
 	*
 	* Configure retry behavior for this request.
 	*
@@ -661,16 +648,13 @@ var PostgrestBuilder = class {
 		const executeWithRetry = async () => {
 			let attemptCount = 0;
 			while (true) {
-				const headers = {};
-				_this.headers.forEach((value, key) => {
-					headers[key] = value;
-				});
-				if (attemptCount > 0) headers["X-Retry-Count"] = String(attemptCount);
+				const requestHeaders = new Headers(_this.headers);
+				if (attemptCount > 0) requestHeaders.set("X-Retry-Count", String(attemptCount));
 				let res$1;
 				try {
 					res$1 = await _fetch(_this.url.toString(), {
 						method: _this.method,
-						headers,
+						headers: requestHeaders,
 						body: JSON.stringify(_this.body, (_, value) => typeof value === "bigint" ? value.toString() : value),
 						signal: _this.signal
 					});
@@ -822,7 +806,6 @@ var PostgrestBuilder = class {
 	* @deprecated Use overrideTypes<yourType, { merge: false }>() method at the end of your call chain instead
 	*
 	* @category Database
-	* @subcategory Using modifiers
 	*/
 	returns() {
 		/* istanbul ignore next */
@@ -927,9 +910,6 @@ var PostgrestBuilder = class {
 	}
 };
 var PostgrestTransformBuilder = class extends PostgrestBuilder {
-	throwOnError() {
-		return super.throwOnError();
-	}
 	/**
 	* Perform a SELECT on the query result.
 	*
@@ -1182,9 +1162,9 @@ var PostgrestTransformBuilder = class extends PostgrestBuilder {
 		return this;
 	}
 	/**
-	* Limit the query result by `rows`.
+	* Limit the query result by `count`.
 	*
-	* @param rows - The maximum number of rows to return
+	* @param count - The maximum number of rows to return
 	* @param options - Named parameters
 	* @param options.referencedTable - Set this to limit rows of referenced
 	* tables instead of the parent table
@@ -1281,9 +1261,9 @@ var PostgrestTransformBuilder = class extends PostgrestBuilder {
 	* }
 	* ```
 	*/
-	limit(rows, { foreignTable, referencedTable = foreignTable } = {}) {
+	limit(count, { foreignTable, referencedTable = foreignTable } = {}) {
 		const key = typeof referencedTable === "undefined" ? "limit" : `${referencedTable}.limit`;
-		this.url.searchParams.set(key, `${rows}`);
+		this.url.searchParams.set(key, `${count}`);
 		return this;
 	}
 	/**
@@ -1554,7 +1534,6 @@ var PostgrestTransformBuilder = class extends PostgrestBuilder {
 	* Return `data` as an object in [GeoJSON](https://geojson.org) format.
 	*
 	* @category Database
-	* @subcategory Using modifiers
 	*/
 	geojson() {
 		this.headers.set("Accept", "application/geo+json");
@@ -1671,33 +1650,11 @@ var PostgrestTransformBuilder = class extends PostgrestBuilder {
 		else return this;
 	}
 	/**
-	* Dry-run this request: execute the query but discard the changes.
+	* Rollback the query.
 	*
-	* Server-side, PostgREST runs the query inside a transaction and rolls it back
-	* instead of committing. The response still contains the data that *would* have
-	* been returned — `RETURNING` clauses execute and RLS, triggers, and constraints
-	* are all evaluated — but no row is actually inserted, updated, or deleted.
-	*
-	* This affects only the single request it is chained to. The JS caller has no
-	* handle on the transaction: supabase-js does not group multiple queries into
-	* one transaction. For multi-statement transactional logic, use a database
-	* function (`supabase.rpc(...)`).
-	*
-	* Sets the `Prefer: tx=rollback` header. See PostgREST's docs on transaction
-	* preferences for the underlying mechanism.
+	* `data` will still be returned, but the query is not committed.
 	*
 	* @category Database
-	* @subcategory Using modifiers
-	*
-	* @example Validate an insert without persisting
-	* ```ts
-	* const { data, error } = await supabase
-	*   .from('countries')
-	*   .insert({ name: 'France' })
-	*   .select()
-	*   .rollback()
-	* // `data` shows what would have been inserted; nothing is saved.
-	* ```
 	*/
 	rollback() {
 		this.headers.append("Prefer", "tx=rollback");
@@ -1749,22 +1706,18 @@ var PostgrestTransformBuilder = class extends PostgrestBuilder {
 	* Set the maximum number of rows that can be affected by the query.
 	* Only available in PostgREST v13+ and only works with PATCH and DELETE methods.
 	*
-	* @param rows - The maximum number of rows that can be affected
+	* @param value - The maximum number of rows that can be affected
 	*
 	* @category Database
-	* @subcategory Using modifiers
 	*/
-	maxAffected(rows) {
+	maxAffected(value) {
 		this.headers.append("Prefer", "handling=strict");
-		this.headers.append("Prefer", `max-affected=${rows}`);
+		this.headers.append("Prefer", `max-affected=${value}`);
 		return this;
 	}
 };
 var PostgrestReservedCharsRegexp = /* @__PURE__ */ new RegExp("[,()]");
 var PostgrestFilterBuilder = class extends PostgrestTransformBuilder {
-	throwOnError() {
-		return super.throwOnError();
-	}
 	/**
 	* Match only rows where `column` is equal to `value`.
 	*
@@ -5492,7 +5445,7 @@ var PostgrestClient = class PostgrestClient {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/lib/websocket-factory.js
+//#region node_modules/@supabase/realtime-js/dist/module/lib/websocket-factory.js
 /**
 * Utilities for creating WebSocket instances across runtimes.
 */
@@ -5602,8 +5555,8 @@ var WebSocketFactory = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/lib/constants.js
-var DEFAULT_VERSION = `realtime-js/2.108.1`;
+//#region node_modules/@supabase/realtime-js/dist/module/lib/constants.js
+var DEFAULT_VERSION = `realtime-js/2.107.0`;
 var VSN_1_0_0 = "1.0.0";
 var VSN_2_0_0 = "2.0.0";
 var DEFAULT_VSN$1 = VSN_2_0_0;
@@ -5630,7 +5583,7 @@ var CONNECTION_STATE = {
 	closed: "closed"
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/lib/serializer.js
+//#region node_modules/@supabase/realtime-js/dist/module/lib/serializer.js
 var Serializer = class {
 	constructor(allowedMetadataKeys) {
 		this.HEADER_LENGTH = 1;
@@ -5766,7 +5719,7 @@ var Serializer = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/lib/transformers.js
+//#region node_modules/@supabase/realtime-js/dist/module/lib/transformers.js
 /**
 * Helpers to convert the change Payload into native JS types.
 */
@@ -5953,7 +5906,7 @@ var httpEndpointURL = (socketUrl) => {
 	return wsUrl.href;
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+phoenix@0.4.2/node_modules/@supabase/phoenix/priv/static/phoenix.mjs
+//#region node_modules/@supabase/phoenix/priv/static/phoenix.mjs
 var closure = (value) => {
 	if (typeof value === "function") return value;
 	else {
@@ -7618,7 +7571,7 @@ var Socket = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/phoenix/presenceAdapter.js
+//#region node_modules/@supabase/realtime-js/dist/module/phoenix/presenceAdapter.js
 var PresenceAdapter = class PresenceAdapter {
 	constructor(channel, opts) {
 		const phoenixOptions = phoenixPresenceOptions(opts);
@@ -7704,7 +7657,7 @@ function parseCurrentPresences(currentPresences) {
 	return (currentPresences === null || currentPresences === void 0 ? void 0 : currentPresences.metas) ? transformState(currentPresences) : [];
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/RealtimePresence.js
+//#region node_modules/@supabase/realtime-js/dist/module/RealtimePresence.js
 var REALTIME_PRESENCE_LISTEN_EVENTS;
 (function(REALTIME_PRESENCE_LISTEN_EVENTS) {
 	REALTIME_PRESENCE_LISTEN_EVENTS["SYNC"] = "sync";
@@ -7738,7 +7691,7 @@ var RealtimePresence = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/lib/normalizeChannelError.js
+//#region node_modules/@supabase/realtime-js/dist/module/lib/normalizeChannelError.js
 /**
 * Normalize the various shapes a channel error reason can take into a real `Error`.
 *
@@ -7761,7 +7714,7 @@ function normalizeChannelError(reason) {
 	return /* @__PURE__ */ new Error("channel error: connection lost");
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/phoenix/channelAdapter.js
+//#region node_modules/@supabase/realtime-js/dist/module/phoenix/channelAdapter.js
 var ChannelAdapter = class {
 	constructor(socket, topic, params) {
 		const phoenixParams = phoenixChannelParams(params);
@@ -7864,7 +7817,7 @@ function phoenixChannelParams(options) {
 	}, options.config) };
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/RealtimeChannel.js
+//#region node_modules/@supabase/realtime-js/dist/module/RealtimeChannel.js
 var REALTIME_POSTGRES_CHANGES_LISTEN_EVENT;
 (function(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT) {
 	REALTIME_POSTGRES_CHANGES_LISTEN_EVENT["ALL"] = "*";
@@ -8522,7 +8475,7 @@ var RealtimeChannel = class RealtimeChannel {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/phoenix/socketAdapter.js
+//#region node_modules/@supabase/realtime-js/dist/module/phoenix/socketAdapter.js
 var SocketAdapter = class {
 	constructor(endPoint, options) {
 		this.socket = new Socket(endPoint, options);
@@ -8631,7 +8584,7 @@ var SocketAdapter = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+realtime-js@2.108.1/node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js
+//#region node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js
 var CONNECTION_TIMEOUTS = {
 	HEARTBEAT_INTERVAL: 25e3,
 	RECONNECT_DELAY: 10,
@@ -9236,7 +9189,7 @@ Option 2: Install and provide the "ws" package:
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/iceberg-js@0.8.1/node_modules/iceberg-js/dist/index.mjs
+//#region node_modules/iceberg-js/dist/index.mjs
 var IcebergError = class extends Error {
 	constructor(message, opts) {
 		super(message);
@@ -9733,7 +9686,7 @@ var IcebergRestCatalog = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+storage-js@2.108.1/node_modules/@supabase/storage-js/dist/index.mjs
+//#region node_modules/@supabase/storage-js/dist/index.mjs
 function _typeof$1(o) {
 	"@babel/helpers - typeof";
 	return _typeof$1 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o$1) {
@@ -11181,7 +11134,7 @@ var StorageFileApi = class extends BaseApiClient {
 		return query;
 	}
 };
-var DEFAULT_HEADERS$1 = { "X-Client-Info": `storage-js/2.108.1` };
+var DEFAULT_HEADERS$1 = { "X-Client-Info": `storage-js/2.107.0` };
 var StorageBucketApi = class extends BaseApiClient {
 	constructor(url, headers = {}, fetch$1, opts) {
 		const baseUrl = new URL(url);
@@ -12615,10 +12568,10 @@ var StorageClient = class extends StorageBucketApi {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/version.js
-var version$1 = "2.108.1";
+//#region node_modules/@supabase/auth-js/dist/module/lib/version.js
+var version$1 = "2.107.0";
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/constants.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/constants.js
 /** Current session will be checked for refresh at this interval. */
 var AUTO_REFRESH_TICK_DURATION_MS = 30 * 1e3;
 var EXPIRY_MARGIN_MS = 3 * AUTO_REFRESH_TICK_DURATION_MS;
@@ -12632,7 +12585,7 @@ var API_VERSIONS = { "2024-01-01": {
 } };
 var BASE64URL_REGEX = /^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}$|[a-z0-9_-]{2}$)$/i;
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/errors.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/errors.js
 /**
 * Base error thrown by Supabase Auth helpers.
 *
@@ -12925,7 +12878,7 @@ var AuthInvalidJwtError = class extends CustomAuthError {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/base64url.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/base64url.js
 /**
 * Avoid modifying this file. It's part of
 * https://github.com/supabase-community/base64url-js.  Submit all fixes on
@@ -13129,7 +13082,7 @@ function bytesToBase64URL(bytes) {
 	return result.join("");
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/helpers.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/helpers.js
 function expiresAt(expiresIn) {
 	return Math.round(Date.now() / 1e3) + expiresIn;
 }
@@ -13397,7 +13350,7 @@ function deepClone(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/fetch.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/fetch.js
 var _getErrorMessage = (err) => {
 	if (typeof err === "object" && err !== null) {
 		const e = err;
@@ -13550,14 +13503,14 @@ function hasSession(data) {
 	return !!data.access_token && !!data.refresh_token && !!data.expires_in;
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/types.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/types.js
 var SIGN_OUT_SCOPES = [
 	"global",
 	"local",
 	"others"
 ];
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/GoTrueAdminApi.js
+//#region node_modules/@supabase/auth-js/dist/module/GoTrueAdminApi.js
 var GoTrueAdminApi = class {
 	/**
 	* Creates an admin API client that can be used to manage users and OAuth clients.
@@ -14713,7 +14666,7 @@ var GoTrueAdminApi = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/local-storage.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/local-storage.js
 /**
 * Returns a localStorage-like object that stores the key-value pairs in
 * memory.
@@ -14732,7 +14685,7 @@ function memoryLocalStorageAdapter(store = {}) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/locks.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/locks.js
 /**
 * Lock primitives retained for backwards-compatible imports. The auth client
 * coordinates refreshes itself (deduping in-instance callers onto a shared
@@ -14943,7 +14896,7 @@ async function processLock(name, acquireTimeout, fn) {
 	return await currentOperation;
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/polyfills.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/polyfills.js
 /**
 * https://mathiasbynens.be/notes/globalthis
 */
@@ -14963,7 +14916,7 @@ function polyfillGlobalThis() {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/web3/ethereum.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/web3/ethereum.js
 function getAddress(address) {
 	if (!/^0x[a-fA-F0-9]{40}$/.test(address)) throw new Error(`@supabase/auth-js: Address "${address}" is invalid.`);
 	return address.toLowerCase();
@@ -15004,7 +14957,7 @@ function createSiweMessage(parameters) {
 	return `${prefix}\n${suffix}`;
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/webauthn.errors.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/webauthn.errors.js
 /**
 * A custom Error used to return a more nuanced error detailing _why_ one of the eight documented
 * errors in the spec was raised after calling `navigator.credentials.create()` or
@@ -15195,7 +15148,7 @@ function identifyAuthenticationError({ error, options }) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/lib/webauthn.js
+//#region node_modules/@supabase/auth-js/dist/module/lib/webauthn.js
 /**
 * WebAuthn abort service to manage ceremony cancellation.
 * Ensures only one WebAuthn ceremony is active at a time to prevent "operation already in progress" errors.
@@ -15802,7 +15755,7 @@ var WebAuthnApi = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/GoTrueClient.js
+//#region node_modules/@supabase/auth-js/dist/module/GoTrueClient.js
 polyfillGlobalThis();
 var DEFAULT_OPTIONS = {
 	url: GOTRUE_URL,
@@ -16025,20 +15978,9 @@ var GoTrueClient = class GoTrueClient {
 		return this;
 	}
 	/**
-	* Initialize the auth client by loading the session from storage or
-	* detecting it from the URL after an OAuth, magic-link, or password-recovery
-	* redirect.
-	*
-	* **Most callers do not need to invoke this directly.** The client calls it
-	* automatically during construction, and to react to sign-in events (including
-	* post-redirect events) you should subscribe to `onAuthStateChange` rather
-	* than awaiting `initialize()`.
-	*
-	* You only need to call it manually when you have opted out of the automatic
-	* call by passing `skipAutoInitialize: true` — for example, in an SSR context
-	* where you need to control initialization timing. In that case, awaiting
-	* `initialize()` returns the resolved session result (or any error encountered
-	* while detecting it from the URL).
+	* Initializes the client session either from the url or from storage.
+	* This method is automatically called when instantiating the client, but should also be called
+	* manually when checking for an error from an auth redirect (oauth, magiclink, password recovery, etc).
 	*
 	* @category Auth
 	*/
@@ -17900,21 +17842,15 @@ var GoTrueClient = class GoTrueClient {
 			const endpoint = `${this.url}/resend`;
 			if ("email" in credentials) {
 				const { email, type, options } = credentials;
-				let codeChallenge = null;
-				let codeChallengeMethod = null;
-				if (this.flowType === "pkce") [codeChallenge, codeChallengeMethod] = await getCodeChallengeAndMethod(this.storage, this.storageKey);
 				const { error } = await _request(this.fetch, "POST", endpoint, {
 					headers: this.headers,
 					body: {
 						email,
 						type,
-						gotrue_meta_security: { captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken },
-						code_challenge: codeChallenge,
-						code_challenge_method: codeChallengeMethod
+						gotrue_meta_security: { captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken }
 					},
 					redirectTo: options === null || options === void 0 ? void 0 : options.emailRedirectTo
 				});
-				if (error) await removeItemAsync(this.storage, `${this.storageKey}-code-verifier`);
 				return this._returnResult({
 					data: {
 						user: null,
@@ -17943,7 +17879,6 @@ var GoTrueClient = class GoTrueClient {
 			}
 			throw new AuthInvalidCredentialsError("You must provide either an email or phone number and a type");
 		} catch (error) {
-			await removeItemAsync(this.storage, `${this.storageKey}-code-verifier`);
 			if (isAuthError(error)) return this._returnResult({
 				data: {
 					user: null,
@@ -19607,7 +19542,7 @@ var GoTrueClient = class GoTrueClient {
 					const { error } = await this._callRefreshToken(currentSession.refresh_token);
 					if (error) if (isAuthRefreshDiscardedError(error)) this._debug(debugName, "refresh discarded by commit guard", error);
 					else {
-						this._debug(debugName, "refresh failed", error);
+						console.error(error);
 						if (!isAuthRetryableFetchError(error)) {
 							this._debug(debugName, "refresh failed with a non-retryable error, removing the session", error);
 							await this._removeSession();
@@ -20960,14 +20895,14 @@ var GoTrueClient = class GoTrueClient {
 };
 GoTrueClient.nextInstanceID = {};
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/AuthAdminApi.js
+//#region node_modules/@supabase/auth-js/dist/module/AuthAdminApi.js
 var AuthAdminApi = GoTrueAdminApi;
 //#endregion
-//#region node_modules/.pnpm/@supabase+auth-js@2.108.1/node_modules/@supabase/auth-js/dist/module/AuthClient.js
+//#region node_modules/@supabase/auth-js/dist/module/AuthClient.js
 var AuthClient = GoTrueClient;
 //#endregion
-//#region node_modules/.pnpm/@supabase+supabase-js@2.108.1/node_modules/@supabase/supabase-js/dist/index.mjs
-var version = "2.108.1";
+//#region node_modules/@supabase/supabase-js/dist/index.mjs
+var version = "2.107.0";
 var JS_ENV = "";
 var JS_RUNTIME_VERSION;
 if (typeof Deno !== "undefined") {

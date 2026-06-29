@@ -1,9 +1,9 @@
-import { i as __toESM, n as __commonJSMin, t as require_react } from "./react-D8g6Ew7f.js";
+import { i as __toESM, n as __commonJSMin, t as require_react } from "./react-CZunmVaX.js";
 import { t as require_react_dom } from "./react-dom.js";
-//#region node_modules/.pnpm/react-router@7.17.0_react-dom@19.2.7_react@19.2.7__react@19.2.7/node_modules/react-router/dist/development/chunk-6CSD65Y2.mjs
+//#region node_modules/react-router/dist/development/chunk-QUQL4437.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 /**
-* react-router v7.17.0
+* react-router v7.16.0
 *
 * Copyright (c) Remix Software Inc.
 *
@@ -7090,7 +7090,7 @@ function BoundaryShell({ title, renderScripts, isOutsideRemixApp, children }) {
 }
 var isBrowser2 = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
 try {
-	if (isBrowser2) window.__reactRouterVersion = "7.17.0";
+	if (isBrowser2) window.__reactRouterVersion = "7.16.0";
 } catch (e) {}
 function createBrowserRouter(routes, opts) {
 	return createRouter({
@@ -7925,7 +7925,7 @@ function encodeLocation(to) {
 }
 var ABSOLUTE_URL_REGEX3 = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 //#endregion
-//#region node_modules/.pnpm/cookie@1.1.1/node_modules/cookie/dist/index.js
+//#region node_modules/cookie/dist/index.js
 var require_dist = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.parse = parseCookie;
@@ -8132,7 +8132,7 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 }));
 //#endregion
-//#region node_modules/.pnpm/set-cookie-parser@2.7.2/node_modules/set-cookie-parser/lib/set-cookie.js
+//#region node_modules/set-cookie-parser/lib/set-cookie.js
 var require_set_cookie = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var defaultParseOptions = {
 		decodeValues: true,
@@ -8266,9 +8266,9 @@ var require_set_cookie = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports.splitCookiesString = splitCookiesString;
 }));
 //#endregion
-//#region node_modules/.pnpm/react-router@7.17.0_react-dom@19.2.7_react@19.2.7__react@19.2.7/node_modules/react-router/dist/development/chunk-ASILSGTR.mjs
+//#region node_modules/react-router/dist/development/chunk-S54KXAEJ.mjs
 /**
-* react-router v7.17.0
+* react-router v7.16.0
 *
 * Copyright (c) Remix Software Inc.
 *
@@ -10016,9 +10016,9 @@ function getHydrationData({ state, routes, getRouteInfo, location, basename, isS
 	return hydrationData;
 }
 //#endregion
-//#region node_modules/.pnpm/react-router@7.17.0_react-dom@19.2.7_react@19.2.7__react@19.2.7/node_modules/react-router/dist/development/dom-export.mjs
+//#region node_modules/react-router/dist/development/dom-export.mjs
 /**
-* react-router v7.17.0
+* react-router v7.16.0
 *
 * Copyright (c) Remix Software Inc.
 *
@@ -10160,9 +10160,9 @@ function HydratedRouter(props) {
 	}))), /* @__PURE__ */ import_react.createElement(import_react.Fragment, null));
 }
 //#endregion
-//#region node_modules/.pnpm/react-router-dom@7.17.0_react-dom@19.2.7_react@19.2.7__react@19.2.7/node_modules/react-router-dom/dist/index.mjs
+//#region node_modules/react-router-dom/dist/index.mjs
 /**
-* react-router-dom v7.17.0
+* react-router-dom v7.16.0
 *
 * Copyright (c) Remix Software Inc.
 *

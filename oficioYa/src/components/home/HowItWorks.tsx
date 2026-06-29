@@ -33,7 +33,7 @@ export function HowItWorks() {
             👋 Bienvenido
           </p>
           <h3 className="text-base font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
-            ¿Cómo funciona Ofix?
+            ¿Cómo funciona OFIX?
           </h3>
         </div>
       </motion.div>
@@ -54,7 +54,7 @@ export function HowItWorks() {
           {
             n: 3,
             title: 'Chateá y coordiná dentro de la app',
-            desc: 'Hablá directamente con el profesional, enviá mensajes y coordiná fecha, precio y detalles sin salir de Ofix.',
+            desc: 'Hablá directamente con el profesional, enviá mensajes y coordiná fecha, precio y detalles sin salir de OFIX.',
           },
         ].map((step) => (
           <motion.div key={step.n} variants={fadeUp} className="flex items-start gap-3">
