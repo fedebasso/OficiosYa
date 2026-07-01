@@ -1,10 +1,12 @@
 // src/pages/Home.tsx
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { Search } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { BrandLogo } from '../components/common/BrandLogo'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
 import { HowItWorks } from '../components/home/HowItWorks'
+import { CategoryIcons } from '../components/home/CategoryIcons'
 import { TicketEntryCard } from '../components/ticket/TicketEntryCard'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
 import { TopRated } from '../components/home/TopRated'
@@ -31,17 +33,17 @@ export default function Home() {
         <button
           type="button"
           onClick={() => navigate('/buscar')}
-          className="w-full flex items-center gap-3 active:opacity-80 transition-opacity"
+          className="w-full flex items-center gap-2.5 active:opacity-80 transition-opacity"
           style={{
-            height: 44,
-            background: '#F5F0E8',
-            border: '1.5px solid #EDE8DE',
-            borderRadius: 14,
+            height: 48,
+            background: '#F6F1EA',
+            border: '1.5px solid #ECE4D8',
+            borderRadius: 15,
             padding: '0 14px',
           }}
         >
-          <span style={{ fontSize: 15 }}>🔍</span>
-          <span style={{ fontSize: 'var(--text-sm)', color: '#BBBBBB' }}>
+          <Search size={19} strokeWidth={2.3} style={{ color: '#C2B8A6' }} />
+          <span style={{ fontSize: 15, color: '#B0A594', fontWeight: 500 }}>
             ¿Qué servicio necesitás?
           </span>
         </button>
@@ -52,6 +54,7 @@ export default function Home() {
   return (
     <PageShell header={homeHeader} showBottomNav>
       <div className="flex flex-col gap-4 pt-4 pb-4">
+        <CategoryIcons />
         <HowItWorks />
         <TopRated />
         <TicketEntryCard />
