@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import { Heart, MapPin, Star, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
@@ -15,7 +16,7 @@ const CARD_SHADOW = '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,
 export function ProfessionalCard({ professional, onClick }: Props) {
   const { profiles, avg_rating, zone, jobs_count, categories, id, verified } = professional
   const { label, avatarGradient, accent } = getCategoryMeta(categories[0] ?? '')
-  const CatIcon = getCategoryIcon(categories[0] ?? '')
+  const catIcon = getCategoryIcon(categories[0] ?? '')
   const initials = getInitials(profiles.full_name)
   const { toggle, isFavorite } = useFavoritesStore()
   const favorite = isFavorite(id)
@@ -71,7 +72,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
             {profiles.full_name}
           </div>
           <div className="flex items-center gap-1.5" style={{ marginTop: 5, color: '#7A6E5E', fontSize: 12.5, fontWeight: 700 }}>
-            <CatIcon size={14} style={{ color: '#D4571F' }} />
+            {createElement(catIcon, { size: 14, style: { color: '#D4571F' } })}
             {label}
           </div>
         </div>
