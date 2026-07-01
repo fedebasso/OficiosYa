@@ -33,9 +33,9 @@ export function ReviewCard({ review }: Props) {
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold truncate" style={{ color: '#111' }}>{name}</p>
           <div className="flex items-center gap-2 mt-0.5">
-            <span style={{ fontSize: 11 }}>
+            <span style={{ fontSize: 11 }} role="img" aria-label={`${review.rating} de 5 estrellas`}>
               {[1,2,3,4,5].map(i => (
-                <span key={i} style={{ color: i <= review.rating ? '#f59e0b' : '#ddd' }}>★</span>
+                <span key={i} aria-hidden="true" style={{ color: i <= review.rating ? '#f59e0b' : '#ddd' }}>★</span>
               ))}
             </span>
             <span className="text-[10px]" style={{ color: '#999' }}>{timeAgo(review.created_at)}</span>

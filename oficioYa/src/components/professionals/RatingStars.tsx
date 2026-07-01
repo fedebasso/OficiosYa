@@ -12,11 +12,16 @@ export function RatingStars({ rating, size = 'md' }: Props) {
   const full = Math.round(rating)
 
   return (
-    <div className="flex items-center gap-0.5">
+    <div
+      className="flex items-center gap-0.5"
+      role="img"
+      aria-label={`Calificación ${rating.toFixed(1)} de 5`}
+    >
       {[1, 2, 3, 4, 5].map((i) => (
         <Star
           key={i}
           size={px}
+          aria-hidden="true"
           style={{ color: i <= full ? '#f59e0b' : '#333' }}
           fill={i <= full ? 'currentColor' : 'none'}
         />

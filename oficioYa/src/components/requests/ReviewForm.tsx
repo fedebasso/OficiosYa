@@ -63,6 +63,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
         <button
           type="button"
           onClick={onClose}
+          aria-label="Cerrar"
           className="w-8 h-8 rounded-full flex items-center justify-center active:opacity-60 transition-opacity"
           style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
         >
@@ -71,13 +72,16 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
       </div>
 
       {/* Estrellas */}
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-center gap-3" role="radiogroup" aria-label="Calificación">
         {[1, 2, 3, 4, 5].map((i) => {
           const active = i <= (hovered || rating)
           return (
             <button
               key={i}
               type="button"
+              role="radio"
+              aria-checked={rating === i}
+              aria-label={`${i} ${i === 1 ? 'estrella' : 'estrellas'}`}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(0)}
               onClick={() => setRating(i)}
@@ -87,6 +91,7 @@ export function ReviewForm({ requestId: _requestId, onSubmit, onClose }: Props) 
               <span
                 className="text-3xl"
                 style={{ color: active ? '#E8683A' : '#E8E0D4', transition: 'color .12s ease' }}
+                aria-hidden="true"
               >
                 ★
               </span>

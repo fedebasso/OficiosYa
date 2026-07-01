@@ -73,22 +73,25 @@ export function ReviewSheet({ requestId, clientId, professionalId, professionalN
             ¿Cómo fue el trabajo de {professionalName}?
           </h3>
         </div>
-        <button type="button" onClick={handleClose}
+        <button type="button" onClick={handleClose} aria-label="Cerrar"
           className="w-8 h-8 rounded-full flex items-center justify-center"
           style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}>
           <X size={14} style={{ color: '#555' }} />
         </button>
       </div>
 
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-center gap-3" role="radiogroup" aria-label="Calificación">
         {[1,2,3,4,5].map((i) => {
           const active = i <= (hovered || rating)
           return (
             <button key={i} type="button"
+              role="radio"
+              aria-checked={rating === i}
+              aria-label={`${i} ${i === 1 ? 'estrella' : 'estrellas'}`}
               onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(0)}
               onClick={() => setRating(i)}
               style={{ transform: active ? 'scale(1.2)' : 'scale(1)', transition: 'transform .15s ease' }}>
-              <span className="text-3xl" style={{ color: active ? '#E8683A' : '#E8E0D4', transition: 'color .12s' }}>★</span>
+              <span className="text-3xl" style={{ color: active ? '#E8683A' : '#E8E0D4', transition: 'color .12s' }} aria-hidden="true">★</span>
             </button>
           )
         })}
@@ -110,7 +113,7 @@ export function ReviewSheet({ requestId, clientId, professionalId, professionalN
         {preview ? (
           <div className="relative rounded-xl overflow-hidden" style={{ height: 140 }}>
             <img src={preview} alt="foto del trabajo" className="w-full h-full object-cover" />
-            <button type="button" onClick={() => { setPhoto(null); setPreview(null) }}
+            <button type="button" onClick={() => { setPhoto(null); setPreview(null) }} aria-label="Quitar foto"
               className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(0,0,0,0.6)' }}>
               <X size={13} color="#fff" />
