@@ -1,7 +1,7 @@
-import { Heart } from 'lucide-react'
+import { Heart, MapPin, Star, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
-import { getCategoryMeta } from '../../lib/categories'
+import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
 import { useFavoritesStore } from '../../store/favoritesStore'
 
@@ -10,9 +10,12 @@ interface Props {
   onClick: () => void
 }
 
+const CARD_SHADOW = '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,20,.14)'
+
 export function ProfessionalCard({ professional, onClick }: Props) {
-  const { profiles, avg_rating, zone, jobs_count, categories, id } = professional
-  const { label, emoji, avatarGradient, accent } = getCategoryMeta(categories[0] ?? '')
+  const { profiles, avg_rating, zone, jobs_count, categories, id, verified } = professional
+  const { label, avatarGradient, accent } = getCategoryMeta(categories[0] ?? '')
+  const CatIcon = getCategoryIcon(categories[0] ?? '')
   const initials = getInitials(profiles.full_name)
   const { toggle, isFavorite } = useFavoritesStore()
   const favorite = isFavorite(id)
@@ -23,108 +26,92 @@ export function ProfessionalCard({ professional, onClick }: Props) {
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
-      className="w-full text-left rounded-2xl overflow-hidden flex items-stretch cursor-pointer"
+      className="w-full text-left cursor-pointer"
       whileTap={{ scale: 0.98, y: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       style={{
         background: '#FFFFFF',
-        border: '1.5px solid #EDE8DE',
-        boxShadow: '0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04)',
+        border: '1px solid #ECE6DC',
+        borderRadius: 20,
+        boxShadow: CARD_SHADOW,
+        padding: 16,
       }}
     >
-      <div className="flex items-center gap-3 flex-1 min-w-0" style={{ padding: 'var(--space-3)' }}>
-
+      {/* Fila superior */}
+      <div className="flex items-center gap-3">
         {/* Avatar */}
-        <motion.div
-          initial={{ scale: 0.85, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center font-black"
+        <div
+          className="relative flex-shrink-0 rounded-2xl overflow-hidden flex items-center justify-center font-black"
           style={{
-            width: 56,
-            height: 56,
+            width: 58,
+            height: 58,
+            borderRadius: 18,
             background: profiles.avatar_url ? undefined : avatarGradient,
-            fontSize: 'var(--text-lg)',
+            boxShadow: 'inset 0 0 0 1px rgba(212,87,31,.12)',
+            fontSize: 19,
           }}
         >
-          {profiles.avatar_url ? (
-            <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
-          ) : (
-            <span style={{ color: accent }}>{initials}</span>
+          {profiles.avatar_url
+            ? <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
+            : <span style={{ color: accent }}>{initials}</span>
+          }
+          {verified && (
+            <span
+              className="absolute flex items-center justify-center"
+              style={{ bottom: -3, right: -3, width: 20, height: 20, borderRadius: '50%', background: '#22A559', border: '2.5px solid #fff' }}
+            >
+              <Check size={11} color="#fff" strokeWidth={3} />
+            </span>
           )}
-        </motion.div>
+        </div>
 
-        {/* Info */}
+        {/* Nombre + categoría */}
         <div className="flex-1 min-w-0">
-          <div className="font-bold truncate mb-1" style={{ color: '#111111', fontSize: 'var(--text-base)' }}>
+          <div className="font-extrabold truncate" style={{ color: '#1A1712', fontSize: 17, letterSpacing: '-0.3px', lineHeight: 1.1 }}>
             {profiles.full_name}
           </div>
-
-          {/* Chip de profesión */}
-          <div className="mb-1.5">
-            <span
-              className="inline-block font-bold"
-              style={{
-                background: 'rgba(232,104,58,.12)',
-                color: '#E8683A',
-                fontSize: 'var(--text-xs)',
-                padding: '2px 8px',
-                borderRadius: 6,
-              }}
-            >
-              {emoji} {label}
-            </span>
-          </div>
-
-          {/* Zona y trabajos */}
-          <div className="flex items-center gap-2" style={{ fontSize: 'var(--text-sm)' }}>
-            <span style={{ color: '#888888', fontWeight: 600 }}>📍 {zone}</span>
-            <span style={{ color: '#DDDDDD' }}>|</span>
-            <span>
-              <span style={{ color: '#333333', fontWeight: 800 }}>{jobs_count}</span>
-              <span style={{ color: '#888888', fontWeight: 500 }}> trabajos</span>
-            </span>
+          <div className="flex items-center gap-1.5" style={{ marginTop: 5, color: '#7A6E5E', fontSize: 12.5, fontWeight: 700 }}>
+            <CatIcon size={14} style={{ color: '#D4571F' }} />
+            {label}
           </div>
         </div>
 
-        {/* Rating + favorito */}
-        <div className="flex flex-col items-end justify-between flex-shrink-0 self-stretch py-0.5">
-          {/* Favorito — cuadrado redondeado */}
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); toggle(id) }}
-            aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
-            className="flex items-center justify-center active:scale-90 transition-transform"
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 10,
-              background: favorite ? '#FEF2F2' : '#F5F0E8',
-              border: `1.5px solid ${favorite ? '#FECACA' : '#E8E0D4'}`,
-              flexShrink: 0,
-            }}
-          >
-            <Heart
-              size={14}
-              style={{ color: favorite ? '#EF4444' : '#CCCCCC' }}
-              fill={favorite ? '#EF4444' : 'none'}
-            />
-          </button>
+        {/* Favorito */}
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); toggle(id) }}
+          aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+          className="flex items-center justify-center active:scale-90 transition-transform flex-shrink-0"
+          style={{ width: 34, height: 34, borderRadius: 12, background: '#FAF6F0' }}
+        >
+          <Heart size={17} style={{ color: favorite ? '#EF4444' : '#C9BFB0' }} fill={favorite ? '#EF4444' : 'none'} />
+        </button>
+      </div>
 
-          {/* Rating */}
-          {avg_rating != null ? (
-            <div className="flex items-center gap-0.5">
-              <span style={{ color: '#F59E0B', fontSize: 'var(--text-base)' }}>★</span>
-              <span className="font-black" style={{ color: '#111', fontSize: 'var(--text-base)', lineHeight: 1 }}>
-                {avg_rating.toFixed(1)}
-              </span>
-              <span style={{ color: '#999', fontSize: 10, fontWeight: 600 }}>({jobs_count})</span>
-            </div>
-          ) : (
-            <span style={{ fontSize: 10, color: '#CCC', fontWeight: 600 }}>Sin reseñas</span>
-          )}
+      {/* Divisor */}
+      <div style={{ height: 1, background: '#F0EAE0', margin: '13px 0 11px' }} />
+
+      {/* Fila inferior */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <span className="flex items-center gap-1" style={{ color: '#8A7F6E', fontSize: 13, fontWeight: 600 }}>
+            <MapPin size={14} style={{ color: '#B3A794' }} />
+            {zone}
+          </span>
+          <span style={{ color: '#B3A794', fontSize: 13 }}>
+            <b style={{ color: '#5A5142' }}>{jobs_count}</b> trabajos
+          </span>
         </div>
 
+        {avg_rating != null ? (
+          <span className="flex items-center gap-1" style={{ background: '#FFF7ED', padding: '5px 10px', borderRadius: 10 }}>
+            <Star size={14} fill="#F5A623" color="#F5A623" />
+            <span style={{ fontWeight: 800, color: '#1A1712', fontSize: 14 }}>{avg_rating.toFixed(1)}</span>
+            <span style={{ color: '#B3A794', fontSize: 11, fontWeight: 600 }}>({jobs_count})</span>
+          </span>
+        ) : (
+          <span style={{ fontSize: 11, color: '#C9BFB0', fontWeight: 600 }}>Sin reseñas</span>
+        )}
       </div>
     </motion.div>
   )
