@@ -32,12 +32,21 @@ export function TopRated() {
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="font-black text-base" style={{ color: '#111', letterSpacing: '-0.3px' }}>
-        ⭐ Mejor calificados
-      </h2>
+      <div className="flex items-baseline justify-between">
+        <h2 className="font-extrabold" style={{ color: '#1A1712', fontSize: 18, letterSpacing: '-0.4px' }}>
+          Mejor calificados
+        </h2>
+        <button
+          type="button"
+          onClick={() => navigate('/buscar')}
+          style={{ fontSize: 13, fontWeight: 700, color: '#D4571F' }}
+        >
+          Ver todos
+        </button>
+      </div>
       <div className="flex gap-3 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
         {pros.map((pro) => {
-          const { emoji, avatarGradient, accent } = getCategoryMeta(pro.categories[0] ?? '')
+          const { avatarGradient, accent } = getCategoryMeta(pro.categories[0] ?? '')
           const initials = getInitials(pro.profiles.full_name)
           return (
             <button
@@ -68,7 +77,7 @@ export function TopRated() {
                 <span style={{ color: '#F59E0B', fontSize: 11 }}>★</span>
                 <span className="text-xs font-black" style={{ color: '#111' }}>{pro.avg_rating.toFixed(1)}</span>
               </div>
-              <span className="text-[10px]" style={{ color: '#999' }}>{emoji} {pro.zone}</span>
+              <span className="text-[10px]" style={{ color: '#9C917E' }}>{pro.zone}</span>
             </button>
           )
         })}
