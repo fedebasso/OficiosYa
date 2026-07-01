@@ -66,6 +66,9 @@ export const reviewService = {
   },
 
   async refreshProfessionalRating(professionalId: string): Promise<void> {
+    // ⚠️ Antes de activar Supabase: verificar que `professionals.id` == `profiles.id`.
+    // Si no lo son, este RPC no actualiza el rating. Ver
+    // docs/superpowers/notes/2026-07-01-reviewService-id-mismatch.md
     await supabase.rpc('refresh_professional_rating', { pro_id: professionalId })
   },
 }
