@@ -1,3 +1,9 @@
+import type { LucideIcon } from 'lucide-react'
+import {
+  Zap, Droplets, Snowflake, KeyRound, Paintbrush, Hammer,
+  Sprout, Wrench, Sparkles, Package,
+} from 'lucide-react'
+
 export type CategoryKey =
   | 'electricista'
   | 'plomero'
@@ -5,6 +11,26 @@ export type CategoryKey =
   | 'cerrajero'
   | 'aire_acondicionado'
   | 'pintor'
+
+export const CATEGORY_ICON: Record<string, LucideIcon> = {
+  electricista:       Zap,
+  plomero:            Droplets,
+  aire_acondicionado: Snowflake,
+  cerrajero:          KeyRound,
+  pintor:             Paintbrush,
+  albanil:            Hammer,
+  carpintero:         Hammer,
+  jardinero:          Sprout,
+  herrero:            Wrench,
+  limpieza:           Sparkles,
+  mudanzas:           Package,
+  manitas:            Wrench,
+  otros:              Wrench,
+}
+
+export function getCategoryIcon(cat: string): LucideIcon {
+  return CATEGORY_ICON[cat] ?? Wrench
+}
 
 export const CATEGORY_LABELS: Record<string, string> = {
   electricista:       'Electricista',
