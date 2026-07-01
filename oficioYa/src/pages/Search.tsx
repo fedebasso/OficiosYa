@@ -15,6 +15,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   aire_acondicionado: 'Aire Acondicionado',
   cerrajero: 'Cerrajeros',
   albanil: 'Albañiles',
+  pintor: 'Pintores',
 }
 
 const ZONES = [
@@ -32,11 +33,10 @@ const RATING_OPTIONS: { label: string; value: number | null }[] = [
 const AUTOCOMPLETE_CATEGORIES = [
   { id: 'electricista',       emoji: '⚡', label: 'Electricista',      keywords: ['electri', 'luz', 'tomacorriente', 'tablero'] },
   { id: 'plomero',            emoji: '🚿', label: 'Sanitario/Plomero', keywords: ['plom', 'sanit', 'caño', 'agua', 'pérdida'] },
-  { id: 'aire_acondicionado', emoji: '❄️', label: 'Aire Acondicionado', keywords: ['aire', 'ac', 'frío', 'frío', 'refriger'] },
-  { id: 'cerrajero',          emoji: '🔑', label: 'Cerrajero',         keywords: ['cerraj', 'llave', 'cerradura', 'portón'] },
+  { id: 'aire_acondicionado', emoji: '❄️', label: 'Aire Acondicionado', keywords: ['aire', 'ac', 'frío', 'calor', 'refriger'] },
+  { id: 'cerrajero',          emoji: '🔑', label: 'Cerrajero',         keywords: ['cerraj', 'llave', 'cerradura', 'portón', 'urgent', 'emergencia', '24hs'] },
   { id: 'albanil',            emoji: '🧱', label: 'Albañil',           keywords: ['alba', 'pared', 'fisura', 'mampost', 'cemento'] },
   { id: 'pintor',             emoji: '🎨', label: 'Pintor',            keywords: ['pint', 'color', 'pared'] },
-  { id: 'cerrajero',          emoji: '🔒', label: 'Urgencias 24hs',    keywords: ['urgent', 'emergencia', '24hs', 'ahora'] },
 ]
 
 const HISTORY_KEY = 'ofix_search_history'

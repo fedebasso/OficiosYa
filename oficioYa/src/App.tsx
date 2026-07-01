@@ -24,13 +24,12 @@ function AppInner() {
 
 function App() {
   const user = useAuthStore((s) => s.user)
-  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false)
 
-  useEffect(() => {
-    if (user && !localStorage.getItem(`onboarding_done_${user.id}`)) {
-      setShowOnboarding(true)
-    }
-  }, [user?.id])
+  const showOnboarding =
+    !!user &&
+    !onboardingDismissed &&
+    !localStorage.getItem(`onboarding_done_${user.id}`)
 
   return (
     <BrowserRouter>
@@ -39,7 +38,7 @@ function App() {
         <OnboardingFlow
           role={user.role}
           userId={user.id}
-          onDone={() => setShowOnboarding(false)}
+          onDone={() => setOnboardingDismissed(true)}
         />
       )}
       <AppInner />
