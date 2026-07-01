@@ -8,6 +8,7 @@ import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
 import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
 import { useProfessionals } from '../hooks/useProfessionals'
 import { fadeUp, scaleIn, staggerFast, SPRING_SOFT } from '../lib/motion'
+import { POPULAR_BARRIOS } from '../lib/barrios'
 
 const CATEGORY_LABELS: Record<string, string> = {
   electricista: 'Electricistas',
@@ -17,11 +18,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   albanil: 'Albañiles',
   pintor: 'Pintores',
 }
-
-const ZONES = [
-  'Pocitos', 'Malvín', 'Centro', 'Carrasco', 'Punta Carretas',
-  'Cordón', 'Tres Cruces', 'La Blanqueada', 'Buceo', 'Parque Batlle',
-]
 
 const RATING_OPTIONS: { label: string; value: number | null }[] = [
   { label: '★ Rating', value: null },
@@ -514,7 +510,7 @@ export default function Search() {
               </div>
               <div className="overflow-y-auto flex-1 px-3 pb-8">
                 <div className="flex flex-wrap gap-2 py-2">
-                  {ZONES.map((z) => (
+                  {POPULAR_BARRIOS.map((z) => (
                     <button
                       key={z}
                       type="button"

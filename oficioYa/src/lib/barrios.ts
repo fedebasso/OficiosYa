@@ -1,3 +1,11 @@
+// Subconjunto de barrios más comunes — usado para selección rápida por chips
+// (picker de zona en Search y onboarding de profesionales).
+export const POPULAR_BARRIOS: string[] = [
+  'Pocitos', 'Malvín', 'Centro', 'Cordón', 'Carrasco',
+  'Prado', 'Unión', 'Punta Carretas', 'Buceo', 'Tres Cruces',
+  'La Blanqueada', 'Parque Batlle', 'Goes', 'Reducto',
+]
+
 export const BARRIOS_MONTEVIDEO: string[] = [
   'Aguada', 'Aire Puro', 'Atahualpa', 'Bañados de Carrasco',
   'Barrio Sur', 'Belvedere', 'Brazo Oriental', 'Buceo',

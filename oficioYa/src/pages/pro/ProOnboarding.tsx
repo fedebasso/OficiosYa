@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '../../store/authStore'
 import { useProfessionalStore } from '../../store/professionalStore'
 import { getInitials } from '../../lib/utils'
+import { POPULAR_BARRIOS } from '../../lib/barrios'
 
 // ── Datos ────────────────────────────────────────────────────────────────────
 
@@ -19,11 +20,7 @@ const CATEGORIES = [
   { id: 'jardinero',          label: 'Jardinería',     emoji: '🌿' },
 ]
 
-const ZONES = [
-  'Pocitos', 'Malvín', 'Centro', 'Cordón', 'Carrasco',
-  'Prado', 'Unión', 'Punta Carretas', 'Buceo', 'Tres Cruces',
-  'La Blanqueada', 'Parque Batlle', 'Goes', 'Reducto',
-]
+const ZONES = POPULAR_BARRIOS
 
 const TOTAL_STEPS = 7
 
