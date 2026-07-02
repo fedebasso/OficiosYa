@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Siren } from 'lucide-react'
 import { useUrgentProfessionals } from '../../hooks/useProfessionals'
 
 export function UrgenciasFAB() {
@@ -44,7 +45,9 @@ export function UrgenciasFAB() {
         animation: expanded ? 'none' : 'urgency-pulse 2s ease-in-out infinite',
       }}
     >
-      <span style={{ fontSize: 22, flexShrink: 0, width: 40, textAlign: 'center' }}>🚨</span>
+      <span className="flex items-center justify-center" style={{ flexShrink: 0, width: 40 }}>
+        <Siren size={22} color="#FFFFFF" />
+      </span>
       {expanded && (
         <div className="flex-1 text-left min-w-0">
           <div className="font-bold text-white truncate" style={{ fontSize: 'var(--text-sm)' }}>
