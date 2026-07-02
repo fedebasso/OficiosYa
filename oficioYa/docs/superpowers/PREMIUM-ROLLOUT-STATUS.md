@@ -95,14 +95,22 @@ Specs de referencia con el detalle:
 
 ---
 
-## PENDIENTE (fases siguientes) 🔜
+### Fase 7 — Cuenta (Login + Registro)
+- `src/pages/ClientProfile.tsx`: ya estaba limpio (lucide); sin cambios.
+- `src/pages/Login.tsx`: íconos de inputs (`Mail`/`Lock`), error (`AlertTriangle`),
+  accesos demo (`User`/`Wrench`); bordes `#ECE4D8`.
+- `src/pages/Register.tsx`: selector de rol (`User`/`Wrench` con createElement),
+  inputs (`User`/`Mail`/`Lock`), error (`AlertTriangle`); bordes `#ECE4D8`.
 
-Orden acordado con el usuario:
+## ROLLOUT COMPLETO ✅
 
-- **Fase 7 — Cuenta:** `src/pages/ClientProfile.tsx` + `Login`/`Register`.  ← PRÓXIMA (última)
+Todas las pantallas principales migradas al lenguaje premium (Fases 1-7).
+Emojis de UI reemplazados por íconos lucide en toda la app. Quedan solo props
+`emoji` como data muerta en algunos arrays (ProProfileEdit, ProOnboarding) — no
+se renderizan.
 
-Método por fase: brainstorm/design corto → spec → plan → ejecutar → lint+build → deploy.
-Buscar emojis restantes con: grep de `⚡|🚿|❄️|🔑|🎨|🧱|📍|⏱|🔨|🔍|🛠` y `CATEGORY_EMOJI`.
+Para futuras pantallas nuevas: seguir el "Lenguaje visual premium" de este doc.
+Buscar emojis con grep de `⚡|🚿|❄️|🔑|🎨|🧱|📍|⏱|🔨|🔍|🛠` y `CATEGORY_EMOJI`.
 
 ---
 

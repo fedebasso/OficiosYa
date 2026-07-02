@@ -3,13 +3,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import { BrandLogo } from '../components/common/BrandLogo'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
-import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
+import { Eye, EyeOff, ChevronLeft, Mail, Lock, User, Wrench, AlertTriangle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { fadeUp, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
 const INPUT_STYLE = {
   background: '#FFFFFF',
-  border: '1.5px solid #E8E0D4',
+  border: '1.5px solid #ECE4D8',
   color: '#111111',
   borderRadius: '14px',
   padding: '14px 16px 14px 48px',
@@ -107,7 +107,7 @@ export default function Login() {
                   className="rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2"
                   style={{ background: '#FEF2F2', border: '1.5px solid #FECACA', color: '#DC2626' }}
                 >
-                  ⚠️ {error}
+                  <AlertTriangle size={15} /> {error}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -122,8 +122,8 @@ export default function Login() {
                   Email
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>
-                    ✉️
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC' }}>
+                    <Mail size={17} />
                   </span>
                   <input
                     type="email"
@@ -142,8 +142,8 @@ export default function Login() {
                   Contraseña
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>
-                    🔒
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC' }}>
+                    <Lock size={17} />
                   </span>
                   <input
                     type={showPw ? 'text' : 'password'}
@@ -210,7 +210,7 @@ export default function Login() {
           <motion.div
             variants={fadeUp}
             className="rounded-2xl p-4"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 1px 3px rgba(0,0,0,.04)' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 1px 3px rgba(0,0,0,.04)' }}
           >
             <div className="flex items-center gap-2 mb-3">
               <span
@@ -228,9 +228,9 @@ export default function Login() {
                 whileTap={{ scale: 0.97 }}
                 transition={SPRING_SOFT}
                 className="flex items-center justify-between py-2.5 px-3 rounded-xl w-full text-left"
-                style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
+                style={{ background: '#F5F0E8', border: '1px solid #ECE4D8' }}
               >
-                <span className="text-xs font-bold" style={{ color: '#E8683A' }}>👤 Cliente</span>
+                <span className="inline-flex items-center gap-1 text-xs font-bold" style={{ color: '#E8683A' }}><User size={13} /> Cliente</span>
                 <span className="text-[11px] font-mono" style={{ color: '#999999' }}>cliente@demo.com</span>
               </motion.button>
               <motion.button
@@ -239,9 +239,9 @@ export default function Login() {
                 whileTap={{ scale: 0.97 }}
                 transition={SPRING_SOFT}
                 className="flex items-center justify-between py-2.5 px-3 rounded-xl w-full text-left"
-                style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
+                style={{ background: '#F5F0E8', border: '1px solid #ECE4D8' }}
               >
-                <span className="text-xs font-bold" style={{ color: '#E8683A' }}>🔧 Profesional</span>
+                <span className="inline-flex items-center gap-1 text-xs font-bold" style={{ color: '#E8683A' }}><Wrench size={13} /> Profesional</span>
                 <span className="text-[11px] font-mono" style={{ color: '#999999' }}>pro@demo.com</span>
               </motion.button>
             </div>

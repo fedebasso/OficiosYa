@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { createElement, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { BrandLogo } from '../components/common/BrandLogo'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useAuthStore } from '../store/authStore'
-import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
+import { Eye, EyeOff, ChevronLeft, Mail, Lock, User, Wrench, AlertTriangle } from 'lucide-react'
 import { fadeUp, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
 const INPUT_STYLE = {
   background: '#FFFFFF',
-  border: '1.5px solid #E8E0D4',
+  border: '1.5px solid #ECE4D8',
   color: '#111111',
   borderRadius: '14px',
   padding: '14px 16px 14px 48px',
@@ -96,7 +96,7 @@ export default function Register() {
                   className="rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2"
                   style={{ background: '#FEF2F2', border: '1.5px solid #FECACA', color: '#DC2626' }}
                 >
-                  ⚠️ {error}
+                  <AlertTriangle size={15} /> {error}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -109,8 +109,8 @@ export default function Register() {
             </label>
             <div className="grid grid-cols-2 gap-3">
               {([
-                { value: 'client',       icon: '👤', name: 'Cliente',      desc: 'Busco profesionales para mi hogar' },
-                { value: 'professional', icon: '🔧', name: 'Profesional',  desc: 'Ofrezco mis servicios y consigo clientes' },
+                { value: 'client',       Icon: User,   name: 'Cliente',      desc: 'Busco profesionales para mi hogar' },
+                { value: 'professional', Icon: Wrench, name: 'Profesional',  desc: 'Ofrezco mis servicios y consigo clientes' },
               ] as const).map((opt) => {
                 const active = role === opt.value
                 return (
@@ -123,12 +123,12 @@ export default function Register() {
                     className="flex flex-col items-center gap-2 rounded-2xl p-4 transition-all duration-150"
                     style={{
                       background: active ? '#FEF0EA' : '#FFFFFF',
-                      border: active ? '2px solid #E8683A' : '1.5px solid #E8E0D4',
+                      border: active ? '2px solid #E8683A' : '1.5px solid #ECE4D8',
                       boxShadow: active ? '0 2px 8px rgba(232,104,58,.15)' : '0 1px 3px rgba(0,0,0,.04)',
                     }}
                     aria-pressed={active}
                   >
-                    <span style={{ fontSize: 28, lineHeight: 1 }}>{opt.icon}</span>
+                    <span style={{ lineHeight: 1, color: active ? '#E8683A' : '#666666' }}>{createElement(opt.Icon, { size: 26 })}</span>
                     <span className="text-sm font-black" style={{ color: active ? '#E8683A' : '#111111' }}>
                       {opt.name}
                     </span>
@@ -149,7 +149,7 @@ export default function Register() {
                 Nombre completo
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>👤</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC' }}><User size={17} /></span>
                 <input
                   type="text"
                   value={fullName}
@@ -167,7 +167,7 @@ export default function Register() {
                 Email
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>✉️</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC' }}><Mail size={17} /></span>
                 <input
                   type="email"
                   value={email}
@@ -185,7 +185,7 @@ export default function Register() {
                 Contraseña
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC', fontSize: 16 }}>🔒</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#CCCCCC' }}><Lock size={17} /></span>
                 <input
                   type={showPw ? 'text' : 'password'}
                   value={password}
