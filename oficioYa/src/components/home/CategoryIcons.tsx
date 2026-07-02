@@ -1,5 +1,6 @@
+import { createElement } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
+import { CATEGORY_LABELS, getCategoryIcon } from '../../lib/categories'
 
 const CATEGORIES = [
   'electricista',
@@ -14,42 +15,32 @@ export function CategoryIcons() {
   const navigate = useNavigate()
 
   return (
-    <div
-      className="flex gap-4 overflow-x-auto"
-      style={{ paddingBottom: 4, scrollbarWidth: 'none' }}
-    >
+    <div className="flex gap-3.5 overflow-x-auto" style={{ paddingBottom: 4, scrollbarWidth: 'none' }}>
       {CATEGORIES.map((id) => (
         <button
           key={id}
           type="button"
           onClick={() => navigate(`/buscar/${id}`)}
-          className="flex-shrink-0 flex flex-col items-center gap-1.5 active:opacity-70 transition-opacity"
+          className="flex-shrink-0 flex flex-col items-center gap-2 active:opacity-70 transition-opacity"
+          style={{ width: 60 }}
         >
           <div
             style={{
-              width: 56,
-              height: 56,
-              borderRadius: 18,
+              width: 58,
+              height: 58,
+              borderRadius: 19,
               background: '#FFFFFF',
-              border: '1.5px solid #EDE8DE',
+              border: '1px solid #ECE4D8',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 26,
-              boxShadow: '0 1px 4px rgba(0,0,0,.06)',
+              boxShadow: '0 2px 6px -2px rgba(60,40,20,.10)',
+              color: '#4A4034',
             }}
           >
-            {CATEGORY_EMOJI[id]}
+            {createElement(getCategoryIcon(id), { size: 24, strokeWidth: 1.9 })}
           </div>
-          <span
-            className="font-bold text-center"
-            style={{
-              fontSize: 'var(--text-xs)',
-              color: '#555555',
-              maxWidth: 56,
-              lineHeight: 1.2,
-            }}
-          >
+          <span className="font-bold text-center" style={{ fontSize: 11.5, color: '#6B6152', maxWidth: 60, lineHeight: 1.15 }}>
             {CATEGORY_LABELS[id]}
           </span>
         </button>

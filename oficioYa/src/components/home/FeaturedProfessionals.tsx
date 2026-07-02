@@ -1,19 +1,20 @@
-import { useState } from 'react'
+import { createElement, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProfessionalCard } from '../professionals/ProfessionalCard'
 import { FeaturedSkeleton } from '../ui/Skeleton'
 import { useProfessionals } from '../../hooks/useProfessionals'
+import { getCategoryIcon } from '../../lib/categories'
 import { motion } from 'framer-motion'
 import { fadeUp, staggerFast, SPRING_SOFT } from '../../lib/motion'
 
 const CATEGORY_FILTERS = [
-  { id: 'todos',              label: 'Todos',        emoji: '' },
-  { id: 'electricista',       label: 'Electricista', emoji: '⚡' },
-  { id: 'plomero',            label: 'Sanitario',    emoji: '🚿' },
-  { id: 'aire_acondicionado', label: 'Aire Ac.',     emoji: '❄️' },
-  { id: 'cerrajero',          label: 'Cerrajero',    emoji: '🔑' },
-  { id: 'pintor',             label: 'Pintor',       emoji: '🎨' },
-  { id: 'albanil',            label: 'Albañil',      emoji: '🧱' },
+  { id: 'todos',              label: 'Todos' },
+  { id: 'electricista',       label: 'Electricista' },
+  { id: 'plomero',            label: 'Sanitario' },
+  { id: 'aire_acondicionado', label: 'Aire Ac.' },
+  { id: 'cerrajero',          label: 'Cerrajero' },
+  { id: 'pintor',             label: 'Pintor' },
+  { id: 'albanil',            label: 'Albañil' },
 ]
 
 export function FeaturedProfessionals() {
@@ -86,7 +87,7 @@ export function FeaturedProfessionals() {
                   : '0 1px 3px rgba(0,0,0,.06)',
               }}
             >
-              {cat.emoji && <span style={{ fontSize: 15 }}>{cat.emoji}</span>}
+              {cat.id !== 'todos' && createElement(getCategoryIcon(cat.id), { size: 15, style: { color: active ? '#FFFFFF' : '#D4571F' } })}
               {cat.label}
             </motion.button>
           )
