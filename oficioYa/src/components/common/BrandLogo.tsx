@@ -9,13 +9,11 @@ interface BrandLogoProps {
   subtitleColor?: string
 }
 
-const SIZES: Record<BrandLogoSize, { fontSize: number; letterSpacing: string; subtitleSize: number }> = {
-  sm: { fontSize: 22, letterSpacing: '-1px',   subtitleSize: 11 },
-  md: { fontSize: 32, letterSpacing: '-1.5px', subtitleSize: 13 },
-  lg: { fontSize: 40, letterSpacing: '-2px',   subtitleSize: 14 },
+const SIZES: Record<BrandLogoSize, { px: number; radius: number; subtitleSize: number }> = {
+  sm: { px: 34, radius: 9,  subtitleSize: 11 },
+  md: { px: 40, radius: 9,  subtitleSize: 13 },
+  lg: { px: 72, radius: 16, subtitleSize: 14 },
 }
-
-const GRADIENT = 'linear-gradient(90deg, #E8683A 0%, #F28C4A 50%, #2A2A2A 100%)'
 
 export function BrandLogo({
   size = 'md',
@@ -23,35 +21,23 @@ export function BrandLogo({
   centered = false,
   subtitleColor = 'rgba(255,255,255,0.8)',
 }: BrandLogoProps) {
-  const { fontSize, letterSpacing, subtitleSize } = SIZES[size]
+  const { px, radius, subtitleSize } = SIZES[size]
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: centered ? 'center' : 'flex-start', gap: 4 }}>
-      <motion.span
-        className="font-black"
-        style={{
-          fontSize,
-          letterSpacing,
-          lineHeight: 1,
-          background: GRADIENT,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}
-        initial={{ opacity: 0, x: centered ? 0 : -8 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        OFIX
-      </motion.span>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: centered ? 'center' : 'flex-start', gap: 8 }}>
+      <motion.img
+        src="/ofix-icon.svg"
+        alt="OFIX"
+        width={px}
+        height={px}
+        style={{ borderRadius: radius, display: 'block' }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+      />
       {showSubtitle && (
         <motion.p
-          style={{
-            fontSize: subtitleSize,
-            color: subtitleColor,
-            fontWeight: 500,
-            margin: 0,
-          }}
+          style={{ fontSize: subtitleSize, color: subtitleColor, fontWeight: 500, margin: 0 }}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.3 }}
