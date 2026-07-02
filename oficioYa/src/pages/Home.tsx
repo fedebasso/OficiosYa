@@ -18,8 +18,8 @@ export default function Home() {
     <header
       className="sticky top-0 z-50"
       style={{
-        background: '#FFFFFF',
-        boxShadow: '0 1px 0 #EDE8DE, 0 2px 8px rgba(0,0,0,.04)',
+        background: '#191410',
+        boxShadow: '0 2px 12px rgba(0,0,0,.25)',
       }}
     >
       <div
@@ -35,14 +35,14 @@ export default function Home() {
           className="w-full flex items-center gap-2.5 active:opacity-80 transition-opacity"
           style={{
             height: 48,
-            background: '#F6F1EA',
-            border: '1.5px solid #ECE4D8',
+            background: '#26201A',
+            border: '1.5px solid #342C24',
             borderRadius: 15,
             padding: '0 14px',
           }}
         >
-          <Search size={19} strokeWidth={2.3} style={{ color: '#C2B8A6' }} />
-          <span style={{ fontSize: 15, color: '#B0A594', fontWeight: 500 }}>
+          <Search size={19} strokeWidth={2.3} style={{ color: '#7D7264' }} />
+          <span style={{ fontSize: 15, color: '#9A8F80', fontWeight: 500 }}>
             ¿Qué servicio necesitás?
           </span>
         </button>

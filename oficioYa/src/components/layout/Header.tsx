@@ -32,7 +32,7 @@ export function Header({ title, showBack = false, onBack }: HeaderProps) {
         </button>
       )}
 
-      {!showBack && <BrandLogo size="sm" />}
+      {!showBack && <BrandLogo size="sm" theme="light" />}
 
       {title && showBack && (
         <span
