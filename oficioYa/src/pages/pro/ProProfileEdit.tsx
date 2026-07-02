@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, createElement } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Camera, Check } from 'lucide-react'
+import { getCategoryIcon } from '../../lib/categories'
 import { motion } from 'framer-motion'
 import { PageShell } from '../../components/layout/PageShell'
 import { Header } from '../../components/layout/Header'
@@ -176,7 +177,7 @@ export default function ProProfileEdit() {
             rows={4}
             placeholder="Contá tu experiencia y especialidades..."
             className="w-full rounded-2xl px-4 py-3 text-sm resize-none focus:outline-none"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', color: '#111', caretColor: '#E8683A' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#111', caretColor: '#E8683A' }}
           />
           <p className="text-right text-[10px] mt-1" style={{ color: bio.length > 280 ? '#E8683A' : '#BBB' }}>
             {bio.length}/300
@@ -201,10 +202,10 @@ export default function ProProfileEdit() {
                   className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all"
                   style={active
                     ? { background: 'rgba(232,104,58,0.15)', color: '#E8683A', border: '1px solid rgba(232,104,58,0.35)' }
-                    : { background: '#EDE8DE', color: disabled ? '#CCC' : '#666', border: '1.5px solid #E8E0D4' }
+                    : { background: '#EDE8DE', color: disabled ? '#CCC' : '#666', border: '1.5px solid #ECE4D8' }
                   }
                 >
-                  {cat.emoji} {cat.label}
+                  {createElement(getCategoryIcon(cat.id), { size: 14, style: { color: active ? '#D4571F' : (disabled ? '#CCC' : '#D4571F') } })} {cat.label}
                 </button>
               )
             })}
@@ -250,7 +251,7 @@ export default function ProProfileEdit() {
             onChange={(e) => setWhatsapp(e.target.value)}
             placeholder="598 9X XXX XXX"
             className="w-full rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', color: '#111', caretColor: '#E8683A' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#111', caretColor: '#E8683A' }}
           />
           <p className="text-[10px] mt-1" style={{ color: '#BBB' }}>Formato: 598XXXXXXXX (sin espacios ni guiones)</p>
         </motion.div>
@@ -267,7 +268,7 @@ export default function ProProfileEdit() {
             value={years}
             onChange={(e) => setYears(e.target.value)}
             className="w-full rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', color: '#111', caretColor: '#E8683A' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#111', caretColor: '#E8683A' }}
           />
         </motion.div>
 

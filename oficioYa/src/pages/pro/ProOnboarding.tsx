@@ -1,11 +1,12 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, createElement } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, Camera, Check } from 'lucide-react'
+import { ChevronLeft, Camera, Check, CheckCircle2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '../../store/authStore'
 import { useProfessionalStore } from '../../store/professionalStore'
 import { getInitials } from '../../lib/utils'
 import { POPULAR_BARRIOS } from '../../lib/barrios'
+import { getCategoryIcon } from '../../lib/categories'
 
 // ── Datos ────────────────────────────────────────────────────────────────────
 
@@ -134,7 +135,7 @@ export default function ProOnboarding() {
       {/* ── Header ── */}
       <div
         className="flex items-center gap-3 px-4 pt-12 pb-4 flex-shrink-0"
-        style={{ background: '#FFFFFF', borderBottom: '1px solid #EDE8DE' }}
+        style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8' }}
       >
         {step > 1 && (
           <button
@@ -161,7 +162,7 @@ export default function ProOnboarding() {
           <div
             key={i}
             className="flex-1 h-1 rounded-full transition-all duration-300"
-            style={{ background: i < step ? '#E8683A' : '#EDE8DE' }}
+            style={{ background: i < step ? '#E8683A' : '#ECE4D8' }}
           />
         ))}
       </div>
@@ -216,7 +217,7 @@ export default function ProOnboarding() {
                   </div>
                   <div
                     className="rounded-2xl p-4"
-                    style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}
+                    style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
                   >
                     <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: '#999' }}>Nombre completo</p>
                     <p className="text-base font-bold" style={{ color: '#111' }}>{user?.full_name ?? '—'}</p>
@@ -244,10 +245,12 @@ export default function ProOnboarding() {
                           className="flex items-center gap-3 rounded-2xl p-4 text-left transition-all active:scale-95"
                           style={active
                             ? { background: 'rgba(232,104,58,0.12)', border: '2px solid #E8683A' }
-                            : { background: '#FFFFFF', border: `2px solid ${disabled ? '#F0EBE3' : '#EDE8DE'}`, opacity: disabled ? 0.5 : 1 }
+                            : { background: '#FFFFFF', border: `2px solid ${disabled ? '#F0EBE3' : '#ECE4D8'}`, opacity: disabled ? 0.5 : 1 }
                           }
                         >
-                          <span className="text-2xl">{cat.emoji}</span>
+                          <span className="flex items-center justify-center" style={{ color: active ? '#E8683A' : '#7A6E5E' }}>
+                            {createElement(getCategoryIcon(cat.id), { size: 24 })}
+                          </span>
                           <span className="text-sm font-bold" style={{ color: active ? '#E8683A' : '#333' }}>
                             {cat.label}
                           </span>
@@ -287,7 +290,7 @@ export default function ProOnboarding() {
                           className="px-4 py-2.5 rounded-2xl text-sm font-bold transition-all active:scale-95"
                           style={active
                             ? { background: '#E8683A', color: '#fff', border: '2px solid #E8683A' }
-                            : { background: '#FFFFFF', color: disabled ? '#CCC' : '#444', border: '2px solid #EDE8DE' }
+                            : { background: '#FFFFFF', color: disabled ? '#CCC' : '#444', border: '2px solid #ECE4D8' }
                           }
                         >
                           {z}
@@ -318,7 +321,7 @@ export default function ProOnboarding() {
                       onChange={(e) => setYears(e.target.value)}
                       placeholder="Ej: 5"
                       className="w-full rounded-2xl px-4 py-4 text-lg font-bold focus:outline-none"
-                      style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE', color: '#111', caretColor: '#E8683A' }}
+                      style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#111', caretColor: '#E8683A' }}
                       autoFocus
                     />
                   </div>
@@ -328,9 +331,9 @@ export default function ProOnboarding() {
                     </label>
                     <div className="grid grid-cols-2 gap-3">
                       {[
-                        { val: true,  label: 'Sí, tengo RUT', emoji: '✅' },
-                        { val: false, label: 'No tengo RUT',  emoji: '❌' },
-                      ].map(({ val, label, emoji }) => (
+                        { val: true,  label: 'Sí, tengo RUT' },
+                        { val: false, label: 'No tengo RUT'  },
+                      ].map(({ val, label }) => (
                         <button
                           key={String(val)}
                           type="button"
@@ -338,10 +341,10 @@ export default function ProOnboarding() {
                           className="rounded-2xl p-4 flex flex-col items-center gap-2 transition-all active:scale-95"
                           style={hasRut === val
                             ? { background: 'rgba(232,104,58,0.12)', border: '2px solid #E8683A' }
-                            : { background: '#FFFFFF', border: '2px solid #EDE8DE' }
+                            : { background: '#FFFFFF', border: '2px solid #ECE4D8' }
                           }
                         >
-                          <span className="text-2xl">{emoji}</span>
+                          <CheckCircle2 size={24} color={hasRut === val ? '#E8683A' : '#CCC'} />
                           <span className="text-xs font-bold text-center" style={{ color: hasRut === val ? '#E8683A' : '#555' }}>
                             {label}
                           </span>
@@ -364,7 +367,7 @@ export default function ProOnboarding() {
                     </label>
                     <div
                       className="flex items-center gap-3 rounded-2xl px-4"
-                      style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}
+                      style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
                     >
                       <span className="text-base font-bold flex-shrink-0" style={{ color: '#888' }}>🇺🇾 +598</span>
                       <input
@@ -398,7 +401,7 @@ export default function ProOnboarding() {
                       rows={6}
                       autoFocus
                       className="w-full rounded-2xl px-4 py-4 text-sm leading-relaxed resize-none focus:outline-none"
-                      style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE', color: '#111', caretColor: '#E8683A' }}
+                      style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#111', caretColor: '#E8683A' }}
                     />
                     <p className="text-right text-xs" style={{ color: bio.length > 270 ? '#E8683A' : '#BBB' }}>
                       {bio.length}/300
@@ -417,7 +420,7 @@ export default function ProOnboarding() {
                   {/* Avatar + nombre */}
                   <div
                     className="flex items-center gap-4 p-4 rounded-2xl"
-                    style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}
+                    style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
                   >
                     <div
                       className="w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center font-bold text-xl flex-shrink-0"
@@ -442,15 +445,16 @@ export default function ProOnboarding() {
 
                   {/* Servicios */}
                   {categories.length > 0 && (
-                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}>
+                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
                       <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: '#999' }}>Servicios</p>
                       <div className="flex flex-wrap gap-2">
                         {categories.map((id) => {
                           const cat = CATEGORIES.find((c) => c.id === id)
                           return cat ? (
-                            <span key={id} className="px-3 py-1.5 rounded-full text-xs font-bold"
+                            <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold"
                               style={{ background: 'rgba(232,104,58,0.12)', color: '#E8683A' }}>
-                              {cat.emoji} {cat.label}
+                              {createElement(getCategoryIcon(cat.id), { size: 14 })}
+                              {cat.label}
                             </span>
                           ) : null
                         })}
@@ -460,7 +464,7 @@ export default function ProOnboarding() {
 
                   {/* Zonas */}
                   {zones.length > 0 && (
-                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}>
+                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
                       <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: '#999' }}>Zonas</p>
                       <p className="text-sm" style={{ color: '#444' }}>{zones.join(', ')}</p>
                     </div>
@@ -468,7 +472,7 @@ export default function ProOnboarding() {
 
                   {/* Bio */}
                   {bio && (
-                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}>
+                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
                       <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: '#999' }}>Descripción</p>
                       <p className="text-sm leading-relaxed" style={{ color: '#444' }}>{bio}</p>
                     </div>
@@ -476,7 +480,7 @@ export default function ProOnboarding() {
 
                   {/* WhatsApp */}
                   {whatsapp && (
-                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #EDE8DE' }}>
+                    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
                       <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: '#999' }}>WhatsApp</p>
                       <p className="text-sm font-bold" style={{ color: '#111' }}>+598 {whatsapp}</p>
                     </div>
@@ -512,7 +516,7 @@ export default function ProOnboarding() {
             className="w-full rounded-2xl py-4 text-base font-black text-white disabled:opacity-60 flex items-center justify-center gap-2"
             style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
           >
-            {saving ? 'Guardando...' : '🚀 Completar perfil'}
+            {saving ? 'Guardando...' : 'Completar perfil'}
           </button>
         )}
         {step === 1 && (

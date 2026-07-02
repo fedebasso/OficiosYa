@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
+import { createElement, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useIncomingRequests } from '../../hooks/useRequests'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, XCircle, MessageCircle, Inbox, Search, ChevronDown, ChevronUp, Zap, Clock } from 'lucide-react'
+import { CheckCircle, XCircle, MessageCircle, Inbox, Search, ChevronDown, ChevronUp, Zap, Clock, Siren, Calendar, AlertTriangle, CheckCircle2, Flag, Navigation, Wrench, Settings, Hammer, ClipboardList } from 'lucide-react'
 import type { ServiceRequest } from '../../store/requestStore'
 import { NotificationBanner } from '../../components/notifications/NotificationBanner'
-import { getCategoryMeta } from '../../lib/categories'
+import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
 import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
 
 // ── Metadatos de estado ─────────────────────────────────────────────────────
@@ -39,6 +39,20 @@ function formatScheduled(iso: string) {
   return time ? `${date} · ${time}hs` : date
 }
 
+function WorkTypeIcon({ type }: { type: string }) {
+  if (type === 'reparacion') return <Wrench size={10} style={{ color: '#777' }} />
+  if (type === 'instalacion') return <Settings size={10} style={{ color: '#777' }} />
+  if (type === 'mantenimiento') return <Hammer size={10} style={{ color: '#777' }} />
+  return <ClipboardList size={10} style={{ color: '#777' }} />
+}
+
+function workTypeLabel(type: string) {
+  if (type === 'reparacion') return 'Reparación'
+  if (type === 'instalacion') return 'Instalación'
+  if (type === 'mantenimiento') return 'Mantenimiento'
+  return 'Otro'
+}
+
 // ── Card de solicitud ────────────────────────────────────────────────────────
 
 function RequestCard({
@@ -56,7 +70,8 @@ function RequestCard({
   onChat?: () => void
   sentProgressId?: string
 }) {
-  const { emoji, label } = getCategoryMeta(req.category)
+  const { label } = getCategoryMeta(req.category)
+  const CategoryIcon = getCategoryIcon(req.category)
   const meta = STATUS_META[req.status] ?? STATUS_META.pending
   const isPending    = req.status === 'pending'
   const isInProgress = req.status === 'in_progress'
@@ -106,17 +121,20 @@ function RequestCard({
       <div className="p-3.5 flex flex-col gap-2.5">
         {/* Chips: categoría + urgencia */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
-            {emoji} {label}
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+            {createElement(CategoryIcon, { size: 10, style: { color: '#D4571F' } })}
+            {label}
           </span>
           {req.urgency && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
-              🚨 Urgente
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
+              <Siren size={10} style={{ color: '#DC2626' }} />
+              Urgente
             </span>
           )}
           {req.work_type && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#F5F0E8', color: '#777' }}>
-              {req.work_type === 'reparacion' ? '🔧 Reparación' : req.work_type === 'instalacion' ? '⚙️ Instalación' : req.work_type === 'mantenimiento' ? '🛠️ Mantenimiento' : '📋 Otro'}
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#F5F0E8', color: '#777' }}>
+              <WorkTypeIcon type={req.work_type} />
+              {workTypeLabel(req.work_type)}
             </span>
           )}
         </div>
@@ -132,7 +150,7 @@ function RequestCard({
             className="flex items-center gap-1.5 rounded-xl px-3 py-2"
             style={{ background: 'rgba(232,104,58,.08)', border: '1px solid rgba(232,104,58,.2)' }}
           >
-            <span style={{ fontSize: 12 }}>📅</span>
+            <Calendar size={12} style={{ color: '#E8683A' }} />
             <span className="text-xs font-bold" style={{ color: '#E8683A' }}>
               {formatScheduled(req.scheduled_date)}
             </span>
@@ -143,7 +161,7 @@ function RequestCard({
         {isActive && req.contact_phone && (
           <div
             className="flex items-center gap-2 rounded-xl px-3 py-2"
-            style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}
+            style={{ background: '#F5F0E8', border: '1px solid #ECE4D8' }}
           >
             <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
             <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
@@ -184,7 +202,7 @@ function RequestCard({
               type="button"
               onClick={() => onProgress(isInProgress ? 'completed' : 'in_progress')}
               whileTap={{ scale: 0.97 }}
-              className="flex-1 rounded-xl py-3 text-sm font-bold"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-bold"
               style={{
                 background: sentProgressId === req.id
                   ? '#DCFCE7'
@@ -195,9 +213,22 @@ function RequestCard({
                 border: `1px solid ${sentProgressId === req.id || isInProgress ? '#BBF7D0' : '#C7D2FE'}`,
               }}
             >
-              {sentProgressId === req.id
-                ? '✓ Cliente notificado'
-                : isInProgress ? '🏁 Completado' : '🚗 En camino'}
+              {sentProgressId === req.id ? (
+                <>
+                  <CheckCircle2 size={14} />
+                  Cliente notificado
+                </>
+              ) : isInProgress ? (
+                <>
+                  <Flag size={14} />
+                  Completado
+                </>
+              ) : (
+                <>
+                  <Navigation size={14} />
+                  En camino
+                </>
+              )}
             </motion.button>
             <motion.button
               type="button"
@@ -257,7 +288,7 @@ export default function ProRequests() {
   const header = (
     <div
       className="sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
     >
       <div className="px-4 pt-12 pb-3 flex items-end justify-between">
         <div>
@@ -298,7 +329,7 @@ export default function ProRequests() {
       <div className="px-4 pb-3">
         <div
           className="flex items-center gap-2 rounded-2xl px-3 py-2.5"
-          style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
+          style={{ background: '#F5F0E8', border: '1.5px solid #ECE4D8' }}
         >
           <Search size={14} style={{ color: '#AAAAAA', flexShrink: 0 }} />
           <input
@@ -338,7 +369,7 @@ export default function ProRequests() {
                   background: 'linear-gradient(90deg,#EDE8DE 25%,#F5F0E8 50%,#EDE8DE 75%)',
                   backgroundSize: '200% 100%',
                   animation: `shimmer 1.4s ease-in-out ${i * 0.15}s infinite`,
-                  border: '1.5px solid #E8E0D4',
+                  border: '1.5px solid #ECE4D8',
                 }}
               />
             ))}
@@ -362,7 +393,7 @@ export default function ProRequests() {
           >
             <div
               className="w-20 h-20 rounded-3xl flex items-center justify-center"
-              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
+              style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
             >
               <Inbox size={32} style={{ color: '#CCCCCC' }} />
             </div>
@@ -459,7 +490,8 @@ export default function ProRequests() {
                   className="flex flex-col gap-2 overflow-hidden"
                 >
                   {history.map((req) => {
-                    const { emoji, label } = getCategoryMeta(req.category)
+                    const { label } = getCategoryMeta(req.category)
+                    const HistCategoryIcon = getCategoryIcon(req.category)
                     const meta = STATUS_META[req.status] ?? STATUS_META.completed
                     return (
                       <motion.div
@@ -474,8 +506,9 @@ export default function ProRequests() {
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5 mb-0.5">
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
-                              {emoji} {label}
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+                              {createElement(HistCategoryIcon, { size: 10, style: { color: '#D4571F' } })}
+                              {label}
                             </span>
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: meta.bg, color: meta.color }}>
                               {meta.label}
@@ -483,8 +516,9 @@ export default function ProRequests() {
                           </div>
                           <p className="text-xs truncate" style={{ color: '#777' }}>{req.description}</p>
                           {req.scheduled_date && (
-                            <p className="text-[10px] mt-0.5 font-semibold" style={{ color: '#E8683A' }}>
-                              📅 {formatScheduled(req.scheduled_date)}
+                            <p className="inline-flex items-center gap-1 text-[10px] mt-0.5 font-semibold" style={{ color: '#E8683A' }}>
+                              <Calendar size={10} style={{ color: '#E8683A' }} />
+                              {formatScheduled(req.scheduled_date)}
                             </p>
                           )}
                         </div>
@@ -526,7 +560,9 @@ export default function ProRequests() {
               style={{ background: '#FFFFFF', maxWidth: 480, margin: '0 auto' }}
             >
               <div className="text-center">
-                <div className="text-3xl mb-2">⚠️</div>
+                <div className="flex justify-center mb-2">
+                  <AlertTriangle size={32} style={{ color: '#D97706' }} />
+                </div>
                 <p className="text-base font-black" style={{ color: '#111111' }}>
                   ¿Rechazar esta solicitud?
                 </p>
@@ -540,7 +576,7 @@ export default function ProRequests() {
                   onClick={() => setRejectingId(null)}
                   whileTap={{ scale: 0.97 }}
                   className="flex-1 rounded-2xl py-3.5 text-sm font-bold"
-                  style={{ background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4' }}
+                  style={{ background: '#F5F0E8', color: '#555555', border: '1.5px solid #ECE4D8' }}
                 >
                   Cancelar
                 </motion.button>

@@ -1,11 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, createElement } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { useProRequestsStore } from '../../store/proRequestsStore'
 import { PageShell } from '../../components/layout/PageShell'
 import { NotificationBanner } from '../../components/notifications/NotificationBanner'
-import { getCategoryMeta } from '../../lib/categories'
-import { MessageCircle, ChevronRight, Bell, User, Briefcase, Star, Clock, Calendar } from 'lucide-react'
+import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
+import { MessageCircle, ChevronRight, Bell, User, Briefcase, Star, Clock, Calendar, Navigation, Flag, CheckCircle2, Siren, Camera } from 'lucide-react'
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -118,7 +118,7 @@ export default function ProDashboard() {
               En curso · {active.length}
             </p>
             {active.map((req) => {
-              const { emoji, label } = getCategoryMeta(req.category)
+              const { label } = getCategoryMeta(req.category)
               const isInProgress = req.status === 'in_progress'
               return (
                 <div
@@ -136,8 +136,11 @@ export default function ProDashboard() {
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full" style={{ background: isInProgress ? '#8B5CF6' : '#22C55E' }} />
-                      <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: isInProgress ? '#7C3AED' : '#16A34A' }}>
-                        {isInProgress ? '🚗 En camino' : '✅ Confirmado'}
+                      <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest" style={{ color: isInProgress ? '#7C3AED' : '#16A34A' }}>
+                        {isInProgress
+                          ? createElement(Navigation, { size: 9, style: { color: '#7C3AED' } })
+                          : createElement(CheckCircle2, { size: 9, style: { color: '#16A34A' } })}
+                        {isInProgress ? 'En camino' : 'Confirmado'}
                       </span>
                     </div>
                     <span className="flex items-center gap-1 text-[10px]" style={{ color: '#AAA' }}>
@@ -148,12 +151,14 @@ export default function ProDashboard() {
                   <div className="px-3.5 pt-3 pb-3.5 flex flex-col gap-2.5">
                     {/* Chips */}
                     <div className="flex gap-1.5 flex-wrap">
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
-                        {emoji} {label}
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+                        {createElement(getCategoryIcon(req.category), { size: 9, style: { color: '#D4571F' } })}
+                        {label}
                       </span>
                       {req.urgency && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
-                          🚨 Urgente
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
+                          {createElement(Siren, { size: 9, style: { color: '#DC2626' } })}
+                          Urgente
                         </span>
                       )}
                     </div>
@@ -178,7 +183,7 @@ export default function ProDashboard() {
                     )}
 
                     {req.contact_phone && (
-                      <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: '#F5F0E8', border: '1px solid #E8E0D4' }}>
+                      <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: '#F5F0E8', border: '1px solid #ECE4D8' }}>
                         <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: '#AAAAAA' }}>Tel</span>
                         <span className="text-sm font-semibold" style={{ color: '#111111' }}>{req.contact_phone}</span>
                       </div>
@@ -195,7 +200,12 @@ export default function ProDashboard() {
                           border: `1px solid ${isInProgress ? '#BBF7D0' : '#C7D2FE'}`,
                         }}
                       >
-                        {isInProgress ? '🏁 Completado' : '🚗 En camino'}
+                        <span className="inline-flex items-center gap-1.5">
+                          {isInProgress
+                            ? createElement(Flag, { size: 13, style: { color: '#16A34A' } })
+                            : createElement(Navigation, { size: 13, style: { color: '#4F46E5' } })}
+                          {isInProgress ? 'Completado' : 'En camino'}
+                        </span>
                       </button>
                       <button
                         type="button"
@@ -217,14 +227,14 @@ export default function ProDashboard() {
         {!loading && pending.length === 0 && active.length === 0 && (
           <div
             className="mx-4 rounded-2xl overflow-hidden"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
           >
             <div
               className="px-5 py-4 flex items-center gap-3"
               style={{ background: 'linear-gradient(135deg, rgba(232,104,58,0.08) 0%, rgba(232,104,58,0.04) 100%)', borderBottom: '1px solid #EDE8DE' }}
             >
-              <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0" style={{ background: 'rgba(232,104,58,0.12)' }}>
-                ✅
+              <div className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(232,104,58,0.12)' }}>
+                <CheckCircle2 size={20} style={{ color: '#D4571F' }} />
               </div>
               <div>
                 <p className="font-black text-sm" style={{ color: '#111' }}>Todo al día, {firstName}</p>
@@ -234,9 +244,9 @@ export default function ProDashboard() {
             <div className="p-4 flex flex-col gap-2">
               <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: '#CCC' }}>Mientras tanto</p>
               {[
-                { icon: '👤', label: 'Completá tu perfil', desc: 'Más info = más clientes', to: '/pro/perfil/editar' },
-                { icon: '📸', label: 'Subí fotos de trabajos', desc: 'Generá confianza con tu portfolio', to: '/pro/perfil' },
-              ].map(({ icon, label, desc, to }) => (
+                { Icon: User, label: 'Completá tu perfil', desc: 'Más info = más clientes', to: '/pro/perfil/editar' },
+                { Icon: Camera, label: 'Subí fotos de trabajos', desc: 'Generá confianza con tu portfolio', to: '/pro/perfil' },
+              ].map(({ Icon, label, desc, to }) => (
                 <button
                   key={to}
                   type="button"
@@ -244,7 +254,7 @@ export default function ProDashboard() {
                   className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-left w-full active:opacity-70"
                   style={{ background: '#F5F0E8', border: '1px solid #EDE8DE' }}
                 >
-                  <span className="text-xl flex-shrink-0">{icon}</span>
+                  <span className="flex-shrink-0">{createElement(Icon, { size: 18, style: { color: '#D4571F' } })}</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold" style={{ color: '#111' }}>{label}</p>
                     <p className="text-xs" style={{ color: '#999' }}>{desc}</p>
@@ -272,7 +282,7 @@ export default function ProDashboard() {
                 type="button"
                 onClick={() => navigate(to)}
                 className="flex flex-col items-center gap-2 rounded-2xl py-4 active:opacity-70"
-                style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+                style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
               >
                 <Icon size={20} style={{ color: '#E8683A' }} />
                 <span className="text-[10px] font-bold text-center" style={{ color: '#555' }}>{label}</span>
@@ -287,7 +297,7 @@ export default function ProDashboard() {
             type="button"
             onClick={() => navigate('/pro/trabajos')}
             className="mx-4 rounded-2xl px-4 py-3.5 flex items-center justify-between active:opacity-80"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34,197,94,.1)' }}>

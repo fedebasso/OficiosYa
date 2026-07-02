@@ -86,15 +86,20 @@ Specs de referencia con el detalle:
 - `src/components/home/FeaturedProfessionals.tsx`: eliminados los pills de filtro
   de categoría (redundantes con CategoryIcons); "Más recomendados" muestra la lista directa.
 
+### Fase 6 — Pantallas del profesional
+- Migradas a lucide (emojis→íconos, bordes `#ECE4D8`): `ProDashboard`, `ProRequests`,
+  `ProProfile`, `ProAvailability`, `ProWorkHistory`, `ProProfileEdit`, `ProOnboarding`
+  (todas en `src/pages/pro/`). Estados con STATUS_ICON, categorías con getCategoryIcon.
+- Nota: en `ProProfileEdit` y `ProOnboarding` quedó la prop `emoji` en los arrays de
+  datos (ya NO se renderiza; es data muerta, sin impacto visual).
+
 ---
 
 ## PENDIENTE (fases siguientes) 🔜
 
 Orden acordado con el usuario:
 
-- **Fase 6 — Profesional:** `ProDashboard`, `ProRequests`, `ProProfile`, `ProAvailability`,
-  `ProWorkHistory` (en `src/pages/pro/`).  ← PRÓXIMA
-- **Fase 7 — Cuenta:** `src/pages/ClientProfile.tsx` + `Login`/`Register`.
+- **Fase 7 — Cuenta:** `src/pages/ClientProfile.tsx` + `Login`/`Register`.  ← PRÓXIMA (última)
 
 Método por fase: brainstorm/design corto → spec → plan → ejecutar → lint+build → deploy.
 Buscar emojis restantes con: grep de `⚡|🚿|❄️|🔑|🎨|🧱|📍|⏱|🔨|🔍|🛠` y `CATEGORY_EMOJI`.

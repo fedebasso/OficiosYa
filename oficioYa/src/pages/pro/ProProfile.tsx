@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { createElement, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Edit2, LogOut, Phone, MapPin, Star, Briefcase, CheckCircle, Share2, Check } from 'lucide-react'
+import { Edit2, LogOut, Phone, MapPin, Star, Briefcase, BadgeCheck, Share2, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { PageShell } from '../../components/layout/PageShell'
 import { ProPortfolio } from '../../components/pro/portfolio/ProPortfolio'
 import { useProfessionalStore } from '../../store/professionalStore'
 import { useAuthStore } from '../../store/authStore'
-import { getCategoryMeta } from '../../lib/categories'
+import { getCategoryIcon, getCategoryMeta } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
 import { fadeUp, staggerContainer } from '../../lib/motion'
 
@@ -40,7 +40,7 @@ export default function ProProfile() {
   const header = (
     <div
       className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8' }}
     >
       <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#999999' }}>
         Panel profesional
@@ -56,7 +56,7 @@ export default function ProProfile() {
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
             style={{
               background: shared ? 'rgba(34,197,94,.12)' : '#F5F0E8',
-              border: `1px solid ${shared ? 'rgba(34,197,94,.3)' : '#E8E0D4'}`,
+              border: `1px solid ${shared ? 'rgba(34,197,94,.3)' : '#ECE4D8'}`,
               color: shared ? '#16A34A' : '#E8683A',
             }}
           >
@@ -106,7 +106,7 @@ export default function ProProfile() {
             <div
               key={i}
               className="rounded-2xl"
-              style={{ height: h, background: '#EDE8DE', border: '1.5px solid #E8E0D4' }}
+              style={{ height: h, background: '#EDE8DE', border: '1.5px solid #ECE4D8' }}
             />
           ))}
         </div>
@@ -121,7 +121,7 @@ export default function ProProfile() {
           <motion.div variants={fadeUp}>
             <div
               className="rounded-2xl p-5 flex flex-col items-center gap-3"
-              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+              style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
             >
               <div
                 className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-black overflow-hidden"
@@ -145,7 +145,7 @@ export default function ProProfile() {
                     className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold"
                     style={{ background: '#DCFCE7', color: '#16A34A' }}
                   >
-                    <CheckCircle size={10} /> Verificado
+                    <BadgeCheck size={10} style={{ color: '#22A559' }} /> Verificado
                   </span>
                 )}
                 {profile?.work_mode === 'independiente' && (
@@ -163,8 +163,8 @@ export default function ProProfile() {
           {/* Bio */}
           {profile?.bio && (
             <motion.div variants={fadeUp}>
-              <div className="rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-                <div className="px-4 py-2.5" style={{ borderBottom: '1px solid #E8E0D4', background: '#F5F0E8' }}>
+              <div className="rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+                <div className="px-4 py-2.5" style={{ borderBottom: '1px solid #ECE4D8', background: '#F5F0E8' }}>
                   <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#999' }}>Descripción</p>
                 </div>
                 <p className="p-4 text-sm leading-relaxed" style={{ color: '#333' }}>{profile.bio}</p>
@@ -175,20 +175,20 @@ export default function ProProfile() {
           {/* Categorías */}
           {(profile?.specialties?.length ?? 0) > 0 && (
             <motion.div variants={fadeUp}>
-              <div className="rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-                <div className="px-4 py-2.5" style={{ borderBottom: '1px solid #E8E0D4', background: '#F5F0E8' }}>
+              <div className="rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+                <div className="px-4 py-2.5" style={{ borderBottom: '1px solid #ECE4D8', background: '#F5F0E8' }}>
                   <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#999' }}>Servicios</p>
                 </div>
                 <div className="p-4 flex flex-wrap gap-2">
                   {profile!.specialties.map((cat) => {
-                    const { emoji, label } = getCategoryMeta(cat)
+                    const { label } = getCategoryMeta(cat)
                     return (
                       <span
                         key={cat}
                         className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold"
                         style={{ background: 'rgba(232,104,58,0.1)', color: '#E8683A', border: '1px solid rgba(232,104,58,0.2)' }}
                       >
-                        {emoji} {label}
+                        {createElement(getCategoryIcon(cat), { size: 12, style: { color: '#D4571F' } })} {label}
                       </span>
                     )
                   })}
@@ -199,8 +199,8 @@ export default function ProProfile() {
 
           {/* Info rápida */}
           <motion.div variants={fadeUp}>
-            <div className="rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-              <div className="px-4 py-2.5" style={{ borderBottom: '1px solid #E8E0D4', background: '#F5F0E8' }}>
+            <div className="rounded-2xl" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+              <div className="px-4 py-2.5" style={{ borderBottom: '1px solid #ECE4D8', background: '#F5F0E8' }}>
                 <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#999' }}>Información</p>
               </div>
               <div className="p-4 flex flex-col gap-3">
@@ -224,7 +224,7 @@ export default function ProProfile() {
                 )}
                 {profile?.quality_score != null && (
                   <div className="flex items-center gap-3">
-                    <Star size={15} style={{ color: '#F59E0B', flexShrink: 0 }} />
+                    <Star size={15} fill="#F5A623" style={{ color: '#F5A623', flexShrink: 0 }} />
                     <span className="text-sm" style={{ color: '#333' }}>Score de calidad: {profile.quality_score}/100</span>
                   </div>
                 )}
@@ -238,7 +238,7 @@ export default function ProProfile() {
               type="button"
               onClick={async () => { await signOut(); navigate('/login') }}
               className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2"
-              style={{ background: 'transparent', color: '#999', border: '1.5px solid #E8E0D4' }}
+              style={{ background: 'transparent', color: '#999', border: '1.5px solid #ECE4D8' }}
             >
               <LogOut size={14} /> Cerrar sesión
             </button>

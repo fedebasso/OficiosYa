@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react'
+import { createElement, useState, useMemo } from 'react'
 import { useAuthStore } from '../../store/authStore'
 import { useIncomingRequests } from '../../hooks/useRequests'
 import { PageShell } from '../../components/layout/PageShell'
-import { Briefcase, TrendingUp, Star, Filter } from 'lucide-react'
-import { getCategoryMeta } from '../../lib/categories'
+import { Briefcase, TrendingUp, Star, Filter, CheckCircle2, Siren, Search as SearchIcon } from 'lucide-react'
+import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
 import { motion, AnimatePresence } from 'framer-motion'
 import { fadeUp, staggerFast, scaleIn, staggerContainer, SPRING_SOFT } from '../../lib/motion'
 import type { ServiceRequest } from '../../store/requestStore'
@@ -26,7 +26,7 @@ function formatDate(iso: string) {
 function WorkSkeleton() {
   return (
     <div className="rounded-2xl p-4 flex items-center gap-3"
-      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+      style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
       <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ background: '#EDE8DE' }} />
       <div className="flex-1 flex flex-col gap-2">
         <div className="h-3 rounded w-2/3" style={{ background: '#EDE8DE' }} />
@@ -37,17 +37,17 @@ function WorkSkeleton() {
 }
 
 function WorkCard({ req }: { req: ServiceRequest }) {
-  const { emoji, label, accent } = getCategoryMeta(req.category)
+  const { label, accent } = getCategoryMeta(req.category)
   return (
     <motion.div
       variants={fadeUp}
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 1px 3px rgba(0,0,0,.04)' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 1px 3px rgba(0,0,0,.04)' }}
     >
       <div className="flex items-start gap-3 p-4">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: `${accent}15`, border: `1px solid ${accent}25` }}>
-          {emoji}
+          {createElement(getCategoryIcon(req.category), { size: 18, style: { color: '#D4571F' } })}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-1">
@@ -67,14 +67,14 @@ function WorkCard({ req }: { req: ServiceRequest }) {
               </span>
             )}
             {req.urgency && (
-              <span className="text-[9px] font-bold px-2 py-0.5 rounded-full"
+              <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full"
                 style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444' }}>
-                🚨 Urgente
+                {createElement(Siren, { size: 9 })} Urgente
               </span>
             )}
-            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full"
+            <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full"
               style={{ background: 'rgba(34,197,94,.1)', color: '#16a34a' }}>
-              ✓ Completado
+              {createElement(CheckCircle2, { size: 9 })} Completado
             </span>
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function ProWorkHistory() {
 
   const header = (
     <div className="px-4 pt-10 pb-4 sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4' }}>
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8' }}>
       <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#e8683a' }}>
         Panel profesional
       </p>
@@ -143,18 +143,18 @@ export default function ProWorkHistory() {
         {/* Stats */}
         {!loading && totalJobs > 0 && (
           <motion.div variants={fadeUp} className="grid grid-cols-3 gap-2">
-            <div className="rounded-2xl p-3 text-center" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+            <div className="rounded-2xl p-3 text-center" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
               <div className="flex justify-center mb-1"><Briefcase size={14} style={{ color: '#E8683A' }} /></div>
               <div className="text-xl font-black leading-none" style={{ color: '#111' }}>{totalJobs}</div>
               <div className="text-[9px] font-bold mt-1" style={{ color: '#AAA' }}>Total</div>
             </div>
-            <div className="rounded-2xl p-3 text-center" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+            <div className="rounded-2xl p-3 text-center" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
               <div className="flex justify-center mb-1"><TrendingUp size={14} style={{ color: '#22c55e' }} /></div>
               <div className="text-xl font-black leading-none" style={{ color: '#111' }}>{thisMonth}</div>
               <div className="text-[9px] font-bold mt-1" style={{ color: '#AAA' }}>Este mes</div>
             </div>
-            <div className="rounded-2xl p-3 text-center" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-              <div className="flex justify-center mb-1"><Star size={14} style={{ color: '#f59e0b' }} /></div>
+            <div className="rounded-2xl p-3 text-center" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+              <div className="flex justify-center mb-1"><Star size={14} fill="#F5A623" color="#F5A623" /></div>
               <div className="text-xl font-black leading-none" style={{ color: '#111' }}>{avgRating}</div>
               <div className="text-[9px] font-bold mt-1" style={{ color: '#AAA' }}>Rating</div>
             </div>
@@ -169,12 +169,12 @@ export default function ProWorkHistory() {
               onClick={() => setActiveCategory('todos')}
               whileTap={{ scale: 0.94 }} transition={SPRING_SOFT}
               className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-bold"
-              style={activeCategory === 'todos' ? { background: '#E8683A', color: '#fff', border: '1.5px solid #E8683A' } : { background: '#F5F0E8', color: '#555', border: '1.5px solid #EDE8DE' }}
+              style={activeCategory === 'todos' ? { background: '#E8683A', color: '#fff', border: '1.5px solid #E8683A' } : { background: '#F5F0E8', color: '#555', border: '1.5px solid #ECE4D8' }}
             >
               <Filter size={9} /> Todos
             </motion.button>
             {categories.map(cat => {
-              const { emoji, label } = getCategoryMeta(cat)
+              const { label } = getCategoryMeta(cat)
               const active = activeCategory === cat
               return (
                 <motion.button
@@ -183,9 +183,9 @@ export default function ProWorkHistory() {
                   onClick={() => setActiveCategory(cat)}
                   whileTap={{ scale: 0.94 }} transition={SPRING_SOFT}
                   className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
-                  style={active ? { background: '#E8683A', color: '#fff', border: '1.5px solid #E8683A' } : { background: '#F5F0E8', color: '#555', border: '1.5px solid #EDE8DE' }}
+                  style={active ? { background: '#E8683A', color: '#fff', border: '1.5px solid #E8683A' } : { background: '#F5F0E8', color: '#555', border: '1.5px solid #ECE4D8' }}
                 >
-                  {emoji} {label}
+                  {createElement(getCategoryIcon(cat), { size: 10, style: { color: active ? '#fff' : '#D4571F' } })} {label}
                 </motion.button>
               )
             })}
@@ -198,7 +198,7 @@ export default function ProWorkHistory() {
           <motion.div variants={scaleIn} initial="hidden" animate="visible"
             className="flex flex-col items-center gap-4 py-20 text-center">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
+              style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
               <Briefcase size={24} style={{ color: '#CCCCCC' }} />
             </div>
             <div>
@@ -236,7 +236,10 @@ export default function ProWorkHistory() {
         {!loading && completed.length > 0 && filtered.length === 0 && (
           <motion.div variants={scaleIn} initial="hidden" animate="visible"
             className="flex flex-col items-center gap-3 py-12 text-center">
-            <div className="text-3xl">🔍</div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+              style={{ background: '#F5F0E8', border: '1.5px solid #ECE4D8' }}>
+              <SearchIcon size={20} style={{ color: '#CCCCCC' }} />
+            </div>
             <p className="font-bold text-sm" style={{ color: '#111' }}>Sin trabajos en esta categoría</p>
             <motion.button type="button" onClick={() => setActiveCategory('todos')}
               whileTap={{ scale: 0.97 }} transition={SPRING_SOFT}

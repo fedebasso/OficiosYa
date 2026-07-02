@@ -1,6 +1,6 @@
 // src/pages/pro/ProAvailability.tsx
 import { useState } from 'react'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, CheckCircle2, Plus, Umbrella } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { PageShell } from '../../components/layout/PageShell'
 import { DateStrip } from '../../components/availability/DateStrip'
@@ -23,7 +23,7 @@ const DAYS_CONFIG: { value: DayOfWeek; label: string }[] = [
 
 const CARD: React.CSSProperties = {
   background: '#FFFFFF',
-  border: '1.5px solid #E8E0D4',
+  border: '1.5px solid #ECE4D8',
   borderRadius: 20,
   padding: '16px',
 }
@@ -39,7 +39,7 @@ const SECTION_LABEL: React.CSSProperties = {
 
 const SELECT: React.CSSProperties = {
   background: '#F5F0E8',
-  border: '1.5px solid #E8E0D4',
+  border: '1.5px solid #ECE4D8',
   borderRadius: 10,
   padding: '8px 10px',
   fontSize: 13,
@@ -117,7 +117,7 @@ export default function ProAvailability() {
   const header = (
     <div
       className="px-4 pt-10 pb-4 sticky top-0 z-50 flex items-center gap-3"
-      style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}
+      style={{ background: '#F5F0E8', borderBottom: '1px solid #ECE4D8' }}
     >
       <button
         type="button" onClick={() => navigate(-1)}
@@ -157,7 +157,7 @@ export default function ProAvailability() {
                     className="flex flex-col items-center py-2 rounded-xl transition-all active:scale-95"
                     style={{
                       background: active ? '#E8683A' : '#F5F0E8',
-                      border: `1.5px solid ${active ? '#E8683A' : '#E8E0D4'}`,
+                      border: `1.5px solid ${active ? '#E8683A' : '#ECE4D8'}`,
                       color: active ? '#FFFFFF' : '#888888',
                     }}
                   >
@@ -199,7 +199,7 @@ export default function ProAvailability() {
                       background: localDuration === opt.value ? '#0F6E56' : '#F5F0E8',
                       color:      localDuration === opt.value ? '#FFFFFF'  : '#555555',
                       border: '1.5px solid',
-                      borderColor: localDuration === opt.value ? '#0F6E56' : '#E8E0D4',
+                      borderColor: localDuration === opt.value ? '#0F6E56' : '#ECE4D8',
                     }}
                   >
                     {opt.label}
@@ -246,7 +246,7 @@ export default function ProAvailability() {
                         background: localBuffer === opt.value ? '#E8683A' : '#F5F0E8',
                         color:      localBuffer === opt.value ? '#FFFFFF'  : '#555555',
                         border: '1.5px solid',
-                        borderColor: localBuffer === opt.value ? '#E8683A' : '#E8E0D4',
+                        borderColor: localBuffer === opt.value ? '#E8683A' : '#ECE4D8',
                       }}
                     >
                       {opt.label}
@@ -265,7 +265,12 @@ export default function ProAvailability() {
                 boxShadow: '0 2px 8px rgba(232,104,58,.25)',
               }}
             >
-              {scheduleSaved ? '✓ Guardado' : 'Guardar horario'}
+              {scheduleSaved ? (
+                <span className="inline-flex items-center gap-1">
+                  <CheckCircle2 size={15} />
+                  Guardado
+                </span>
+              ) : 'Guardar horario'}
             </button>
           </div>
         </div>
@@ -276,9 +281,10 @@ export default function ProAvailability() {
           <button
             type="button" onClick={() => setBlockOpen(true)}
             className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 mb-3"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', color: '#555555' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#555555' }}
           >
-            ➕ Bloquear horario
+            <Plus size={15} />
+            Bloquear horario
           </button>
 
           {proBlocks.length > 0 && (
@@ -316,9 +322,10 @@ export default function ProAvailability() {
           <button
             type="button" onClick={() => setVacOpen(true)}
             className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-2 mb-3"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', color: '#555555' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', color: '#555555' }}
           >
-            🏖️ Agregar período
+            <Umbrella size={15} />
+            Agregar período
           </button>
 
           {proVacations.length > 0 && (
