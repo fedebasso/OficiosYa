@@ -1,8 +1,10 @@
+import { createElement } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { MapPin, Star, Phone } from 'lucide-react'
 import { Avatar } from '../ui/Avatar'
 import { Button } from '../ui/Button'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
-import { getCategoryMeta } from '../../lib/categories'
+import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
 
 interface Props {
   professional: ProfessionalWithProfile
@@ -11,7 +13,8 @@ interface Props {
 export function UrgentProfessionalCard({ professional }: Props) {
   const navigate = useNavigate()
   const { profiles, avg_rating, zone, jobs_count, response_time_min, categories } = professional
-  const { label: specialty, emoji } = getCategoryMeta(categories[0] ?? '')
+  const { label: specialty } = getCategoryMeta(categories[0] ?? '')
+  const categoryId = categories[0] ?? ''
 
   function handleCall(e: React.MouseEvent) {
     e.stopPropagation()
@@ -21,7 +24,7 @@ export function UrgentProfessionalCard({ professional }: Props) {
 return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.08)' }}
+      style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 4px 16px rgba(0,0,0,.08)' }}
     >
       <div className="p-4 pb-0">
         {/* Disponibilidad + tiempo */}
@@ -36,7 +39,7 @@ return (
             </span>
           </div>
           <span className="text-[10px] font-semibold" style={{ color: '#AAAAAA' }}>
-            ⏱ ~{response_time_min} min
+            ~{response_time_min} min
           </span>
         </div>
 
@@ -56,15 +59,16 @@ return (
             <div className="text-sm font-bold truncate mb-1" style={{ color: '#111111' }}>
               {profiles.full_name}
             </div>
-            <div className="text-[11px] font-semibold mb-1" style={{ color: '#E8683A' }}>
-              {emoji} {specialty}
+            <div className="flex items-center gap-1 text-[11px] font-semibold mb-1" style={{ color: '#E8683A' }}>
+              {createElement(getCategoryIcon(categoryId), { size: 12 })}
+              {specialty}
             </div>
             <div className="flex items-center gap-3 text-[11px]" style={{ color: '#888888' }}>
-              <span>📍 {zone}</span>
+              <span className="flex items-center gap-0.5"><MapPin size={11} />{zone}</span>
               {avg_rating != null && (
-                <span>
-                  <span style={{ color: '#f59e0b' }}>★</span>
-                  <span className="font-bold" style={{ color: '#111111' }}> {avg_rating}</span>
+                <span className="flex items-center gap-0.5">
+                  <Star size={11} style={{ color: '#f59e0b', fill: '#f59e0b' }} />
+                  <span className="font-bold" style={{ color: '#111111' }}>{avg_rating}</span>
                 </span>
               )}
               <span>{jobs_count} trabajos</span>
@@ -82,9 +86,9 @@ return (
           type="button"
           onClick={handleCall}
           className="rounded-xl py-3 text-[12px] font-bold flex items-center justify-center gap-1.5 active:scale-[0.97] active:opacity-80 transition-[transform,opacity] duration-150"
-          style={{ background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4' }}
+          style={{ background: '#F5F0E8', color: '#555555', border: '1.5px solid #ECE4D8' }}
         >
-          📞 Llamar
+          <Phone size={13} /> Llamar
         </button>
         <Button
           onClick={() => navigate(`/ticket?pro=${professional.id}`)}

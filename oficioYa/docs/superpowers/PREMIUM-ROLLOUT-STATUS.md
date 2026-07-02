@@ -67,15 +67,22 @@ Specs de referencia con el detalle:
   (Circle verde/Award/TrendingUp), zona con `MapPin`, rating con `Star`, estado
   vacío con `SearchIcon`, bordes de chips a `#ECE4D8`.
 
+### Fase 4 — Solicitudes + Urgencias
+- `src/pages/MisSolicitudes.tsx`: categoría/urgente/zona/fecha/vacío/banner con lucide
+  (getCategoryIcon, Siren, MapPin, Calendar, ClipboardList, Navigation/CheckCircle2); bordes `#ECE4D8`.
+- `src/pages/SolicitudDetail.tsx`: mapa `STATUS_ICON` (Clock/CheckCircle2/Navigation/Flag/XCircle),
+  chips work-type/ubicación/fecha/urgente con lucide, botones reseña/buscar con Star/Search; bordes `#ECE4D8`.
+- `src/pages/Urgencias.tsx`: `🚨` → `Siren`; borde `#ECE4D8`.
+- `src/components/professionals/UrgentProfessionalCard.tsx`: categoría/zona/rating/llamar
+  con getCategoryIcon/MapPin/Star/Phone.
+
 ---
 
 ## PENDIENTE (fases siguientes) 🔜
 
 Orden acordado con el usuario:
 
-- **Fase 4 — Solicitudes:**  ← PRÓXIMA `src/pages/MisSolicitudes.tsx` + `src/pages/SolicitudDetail.tsx`
-  + `src/pages/Urgencias.tsx`.
-- **Fase 5 — Comunicación:** `src/pages/Mensajes.tsx` + `src/pages/Chat.tsx`.
+- **Fase 5 — Comunicación:** `src/pages/Mensajes.tsx` + `src/pages/Chat.tsx`.  ← PRÓXIMA
 - **Fase 6 — Profesional:** `ProDashboard`, `ProRequests`, `ProProfile`, `ProAvailability`,
   `ProWorkHistory` (en `src/pages/pro/`).
 - **Fase 7 — Cuenta:** `src/pages/ClientProfile.tsx` + `Login`/`Register`.

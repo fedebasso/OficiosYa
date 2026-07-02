@@ -1,5 +1,5 @@
 import { useBack } from '../hooks/useBack'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Siren } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { UrgentProfessionalCard } from '../components/professionals/UrgentProfessionalCard'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
@@ -12,7 +12,7 @@ export default function Urgencias() {
   const { professionals, loading } = useUrgentProfessionals()
 
   const header = (
-    <div className="px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #E8E0D4' }}>
+    <div className="px-4 pt-10 pb-5 sticky top-0 z-50" style={{ background: '#F5F0E8', borderBottom: '1px solid #ECE4D8' }}>
       <button
         type="button"
         onClick={goBack}
@@ -27,14 +27,15 @@ export default function Urgencias() {
           {/* Badge urgencias — acento rojo sutil */}
           <div className="flex items-center gap-2 mb-2">
             <span
-              className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full"
+              className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full"
               style={{
                 background: 'rgba(239,68,68,.12)',
                 color: '#ef4444',
                 border: '1px solid rgba(239,68,68,.25)',
               }}
             >
-              🚨 Emergencias
+              <Siren size={11} />
+              Emergencias
             </span>
             {!loading && (
               <span className="flex items-center gap-1.5 text-[10px] font-bold" style={{ color: '#555555' }}>
@@ -56,13 +57,13 @@ export default function Urgencias() {
 
         {/* Ícono decorativo */}
         <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+          className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
           style={{
             background: 'linear-gradient(135deg, #1a0505, #2d0a0a)',
             border: '1px solid rgba(239,68,68,.2)',
           }}
         >
-          🚨
+          <Siren size={28} style={{ color: '#DC2626' }} />
         </div>
       </div>
     </div>

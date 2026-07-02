@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from 'react'
+import { createElement, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Search, MessageCircle, Star, XCircle } from 'lucide-react'
+import { ChevronLeft, Search, MessageCircle, Star, XCircle, MapPin, Calendar, Siren, CheckCircle2, Navigation, ClipboardList } from 'lucide-react'
 import { useRequestStore } from '../store/requestStore'
 import { ReviewForm } from '../components/requests/ReviewForm'
 import { NotificationBanner } from '../components/notifications/NotificationBanner'
 import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
-import { getCategoryMeta } from '../lib/categories'
+import { getCategoryMeta, getCategoryIcon } from '../lib/categories'
 import { getInitials } from '../lib/utils'
 import { fadeUp, staggerFast, scaleIn, SPRING_SOFT } from '../lib/motion'
 
 // ── Metadatos de estado ─────────────────────────────────────────────────────
 
-const STATUS_META: Record<string, { label: string; color: string; bg: string; dot: string; icon: string }> = {
-  pending:     { label: 'Pendiente',  color: '#D97706', bg: 'rgba(245,158,11,.12)', dot: '#F59E0B', icon: '⏳' },
-  confirmed:   { label: 'Confirmado', color: '#16A34A', bg: 'rgba(34,197,94,.12)',  dot: '#22C55E', icon: '✅' },
-  in_progress: { label: 'En camino',  color: '#7C3AED', bg: 'rgba(139,92,246,.12)', dot: '#8B5CF6', icon: '🚗' },
-  completed:   { label: 'Completado', color: '#2563EB', bg: 'rgba(37,99,235,.12)',  dot: '#3B82F6', icon: '🏁' },
-  cancelled:   { label: 'Cancelado',  color: '#DC2626', bg: 'rgba(239,68,68,.12)',  dot: '#EF4444', icon: '❌' },
+const STATUS_META: Record<string, { label: string; color: string; bg: string; dot: string }> = {
+  pending:     { label: 'Pendiente',  color: '#D97706', bg: 'rgba(245,158,11,.12)', dot: '#F59E0B' },
+  confirmed:   { label: 'Confirmado', color: '#16A34A', bg: 'rgba(34,197,94,.12)',  dot: '#22C55E' },
+  in_progress: { label: 'En camino',  color: '#7C3AED', bg: 'rgba(139,92,246,.12)', dot: '#8B5CF6' },
+  completed:   { label: 'Completado', color: '#2563EB', bg: 'rgba(37,99,235,.12)',  dot: '#3B82F6' },
+  cancelled:   { label: 'Cancelado',  color: '#DC2626', bg: 'rgba(239,68,68,.12)',  dot: '#EF4444' },
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ function formatScheduled(iso: string) {
 
 function SolicitudSkeleton() {
   return (
-    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 1px 4px rgba(0,0,0,.05)' }}>
+    <div className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 1px 4px rgba(0,0,0,.05)' }}>
       <div className="flex items-center gap-3 mb-3">
         <div className="w-12 h-12 rounded-full flex-shrink-0" style={{ background: 'linear-gradient(90deg,#EDE8DE 25%,#F5F0E8 50%,#EDE8DE 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.4s ease-in-out infinite' }} />
         <div className="flex-1 flex flex-col gap-2">
@@ -108,7 +108,7 @@ export default function MisSolicitudes() {
   const header = (
     <div
       className="sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
     >
       <div className="flex items-center gap-3 px-4 pt-12 pb-3">
         <button
@@ -134,7 +134,7 @@ export default function MisSolicitudes() {
         <div className="px-4 pb-3">
           <div
             className="flex items-center gap-2 rounded-2xl px-3 py-2.5"
-            style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#F5F0E8', border: '1.5px solid #ECE4D8' }}
           >
             <Search size={14} style={{ color: '#AAAAAA', flexShrink: 0 }} />
             <input
@@ -161,7 +161,7 @@ export default function MisSolicitudes() {
     const proName  = pro?.profiles?.full_name ?? 'Profesional'
     const proAvatar = pro?.profiles?.avatar_url
     const proZone  = pro?.zone
-    const { emoji, label } = getCategoryMeta(req.category)
+    const { label } = getCategoryMeta(req.category)
     const meta     = STATUS_META[req.status] ?? STATUS_META.pending
     const isActive = req.status === 'confirmed' || req.status === 'in_progress'
 
@@ -212,28 +212,28 @@ export default function MisSolicitudes() {
 
             {/* Fila 2: chips */}
             <div className="flex items-center gap-1.5 flex-wrap mb-1">
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
-                {emoji} {label}
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}>
+                {createElement(getCategoryIcon(req.category), { size: 12, style: { color: '#D4571F' } })} {label}
               </span>
               <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: meta.bg, color: meta.color }}>
                 {meta.label}
               </span>
               {req.urgency && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
-                  🚨 Urgente
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(239,68,68,.1)', color: '#DC2626' }}>
+                  <Siren size={11} /> Urgente
                 </span>
               )}
             </div>
 
             {/* Fila 3: zona */}
             {proZone && (
-              <p className="text-[10px] mb-0.5" style={{ color: '#AAAAAA' }}>📍 {proZone}</p>
+              <p className="inline-flex items-center gap-1 text-[10px] mb-0.5" style={{ color: '#AAAAAA' }}><MapPin size={11} /> {proZone}</p>
             )}
 
             {/* Fila 4: fecha/hora agendada */}
             {req.scheduled_date && (
-              <p className="text-[10px] font-semibold mb-0.5" style={{ color: '#E8683A' }}>
-                📅 {formatScheduled(req.scheduled_date)}
+              <p className="inline-flex items-center gap-1 text-[10px] font-semibold mb-0.5" style={{ color: '#E8683A' }}>
+                <Calendar size={11} /> {formatScheduled(req.scheduled_date)}
               </p>
             )}
 
@@ -254,10 +254,10 @@ export default function MisSolicitudes() {
               type="button"
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(`/buscar-profesional/${req.id}`)}
-              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-bold"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-bold"
               style={{ background: 'rgba(232,104,58,.08)', color: '#E8683A', border: '1.5px solid rgba(232,104,58,.25)' }}
             >
-              🔍 Buscar otro profesional
+              <Search size={14} /> Buscar otro profesional
             </motion.button>
           )}
           {(req.status === 'confirmed' || req.status === 'in_progress') && (
@@ -308,10 +308,10 @@ export default function MisSolicitudes() {
       className="flex flex-col items-center gap-5 py-20 text-center px-8"
     >
       <div
-        className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl"
-        style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
+        className="w-20 h-20 rounded-3xl flex items-center justify-center"
+        style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
       >
-        📋
+        <ClipboardList size={30} style={{ color: '#B3A794' }} />
       </div>
       <div>
         <p className="font-black text-base mb-1" style={{ color: '#111111' }}>Sin solicitudes aún</p>
@@ -352,7 +352,6 @@ export default function MisSolicitudes() {
           const shadow = isInProgress
             ? '0 4px 16px rgba(124,58,237,.35)'
             : '0 4px 16px rgba(232,104,58,.35)'
-          const icon = isInProgress ? '🚗' : '🎉'
           const text = isInProgress
             ? `¡${firstName} está en camino!`
             : `¡${firstName} aceptó tu trabajo!`
@@ -366,7 +365,7 @@ export default function MisSolicitudes() {
               className="mx-3 mt-3 rounded-2xl px-4 py-3 flex items-center gap-3"
               style={{ background: bg, boxShadow: shadow }}
             >
-              <span style={{ fontSize: 22, flexShrink: 0 }}>{icon}</span>
+              <span style={{ flexShrink: 0, color: '#FFFFFF' }}>{createElement(isInProgress ? Navigation : CheckCircle2, { size: 20 })}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-black text-white leading-tight">
                   {text}
@@ -495,7 +494,7 @@ export default function MisSolicitudes() {
                   type="button"
                   onClick={() => setCancellingId(null)}
                   className="flex-1 rounded-xl py-3 text-sm font-bold active:opacity-70"
-                  style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #E8E0D4' }}
+                  style={{ background: '#EDE8DE', color: '#555555', border: '1.5px solid #ECE4D8' }}
                 >
                   Volver
                 </button>

@@ -1,7 +1,7 @@
 // src/pages/SolicitudDetail.tsx
-import { useState } from 'react'
+import { useState, createElement } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ChevronLeft, MessageCircle, XCircle, Star } from 'lucide-react'
+import { ChevronLeft, MessageCircle, XCircle, Star, Clock, CheckCircle2, Navigation, Flag, ClipboardList, MapPin, Calendar, Search, Siren } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { useRequestStore } from '../store/requestStore'
@@ -11,12 +11,20 @@ import { PortfolioItemForm } from '../components/pro/portfolio/PortfolioItemForm
 import { useAuthStore } from '../store/authStore'
 import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT } from '../lib/motion'
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string; desc: string }> = {
-  pending:     { label: 'Pendiente',   color: '#f59e0b', bg: 'rgba(245,158,11,.1)',  icon: '⏳', desc: 'Esperando que el profesional confirme tu solicitud.' },
-  confirmed:   { label: 'Confirmado',  color: '#3b82f6', bg: 'rgba(59,130,246,.1)', icon: '✅', desc: 'El profesional aceptó tu solicitud. Podés chatear con él desde acá.' },
-  in_progress: { label: 'En camino',   color: '#8b5cf6', bg: 'rgba(139,92,246,.1)', icon: '🚗', desc: 'El profesional está en camino a tu domicilio.' },
-  completed:   { label: 'Completado',  color: '#22c55e', bg: 'rgba(34,197,94,.1)',  icon: '🏁', desc: 'Trabajo finalizado. ¡Dejá tu reseña!' },
-  cancelled:   { label: 'Cancelado',   color: '#ef4444', bg: 'rgba(239,68,68,.1)',  icon: '❌', desc: 'La solicitud fue cancelada.' },
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; desc: string }> = {
+  pending:     { label: 'Pendiente',   color: '#f59e0b', bg: 'rgba(245,158,11,.1)',  desc: 'Esperando que el profesional confirme tu solicitud.' },
+  confirmed:   { label: 'Confirmado',  color: '#3b82f6', bg: 'rgba(59,130,246,.1)', desc: 'El profesional aceptó tu solicitud. Podés chatear con él desde acá.' },
+  in_progress: { label: 'En camino',   color: '#8b5cf6', bg: 'rgba(139,92,246,.1)', desc: 'El profesional está en camino a tu domicilio.' },
+  completed:   { label: 'Completado',  color: '#22c55e', bg: 'rgba(34,197,94,.1)',  desc: 'Trabajo finalizado. ¡Dejá tu reseña!' },
+  cancelled:   { label: 'Cancelado',   color: '#ef4444', bg: 'rgba(239,68,68,.1)',  desc: 'La solicitud fue cancelada.' },
+}
+
+const STATUS_ICON: Record<string, typeof Clock> = {
+  pending: Clock,
+  confirmed: CheckCircle2,
+  in_progress: Navigation,
+  completed: Flag,
+  cancelled: XCircle,
 }
 
 const WORK_TYPE_LABELS: Record<string, string> = {
@@ -59,7 +67,7 @@ export default function SolicitudDetail() {
           variants={scaleIn} initial="hidden" animate="visible"
           className="flex flex-col items-center gap-4 py-24 text-center px-6"
         >
-          <div className="text-4xl">📋</div>
+          <ClipboardList size={34} style={{ color: '#B3A794' }} />
           <p className="font-black text-base" style={{ color: '#111' }}>Solicitud no encontrada</p>
           <motion.button
             type="button" onClick={() => navigate('/mis-solicitudes')}
@@ -82,7 +90,7 @@ export default function SolicitudDetail() {
 
   const header = (
     <div className="px-4 pt-10 pb-4 sticky top-0 z-50 flex items-center gap-3"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}>
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}>
       <button type="button" onClick={() => navigate(-1)}
         className="p-1 -ml-1 rounded-full active:opacity-60 flex-shrink-0">
         <ChevronLeft size={24} style={{ color: '#111' }} />
@@ -91,9 +99,9 @@ export default function SolicitudDetail() {
         <h1 className="text-base font-black" style={{ color: '#111' }}>Detalle de solicitud</h1>
         <p className="text-xs" style={{ color: '#AAA' }}>{date}</p>
       </div>
-      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
+      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
         style={{ background: status.bg, color: status.color }}>
-        {status.icon} {status.label}
+        {createElement(STATUS_ICON[req.status] ?? Clock, { size: 14 })} {status.label}
       </div>
     </div>
   )
@@ -109,7 +117,7 @@ export default function SolicitudDetail() {
         {!isCancelled && (
           <motion.div variants={fadeUp}
             className="rounded-2xl p-4"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
           >
             <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: '#AAA' }}>
               Estado del pedido
@@ -149,7 +157,7 @@ export default function SolicitudDetail() {
         {/* Descripción del trabajo */}
         <motion.div variants={fadeUp}
           className="rounded-2xl overflow-hidden"
-          style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+          style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
         >
           <div className="px-4 py-2.5" style={{ background: '#F5F0E8', borderBottom: '1px solid #EDE8DE' }}>
             <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#999' }}>Descripción</p>
@@ -158,33 +166,33 @@ export default function SolicitudDetail() {
             <p className="text-sm leading-relaxed" style={{ color: '#333' }}>{req.description}</p>
             <div className="flex gap-2 flex-wrap mt-1">
               {req.work_type && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: '#F5F0E8', color: '#666' }}>
-                  📋 {WORK_TYPE_LABELS[req.work_type] ?? req.work_type}
+                  <ClipboardList size={13} /> {WORK_TYPE_LABELS[req.work_type] ?? req.work_type}
                 </span>
               )}
               {req.location && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: '#F5F0E8', color: '#666' }}>
-                  📍 {req.location}
+                  <MapPin size={13} /> {req.location}
                 </span>
               )}
               {req.address && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: '#F5F0E8', color: '#666' }}>
-                  📍 {req.address}
+                  <MapPin size={13} /> {req.address}
                 </span>
               )}
               {req.scheduled_date && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: '#F5F0E8', color: '#666' }}>
-                  📅 {new Date(req.scheduled_date).toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                  <Calendar size={13} /> {new Date(req.scheduled_date).toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                 </span>
               )}
               {req.urgency && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,.2)' }}>
-                  🚨 Urgente
+                  <Siren size={11} /> Urgente
                 </span>
               )}
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
@@ -199,7 +207,7 @@ export default function SolicitudDetail() {
         {req.contact_phone && (
           <motion.div variants={fadeUp}
             className="rounded-2xl p-4"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}
           >
             <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: '#AAA' }}>
               Tu teléfono de contacto
@@ -257,10 +265,10 @@ export default function SolicitudDetail() {
             <button
               type="button"
               onClick={() => setShowReviewSheet(true)}
-              className="w-full rounded-2xl py-3.5 text-sm font-bold text-white"
+              className="w-full rounded-2xl py-3.5 text-sm font-bold text-white inline-flex items-center justify-center gap-1.5"
               style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.25)' }}
             >
-              ⭐ Dejar reseña
+              <Star size={15} fill="currentColor" /> Dejar reseña
             </button>
           )}
 
@@ -320,10 +328,10 @@ export default function SolicitudDetail() {
                 type="button"
                 whileTap={{ scale: 0.97 }}
                 onClick={() => navigate(`/buscar-profesional/${req.id}`)}
-                className="w-full rounded-2xl py-3.5 text-sm font-bold text-white"
+                className="w-full rounded-2xl py-3.5 text-sm font-bold text-white inline-flex items-center justify-center gap-1.5"
                 style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)' }}
               >
-                🔍 Buscar otro profesional
+                <Search size={14} /> Buscar otro profesional
               </motion.button>
             </div>
           </motion.div>
@@ -420,7 +428,7 @@ export default function SolicitudDetail() {
                   type="button" onClick={() => setShowCancel(false)}
                   whileTap={{ scale: 0.97 }} transition={SPRING_SOFT}
                   className="flex-1 rounded-xl py-3 text-sm font-bold"
-                  style={{ background: '#EDE8DE', color: '#555', border: '1.5px solid #E8E0D4' }}
+                  style={{ background: '#EDE8DE', color: '#555', border: '1.5px solid #ECE4D8' }}
                 >
                   Volver
                 </motion.button>
