@@ -118,6 +118,20 @@ const PRO_SLIDES = [
 
 ---
 
+## 2b. Quitar el onboarding redundante del Home
+
+En el Home hay un card `HowItWorks` ("👋 Bienvenido / ¿Cómo funciona OFIX?" con 3
+pasos) que funciona como mini-onboarding embebido. Es redundante con el
+`OnboardingFlow` real. Se elimina de la Home:
+
+- `src/pages/Home.tsx`: quitar el `import { HowItWorks }` y el `<HowItWorks />`
+  del render.
+- No borrar el archivo `src/components/home/HowItWorks.tsx` (queda huérfano pero
+  sin romper nada; se puede eliminar en limpieza aparte si se desea). Preferir no
+  eliminar el archivo para minimizar riesgo.
+
+---
+
 ## 3. Sin cambios de lógica
 
 - `App.tsx` sigue montando `<OnboardingFlow role={user.role} userId={user.id} onDone={...} />`.
