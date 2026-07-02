@@ -163,9 +163,8 @@ function MediaStep({
     }
   }, [photoUrl])
 
-  const missingPhoto = input.photo === null
-  const missingText  = input.text.trim().length < 10
-  const canAnalyze   = !missingPhoto && !missingText
+  const missingText = input.text.trim().length < 10
+  const canAnalyze  = !missingText
 
   function handleAnalyze() {
     setAttempted(true)
@@ -246,7 +245,7 @@ function MediaStep({
           onClick={() => fileRef.current?.click()}
           whileTap={{ scale: 0.98 }}
           className="flex flex-col items-center justify-center gap-2 rounded-2xl relative overflow-hidden"
-          style={{ height: 200, border: `2px dashed ${attempted && missingPhoto ? '#EF4444' : '#E8683A'}`, background: attempted && missingPhoto ? '#FFF5F5' : '#FEF0EA' }}
+          style={{ height: 200, border: '2px dashed #E8683A', background: '#FEF0EA' }}
         >
           <div style={{
             position: 'absolute', inset: 0,
@@ -261,17 +260,12 @@ function MediaStep({
             <Camera size={32} style={{ color: '#E8683A' }} />
           </motion.span>
           <span className="text-sm font-bold" style={{ color: '#E8683A', position: 'relative', zIndex: 1 }}>
-            Sacar o subir foto
+            Sacar o subir foto (opcional)
           </span>
           <span className="text-xs" style={{ color: '#C4927A', position: 'relative', zIndex: 1 }}>
             Tocá para abrir la cámara
           </span>
         </motion.button>
-        {attempted && missingPhoto && (
-          <p className="text-xs font-semibold -mt-1 inline-flex items-center gap-1" style={{ color: '#EF4444' }}>
-            <Camera size={16} style={{ color: '#EF4444' }} /> Agregá una foto del problema
-          </p>
-        )}
         </>
       )}
       <input
