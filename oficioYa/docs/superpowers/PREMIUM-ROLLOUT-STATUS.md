@@ -102,6 +102,14 @@ Specs de referencia con el detalle:
 - `src/pages/Register.tsx`: selector de rol (`User`/`Wrench` con createElement),
   inputs (`User`/`Mail`/`Lock`), error (`AlertTriangle`); bordes `#ECE4D8`.
 
+### Onboarding premium (post rollout)
+- `src/components/onboarding/OnboardingSlide.tsx` + `OnboardingFlow.tsx`: rediseño
+  premium (tile con degradé + ícono lucide, blobs, progreso segmentado animado,
+  botón con ArrowRight). Cliente (3) y profesional (4). Reemplaza los emojis que
+  aún tenía el onboarding.
+- `src/pages/Home.tsx`: quitado `<HowItWorks />` (onboarding redundante embebido).
+  El archivo `HowItWorks.tsx` queda huérfano (no se renderiza).
+
 ## ROLLOUT COMPLETO ✅
 
 Todas las pantallas principales migradas al lenguaje premium (Fases 1-7).

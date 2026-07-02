@@ -5,7 +5,6 @@ import { Search } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { BrandLogo } from '../components/common/BrandLogo'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
-import { HowItWorks } from '../components/home/HowItWorks'
 import { CategoryIcons } from '../components/home/CategoryIcons'
 import { TicketEntryCard } from '../components/ticket/TicketEntryCard'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
@@ -55,7 +54,6 @@ export default function Home() {
     <PageShell header={homeHeader} showBottomNav>
       <div className="flex flex-col gap-4 pt-4 pb-4">
         <CategoryIcons />
-        <HowItWorks />
         <TopRated />
         <TicketEntryCard />
         {/* Banner Servicios Oficiales — Fase 2: activar en featureFlags.ts */}

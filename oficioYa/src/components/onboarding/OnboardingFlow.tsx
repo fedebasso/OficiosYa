@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Sparkles, Zap, MessageCircle, Briefcase, ClipboardList, CalendarClock, Star, ArrowRight } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { OnboardingSlide } from './OnboardingSlide'
 
 interface OnboardingFlowProps {
@@ -8,57 +10,23 @@ interface OnboardingFlowProps {
   onDone: () => void
 }
 
-const CLIENT_SLIDES = [
-  {
-    icon: '🏠',
-    title: 'Bienvenido a OFIX',
-    description: 'Encontrá profesionales de confianza en Montevideo para cualquier trabajo del hogar',
-    gradient: true,
-  },
-  {
-    icon: '⚡',
-    title: 'Servicios y Urgencias',
-    description: '¿Es urgente? Activá el modo urgencia y recibís respuesta en minutos. Electricistas, plomeros, pintores y más',
-    gradient: false,
-  },
-  {
-    icon: '💬',
-    title: 'Chateá y coordiná',
-    description: 'Hablá directo con el profesional, revisá sus reseñas y coordiná todo sin salir de la app',
-    gradient: false,
-  },
+interface Slide { Icon: LucideIcon; title: string; description: string }
+
+const CLIENT_SLIDES: Slide[] = [
+  { Icon: Sparkles,      title: 'Bienvenido a OFIX',     description: 'Encontrá profesionales de confianza en Montevideo para cualquier trabajo del hogar' },
+  { Icon: Zap,           title: 'Servicios y Urgencias', description: '¿Es urgente? Activá el modo urgencia y recibí respuesta en minutos. Electricistas, plomeros, pintores y más' },
+  { Icon: MessageCircle, title: 'Chateá y coordiná',     description: 'Hablá directo con el profesional, revisá sus reseñas y coordiná todo sin salir de la app' },
 ]
 
-const PRO_SLIDES = [
-  {
-    icon: '👷',
-    title: 'Bienvenido a OFIX',
-    description: 'Tu plataforma para conseguir más clientes en Montevideo',
-    gradient: true,
-  },
-  {
-    icon: '📋',
-    title: 'Recibí solicitudes',
-    description: 'Los clientes te contactan directamente según tu categoría y zona de trabajo',
-    gradient: false,
-  },
-  {
-    icon: '⚡',
-    title: 'Urgencias y disponibilidad',
-    description: 'Activá tu disponibilidad y aparecé primero cuando hay urgencias cerca tuyo',
-    gradient: false,
-  },
-  {
-    icon: '⭐',
-    title: 'Construí tu reputación',
-    description: 'Acumulá reseñas reales, subí fotos de tus trabajos y destacate del resto',
-    gradient: false,
-  },
+const PRO_SLIDES: Slide[] = [
+  { Icon: Briefcase,     title: 'Bienvenido a OFIX',          description: 'Tu plataforma para conseguir más clientes en Montevideo' },
+  { Icon: ClipboardList, title: 'Recibí solicitudes',         description: 'Los clientes te contactan directamente según tu categoría y zona de trabajo' },
+  { Icon: CalendarClock, title: 'Urgencias y disponibilidad', description: 'Activá tu disponibilidad y aparecé primero cuando hay urgencias cerca tuyo' },
+  { Icon: Star,          title: 'Construí tu reputación',     description: 'Acumulá reseñas reales, subí fotos de tus trabajos y destacate del resto' },
 ]
 
 export function OnboardingFlow({ role, userId, onDone }: OnboardingFlowProps) {
   const [index, setIndex] = useState(0)
-  const [direction, setDirection] = useState(1)
   const slides = role === 'client' ? CLIENT_SLIDES : PRO_SLIDES
   const isLast = index === slides.length - 1
   const current = slides[index]
@@ -70,26 +38,14 @@ export function OnboardingFlow({ role, userId, onDone }: OnboardingFlowProps) {
 
   const next = () => {
     if (isLast) { finish(); return }
-    setDirection(1)
     setIndex((i) => i + 1)
   }
 
   return (
-    <div
-      className="fixed inset-0 flex flex-col"
-      style={{ zIndex: 9998, maxWidth: 480, margin: '0 auto' }}
-    >
-      {/* Botón saltar */}
-      <div className="absolute top-12 right-5 z-10">
-        <button
-          type="button"
-          onClick={finish}
-          className="text-sm font-bold px-3 py-1.5 rounded-full"
-          style={{
-            color: current.gradient ? 'rgba(255,255,255,0.8)' : '#999999',
-            background: current.gradient ? 'rgba(255,255,255,0.15)' : 'transparent',
-          }}
-        >
+    <div className="fixed inset-0 flex flex-col" style={{ zIndex: 9998, maxWidth: 480, margin: '0 auto', background: '#F5F0E8' }}>
+      {/* Saltar */}
+      <div className="flex justify-end" style={{ padding: '48px 20px 0' }}>
+        <button type="button" onClick={finish} className="text-sm font-bold px-2 py-1" style={{ color: '#9C917E' }}>
           Saltar
         </button>
       </div>
@@ -100,57 +56,36 @@ export function OnboardingFlow({ role, userId, onDone }: OnboardingFlowProps) {
           <motion.div
             key={index}
             className="absolute inset-0"
-            initial={{ x: direction > 0 ? '100%' : '-100%', opacity: 0 }}
+            initial={{ x: 40, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction > 0 ? '-100%' : '100%', opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            exit={{ x: -40, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <OnboardingSlide
-              icon={current.icon}
-              title={current.title}
-              description={current.description}
-              gradient={current.gradient}
-            />
+            <OnboardingSlide Icon={current.Icon} title={current.title} description={current.description} />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Footer: dots + botón */}
-      <div
-        className="flex flex-col items-center gap-5 px-6 pb-12 pt-6"
-        style={{ background: current.gradient ? 'linear-gradient(160deg, #E8683A 0%, #c44d1f 100%)' : '#FFFFFF' }}
-      >
-        {/* Dots */}
-        <div className="flex items-center gap-2">
+      {/* Footer: progreso + botón */}
+      <div className="flex flex-col gap-5" style={{ padding: '0 28px 40px' }}>
+        <div className="flex items-center gap-1.5">
           {slides.map((_, i) => (
-            <div
-              key={i}
-              style={{
-                width: i === index ? 20 : 6,
-                height: 6,
-                borderRadius: 3,
-                background: current.gradient
-                  ? i === index ? '#FFFFFF' : 'rgba(255,255,255,0.35)'
-                  : i === index ? '#E8683A' : '#E8E0D4',
-                transition: 'all 0.3s ease',
-              }}
-            />
+            <div key={i} className="flex-1 overflow-hidden" style={{ height: 4, borderRadius: 2, background: '#E7DFD2' }}>
+              <div style={{ height: '100%', borderRadius: 2, background: '#E8683A', width: i <= index ? '100%' : '0%', transition: 'width 0.4s ease' }} />
+            </div>
           ))}
         </div>
 
-        {/* Botón siguiente / empezar */}
-        <button
+        <motion.button
           type="button"
           onClick={next}
-          className="w-full rounded-2xl py-4 text-base font-black transition-opacity active:opacity-80"
-          style={{
-            background: current.gradient ? '#FFFFFF' : '#E8683A',
-            color: current.gradient ? '#E8683A' : '#FFFFFF',
-            boxShadow: current.gradient ? 'none' : '0 4px 14px rgba(232,104,58,0.3)',
-          }}
+          whileTap={{ scale: 0.97 }}
+          className="w-full flex items-center justify-center gap-2 font-black text-white"
+          style={{ height: 54, borderRadius: 16, background: '#E8683A', boxShadow: '0 8px 20px -6px rgba(232,104,58,.5)', fontSize: 16 }}
         >
-          {isLast ? '¡Empezar!' : index === 0 ? 'Empezar' : 'Siguiente'}
-        </button>
+          {isLast ? '¡Empezar!' : 'Continuar'}
+          {!isLast && <ArrowRight size={18} />}
+        </motion.button>
       </div>
     </div>
   )
