@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { createElement, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ChevronLeft, MessageCircle, Search } from 'lucide-react'
+import { ChevronLeft, MessageCircle, Search, MapPin, Image as ImageIcon, Mic } from 'lucide-react'
+import { getCategoryIcon } from '../lib/categories'
 import { useChatStore } from '../store/chatStore'
 import { useRequestStore } from '../store/requestStore'
 import { useProRequestsStore } from '../store/proRequestsStore'
@@ -37,8 +38,8 @@ function timeAgo(iso: string) {
 }
 
 function lastMessagePreview(type: string, content: string) {
-  if (type === 'image') return '📷 Foto'
-  if (type === 'audio') return '🎙️ Audio'
+  if (type === 'image') return <span className="inline-flex items-center gap-1"><ImageIcon size={11} /> Foto</span>
+  if (type === 'audio') return <span className="inline-flex items-center gap-1"><Mic size={11} /> Audio</span>
   return content.length > 50 ? content.slice(0, 50) + '…' : content
 }
 
@@ -94,7 +95,7 @@ export default function Mensajes() {
   const header = (
     <div
       className="sticky top-0 z-50"
-      style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #ECE4D8', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }}
     >
       {/* Título */}
       <div className="flex items-center gap-3 px-4 pt-12 pb-3">
@@ -122,7 +123,7 @@ export default function Mensajes() {
         <div className="px-4 pb-3">
           <div
             className="flex items-center gap-2 rounded-2xl px-3 py-2.5"
-            style={{ background: '#F5F0E8', border: '1.5px solid #E8E0D4' }}
+            style={{ background: '#F5F0E8', border: '1.5px solid #ECE4D8' }}
           >
             <Search size={14} style={{ color: '#AAAAAA', flexShrink: 0 }} />
             <input
@@ -151,13 +152,13 @@ export default function Mensajes() {
         <div className="flex flex-col items-center gap-5 py-24 text-center px-8 flex-1">
           <div
             className="w-20 h-20 rounded-3xl flex items-center justify-center"
-            style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
+            style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }}
           >
             <MessageCircle size={32} style={{ color: '#E8683A' }} />
           </div>
           <div>
             <p className="font-black text-base mb-1" style={{ color: '#111111' }}>
-              💬 No tenés conversaciones todavía
+              No tenés conversaciones todavía
             </p>
             <p className="text-sm leading-relaxed" style={{ color: '#AAAAAA' }}>
               Cuando solicites un profesional, aparecerán aquí tus chats.
@@ -200,7 +201,7 @@ export default function Mensajes() {
           const proAvatar   = pro?.profiles?.avatar_url
           const proInitials = getInitials(proName)
           const proZone     = pro?.zone
-          const { emoji, label } = getCategoryMeta(req.category)
+          const { label } = getCategoryMeta(req.category)
           const messages    = messagesByRequest[req.id] ?? []
           const last        = messages[messages.length - 1]
           const meta        = STATUS_META[req.status] ?? STATUS_META.confirmed
@@ -276,10 +277,10 @@ export default function Mensajes() {
                 {/* Fila 2: oficio + estado */}
                 <div className="flex items-center gap-1.5 mb-1">
                   <span
-                    className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md"
                     style={{ background: 'rgba(232,104,58,.1)', color: '#E8683A' }}
                   >
-                    {emoji} {label}
+                    {createElement(getCategoryIcon(req.category), { size: 11, style: { color: '#D4571F' } })} {label}
                   </span>
                   <span
                     className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
@@ -291,8 +292,8 @@ export default function Mensajes() {
 
                 {/* Fila 3: zona */}
                 {proZone && (
-                  <p className="text-[10px] mb-0.5" style={{ color: '#AAAAAA' }}>
-                    📍 {proZone}
+                  <p className="inline-flex items-center gap-1 text-[10px] mb-0.5" style={{ color: '#AAAAAA' }}>
+                    <MapPin size={11} /> {proZone}
                   </p>
                 )}
 

@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { createElement, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ChevronLeft, MapPin, Calendar } from 'lucide-react'
+import { ChevronLeft, MapPin, Calendar, Clock, CheckCircle2, Navigation, Flag } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { ChatBubble } from '../components/chat/ChatBubble'
@@ -14,10 +14,17 @@ import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
 import { getCategoryMeta } from '../lib/categories'
 
 const STATUS_LABEL: Record<string, string> = {
-  pending:     '⏳ Pendiente',
-  confirmed:   '✅ Confirmado',
-  in_progress: '🚗 En camino',
-  completed:   '🏁 Completado',
+  pending:     'Pendiente',
+  confirmed:   'Confirmado',
+  in_progress: 'En camino',
+  completed:   'Completado',
+}
+
+const STATUS_ICON: Record<string, typeof Clock> = {
+  pending:     Clock,
+  confirmed:   CheckCircle2,
+  in_progress: Navigation,
+  completed:   Flag,
 }
 
 function formatScheduledDate(iso: string) {
@@ -157,9 +164,10 @@ export default function Chat() {
       {/* Status badge */}
       {req.status !== 'cancelled' && (
         <div
-          className="px-2 py-1 rounded-lg text-[9px] font-bold flex-shrink-0"
+          className="px-2 py-1 rounded-lg text-[9px] font-bold flex-shrink-0 inline-flex items-center gap-1"
           style={{ background: 'rgba(255,255,255,0.2)', color: 'white', border: '1px solid rgba(255,255,255,0.3)' }}
         >
+          {createElement(STATUS_ICON[req.status] ?? Clock, { size: 10 })}
           {STATUS_LABEL[req.status] ?? req.status}
         </div>
       )}

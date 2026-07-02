@@ -76,15 +76,24 @@ Specs de referencia con el detalle:
 - `src/components/professionals/UrgentProfessionalCard.tsx`: categoría/zona/rating/llamar
   con getCategoryIcon/MapPin/Star/Phone.
 
+### Fase 5 — Mensajes + Chat
+- `src/pages/Mensajes.tsx`: preview foto/audio (`ImageIcon`/`Mic`), chip categoría
+  (getCategoryIcon), zona (`MapPin`), vacío sin emoji; bordes `#ECE4D8`.
+- `src/pages/Chat.tsx`: `STATUS_ICON` (Clock/CheckCircle2/Navigation/Flag) en el badge de estado.
+- Componentes en `src/components/chat/` ya usaban lucide (sin cambios).
+
+### Fix Home (post-Fase 4)
+- `src/components/home/FeaturedProfessionals.tsx`: eliminados los pills de filtro
+  de categoría (redundantes con CategoryIcons); "Más recomendados" muestra la lista directa.
+
 ---
 
 ## PENDIENTE (fases siguientes) 🔜
 
 Orden acordado con el usuario:
 
-- **Fase 5 — Comunicación:** `src/pages/Mensajes.tsx` + `src/pages/Chat.tsx`.  ← PRÓXIMA
 - **Fase 6 — Profesional:** `ProDashboard`, `ProRequests`, `ProProfile`, `ProAvailability`,
-  `ProWorkHistory` (en `src/pages/pro/`).
+  `ProWorkHistory` (en `src/pages/pro/`).  ← PRÓXIMA
 - **Fase 7 — Cuenta:** `src/pages/ClientProfile.tsx` + `Login`/`Register`.
 
 Método por fase: brainstorm/design corto → spec → plan → ejecutar → lint+build → deploy.
