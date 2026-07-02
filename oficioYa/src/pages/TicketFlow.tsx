@@ -1,28 +1,29 @@
 // src/pages/TicketFlow.tsx
-import { useState, useRef, useMemo, useEffect } from 'react'
+import { useState, useRef, useMemo, useEffect, createElement } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Sparkles, MapPin, Star, Briefcase, Camera, Pencil, Siren, Globe, HelpCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { analyzeTicket } from '../services/ai/ticketService'
 import { useProfessionals } from '../hooks/useProfessionals'
-import { CATEGORY_LABELS, CATEGORY_EMOJI } from '../lib/categories'
+import { CATEGORY_LABELS, getCategoryIcon, getCategoryMeta } from '../lib/categories'
 import { SPRING_GENTLE } from '../lib/motion'
 import { BARRIOS_MONTEVIDEO } from '../lib/barrios'
 import { professionalService } from '../services/professionalService'
-import { scoreProfessional } from '../lib/scoring'
+import { scoreBreakdown } from '../lib/scoring'
+import { inferCategory } from '../lib/inferCategory'
 import { isInRadius } from '../lib/barrio-coords'
 import type { TicketInput, GeneratedTicket } from '../types/ticket'
 import type { ProfessionalWithProfile } from '../hooks/useProfessionals'
 
 /* ── Datos de categorías para el paso 1 ── */
 const CATEGORIES = [
-  { id: 'electricista',       emoji: '⚡', label: 'Electricidad',  desc: 'Tomacorrientes, luces, tableros' },
-  { id: 'plomero',            emoji: '🚿', label: 'Sanitario',     desc: 'Caños, llaves, pérdidas' },
-  { id: 'aire_acondicionado', emoji: '❄️', label: 'Aire Ac.',      desc: 'Instalación y limpieza' },
-  { id: 'cerrajero',          emoji: '🔑', label: 'Cerrajería',    desc: 'Cerraduras, llaves, portones' },
-  { id: 'pintor',             emoji: '🎨', label: 'Pintura',       desc: 'Interior y exterior' },
-  { id: 'albanil',            emoji: '🧱', label: 'Albañilería',   desc: 'Reparaciones, muros, pisos' },
+  { id: 'electricista',       label: 'Electricidad',  desc: 'Tomacorrientes, luces, tableros' },
+  { id: 'plomero',            label: 'Sanitario',     desc: 'Caños, llaves, pérdidas' },
+  { id: 'aire_acondicionado', label: 'Aire Ac.',      desc: 'Instalación y limpieza' },
+  { id: 'cerrajero',          label: 'Cerrajería',    desc: 'Cerraduras, llaves, portones' },
+  { id: 'pintor',             label: 'Pintura',       desc: 'Interior y exterior' },
+  { id: 'albanil',            label: 'Albañilería',   desc: 'Reparaciones, muros, pisos' },
 ]
 
 /* ── Paso 1: Categoría ── */
@@ -42,10 +43,10 @@ function CategoryStep({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#E8683A' }}>
-          ✨ Nuevo ticket
+        <p className="text-[10px] font-bold uppercase tracking-widest mb-1 inline-flex items-center gap-1" style={{ color: '#D4571F' }}>
+          <Sparkles size={12} style={{ color: '#D4571F' }} /> Nuevo ticket
         </p>
-        <h2 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
+        <h2 className="text-xl font-black leading-tight" style={{ color: '#1A1712', letterSpacing: '-0.3px' }}>
           ¿Qué tipo de trabajo necesitás?
         </h2>
       </motion.div>
@@ -76,7 +77,9 @@ function CategoryStep({
                 boxShadow: active ? '0 4px 14px rgba(232,104,58,.25)' : '0 1px 3px rgba(0,0,0,.04)',
               }}
             >
-              <span className="text-2xl flex-shrink-0">{cat.emoji}</span>
+              <span className="text-2xl flex-shrink-0">
+                {createElement(getCategoryIcon(cat.id), { size: 26, style: { color: active ? '#fff' : '#D4571F' } })}
+              </span>
               <div className="min-w-0">
                 <div className="text-sm font-bold truncate" style={{ color: active ? '#fff' : '#111' }}>
                   {cat.label}
@@ -103,6 +106,32 @@ function CategoryStep({
       >
         Continuar →
       </motion.button>
+    </div>
+  )
+}
+
+/* ── Disambiguation step ── */
+function DisambiguationStep({ alternatives, onPick, onSeeAll }: { alternatives: string[]; onPick: (category: string) => void; onSeeAll: () => void }) {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#D4571F' }}>Ayudanos a entender</p>
+        <h2 className="text-xl font-black leading-tight" style={{ color: '#1A1712', letterSpacing: '-0.3px' }}>¿Qué es lo que te pasa?</h2>
+        <p className="text-sm mt-1" style={{ color: '#7A6E5E' }}>Elegí lo que más se acerca a tu problema.</p>
+      </div>
+      <div className="flex flex-col gap-2.5">
+        {alternatives.map((id) => (
+          <button key={id} type="button" onClick={() => onPick(id)}
+            className="w-full flex items-center gap-3 p-4 rounded-2xl text-left active:scale-[0.99] transition-transform"
+            style={{ background: '#FFFFFF', border: '1px solid #ECE6DC', boxShadow: '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,20,.14)' }}>
+            <span className="flex items-center justify-center flex-shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: '#FAF6F0' }}>
+              {createElement(getCategoryIcon(id), { size: 20, style: { color: '#D4571F' } })}
+            </span>
+            <span className="font-bold" style={{ color: '#1A1712', fontSize: 15 }}>{getCategoryMeta(id).label}</span>
+          </button>
+        ))}
+      </div>
+      <button type="button" onClick={onSeeAll} className="text-sm font-bold self-center mt-1" style={{ color: '#7A6E5E' }}>No estoy seguro · ver todas las categorías</button>
     </div>
   )
 }
@@ -168,8 +197,8 @@ function MediaStep({
             <div className="text-sm font-bold truncate" style={{ color: '#111111' }}>
               {lockedPro.profiles.full_name}
             </div>
-            <div className="text-[10px]" style={{ color: '#AAAAAA' }}>
-              {CATEGORY_EMOJI[lockedPro.categories[0]] ?? '🛠️'} {CATEGORY_LABELS[lockedPro.categories[0]] ?? lockedPro.categories[0]} · {lockedPro.zone}
+            <div className="text-[10px] inline-flex items-center gap-1" style={{ color: '#AAAAAA' }}>
+              {createElement(getCategoryIcon(lockedPro.categories[0]), { size: 12, style: { color: '#D4571F' } })} {CATEGORY_LABELS[lockedPro.categories[0]] ?? lockedPro.categories[0]} · {lockedPro.zone}
             </div>
           </div>
           {lockedPro.avg_rating != null && (
@@ -177,7 +206,7 @@ function MediaStep({
               className="flex items-center gap-1 px-2 py-1 rounded-xl flex-shrink-0"
               style={{ background: 'rgba(34,197,94,.1)', border: '1px solid rgba(34,197,94,.2)' }}
             >
-              <span style={{ color: '#f59e0b', fontSize: 11 }}>★</span>
+              <Star size={11} fill="#F5A623" color="#F5A623" />
               <span className="text-xs font-black" style={{ color: '#22c55e' }}>{lockedPro.avg_rating}</span>
             </div>
           )}
@@ -227,9 +256,9 @@ function MediaStep({
           <motion.span
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2.5, ease: 'easeInOut', repeat: Infinity }}
-            style={{ fontSize: 42, position: 'relative', zIndex: 1 }}
+            style={{ position: 'relative', zIndex: 1 }}
           >
-            📷
+            <Camera size={32} style={{ color: '#E8683A' }} />
           </motion.span>
           <span className="text-sm font-bold" style={{ color: '#E8683A', position: 'relative', zIndex: 1 }}>
             Sacar o subir foto
@@ -239,8 +268,8 @@ function MediaStep({
           </span>
         </motion.button>
         {attempted && missingPhoto && (
-          <p className="text-xs font-semibold -mt-1" style={{ color: '#EF4444' }}>
-            📷 Agregá una foto del problema
+          <p className="text-xs font-semibold -mt-1 inline-flex items-center gap-1" style={{ color: '#EF4444' }}>
+            <Camera size={16} style={{ color: '#EF4444' }} /> Agregá una foto del problema
           </p>
         )}
         </>
@@ -272,7 +301,7 @@ function MediaStep({
         />
         <div className="flex items-center justify-between px-1">
           {attempted && missingText
-            ? <p className="text-xs font-semibold" style={{ color: '#EF4444' }}>✏️ Describí el problema</p>
+            ? <p className="text-xs font-semibold inline-flex items-center gap-1" style={{ color: '#EF4444' }}><Pencil size={12} style={{ color: '#EF4444' }} /> Describí el problema</p>
             : <span />
           }
           <p className="text-xs" style={{ color: input.text.trim().length >= 10 ? '#16A34A' : '#AAAAAA' }}>
@@ -293,8 +322,8 @@ function MediaStep({
             border: `1.5px solid ${input.zone ? '#E8683A' : '#EDE8DE'}`,
           }}
         >
-          <span className="text-sm font-bold" style={{ color: input.zone ? '#E8683A' : '#555555' }}>
-            📍 {input.zone || 'Seleccioná tu barrio'}
+          <span className="text-sm font-bold inline-flex items-center gap-1" style={{ color: input.zone ? '#E8683A' : '#555555' }}>
+            <MapPin size={13} style={{ color: input.zone ? '#E8683A' : '#555555' }} /> {input.zone || 'Seleccioná tu barrio'}
           </span>
           {input.zone ? (
             <span
@@ -376,10 +405,10 @@ function MediaStep({
       <button
         type="button"
         onClick={handleAnalyze}
-        className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 transition-opacity"
+        className="w-full rounded-2xl py-4 text-base font-bold text-white active:opacity-80 transition-opacity inline-flex items-center justify-center gap-2"
         style={{ background: '#E8683A', boxShadow: '0 4px 14px rgba(232,104,58,.3)', opacity: canAnalyze ? 1 : 0.65 }}
       >
-        Analizar con IA ✨
+        Analizar con IA <Sparkles size={16} />
       </button>
     </div>
   )
@@ -420,12 +449,11 @@ function AIProcessingStep({ progress }: { progress: number }) {
         />
         {/* Core */}
         <motion.span
-          className="relative z-10"
-          style={{ fontSize: 32 }}
+          className="relative z-10 flex items-center justify-center"
           animate={{ rotate: [-3, 3, -3] }}
           transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }}
         >
-          ✨
+          <Sparkles size={32} style={{ color: '#fff' }} />
         </motion.span>
       </div>
 
@@ -501,20 +529,20 @@ function ResultsStep({
   clientZone: string
   onPedir: (pro: ProfessionalWithProfile) => void
 }) {
+  const navigate = useNavigate()
   const { professionals } = useProfessionals(category)
   const inRange = professionals.filter((p) =>
     isInRadius(p.zone, p.radius_km, clientZone)
   )
 
-  const sorted = inRange
-    .map((p) => ({ pro: p, score: scoreProfessional(p, clientZone) }))
-    .sort((a, b) => b.score - a.score)
-    .map(({ pro }) => pro)
+  const ranked = inRange
+    .map((p) => ({ pro: p, bd: scoreBreakdown(p, clientZone, category) }))
+    .filter((r) => r.bd.total > 0)
+    .sort((a, b) => b.bd.total - a.bd.total)
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  // Selección efectiva: la del usuario, o el primero por defecto
-  const effectiveId = selectedId ?? sorted[0]?.id ?? null
-  const selectedPro = sorted.find((p) => p.id === effectiveId) ?? null
+  const effectiveId = selectedId ?? ranked[0]?.pro.id ?? null
+  const selectedPro = ranked.find((r) => r.pro.id === effectiveId)?.pro ?? null
 
   return (
     <div className="flex flex-col pb-24" style={{ minHeight: '100%' }}>
@@ -534,7 +562,7 @@ function ResultsStep({
             color: '#E8683A',
           }}
         >
-          ✨ Generado por IA
+          <Sparkles size={12} /> Generado por IA
         </motion.div>
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
@@ -561,14 +589,14 @@ function ResultsStep({
           className="flex gap-2 flex-wrap"
         >
           {ticket.urgent && (
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1"
               style={{ background: 'rgba(239,68,68,.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,.2)' }}>
-              🚨 Urgente
+              <Siren size={11} /> Urgente
             </span>
           )}
-          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1"
             style={{ background: '#F5F0E8', color: '#666' }}>
-            {CATEGORY_EMOJI[category]} {CATEGORY_LABELS[category] ?? category}
+            {createElement(getCategoryIcon(category), { size: 11, style: { color: '#D4571F' } })} {CATEGORY_LABELS[category] ?? category}
           </span>
         </motion.div>
       </div>
@@ -590,77 +618,118 @@ function ResultsStep({
           initial="hidden"
           animate="visible"
         >
-          {sorted.slice(0, 5).map((pro) => {
+          {ranked.slice(0, 5).map(({ pro, bd }, index) => {
             const selected = pro.id === effectiveId
             return (
-              <motion.button
-                key={pro.id}
-                type="button"
-                onClick={() => setSelectedId(pro.id)}
+              <motion.div key={pro.id}
                 variants={{
                   hidden: { opacity: 0, y: 16 },
                   visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 400, damping: 32 } },
                 }}
-                whileTap={{ scale: 0.98 }}
-                className="rounded-2xl overflow-hidden text-left w-full"
-                style={{
-                  background: '#FFFFFF',
-                  border: `2px solid ${selected ? '#E8683A' : '#EDE8DE'}`,
-                  boxShadow: selected ? '0 2px 12px rgba(232,104,58,.18)' : '0 1px 3px rgba(0,0,0,.04)',
-                }}
               >
-                <div className="flex items-center gap-3 p-3">
-                  {pro.profiles.avatar_url ? (
-                    <img src={pro.profiles.avatar_url} alt={pro.profiles.full_name}
-                      className="rounded-xl object-cover flex-shrink-0" style={{ width: 40, height: 40 }} />
-                  ) : (
-                    <div className="rounded-xl flex items-center justify-center flex-shrink-0 font-black text-white"
-                      style={{ width: 40, height: 40, background: 'linear-gradient(135deg,#E8683A,#c44d1f)', fontSize: 16 }}>
-                      {pro.profiles.full_name.charAt(0)}
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold truncate" style={{ color: '#111' }}>{pro.profiles.full_name}</div>
-                    <div className="text-[10px]" style={{ color: '#AAAAAA' }}>
-                      {pro.avg_rating != null && <><span style={{ color: '#f59e0b' }}>★</span> {pro.avg_rating} · </>}
-                      {pro.jobs_count} trabajos
-                      {pro.response_time_min > 0 && ` · ~${pro.response_time_min}min`}
-                    </div>
-                    <span className="text-[9px] font-bold" style={{ color: '#AAAAAA' }}>
-                      {pro.radius_km === null ? '🌍 Toda la ciudad' : `📍 ${pro.zone} · ${pro.radius_km} km`}
+                {index === 0 && (
+                  <div className="mb-1.5">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full" style={{ background: '#FEF0EA', color: '#D4571F' }}>
+                      <Sparkles size={11} /> Mejor opción para vos
                     </span>
                   </div>
-                  {/* Indicador de selección */}
-                  <div className="relative flex-shrink-0" style={{ width: 22, height: 22 }}>
-                    <AnimatePresence mode="wait">
-                      {selected ? (
-                        <motion.div
-                          key="selected"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                          className="absolute inset-0 rounded-full flex items-center justify-center font-black text-white"
-                          style={{ background: '#E8683A', fontSize: 11 }}
-                        >
-                          ✓
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="unselected"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                          className="absolute inset-0 rounded-full"
-                          style={{ border: '1.5px solid #DDD' }}
-                        />
-                      )}
-                    </AnimatePresence>
+                )}
+                <motion.button
+                  type="button"
+                  onClick={() => setSelectedId(pro.id)}
+                  whileTap={{ scale: 0.98 }}
+                  className="rounded-2xl overflow-hidden text-left w-full"
+                  style={{
+                    background: '#FFFFFF',
+                    border: `2px solid ${selected ? '#E8683A' : '#EDE8DE'}`,
+                    boxShadow: selected ? '0 2px 12px rgba(232,104,58,.18)' : '0 1px 3px rgba(0,0,0,.04)',
+                  }}
+                >
+                  <div className="flex items-center gap-3 p-3">
+                    {pro.profiles.avatar_url ? (
+                      <img src={pro.profiles.avatar_url} alt={pro.profiles.full_name}
+                        className="rounded-xl object-cover flex-shrink-0" style={{ width: 40, height: 40 }} />
+                    ) : (
+                      <div className="rounded-xl flex items-center justify-center flex-shrink-0 font-black text-white"
+                        style={{ width: 40, height: 40, background: 'linear-gradient(135deg,#E8683A,#c44d1f)', fontSize: 16 }}>
+                        {pro.profiles.full_name.charAt(0)}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-bold truncate" style={{ color: '#111' }}>{pro.profiles.full_name}</div>
+                      <div className="text-[10px] inline-flex items-center gap-1" style={{ color: '#AAAAAA' }}>
+                        {pro.avg_rating != null && <><Star size={11} fill="#F5A623" color="#F5A623" /> {pro.avg_rating} · </>}
+                        {pro.jobs_count} trabajos
+                        {pro.response_time_min > 0 && ` · ~${pro.response_time_min}min`}
+                      </div>
+                      <span className="text-[9px] font-bold inline-flex items-center gap-1" style={{ color: '#AAAAAA' }}>
+                        {pro.radius_km === null
+                          ? <><Globe size={12} /> Toda la ciudad</>
+                          : <><MapPin size={12} /> {pro.zone} · {pro.radius_km} km</>
+                        }
+                      </span>
+                    </div>
+                    {/* Indicador de selección */}
+                    <div className="relative flex-shrink-0" style={{ width: 22, height: 22 }}>
+                      <AnimatePresence mode="wait">
+                        {selected ? (
+                          <motion.div
+                            key="selected"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                            className="absolute inset-0 rounded-full flex items-center justify-center font-black text-white"
+                            style={{ background: '#E8683A', fontSize: 11 }}
+                          >
+                            ✓
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="unselected"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                            className="absolute inset-0 rounded-full"
+                            style={{ border: '1.5px solid #DDD' }}
+                          />
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
-                </div>
-              </motion.button>
+                  {/* Chips "por qué" */}
+                  <div className="flex flex-wrap gap-1.5 px-3 pb-3 mt-1.5">
+                    {bd.specialist && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded-lg"
+                        style={{ background: '#FAF6F0', border: '1px solid #ECE4D8', color: '#7A6E5E' }}>
+                        {createElement(getCategoryIcon(category), { size: 12, style: { color: '#D4571F' } })} Especialista en {getCategoryMeta(category).label}
+                      </span>
+                    )}
+                    {bd.sameZone && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded-lg"
+                        style={{ background: '#FAF6F0', border: '1px solid #ECE4D8', color: '#7A6E5E' }}>
+                        <MapPin size={12} style={{ color: '#B3A794' }} /> Cerca tuyo
+                      </span>
+                    )}
+                    {bd.rating != null && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded-lg"
+                        style={{ background: '#FAF6F0', border: '1px solid #ECE4D8', color: '#7A6E5E' }}>
+                        <Star size={12} fill="#F5A623" color="#F5A623" /> {bd.rating.toFixed(1)}
+                      </span>
+                    )}
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded-lg"
+                      style={{ background: '#FAF6F0', border: '1px solid #ECE4D8', color: '#7A6E5E' }}>
+                      <Briefcase size={12} style={{ color: '#B3A794' }} /> {bd.jobs} trabajos
+                    </span>
+                  </div>
+                </motion.button>
+              </motion.div>
             )
           })}
         </motion.div>
+
+        <button type="button" onClick={() => navigate('/buscar')} className="w-full text-center text-sm font-bold py-3 mt-1" style={{ color: '#7A6E5E' }}>
+          ¿Preferís elegir vos? Ver todos los profesionales
+        </button>
       </div>
 
       {/* CTA fijo al fondo */}
@@ -692,7 +761,7 @@ export default function TicketFlow() {
   const [searchParams] = useSearchParams()
   const preselectedProId = searchParams.get('pro')
 
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(2)
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
   const [category, setCategory] = useState<string | null>(null)
   const [input, setInput] = useState<TicketInput>({ category: '', photo: null, text: '', zone: '' })
@@ -701,6 +770,8 @@ export default function TicketFlow() {
   const [aiError, setAiError] = useState<'no_match' | null>(null)
   const timeoutIdsRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const [lockedPro, setLockedPro] = useState<ProfessionalWithProfile | null>(null)
+  const [guessAlts, setGuessAlts] = useState<string[]>([])
+  const [showAllCats, setShowAllCats] = useState(false)
 
   useEffect(() => {
     return () => {
@@ -718,9 +789,10 @@ export default function TicketFlow() {
     })
   }, [preselectedProId])
 
-  const handleAnalyze = async () => {
-    if (!category) return
-    const ticketInput: TicketInput = { ...input, category }
+  const runAnalyze = async (cat: string) => {
+    setCategory(cat)
+    const ticketInput: TicketInput = { ...input, category: cat }
+    setDirection('forward')
     setStep(3)
     setAiError(null)
     setAiProgress(0)
@@ -751,6 +823,18 @@ export default function TicketFlow() {
     }
   }
 
+  const handleDescribeSubmit = () => {
+    const g = inferCategory(input.text)
+    if (g.confidence === 'high' && g.category) {
+      runAnalyze(g.category)
+    } else {
+      setGuessAlts(g.alternatives)
+      setShowAllCats(false)
+      setDirection('forward')
+      setStep(1)
+    }
+  }
+
   const handlePedir = (pro: ProfessionalWithProfile, resolvedTicket?: GeneratedTicket) => {
     const t = resolvedTicket ?? ticket
     navigate('/ticket/confirmar', {
@@ -777,7 +861,7 @@ export default function TicketFlow() {
       style={{ background: '#FFFFFF', borderBottom: '1px solid #E8E0D4', boxShadow: '0 1px 0 #E8E0D4, 0 2px 8px rgba(0,0,0,.04)' }}
     >
       {step === 1 && (
-        <button type="button" onClick={() => navigate(-1)}
+        <button type="button" onClick={() => { setDirection('back'); setStep(2) }}
           className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0">
           <ChevronLeft size={24} style={{ color: '#111111' }} />
         </button>
@@ -785,14 +869,7 @@ export default function TicketFlow() {
       {step === 2 && (
         <button
           type="button"
-          onClick={() => {
-            if (lockedPro) {
-              navigate(-1)
-            } else {
-              setDirection('back')
-              setStep(1)
-            }
-          }}
+          onClick={() => navigate(-1)}
           className="p-1 -ml-1 rounded-full active:opacity-60 transition-opacity flex-shrink-0"
         >
           <ChevronLeft size={24} style={{ color: '#111111' }} />
@@ -806,15 +883,15 @@ export default function TicketFlow() {
       )}
       <div>
         <h1 className="text-base font-black leading-tight" style={{ color: '#111111' }}>
-          {step === 1 && 'Nuevo ticket'}
-          {step === 2 && (lockedPro ? `Solicitar a ${lockedPro.profiles.full_name.split(' ')[0]}` : 'Describí el problema')}
+          {step === 1 && 'Ayudanos a entender'}
+          {step === 2 && (lockedPro ? `Describí el problema` : 'Contanos qué pasa')}
           {step === 3 && 'Analizando...'}
           {step === 4 && 'Profesionales para vos'}
         </h1>
         <p className="text-xs mt-0.5" style={{ color: '#AAAAAA' }}>
           {lockedPro && step !== 1 && step !== 4
             ? `Paso ${step === 2 ? 1 : 2} de 2 · ${CATEGORY_LABELS[lockedPro.categories[0]] ?? lockedPro.categories[0]}`
-            : `Paso ${step} de 4`
+            : step === 2 ? 'Paso 1 de 3' : step === 1 ? 'Paso 2 de 3' : step === 3 ? 'Analizando...' : 'Paso 3 de 3'
           }
         </p>
       </div>
@@ -835,11 +912,19 @@ export default function TicketFlow() {
               exit="exit"
               style={{ width: '100%' }}
             >
-              <CategoryStep
-                selected={category}
-                onSelect={(id) => setCategory(id)}
-                onNext={() => { setDirection('forward'); setStep(2) }}
-              />
+              {guessAlts.length > 0 && !showAllCats ? (
+                <DisambiguationStep
+                  alternatives={guessAlts}
+                  onPick={(id) => runAnalyze(id)}
+                  onSeeAll={() => setShowAllCats(true)}
+                />
+              ) : (
+                <CategoryStep
+                  selected={category}
+                  onSelect={(id) => setCategory(id)}
+                  onNext={() => { if (category) runAnalyze(category) }}
+                />
+              )}
             </motion.div>
           )}
           {step === 2 && (
@@ -855,7 +940,7 @@ export default function TicketFlow() {
               <MediaStep
                 input={input}
                 onChange={(patch) => setInput((prev) => ({ ...prev, ...patch }))}
-                onAnalyze={handleAnalyze}
+                onAnalyze={lockedPro && category ? () => runAnalyze(category) : handleDescribeSubmit}
                 lockedPro={lockedPro}
               />
             </motion.div>
@@ -872,10 +957,10 @@ export default function TicketFlow() {
               {aiError === 'no_match' ? (
                 <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-5">
                   <div
-                    className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center"
                     style={{ background: 'rgba(239,68,68,.08)', border: '1.5px solid rgba(239,68,68,.15)' }}
                   >
-                    🤔
+                    <HelpCircle size={32} style={{ color: '#DC2626' }} />
                   </div>
                   <div>
                     <h2 className="text-xl font-black leading-tight mb-2" style={{ color: '#111111', letterSpacing: '-0.3px' }}>
