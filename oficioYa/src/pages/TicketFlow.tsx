@@ -115,7 +115,6 @@ function DisambiguationStep({ alternatives, onPick, onSeeAll }: { alternatives: 
   return (
     <div className="flex flex-col gap-4 p-4">
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#D4571F' }}>Ayudanos a entender</p>
         <h2 className="text-xl font-black leading-tight" style={{ color: '#1A1712', letterSpacing: '-0.3px' }}>¿Qué es lo que te pasa?</h2>
         <p className="text-sm mt-1" style={{ color: '#7A6E5E' }}>Elegí lo que más se acerca a tu problema.</p>
       </div>
