@@ -1,7 +1,7 @@
-import { useState, useMemo, useRef, useEffect } from 'react'
+import { createElement, useState, useMemo, useRef, useEffect } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBack } from '../hooks/useBack'
-import { Search as SearchIcon, ChevronLeft, Clock, X } from 'lucide-react'
+import { Search as SearchIcon, ChevronLeft, Clock, X, MapPin, Star, Award, TrendingUp, Circle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageShell } from '../components/layout/PageShell'
 import { ProfessionalCardSkeleton } from '../components/ui/Skeleton'
@@ -9,6 +9,7 @@ import { ProfessionalCard } from '../components/professionals/ProfessionalCard'
 import { useProfessionals } from '../hooks/useProfessionals'
 import { fadeUp, scaleIn, staggerFast, SPRING_SOFT } from '../lib/motion'
 import { POPULAR_BARRIOS } from '../lib/barrios'
+import { getCategoryIcon } from '../lib/categories'
 
 const CATEGORY_LABELS: Record<string, string> = {
   electricista: 'Electricistas',
@@ -20,10 +21,10 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 const RATING_OPTIONS: { label: string; value: number | null }[] = [
-  { label: '★ Rating', value: null },
-  { label: '★ 4.0+',  value: 4.0 },
-  { label: '★ 4.5+',  value: 4.5 },
-  { label: '★ 4.8+',  value: 4.8 },
+  { label: 'Rating', value: null },
+  { label: '4.0+',  value: 4.0 },
+  { label: '4.5+',  value: 4.5 },
+  { label: '4.8+',  value: 4.8 },
 ]
 
 const AUTOCOMPLETE_CATEGORIES = [
@@ -172,10 +173,10 @@ export default function Search() {
     return list
   }, [professionals, activeFilters, textQuery, selectedZone, ratingIndex])
 
-  const FILTERS: { key: Filter; label: string; icon: string }[] = [
-    { key: 'disponible', label: 'Disponibles', icon: '●' },
-    { key: 'top',        label: 'Top Pro',     icon: '★' },
-    { key: 'rating',     label: 'Mejor rating', icon: '↑' },
+  const FILTERS: { key: Filter; label: string; Icon: typeof Circle }[] = [
+    { key: 'disponible', label: 'Disponibles', Icon: Circle },
+    { key: 'top',        label: 'Top Pro',     Icon: Award },
+    { key: 'rating',     label: 'Mejor rating', Icon: TrendingUp },
   ]
 
   const header = (
@@ -245,10 +246,14 @@ export default function Search() {
                 style={active ? {
                   background: '#E8683A', color: '#FFFFFF', border: '1.5px solid #E8683A',
                 } : {
-                  background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+                  background: '#F5F0E8', color: '#555555', border: '1.5px solid #ECE4D8',
                 }}
               >
-                <span style={{ fontSize: 9 }}>{f.icon}</span>
+                <f.Icon
+                  size={12}
+                  fill={f.key === 'disponible' ? (active ? '#FFFFFF' : '#22A559') : 'none'}
+                  color={f.key === 'disponible' && !active ? '#22A559' : undefined}
+                />
                 {f.label}
               </motion.button>
             )
@@ -264,10 +269,10 @@ export default function Search() {
             style={selectedZone ? {
               background: 'rgba(232,104,58,0.12)', color: '#E8683A', border: '1.5px solid rgba(232,104,58,0.3)',
             } : {
-              background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+              background: '#F5F0E8', color: '#555555', border: '1.5px solid #ECE4D8',
             }}
           >
-            📍 {selectedZone ?? 'Zona'}
+            <MapPin size={13} /> {selectedZone ?? 'Zona'}
           </motion.button>
 
           {/* Chip de rating */}
@@ -280,10 +285,10 @@ export default function Search() {
             style={ratingIndex > 0 ? {
               background: 'rgba(232,104,58,0.12)', color: '#E8683A', border: '1.5px solid rgba(232,104,58,0.3)',
             } : {
-              background: '#F5F0E8', color: '#555555', border: '1.5px solid #E8E0D4',
+              background: '#F5F0E8', color: '#555555', border: '1.5px solid #ECE4D8',
             }}
           >
-            {RATING_OPTIONS[ratingIndex].label}
+            <Star size={12} fill={ratingIndex > 0 ? '#F5A623' : 'none'} color={ratingIndex > 0 ? '#F5A623' : undefined} /> {RATING_OPTIONS[ratingIndex].label}
           </motion.button>
         </div>
       )}
@@ -341,8 +346,8 @@ export default function Search() {
                     style={{ background: '#F9F6F2' }}
                   >
                     <div className="flex items-center justify-center rounded-lg flex-shrink-0"
-                      style={{ width: 32, height: 32, background: '#FEF0EA', fontSize: 16 }}>
-                      {cat.emoji}
+                      style={{ width: 32, height: 32, background: '#FEF0EA' }}>
+                      {createElement(getCategoryIcon(cat.id), { size: 16, style: { color: '#D4571F' } })}
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-sm font-bold" style={{ color: '#111' }}>
@@ -432,7 +437,9 @@ export default function Search() {
             animate="visible"
             className="flex flex-col items-center gap-3 py-16 text-center"
           >
-            <div className="text-4xl">🔍</div>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: '#F5F0E8', border: '1px solid #ECE4D8' }}>
+              <SearchIcon size={28} style={{ color: '#B3A794' }} />
+            </div>
             <p className="font-bold" style={{ color: '#111111' }}>No encontramos profesionales</p>
             <p className="text-sm" style={{ color: '#999999' }}>
               {activeFilters.size > 0 ? 'Probá quitando algún filtro' : 'Intentá con otra categoría'}

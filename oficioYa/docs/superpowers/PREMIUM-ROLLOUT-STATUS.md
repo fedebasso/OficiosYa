@@ -61,15 +61,19 @@ Specs de referencia con el detalle:
   reportó el cambio pero NO se había aplicado; corregido).
 - `src/components/home/FeaturedProfessionals.tsx`: filtros de categoría con lucide.
 
+### Fase 3 — Búsqueda + Favoritos
+- `src/pages/Favoritos.tsx`: ya estaba premium (usa ProfessionalCard + Heart lucide); sin cambios.
+- `src/pages/Search.tsx`: sugerencias con `getCategoryIcon`, filtros con lucide
+  (Circle verde/Award/TrendingUp), zona con `MapPin`, rating con `Star`, estado
+  vacío con `SearchIcon`, bordes de chips a `#ECE4D8`.
+
 ---
 
 ## PENDIENTE (fases siguientes) 🔜
 
 Orden acordado con el usuario:
 
-- **Fase 3 — Cliente alto tráfico:** `src/pages/Search.tsx` (header, chips de filtro,
-  estado vacío, historial) + `src/pages/Favoritos.tsx`.  ← EN CURSO
-- **Fase 4 — Solicitudes:** `src/pages/MisSolicitudes.tsx` + `src/pages/SolicitudDetail.tsx`
+- **Fase 4 — Solicitudes:**  ← PRÓXIMA `src/pages/MisSolicitudes.tsx` + `src/pages/SolicitudDetail.tsx`
   + `src/pages/Urgencias.tsx`.
 - **Fase 5 — Comunicación:** `src/pages/Mensajes.tsx` + `src/pages/Chat.tsx`.
 - **Fase 6 — Profesional:** `ProDashboard`, `ProRequests`, `ProProfile`, `ProAvailability`,
