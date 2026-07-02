@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { createElement, useEffect, useState } from 'react'
 import { reviewService, type Review } from '../../services/reviewService'
 import { ReviewCard } from './ReviewCard'
 import { useNavigate } from 'react-router-dom'
 import { PortfolioWorkModal } from '../pro/portfolio/PortfolioWorkModal'
 import type { PortfolioItem } from '../../types/registration'
-import { ChevronLeft, Share2, Check } from 'lucide-react'
+import { ChevronLeft, Share2, Check, Star, MapPin, Clock, BadgeCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useBack } from '../../hooks/useBack'
 import { WorkPhotoGallery } from './WorkPhotoGallery'
@@ -13,7 +13,7 @@ import { DateStrip } from '../availability/DateStrip'
 import { TimeSlotGrid } from '../availability/TimeSlotGrid'
 import { useAvailabilityStore } from '../../store/availabilityStore'
 import type { ProfessionalWithProfile, WorkPhoto } from '../../hooks/useProfessionals'
-import { getCategoryMeta, CATEGORY_EMOJI, CATEGORY_LABELS } from '../../lib/categories'
+import { getCategoryMeta, getCategoryIcon, CATEGORY_LABELS } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
 import { fadeUp, scaleIn, staggerContainer, SPRING_SOFT, SPRING_GENTLE } from '../../lib/motion'
 
@@ -192,7 +192,7 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
         {/* Foto grande */}
         <div
           className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center mb-4 flex-shrink-0"
-          style={{ border: '3px solid #E8683A', boxShadow: '0 0 0 6px rgba(232,104,58,.08)' }}
+          style={{ border: '3px solid #EFA07A', boxShadow: '0 0 0 5px rgba(232,104,58,.08)' }}
         >
           {profiles.avatar_url ? (
             <img src={profiles.avatar_url} alt={profiles.full_name} className="w-full h-full object-cover" />
@@ -214,36 +214,52 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
           {specialty} · {zone}
         </p>
 
-        {/* Indicadores de confianza */}
-        <motion.div variants={scaleIn} className="flex items-center gap-4 flex-wrap justify-center">
-          {avg_rating != null && (
-            <div className="flex items-center gap-1">
-              <span style={{ color: '#F59E0B', fontSize: 18 }}>★</span>
-              <span className="font-black text-base" style={{ color: '#111111' }}>{avg_rating}</span>
+        {/* Stats destacados */}
+        <motion.div variants={scaleIn} className="w-full" style={{ maxWidth: 320 }}>
+          <div
+            style={{
+              display: 'flex',
+              background: '#FFFFFF',
+              border: '1px solid #ECE6DC',
+              borderRadius: 16,
+              boxShadow: '0 2px 6px rgba(60,40,20,.05)',
+              overflow: 'hidden',
+              marginTop: 4,
+              marginBottom: 14,
+            }}
+          >
+            <div style={{ flex: 1, padding: '12px 20px', textAlign: 'center' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Star size={18} fill="#F5A623" color="#F5A623" />
+                <span style={{ fontSize: 22, fontWeight: 800, color: '#1A1712' }}>
+                  {avg_rating != null ? avg_rating.toFixed(1) : '—'}
+                </span>
+              </div>
+              <div style={{ fontSize: 11, color: '#9C917E', fontWeight: 600, marginTop: 2 }}>Calificación</div>
             </div>
-          )}
-          <div className="flex items-center gap-1">
-            <span style={{ fontSize: 14 }}>🔨</span>
-            <span className="font-semibold text-sm" style={{ color: '#555555' }}>{jobs_count} trabajos</span>
+            <div style={{ width: 1, background: '#F0EAE0' }} />
+            <div style={{ flex: 1, padding: '12px 20px', textAlign: 'center' }}>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#1A1712' }}>{jobs_count}</div>
+              <div style={{ fontSize: 11, color: '#9C917E', fontWeight: 600, marginTop: 2 }}>Trabajos</div>
+            </div>
           </div>
-          {verified && (
-            <span
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold"
-              style={{ background: '#F0FDF4', color: '#0F6E56', border: '1px solid #86EFAC' }}
-            >
-              ✓ Profesional Verificado
+
+          {/* Chips secundarios */}
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {verified && (
+              <span style={{ display:'inline-flex', alignItems:'center', gap:5, padding:'5px 10px', borderRadius:10, background:'#F0FDF4', border:'1px solid #BBF7D0', color:'#15803D', fontSize:12, fontWeight:700 }}>
+                <BadgeCheck size={14} /> Verificado
+              </span>
+            )}
+            <span style={{ display:'inline-flex', alignItems:'center', gap:5, padding:'5px 10px', borderRadius:10, background:'#FAF6F0', color:'#7A6E5E', fontSize:12, fontWeight:700 }}>
+              <MapPin size={14} style={{ color:'#B3A794' }} /> {zone}
             </span>
-          )}
-          <div className="flex items-center gap-1">
-            <span style={{ fontSize: 14 }}>📍</span>
-            <span className="font-semibold text-sm" style={{ color: '#555555' }}>{zone}</span>
+            {estimatedDuration !== null && (
+              <span style={{ display:'inline-flex', alignItems:'center', gap:5, padding:'5px 10px', borderRadius:10, background:'#FAF6F0', color:'#7A6E5E', fontSize:12, fontWeight:700 }}>
+                <Clock size={14} style={{ color:'#B3A794' }} /> {formatDuration(estimatedDuration)}
+              </span>
+            )}
           </div>
-          {estimatedDuration !== null && (
-            <div className="flex items-center gap-1">
-              <span>⏱</span>
-              <span className="font-semibold text-sm" style={{ color: '#555555' }}>Duración estimada: {formatDuration(estimatedDuration)}</span>
-            </div>
-          )}
         </motion.div>
       </div>
       </motion.div>
@@ -253,23 +269,26 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
 
         {/* Sobre mí */}
         {bio && (
-          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-            <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-2">Sobre mí</h3>
+          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1px solid #ECE6DC', borderRadius: 20, boxShadow: '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,20,.14)' }}>
+            <h3 className="text-xs font-bold uppercase tracking-widest mb-2"
+              style={{ color: '#8A7F6E' }}>Sobre mí</h3>
             <p className="text-sm text-[#888] leading-relaxed">{bio}</p>
           </motion.div>
         )}
 
         {/* Servicios */}
-        <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-          <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Servicios</h3>
+        <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1px solid #ECE6DC', borderRadius: 20, boxShadow: '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,20,.14)' }}>
+          <h3 className="text-xs font-bold uppercase tracking-widest mb-3"
+              style={{ color: '#8A7F6E' }}>Servicios</h3>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
               <span
                 key={c}
-                className="text-xs font-semibold px-3 py-1.5 rounded-xl"
-                style={{ background: 'rgba(232,104,58,.1)', color: '#e8683a', border: '1px solid rgba(232,104,58,.2)' }}
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl"
+                style={{ background: '#FAF6F0', color: '#7A6E5E', border: '1px solid #ECE4D8' }}
               >
-                {CATEGORY_EMOJI[c] ?? '🛠️'} {CATEGORY_LABELS[c] ?? c}
+                {createElement(getCategoryIcon(c), { size: 14, style: { color: '#D4571F' } })}
+                {CATEGORY_LABELS[c] ?? c}
               </span>
             ))}
           </div>
@@ -277,8 +296,9 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
 
         {/* Portfolio / Trabajos realizados */}
         {(photos.length > 0 || portfolio.length > 0) && (
-          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-            <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Trabajos realizados</h3>
+          <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1px solid #ECE6DC', borderRadius: 20, boxShadow: '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,20,.14)' }}>
+            <h3 className="text-xs font-bold uppercase tracking-widest mb-3"
+              style={{ color: '#8A7F6E' }}>Trabajos realizados</h3>
             {portfolio.length > 0 ? (
               <WorkPhotoGallery
                 photos={portfolio.map((item) => ({
@@ -301,8 +321,9 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
         )}
 
         {/* Disponibilidad */}
-        <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1.5px solid #E8E0D4' }}>
-          <h3 className="text-xs font-bold text-[#555] uppercase tracking-widest mb-3">Disponibilidad</h3>
+        <motion.div variants={fadeUp} className="rounded-2xl p-4" style={{ background: '#FFFFFF', border: '1px solid #ECE6DC', borderRadius: 20, boxShadow: '0 2px 6px rgba(60,40,20,.04), 0 12px 28px -12px rgba(60,40,20,.14)' }}>
+          <h3 className="text-xs font-bold uppercase tracking-widest mb-3"
+              style={{ color: '#8A7F6E' }}>Disponibilidad</h3>
           <DateStrip proId={id} selected={availDate} onSelect={setAvailDate} />
           {availDate && (
             <div className="mt-3">
@@ -355,8 +376,8 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
           onClick={() => navigate(`/ticket?pro=${id}`)}
           whileTap={{ scale: 0.97 }}
           transition={SPRING_SOFT}
-          className="w-full rounded-2xl py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 text-white"
-          style={{ background: '#e8683a', boxShadow: '0 4px 16px rgba(232,104,58,.3)' }}
+          className="w-full py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 text-white"
+          style={{ background: '#e8683a', borderRadius: 16, boxShadow: '0 6px 20px -6px rgba(232,104,58,.45)' }}
         >
           Solicitar trabajo
         </motion.button>
