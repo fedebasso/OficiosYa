@@ -64,7 +64,9 @@ _Ninguna._ No se encontró feature completamente rota ni crash de app.
 
 ### Alta
 
-**[A1] Fetch a Supabase sin guard `IS_DEMO_MODE` → errores de consola en demo**
+**[A1] ✅ RESUELTO — Fetch a Supabase sin guard `IS_DEMO_MODE` → errores de consola en demo**
+_Fix commit `fix(P2-A1)`. Verificado: Home, `/profesional/:id`, `/pro/registro`,
+`/admin/verificaciones` y ambos flujos completos cargan con 0 errores._
 En modo demo varios componentes/servicios llaman directo a Supabase y pegan
 contra `placeholder.supabase.co` (`ERR_NAME_NOT_RESOLVED` / `ERR_FAILED`).
 No rompen la UI (hay fallback a mock/vacío) pero ensucian la consola, hacen
@@ -84,7 +86,9 @@ en `authService`, `professionalService`, `requestService`, etc.
 
 ### Media
 
-**[M1] Copy engañosa en el paso 1 del flujo IA (`TicketFlow`)**
+**[M1] ✅ RESUELTO — Copy engañosa en el paso 1 del flujo IA (`TicketFlow`)**
+_Fix commit `fix(P2-M1)`. Subtítulo ahora: "Describí el problema. La foto y el
+barrio son opcionales"._
 El subtítulo dice "Completá los tres campos para continuar", pero solo la
 descripción (≥10 chars) es obligatoria: foto y barrio están rotulados
 "opcional". Confunde y sugiere que faltan datos. Ajustar copy a la realidad
