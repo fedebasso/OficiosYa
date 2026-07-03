@@ -2,6 +2,7 @@ import { useAuthStore } from '../../store/authStore'
 import { useRegistration } from '../../hooks/useRegistration'
 import { registrationService } from '../../services/registrationService'
 import { supabase } from '../../lib/supabase'
+import { IS_DEMO_MODE } from '../../lib/env'
 import { RegistrationShell } from '../../components/pro/registration/RegistrationShell'
 import { Step1PersonalData } from '../../components/pro/registration/Step1PersonalData'
 import { Step2TradeInfo } from '../../components/pro/registration/Step2TradeInfo'
@@ -25,7 +26,9 @@ export default function ProRegistration() {
     if (avatarFile && user?.id) {
       try {
         const url = await registrationService.uploadFile('pro-avatars', user.id, avatarFile)
-        await supabase.from('profiles').update({ avatar_url: url }).eq('id', user.id)
+        if (!IS_DEMO_MODE) {
+          await supabase.from('profiles').update({ avatar_url: url }).eq('id', user.id)
+        }
       } catch (e) {
         console.error('Avatar upload failed:', e)
         // Do not advance wizard if avatar upload fails

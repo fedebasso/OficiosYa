@@ -13,6 +13,12 @@
       "skillPath": "skills/brainstorming/SKILL.md",
       "computedHash": "f483c304fcde060211ffae00f49bb728536e7e7613c99db45b5b924d9fc17243"
     },
+    "council": {
+      "source": "warpdotdev/common-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/council/SKILL.md",
+      "computedHash": "7afda98df7c550d20638df048774b6e4db32ac0c82aba14cf00fc90dd36b3b70"
+    },
     "emilkowal-animations": {
       "source": "pproenca/dot-skills",
       "sourceType": "github",

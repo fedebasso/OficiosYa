@@ -1,0 +1,72 @@
+<h2>Home premium</h2>
+<p class="subtitle">Buscador con ícono lucide, nueva fila de accesos rápidos por categoría (íconos monocromáticos) y encabezados de sección refinados. Todo sobre la base crema.</p>
+
+<style>
+  .phone { max-width:390px; margin:0 auto; background:#F5F0E8; border-radius:28px; overflow:hidden; border:1px solid #E7DFD2; box-shadow:0 20px 50px -20px rgba(60,40,20,.35); font-family:'DM Sans',system-ui,sans-serif; }
+  .hdr { background:#fff; padding:18px 18px 14px; box-shadow:0 1px 0 #EDE8DE,0 6px 16px -10px rgba(0,0,0,.12); }
+  .logo { font-size:30px; font-weight:900; letter-spacing:-1.5px; background:linear-gradient(90deg,#E8683A,#F28C4A 50%,#2A2A2A); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .sb { margin-top:12px; height:48px; background:#F6F1EA; border:1.5px solid #ECE4D8; border-radius:15px; display:flex; align-items:center; gap:10px; padding:0 14px; color:#B0A594; font-size:15px; font-weight:500;}
+  .sb svg{ width:19px;height:19px;stroke-width:2.3; color:#C2B8A6;}
+  .body { padding:18px; display:flex; flex-direction:column; gap:22px;}
+
+  .cats { display:flex; gap:14px; overflow-x:auto; }
+  .cat { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:7px; width:60px;}
+  .cat .tile { width:58px;height:58px;border-radius:19px;background:#fff;border:1px solid #ECE4D8;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px -2px rgba(60,40,20,.10);color:#4A4034;}
+  .cat .tile svg{ width:24px;height:24px;stroke-width:1.9;}
+  .cat span{ font-size:11.5px;font-weight:700;color:#6B6152;text-align:center;line-height:1.15;}
+
+  .shead { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px;}
+  .shead h3 { margin:0; font-size:18px; font-weight:800; color:#1A1712; letter-spacing:-.4px;}
+  .shead a { font-size:13px; font-weight:700; color:#D4571F;}
+
+  .prow { display:flex; gap:12px; overflow-x:auto;}
+  .pc { flex:0 0 132px; background:#fff; border:1px solid #ECE6DC; border-radius:18px; padding:13px; box-shadow:0 2px 6px rgba(60,40,20,.04),0 12px 24px -14px rgba(60,40,20,.16); display:flex; flex-direction:column; align-items:center; gap:7px;}
+  .pc .av{ width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#FDEEE6,#FAD9C6);display:flex;align-items:center;justify-content:center;font-weight:800;color:#D4571F;font-size:17px;}
+  .pc .nm{ font-size:13px;font-weight:800;color:#1A1712;}
+  .pc .rt{ display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:800;color:#1A1712;}
+  .pc .rt svg{width:13px;height:13px;}
+  .pc .zn{ font-size:11px;color:#9C917E;font-weight:600;}
+</style>
+
+<div class="phone">
+  <div class="hdr">
+    <div class="logo">OFIX</div>
+    <div class="sb">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+      ¿Qué servicio necesitás?
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- Category quick access (NUEVO) -->
+    <div class="cats">
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Electricista</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22a7 7 0 0 0 7-7c0-3-3-7-7-11-4 4-7 8-7 11a7 7 0 0 0 7 7Z"/></svg></div><span>Sanitario</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M4.2 4.2l15.6 15.6M19.8 4.2 4.2 19.8M2 12h20"/></svg></div><span>Aire Ac.</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="8" cy="8" r="5"/><path d="m11.5 11.5 8.5 8.5M16.5 15.5 19 18l-2 2"/></svg></div><span>Cerrajero</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 4l6 6-8 8-6-6z"/><path d="M8.5 15.5 3 21l6-1.5"/></svg></div><span>Pintor</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 12 8 5 5 8l7 7zM12 8l4-4 5 5-4 4M3 21l4-4"/></svg></div><span>Albañil</span></div>
+    </div>
+
+    <!-- Mejor calificados -->
+    <div>
+      <div class="shead"><h3>⭐ Mejor calificados</h3><a>Ver todos</a></div>
+      <div class="prow">
+        <div class="pc"><div class="av">CM</div><div class="nm">Carlos</div><div class="rt"><svg viewBox="0 0 24 24" fill="#F5A623" stroke="#F5A623"><path d="m12 2 3 7 7 .5-5.5 4.5 2 7-6.5-4-6.5 4 2-7L2 9.5 9 9z"/></svg>4.9</div><div class="zn">Pocitos</div></div>
+        <div class="pc"><div class="av" style="background:linear-gradient(135deg,#E6EEFD,#C6D9FA);color:#2F6BD4;">LR</div><div class="nm">Lucía</div><div class="rt"><svg viewBox="0 0 24 24" fill="#F5A623" stroke="#F5A623"><path d="m12 2 3 7 7 .5-5.5 4.5 2 7-6.5-4-6.5 4 2-7L2 9.5 9 9z"/></svg>4.8</div><div class="zn">Malvín</div></div>
+        <div class="pc"><div class="av" style="background:linear-gradient(135deg,#F3E8FF,#E4D0FA);color:#7C3FCB;">JG</div><div class="nm">Javier</div><div class="rt"><svg viewBox="0 0 24 24" fill="#F5A623" stroke="#F5A623"><path d="m12 2 3 7 7 .5-5.5 4.5 2 7-6.5-4-6.5 4 2-7L2 9.5 9 9z"/></svg>4.9</div><div class="zn">Centro</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="options" style="margin-top:26px;">
+  <div class="option" data-choice="go" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content"><h3>Me gusta — hagámoslo</h3><p>Escribo el spec con card + Home + fila de categorías y lo implementamos</p></div>
+  </div>
+  <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content"><h3>Con ajustes</h3><p>Decime qué cambiarías del buscador, la fila de categorías o los encabezados</p></div>
+  </div>
+</div>

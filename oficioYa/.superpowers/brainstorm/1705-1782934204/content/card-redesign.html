@@ -1,0 +1,116 @@
+<h2>Card de profesional — Actual vs Premium</h2>
+<p class="subtitle">Misma info, base crema. Cambian íconos (emoji → lucide monocromático), sombras, jerarquía y respiración. Fijate cuál se siente más "app real".</p>
+
+<style>
+  .cmp { display:flex; gap:20px; flex-wrap:wrap; }
+  .col { flex:1; min-width:300px; }
+  .col h4 { text-transform:uppercase; letter-spacing:1px; font-size:11px; color:#999; margin:0 0 10px; font-weight:800; }
+  .stage { background:#F5F0E8; border-radius:20px; padding:18px; }
+
+  /* ---- ACTUAL ---- */
+  .cardA { background:#fff; border:1.5px solid #EDE8DE; border-radius:16px; box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04); display:flex; align-items:stretch; overflow:hidden; font-family:'DM Sans',system-ui,sans-serif; }
+  .cardA .in { display:flex; gap:12px; flex:1; padding:14px; align-items:center; }
+  .cardA .av { width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#FEF0EA,#FDDCC8);display:flex;align-items:center;justify-content:center;font-weight:900;color:#E8683A;font-size:18px;flex-shrink:0;}
+  .cardA .nm { font-weight:700; color:#111; font-size:16px; margin-bottom:4px;}
+  .cardA .chip { display:inline-block;background:rgba(232,104,58,.12);color:#E8683A;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;margin-bottom:6px;}
+  .cardA .meta { font-size:14px;color:#888;font-weight:600;}
+  .cardA .rt { display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding:2px 0;}
+  .cardA .heart { width:32px;height:32px;border-radius:10px;background:#F5F0E8;border:1.5px solid #E8E0D4;display:flex;align-items:center;justify-content:center;}
+  .cardA .star { color:#F59E0B;font-weight:900;font-size:18px;}
+
+  /* ---- PREMIUM ---- */
+  .cardB { background:#fff; border:1px solid #ECE6DC; border-radius:20px; box-shadow:0 2px 6px rgba(60,40,20,.04),0 12px 28px -12px rgba(60,40,20,.14); padding:16px; font-family:'DM Sans',system-ui,sans-serif; }
+  .cardB .top { display:flex; gap:13px; align-items:center; }
+  .cardB .av { position:relative; width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#FDEEE6,#FAD9C6);display:flex;align-items:center;justify-content:center;font-weight:800;color:#D4571F;font-size:19px;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(212,87,31,.12);}
+  .cardB .av .vf { position:absolute;bottom:-3px;right:-3px;width:20px;height:20px;border-radius:50%;background:#22A559;border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;}
+  .cardB .nm { font-weight:800; color:#1A1712; font-size:17px; letter-spacing:-.3px; line-height:1.1;}
+  .cardB .chip { display:inline-flex;align-items:center;gap:5px;margin-top:5px;color:#7A6E5E;font-size:12.5px;font-weight:700;}
+  .cardB .chip svg { color:#D4571F; }
+  .cardB .heart { width:34px;height:34px;border-radius:12px;background:#FAF6F0;display:flex;align-items:center;justify-content:center;color:#C9BFB0;margin-left:auto;flex-shrink:0;}
+  .cardB .divider { height:1px;background:#F0EAE0;margin:13px 0 11px;}
+  .cardB .foot { display:flex;align-items:center;justify-content:space-between;}
+  .cardB .zone { display:inline-flex;align-items:center;gap:5px;color:#8A7F6E;font-size:13px;font-weight:600;}
+  .cardB .zone svg{color:#B3A794;}
+  .cardB .jobs { color:#B3A794; }
+  .cardB .jobs b { color:#5A5142; }
+  .cardB .rate { display:inline-flex;align-items:center;gap:4px;background:#FFF7ED;padding:5px 10px;border-radius:10px;}
+  .cardB .rate .n { font-weight:800;color:#1A1712;font-size:14px;}
+  .cardB .rate .c { color:#B3A794;font-size:11px;font-weight:600;}
+  .cardB svg { width:15px;height:15px;stroke-width:2.2; }
+</style>
+
+<div class="cmp">
+  <!-- ACTUAL -->
+  <div class="col">
+    <h4>Actual</h4>
+    <div class="stage">
+      <div class="cardA">
+        <div class="in">
+          <div class="av">CM</div>
+          <div style="flex:1;min-width:0;">
+            <div class="nm">Carlos Méndez</div>
+            <div class="chip">⚡ Electricista</div>
+            <div class="meta">📍 Pocitos <span style="color:#DDD">|</span> <b style="color:#333">128</b> trabajos</div>
+          </div>
+          <div class="rt">
+            <div class="heart">🤍</div>
+            <div class="star">★ 4.9</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREMIUM -->
+  <div class="col">
+    <h4>Premium</h4>
+    <div class="stage">
+      <div class="cardB">
+        <div class="top">
+          <div class="av">CM
+            <span class="vf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="11" height="11" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </div>
+          <div style="min-width:0;">
+            <div class="nm">Carlos Méndez</div>
+            <div class="chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Electricista
+            </div>
+          </div>
+          <div class="heart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="17" height="17"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 12 5 5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="foot">
+          <div style="display:flex;gap:14px;align-items:center;">
+            <span class="zone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              Pocitos
+            </span>
+            <span class="jobs"><b>128</b> trabajos</span>
+          </div>
+          <div class="rate">
+            <svg viewBox="0 0 24 24" fill="#F5A623" stroke="#F5A623"><path d="m12 2 3 7 7 .5-5.5 4.5 2 7-6.5-4-6.5 4 2-7L2 9.5 9 9z"/></svg>
+            <span class="n">4.9</span><span class="c">(128)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="options" style="margin-top:26px;">
+  <div class="option" data-choice="premium" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content"><h3>Me gusta el Premium</h3><p>Aplicamos este estilo a la card y adaptamos la Home igual</p></div>
+  </div>
+  <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content"><h3>Me gusta pero con ajustes</h3><p>Decime qué cambiarías (sombra, badge verde, colores del chip, etc.)</p></div>
+  </div>
+  <div class="option" data-choice="keep" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content"><h3>Prefiero el actual</h3><p>Repensamos la dirección</p></div>
+  </div>
+</div>

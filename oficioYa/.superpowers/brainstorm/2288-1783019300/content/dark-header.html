@@ -1,0 +1,55 @@
+<h2>Header oscuro + logo naranja/blanco</h2>
+<p class="subtitle">La barra del header pasa a oscuro; el logo oficial (O naranja + FIX blanco) se ve idéntico a la PWA. El resto de la pantalla mantiene la base crema.</p>
+
+<style>
+  .phone { max-width:390px; margin:0 auto; background:#F5F0E8; border-radius:28px; overflow:hidden; border:1px solid #E7DFD2; box-shadow:0 20px 50px -20px rgba(60,40,20,.35); font-family:'DM Sans',system-ui,sans-serif; }
+  .hdr { background:#191410; padding:20px 18px 14px; }
+  .sb { margin-top:14px; height:46px; background:#26201a; border:1.5px solid #342c24; border-radius:14px; display:flex; align-items:center; gap:10px; padding:0 14px; color:#9a8f80; font-size:15px; font-weight:500;}
+  .sb svg{ width:18px;height:18px;stroke-width:2.3; color:#7d7264;}
+  .body { padding:18px; display:flex; flex-direction:column; gap:22px;}
+  .cats { display:flex; gap:14px; }
+  .cat { display:flex; flex-direction:column; align-items:center; gap:7px; width:60px;}
+  .cat .tile { width:56px;height:56px;border-radius:18px;background:#fff;border:1px solid #ECE4D8;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px -2px rgba(60,40,20,.10);color:#4A4034;}
+  .cat span{ font-size:11px;font-weight:700;color:#6B6152;text-align:center;}
+</style>
+
+<div class="phone">
+  <div class="hdr">
+    <!-- Logo: O naranja + FIX blanco, transparente sobre header oscuro -->
+    <svg viewBox="120 320 800 384" height="30"><circle cx="310" cy="512" r="148" fill="none" stroke="#FF6B00" stroke-width="68"/><text x="665" y="578" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="300" letter-spacing="-6" fill="#FFFFFF" text-anchor="middle">FIX</text></svg>
+    <div class="sb">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+      ¿Qué servicio necesitás?
+    </div>
+  </div>
+  <div class="body">
+    <div class="cats">
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Electricista</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 22a7 7 0 0 0 7-7c0-3-3-7-7-11-4 4-7 8-7 11a7 7 0 0 0 7 7Z"/></svg></div><span>Sanitario</span></div>
+      <div class="cat"><div class="tile"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2v20M4.2 4.2l15.6 15.6M19.8 4.2 4.2 19.8M2 12h20"/></svg></div><span>Aire Ac.</span></div>
+    </div>
+    <div style="background:#fff;border:1px solid #ECE6DC;border-radius:20px;padding:16px;box-shadow:0 2px 6px rgba(60,40,20,.04),0 12px 28px -12px rgba(60,40,20,.14);color:#9C917E;font-size:13px;">
+      … contenido de la Home (cards de profesionales, etc.) sobre la base crema …
+    </div>
+  </div>
+</div>
+
+<div class="split" style="margin-top:22px; max-width:420px; margin-left:auto; margin-right:auto;">
+  <div style="text-align:center;">
+    <div style="background:#191410; border-radius:14px; padding:16px;">
+      <svg viewBox="120 320 800 384" height="26"><circle cx="310" cy="512" r="148" fill="none" stroke="#FF6B00" stroke-width="68"/><text x="665" y="578" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="300" letter-spacing="-6" fill="#FFFFFF" text-anchor="middle">FIX</text></svg>
+    </div>
+    <div style="font-size:10px;color:#8A7F6E;margin-top:6px;font-weight:700;">Header oscuro (sm)</div>
+  </div>
+</div>
+
+<div class="options" style="margin-top:22px; max-width:420px; margin-left:auto; margin-right:auto;">
+  <div class="option" data-choice="ok" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content"><h3>Me gusta — hagámoslo</h3><p>Header oscuro + logo O naranja / FIX blanco en toda la app</p></div>
+  </div>
+  <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content"><h3>Con ajustes</h3><p>Decime el tono del header (más negro/marrón), el tamaño del logo, etc.</p></div>
+  </div>
+</div>

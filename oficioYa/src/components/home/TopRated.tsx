@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
+import { IS_DEMO_MODE } from '../../lib/env'
+import { professionalService } from '../../services/professionalService'
 import { getCategoryMeta } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
 
@@ -18,6 +20,16 @@ export function TopRated() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (IS_DEMO_MODE) {
+      professionalService.getAll().then((all) => {
+        const top = all
+          .filter((p) => (p.avg_rating ?? 0) >= 4.5 && p.jobs_count >= 3)
+          .sort((a, b) => (b.avg_rating ?? 0) - (a.avg_rating ?? 0))
+          .slice(0, 4)
+        setPros(top as unknown as TopPro[])
+      })
+      return
+    }
     supabase
       .from('professionals')
       .select('id, avg_rating, jobs_count, categories, zone, profiles(full_name, avatar_url)')

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
+import { IS_DEMO_MODE } from '../../lib/env'
 import { registrationService } from '../../services/registrationService'
 import { PageShell } from '../../components/layout/PageShell'
 
@@ -26,6 +27,7 @@ export default function AdminVerificaciones() {
   const [saving, setSaving] = useState(false)
 
   async function fetchPending(): Promise<PendingPro[]> {
+    if (IS_DEMO_MODE) return [] // demo: sin cola de verificación real
     const { data } = await supabase
       .from('professionals')
       .select('id, trade, quality_score, profiles(full_name, avatar_url), identity_verification(id, cedula_front_url, cedula_back_url, selfie_url, status)')
@@ -70,8 +72,10 @@ export default function AdminVerificaciones() {
 
   async function handleDecision(proId: string, identityId: string, decision: 'verified' | 'rejected') {
     setSaving(true)
-    await supabase.from('professionals').update({ verification_status: decision }).eq('id', proId)
-    await supabase.from('identity_verification').update({ status: decision, admin_notes: notes, reviewed_at: new Date().toISOString() }).eq('id', identityId)
+    if (!IS_DEMO_MODE) {
+      await supabase.from('professionals').update({ verification_status: decision }).eq('id', proId)
+      await supabase.from('identity_verification').update({ status: decision, admin_notes: notes, reviewed_at: new Date().toISOString() }).eq('id', identityId)
+    }
     setSelected(null)
     setNotes('')
     await load()

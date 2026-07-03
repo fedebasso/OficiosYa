@@ -1,0 +1,55 @@
+<h2>Logo OFIX — wordmark transparente</h2>
+<p class="subtitle">El mismo logo (anillo naranja "O" + "FIX"), fondo transparente, integrado a cada pantalla. Lo único que cambia es el color de "FIX" para legibilidad. La "O" siempre naranja.</p>
+
+<style>
+  .ctxs { display:flex; flex-direction:column; gap:16px; max-width:420px; margin:0 auto; }
+  .ctx { border-radius:20px; padding:22px 20px; display:flex; align-items:center; gap:16px; border:1px solid #e5e5e5; }
+  .ctx .tag { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; opacity:.6; }
+  .light { background:#F5F0E8; }
+  .hero  { background:linear-gradient(160deg,#E8683A 0%,#c44d1f 100%); }
+  .dark  { background:#000000; }
+  .row { display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+  .lab { font-size:10px; font-weight:700; opacity:.5; margin-top:4px; text-align:center; }
+</style>
+
+<div class="ctxs">
+  <div class="light" style="flex-direction:column; align-items:flex-start;">
+    <div class="tag" style="color:#8A7F6E;">Fondo claro · Home / Header (theme "light")</div>
+    <div class="row" style="margin-top:12px;">
+      <div style="text-align:center">
+        <svg viewBox="120 320 800 384" height="26"><circle cx="310" cy="512" r="148" fill="none" stroke="#FF6B00" stroke-width="68"/><text x="665" y="578" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="300" letter-spacing="-6" fill="#1A1712" text-anchor="middle">FIX</text></svg>
+        <div class="lab" style="color:#8A7F6E">sm (Header)</div>
+      </div>
+      <div style="text-align:center">
+        <svg viewBox="120 320 800 384" height="34"><circle cx="310" cy="512" r="148" fill="none" stroke="#FF6B00" stroke-width="68"/><text x="665" y="578" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="300" letter-spacing="-6" fill="#1A1712" text-anchor="middle">FIX</text></svg>
+        <div class="lab" style="color:#8A7F6E">md (Home)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero" style="flex-direction:column; align-items:flex-start;">
+    <div class="tag" style="color:rgba(255,255,255,.85);">Hero naranja · Login / Registro (theme "dark")</div>
+    <div style="margin-top:14px;">
+      <svg viewBox="120 320 800 384" height="52"><circle cx="310" cy="512" r="148" fill="none" stroke="#FF6B00" stroke-width="68"/><text x="665" y="578" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="300" letter-spacing="-6" fill="#FFFFFF" text-anchor="middle">FIX</text></svg>
+      <div style="color:rgba(255,255,255,.85); font-size:13px; font-weight:500; margin-top:8px;">Profesionales de confianza en Montevideo</div>
+    </div>
+  </div>
+
+  <div class="dark" style="flex-direction:column; align-items:center;">
+    <div class="tag" style="color:rgba(255,255,255,.55); align-self:flex-start;">Fondo negro · Splash (theme "dark")</div>
+    <div style="margin:18px 0;">
+      <svg viewBox="120 320 800 384" height="64"><circle cx="310" cy="512" r="148" fill="none" stroke="#FF6B00" stroke-width="68"/><text x="665" y="578" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="300" letter-spacing="-6" fill="#FFFFFF" text-anchor="middle">FIX</text></svg>
+    </div>
+  </div>
+</div>
+
+<div class="options" style="margin-top:26px; max-width:420px; margin-left:auto; margin-right:auto;">
+  <div class="option" data-choice="ok" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content"><h3>Me gusta — implementalo así</h3><p>Wordmark transparente, "O" naranja, "FIX" adapta color por fondo</p></div>
+  </div>
+  <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content"><h3>Con ajustes</h3><p>Decime qué cambiarías (tamaño del anillo, grosor, color del FIX en claro, etc.)</p></div>
+  </div>
+</div>
