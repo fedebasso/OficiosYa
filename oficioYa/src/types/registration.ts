@@ -8,6 +8,7 @@ export interface RegistrationState {
   registration_completed: boolean
   verification_status: VerificationStatus
   quality_score: number
+  avg_rating?: number
   // Paso 1
   cedula: string | null
   birth_date: string | null

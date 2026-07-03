@@ -8,6 +8,7 @@ const MOCK_PROFILE: RegistrationState = {
   registration_completed: true,
   verification_status: 'verified',
   quality_score: 85,
+  avg_rating: 4.8,
   cedula: '1.234.567-8',
   birth_date: '1990-05-15',
   address: 'Av. Brasil 2340',
@@ -34,6 +35,8 @@ interface ProfessionalStore {
   loading: boolean
   error: string | null
   loadedForId: string | null
+  availableNow: boolean
+  setAvailableNow: (v: boolean) => void
   load: (proId: string) => Promise<void>
   save: (proId: string, data: Partial<RegistrationState>) => Promise<void>
   uploadAvatar: (proId: string, file: File) => Promise<string>
@@ -44,6 +47,12 @@ export const useProfessionalStore = create<ProfessionalStore>((set, get) => ({
   loading: false,
   error: null,
   loadedForId: null,
+
+  availableNow: (typeof localStorage !== 'undefined' ? localStorage.getItem('pro_available_now') : null) !== '0',
+  setAvailableNow: (v: boolean) => {
+    try { localStorage.setItem('pro_available_now', v ? '1' : '0') } catch { /* no-op */ }
+    set({ availableNow: v })
+  },
 
   load: async (proId: string) => {
     if (get().loadedForId === proId && get().profile) return

@@ -7,6 +7,8 @@ import { CheckCircle, XCircle, MessageCircle, Inbox, Search, ChevronDown, Chevro
 import type { ServiceRequest } from '../../store/requestStore'
 import { NotificationBanner } from '../../components/notifications/NotificationBanner'
 import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
+import { timeAgo, formatScheduled } from '../../lib/proFormat'
+import { ActiveJobCard } from '../../components/pro/ActiveJobCard'
 import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
 
 // ── Metadatos de estado ─────────────────────────────────────────────────────
@@ -20,24 +22,6 @@ const STATUS_META: Record<string, { label: string; color: string; bg: string; do
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
-
-function timeAgo(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime()
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'Ahora'
-  if (m < 60) return `hace ${m}m`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `hace ${h}h`
-  return `hace ${Math.floor(h / 24)}d`
-}
-
-function formatScheduled(iso: string) {
-  const d = new Date(iso)
-  const date = d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })
-  const hasTime = iso.includes('T') && !iso.endsWith('T00:00:00')
-  const time = hasTime ? d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : null
-  return time ? `${date} · ${time}hs` : date
-}
 
 function WorkTypeIcon({ type }: { type: string }) {
   if (type === 'reparacion') return <Wrench size={10} style={{ color: '#777' }} />
@@ -446,7 +430,7 @@ export default function ProRequests() {
             </p>
             <motion.div variants={staggerFast} initial="hidden" animate="visible" className="flex flex-col gap-2">
               {active.map((req) => (
-                <RequestCard
+                <ActiveJobCard
                   key={req.id}
                   req={req}
                   onProgress={(s) => {
@@ -457,7 +441,7 @@ export default function ProRequests() {
                     }
                   }}
                   onChat={() => navigate(`/solicitud/${req.id}/chat`)}
-                  sentProgressId={sentProgress ?? undefined}
+                  sentProgress={sentProgress === req.id}
                 />
               ))}
             </motion.div>
