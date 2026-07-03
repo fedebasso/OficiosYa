@@ -216,7 +216,7 @@ function MediaStep({
           Mostranos el problema
         </h2>
         <p className="text-sm mt-1" style={{ color: '#AAAAAA' }}>
-          Completá los tres campos para continuar
+          Describí el problema. La foto y el barrio son opcionales
         </p>
       </div>
 
