@@ -68,7 +68,7 @@ export default function Home() {
               if (e.key === 'Enter' && results.length > 0) goToCategory(results[0].id)
             }}
             placeholder="¿Qué servicio necesitás?"
-            className="flex-1 bg-transparent outline-none"
+            className="flex-1 self-stretch bg-transparent outline-none"
             style={{ fontSize: 15, color: '#1A1712', fontWeight: 500 }}
           />
           {searchOpen && (

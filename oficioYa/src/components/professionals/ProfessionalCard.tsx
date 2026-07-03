@@ -80,7 +80,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           onClick={(e) => { e.stopPropagation(); toggle(id) }}
           aria-label={favorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
           className="flex items-center justify-center active:scale-90 transition-transform flex-shrink-0"
-          style={{ width: 34, height: 34, borderRadius: 12, background: '#FAF6F0' }}
+          style={{ width: 44, height: 44, borderRadius: 14, background: '#FAF6F0' }}
         >
           <Heart size={17} style={{ color: favorite ? '#EF4444' : '#C9BFB0' }} fill={favorite ? '#EF4444' : 'none'} />
         </button>

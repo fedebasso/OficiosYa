@@ -53,6 +53,7 @@ export function TopRated() {
         <button
           type="button"
           onClick={() => navigate('/buscar')}
+          className="flex items-center -mr-2 px-2 py-2.5"
           style={{ fontSize: 13, fontWeight: 700, color: '#B8460F' }}
         >
           Ver todos
