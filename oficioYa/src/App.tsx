@@ -3,15 +3,14 @@ import { BrowserRouter, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
 import { PageSkeleton } from './components/layout/PageSkeleton'
+// Eager: el router siempre se necesita en el primer render; importarlo directo
+// evita un hop extra en el waterfall (index → AnimatedRoutes → página).
+import { AnimatedRoutes } from './components/layout/AnimatedRoutes'
 
 // Lazy: sólo se descarga cuando hay onboarding para mostrar (arrastra framer-motion,
 // fuera del bundle inicial).
 const OnboardingFlow = lazy(() =>
   import('./components/onboarding/OnboardingFlow').then((m) => ({ default: m.OnboardingFlow }))
-)
-
-const AnimatedRoutes = lazy(() =>
-  import('./components/layout/AnimatedRoutes').then((m) => ({ default: m.AnimatedRoutes }))
 )
 
 function ScrollToTop() {
