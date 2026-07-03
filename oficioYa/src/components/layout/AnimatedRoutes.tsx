@@ -49,6 +49,14 @@ function ProtectedRoute({
   return <>{children}</>
 }
 
+// Rutas orientadas a cliente: un profesional logueado va a su dashboard,
+// consistente con la redirección que ya hace ClientLayout.
+function ClientRoute({ children }: { children: ReactNode }) {
+  const user = useAuthStore((s) => s.user)
+  if (user?.role === 'professional') return <Navigate to="/pro/dashboard" replace />
+  return <>{children}</>
+}
+
 export function AnimatedRoutes() {
   const location = useLocation()
   const user = useAuthStore((s) => s.user)
@@ -59,19 +67,19 @@ export function AnimatedRoutes() {
       <Routes location={location}>
               <Route path="/login"    element={<Login />} />
               <Route path="/registro" element={<Register />} />
-              <Route path="/profesional/:id" element={<ProfessionalDetail />} />
-              <Route path="/urgencias"       element={<Urgencias />} />
-              <Route path="/ticket"          element={<TicketFlow />} />
-              <Route path="/ticket/confirmar" element={<TicketConfirm />} />
+              <Route path="/profesional/:id" element={<ClientRoute><ProfessionalDetail /></ClientRoute>} />
+              <Route path="/urgencias"       element={<ClientRoute><Urgencias /></ClientRoute>} />
+              <Route path="/ticket"          element={<ClientRoute><TicketFlow /></ClientRoute>} />
+              <Route path="/ticket/confirmar" element={<ClientRoute><TicketConfirm /></ClientRoute>} />
               <Route path="/buscar-profesional/:requestId" element={<ProtectedRoute><BuscarOtroProfesional /></ProtectedRoute>} />
-              <Route path="/solicitar/:id"   element={<RequestService />} />
+              <Route path="/solicitar/:id"   element={<ClientRoute><RequestService /></ClientRoute>} />
               <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
               <Route path="/pro/registro"   element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
               <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
               <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
               <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
-              {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales"     element={<OfficialServicesPage />} />}
-              {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales/:id" element={<OfficialServiceDetail />} />}
+              {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales"     element={<ClientRoute><OfficialServicesPage /></ClientRoute>} />}
+              {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales/:id" element={<ClientRoute><OfficialServiceDetail /></ClientRoute>} />}
 
               <Route
                 path="/pro/*"
