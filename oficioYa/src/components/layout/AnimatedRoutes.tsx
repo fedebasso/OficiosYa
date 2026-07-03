@@ -1,7 +1,5 @@
 import { lazy, Suspense, type ReactNode } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useNavDirection } from '../../hooks/useNavDirection'
 import { FEATURES } from '../../lib/featureFlags'
 import { ClientLayout } from '../../layouts/ClientLayout'
 import { ProLayout } from '../../layouts/ProLayout'
@@ -51,34 +49,14 @@ function ProtectedRoute({
   return <>{children}</>
 }
 
-const TRANSITION = { type: 'tween', duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] } as const
-
 export function AnimatedRoutes() {
   const location = useLocation()
-  const direction = useNavDirection()
   const user = useAuthStore((s) => s.user)
   const isPro = user?.role === 'professional'
 
-  const variants = {
-    initial:  { x: direction === 'forward' ? '100%' : '-30%', opacity: 0 },
-    animate:  { x: 0, opacity: 1 },
-    exit:     { x: direction === 'forward' ? '-30%' : '100%', opacity: 0 },
-  }
-
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden' }}>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={location.key}
-          variants={variants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={TRANSITION}
-          style={{ position: 'absolute', inset: 0, overflowY: 'auto' }}
-        >
-          <Suspense fallback={<PageSkeleton />}>
-            <Routes location={location}>
+    <Suspense fallback={<PageSkeleton />}>
+      <Routes location={location}>
               <Route path="/login"    element={<Login />} />
               <Route path="/registro" element={<Register />} />
               <Route path="/profesional/:id" element={<ProfessionalDetail />} />
@@ -135,10 +113,7 @@ export function AnimatedRoutes() {
                     )
                 }
               />
-            </Routes>
-          </Suspense>
-        </motion.div>
-      </AnimatePresence>
-    </div>
+      </Routes>
+    </Suspense>
   )
 }

@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
-import { SplashScreen } from './components/SplashScreen'
 import { OnboardingFlow } from './components/onboarding/OnboardingFlow'
 import { PageSkeleton } from './components/layout/PageSkeleton'
 
@@ -33,7 +32,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <SplashScreen />
       {showOnboarding && user && (
         <OnboardingFlow
           role={user.role}
