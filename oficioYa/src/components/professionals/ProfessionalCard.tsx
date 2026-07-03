@@ -92,11 +92,11 @@ export function ProfessionalCard({ professional, onClick }: Props) {
       {/* Fila inferior */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3.5">
-          <span className="flex items-center gap-1" style={{ color: '#8A7F6E', fontSize: 13, fontWeight: 600 }}>
+          <span className="flex items-center gap-1" style={{ color: '#6B6153', fontSize: 13, fontWeight: 600 }}>
             <MapPin size={14} style={{ color: '#B3A794' }} />
             {zone}
           </span>
-          <span style={{ color: '#B3A794', fontSize: 13 }}>
+          <span style={{ color: '#6E6455', fontSize: 13 }}>
             <b style={{ color: '#5A5142' }}>{jobs_count}</b> trabajos
           </span>
         </div>
@@ -105,10 +105,10 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           <span className="flex items-center gap-1" style={{ background: '#FFF7ED', padding: '5px 10px', borderRadius: 10 }}>
             <Star size={14} fill="#F5A623" color="#F5A623" />
             <span style={{ fontWeight: 800, color: '#1A1712', fontSize: 14 }}>{avg_rating.toFixed(1)}</span>
-            <span style={{ color: '#B3A794', fontSize: 11, fontWeight: 600 }}>({jobs_count})</span>
+            <span style={{ color: '#6E6455', fontSize: 11, fontWeight: 600 }}>({jobs_count})</span>
           </span>
         ) : (
-          <span style={{ fontSize: 11, color: '#C9BFB0', fontWeight: 600 }}>Sin reseñas</span>
+          <span style={{ fontSize: 11, color: '#8A7F6E', fontWeight: 600 }}>Sin reseñas</span>
         )}
       </div>
     </div>

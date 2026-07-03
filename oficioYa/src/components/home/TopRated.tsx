@@ -53,7 +53,7 @@ export function TopRated() {
         <button
           type="button"
           onClick={() => navigate('/buscar')}
-          style={{ fontSize: 13, fontWeight: 700, color: '#D4571F' }}
+          style={{ fontSize: 13, fontWeight: 700, color: '#B8460F' }}
         >
           Ver todos
         </button>
@@ -91,7 +91,7 @@ export function TopRated() {
                 <span style={{ color: '#F59E0B', fontSize: 11 }}>★</span>
                 <span className="text-xs font-black" style={{ color: '#111' }}>{pro.avg_rating.toFixed(1)}</span>
               </div>
-              <span className="text-[10px]" style={{ color: '#9C917E' }}>{pro.zone}</span>
+              <span className="text-[10px]" style={{ color: '#6B6153' }}>{pro.zone}</span>
             </button>
           )
         })}

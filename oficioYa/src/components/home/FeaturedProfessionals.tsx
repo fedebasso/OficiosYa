@@ -13,7 +13,7 @@ export function FeaturedProfessionals() {
     <section>
       <h2
         className="animate-fade-up text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
-        style={{ color: '#999999' }}
+        style={{ color: '#6E6455' }}
       >
         Más recomendados
       </h2>
@@ -27,7 +27,7 @@ export function FeaturedProfessionals() {
     <section>
       <h2
         className="animate-fade-up text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
-        style={{ color: '#999999' }}
+        style={{ color: '#6E6455' }}
       >
         Más recomendados
       </h2>
