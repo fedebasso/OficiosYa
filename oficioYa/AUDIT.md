@@ -96,7 +96,10 @@ descripción (≥10 chars) es obligatoria: foto y barrio están rotulados
 
 ### Baja
 
-**[B1] Pro accede a rutas top-level de cliente (`/ticket`, `/urgencias`) sin redirección**
+**[B1] ✅ RESUELTO — Pro accede a rutas top-level de cliente sin redirección**
+_Fix commit `fix(P2-B1)`. Nuevo guard `ClientRoute` redirige al pro a
+`/pro/dashboard` en `/ticket`, `/urgencias`, `/profesional/:id`, `/solicitar/:id`
+y servicios oficiales. Verificado en runtime._
 Las rutas bajo `ClientLayout` sí redirigen al pro a su dashboard, pero las
 top-level (`/ticket`, `/urgencias`, `/profesional/:id`) no. Un pro logueado
 puede entrar al flujo de cliente. Impacto bajo (no hay daño de datos), pero es
@@ -106,9 +109,8 @@ inconsistente con la separación de roles.
 
 ## 3. Observaciones (no bloqueantes)
 
-**[O1]** En `ProfessionalDetail`, el botón "Solicitar trabajo" lleva a `/ticket`
-(flujo IA) en lugar de `/solicitar/:id` (`RequestService`). Verificar si es
-intencional (rediseño hacia flujo IA) o si `RequestService` quedó huérfano.
+**[O1] ✅ RESUELTO** — "Solicitar trabajo" ahora lleva a `/solicitar/:id`
+(`RequestService`, flujo directo con wizard). Fix commit `fix(P2-O1)`.
 
-**[O2]** `SplashScreen.tsx` quedó huérfano tras P1.2 (ya no se renderiza). Se
-puede borrar en limpieza, no urge.
+**[O2] ✅ RESUELTO** — `SplashScreen.tsx` (huérfano tras P1.2) eliminado.
+Fix commit `chore(P2-O2)`.
