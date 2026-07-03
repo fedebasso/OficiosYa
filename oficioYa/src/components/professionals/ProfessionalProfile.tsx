@@ -142,7 +142,7 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
       variants={staggerContainer}
       initial="hidden"
       animate="visible"
-      className="flex flex-col min-h-screen"
+      className="flex flex-col min-h-dvh"
       style={{ background: '#F5F0E8' }}
     >
 

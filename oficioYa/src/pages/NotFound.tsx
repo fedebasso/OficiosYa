@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <PageShell showBottomNav>
       <div
-        className="flex flex-col items-center justify-center min-h-screen gap-6 px-6 pb-16 text-center"
+        className="flex flex-col items-center justify-center min-h-dvh gap-6 px-6 pb-16 text-center"
         style={{ background: '#F5F0E8' }}
       >
         {/* Número grande */}

@@ -55,7 +55,7 @@ export function ChatInput({ onSendText, onSendImage, onSendAudio }: Props) {
       style={{
         background: '#FFFFFF',
         borderTop: '1px solid #EDE8DE',
-        paddingBottom: 'calc(10px + var(--safe-bottom, 0px))',
+        paddingBottom: 'calc(10px + var(--safe-bottom, 0px) + var(--kb-inset, 0px))',
       }}
     >
       {/* Textarea */}

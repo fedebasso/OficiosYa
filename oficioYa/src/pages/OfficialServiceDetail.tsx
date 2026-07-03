@@ -43,7 +43,7 @@ export default function OfficialServiceDetail() {
 
   if (!service) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-dvh">
         <p style={{ color: '#AAAAAA' }}>Servicio no encontrado</p>
       </div>
     )

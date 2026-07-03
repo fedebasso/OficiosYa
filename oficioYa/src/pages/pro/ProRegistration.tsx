@@ -56,7 +56,7 @@ export default function ProRegistration() {
 
   if (loading && !state) {
     return (
-      <div className="flex items-center justify-center min-h-screen" style={{ background: '#F5F0E8' }}>
+      <div className="flex items-center justify-center min-h-dvh" style={{ background: '#F5F0E8' }}>
         <div className="text-center">
           <div className="text-4xl mb-3">🔧</div>
           <p style={{ color: '#555' }}>Cargando...</p>

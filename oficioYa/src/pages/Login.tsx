@@ -49,7 +49,7 @@ export default function Login() {
 
   return (
     <PageShell showBottomNav={false}>
-      <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
+      <div className="flex flex-col min-h-dvh" style={{ background: '#F5F0E8' }}>
 
         {/* Hero naranja */}
         <div

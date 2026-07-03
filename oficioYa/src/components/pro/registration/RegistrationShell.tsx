@@ -19,7 +19,7 @@ export function RegistrationShell({ currentStep, totalSteps, onBack, children, t
   const progress = (currentStep / totalSteps) * 100
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: '#F5F0E8' }}>
+    <div className="flex flex-col min-h-dvh" style={{ background: '#F5F0E8' }}>
       {/* Header */}
       <div className="px-5 pt-12 pb-4" style={{ background: '#E8683A' }}>
         <div className="flex items-center gap-3 mb-4">

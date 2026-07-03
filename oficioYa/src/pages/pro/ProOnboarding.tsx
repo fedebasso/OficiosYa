@@ -129,7 +129,7 @@ export default function ProOnboarding() {
 
   return (
     <div
-      className="flex flex-col min-h-screen"
+      className="flex flex-col min-h-dvh"
       style={{ background: '#F5F0E8', maxWidth: 480, margin: '0 auto' }}
     >
       {/* ── Header ── */}

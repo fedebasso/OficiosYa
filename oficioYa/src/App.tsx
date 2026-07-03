@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
+import { useKeyboardInset } from './hooks/useKeyboardInset'
 import { PageSkeleton } from './components/layout/PageSkeleton'
 // Eager: el router siempre se necesita en el primer render; importarlo directo
 // evita un hop extra en el waterfall (index → AnimatedRoutes → página).
@@ -22,6 +23,7 @@ function ScrollToTop() {
 function AppInner() {
   const initNotifications = useNotificationStore((s) => s.init)
   useEffect(() => { initNotifications() }, [initNotifications])
+  useKeyboardInset()
   return null
 }
 

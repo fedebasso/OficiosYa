@@ -8,6 +8,22 @@
     color: #111111;
     font-family: 'DM Sans', system-ui, sans-serif;
   }
+  /* Sin scroll de goma del body detrás de contenedores (fix viewport/teclado).
+     No se bloquea el scroll (overflow) para no romper las pantallas basadas en
+     PageShell que scrollean la página. */
+  html, body {
+    overscroll-behavior: none;
+  }
+}
+
+/* Fallback dvh: navegadores viejos usan 100vh; modernos, el viewport dinámico. */
+.h-screen-dyn {
+  height: 100vh;
+  height: 100dvh;
+}
+.min-h-screen-dyn {
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* ── DARK THEME OVERRIDES ─────────────────────────────────────── */
