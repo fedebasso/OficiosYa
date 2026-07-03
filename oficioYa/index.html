@@ -18,10 +18,13 @@
   <body>
     <div id="root">
       <!-- Shell de carga estático: pinta de inmediato (FCP) mientras carga el JS.
-           React reemplaza el contenido de #root al montar; no es un splash artificial. -->
-      <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#F5F0E8">
-        <div style="font-family:'DM Sans',system-ui,sans-serif;font-weight:800;font-size:34px;letter-spacing:-1px;color:#1A1712">
-          O<span style="color:#FF6B00">FIX</span>
+           Imita el header real (OFIX arriba-izquierda) para que el logo no se
+           reposicione al montar React → evita layout shift. No es un splash. -->
+      <div style="position:fixed;inset:0;background:#F5F0E8">
+        <div style="background:#FFFFFF;box-shadow:0 1px 0 #EDE8DE;padding:calc(14px + env(safe-area-inset-top)) 16px 10px">
+          <div style="font-family:'DM Sans',system-ui,sans-serif;font-weight:800;font-size:26px;letter-spacing:-1px;color:#1A1712;line-height:1.2">
+            O<span style="color:#FF6B00">FIX</span>
+          </div>
         </div>
       </div>
     </div>

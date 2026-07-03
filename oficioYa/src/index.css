@@ -119,6 +119,25 @@ input:-webkit-autofill:focus {
   animation: fade-in 0.2s var(--ease-out) both;
 }
 
+/* Respiración suave del ícono IA (reemplaza framer-motion en TicketEntryCard).
+   Solo transform → compositor, sin costo de layout. */
+@keyframes breathe-soft {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+.animate-breathe { animation: breathe-soft 3s ease-in-out infinite; }
+
+/* Vaivén horizontal de la flecha (reemplaza framer-motion). */
+@keyframes nudge-x {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
+.animate-nudge-x { animation: nudge-x 2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe, .animate-nudge-x { animation: none; }
+}
+
 /* Stagger delays — rule polish-stagger-children */
 .delay-1 { animation-delay: 0.04s; }
 .delay-2 { animation-delay: 0.08s; }

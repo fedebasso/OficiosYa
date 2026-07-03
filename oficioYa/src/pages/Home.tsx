@@ -1,7 +1,6 @@
 // src/pages/Home.tsx
 import { createElement, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { Search, X } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { BrandLogo } from '../components/common/BrandLogo'
@@ -149,12 +148,10 @@ export default function Home() {
         <TopRated />
         <TicketEntryCard />
         {/* Banner Servicios Oficiales — Fase 2: activar en featureFlags.ts */}
-        {FEATURES.SERVICIOS_OFICIALES && <motion.button
+        {FEATURES.SERVICIOS_OFICIALES && <button
           type="button"
           onClick={() => navigate('/servicios-oficiales')}
-          whileTap={{ scale: 0.98 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="w-full text-left"
+          className="w-full text-left transition-transform active:scale-[0.98]"
           style={{
             background: 'linear-gradient(135deg, #0F6E56 0%, #1a9b78 100%)',
             borderRadius: 20,
@@ -177,7 +174,7 @@ export default function Home() {
             </div>
             <span style={{ fontSize: 36 }}>🏷️</span>
           </div>
-        </motion.button>}
+        </button>}
         <section>
           <FeaturedProfessionals />
         </section>

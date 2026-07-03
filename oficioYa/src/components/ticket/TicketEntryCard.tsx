@@ -1,22 +1,15 @@
 // src/components/ticket/TicketEntryCard.tsx
-import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, ArrowRight } from 'lucide-react'
-import { SPRING_SOFT, fadeUp } from '../../lib/motion'
 
 export function TicketEntryCard() {
   const navigate = useNavigate()
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={() => navigate('/ticket')}
-      variants={fadeUp}
-      initial="hidden"
-      animate="visible"
-      whileTap={{ scale: 0.98 }}
-      transition={SPRING_SOFT}
-      className="relative w-full text-left flex items-center gap-3.5 overflow-hidden"
+      className="animate-fade-up relative w-full text-left flex items-center gap-3.5 overflow-hidden transition-transform active:scale-[0.98]"
       style={{
         background: 'linear-gradient(135deg, #FFFFFF 0%, #FEF4EE 100%)',
         border: '1.5px solid rgba(232,104,58,.22)',
@@ -28,10 +21,8 @@ export function TicketEntryCard() {
       {/* Orb con glow */}
       <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: 52, height: 52 }}>
         <div style={{ position: 'absolute', width: 44, height: 44, borderRadius: '50%', background: '#F28C4A', opacity: 0.35, filter: 'blur(14px)' }} />
-        <motion.div
-          className="relative flex items-center justify-center"
-          animate={{ scale: [1, 1.06, 1] }}
-          transition={{ duration: 3, ease: 'easeInOut', repeat: Infinity }}
+        <div
+          className="animate-breathe relative flex items-center justify-center"
           style={{
             width: 48,
             height: 48,
@@ -41,7 +32,7 @@ export function TicketEntryCard() {
           }}
         >
           <Sparkles size={23} color="#FFFFFF" strokeWidth={2.2} />
-        </motion.div>
+        </div>
       </div>
 
       {/* Texto */}
@@ -61,14 +52,12 @@ export function TicketEntryCard() {
       </div>
 
       {/* Flecha */}
-      <motion.span
-        className="flex items-center justify-center flex-shrink-0"
-        animate={{ x: [0, 3, 0] }}
-        transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity }}
+      <span
+        className="animate-nudge-x flex items-center justify-center flex-shrink-0"
         style={{ width: 32, height: 32, borderRadius: 12, background: '#FEF0EA', color: '#E8683A' }}
       >
         <ArrowRight size={17} />
-      </motion.span>
-    </motion.button>
+      </span>
+    </button>
   )
 }

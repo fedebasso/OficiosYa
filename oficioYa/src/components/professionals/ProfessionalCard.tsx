@@ -1,6 +1,5 @@
 import { createElement } from 'react'
 import { Heart, MapPin, Star, Check } from 'lucide-react'
-import { motion } from 'framer-motion'
 import type { ProfessionalWithProfile } from '../../hooks/useProfessionals'
 import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
 import { getInitials } from '../../lib/utils'
@@ -22,14 +21,12 @@ export function ProfessionalCard({ professional, onClick }: Props) {
   const favorite = isFavorite(id)
 
   return (
-    <motion.div
+    <div
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
-      className="w-full text-left cursor-pointer"
-      whileTap={{ scale: 0.98, y: 1 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      className="w-full text-left cursor-pointer transition-transform active:scale-[0.98]"
       style={{
         background: '#FFFFFF',
         border: '1px solid #ECE6DC',
@@ -114,7 +111,7 @@ export function ProfessionalCard({ professional, onClick }: Props) {
           <span style={{ fontSize: 11, color: '#C9BFB0', fontWeight: 600 }}>Sin reseñas</span>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
 

@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { ProfessionalCard } from '../professionals/ProfessionalCard'
 import { FeaturedSkeleton } from '../ui/Skeleton'
 import { useProfessionals } from '../../hooks/useProfessionals'
-import { motion } from 'framer-motion'
-import { fadeUp, staggerFast } from '../../lib/motion'
 
 export function FeaturedProfessionals() {
   const navigate = useNavigate()
@@ -13,15 +11,12 @@ export function FeaturedProfessionals() {
 
   if (loading) return (
     <section>
-      <motion.h2
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-        className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
+      <h2
+        className="animate-fade-up text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
         style={{ color: '#999999' }}
       >
         Más recomendados
-      </motion.h2>
+      </h2>
       <FeaturedSkeleton />
     </section>
   )
@@ -30,31 +25,23 @@ export function FeaturedProfessionals() {
 
   return (
     <section>
-      <motion.h2
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-        className="text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
+      <h2
+        className="animate-fade-up text-[11px] font-bold uppercase tracking-[.7px] mb-2.5"
         style={{ color: '#999999' }}
       >
         Más recomendados
-      </motion.h2>
+      </h2>
 
-      <motion.div
-        variants={staggerFast}
-        initial="hidden"
-        animate="visible"
-        className="flex flex-col gap-2"
-      >
-        {featured.map((pro) => (
-          <motion.div key={pro.id} variants={fadeUp}>
+      <div className="flex flex-col gap-2">
+        {featured.map((pro, i) => (
+          <div key={pro.id} className={`animate-fade-up delay-${Math.min(i + 1, 6)}`}>
             <ProfessionalCard
               professional={pro}
               onClick={() => navigate(`/profesional/${pro.id}`)}
             />
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   )
 }

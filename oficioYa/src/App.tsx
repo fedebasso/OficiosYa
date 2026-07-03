@@ -2,8 +2,13 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useNotificationStore } from './store/notificationStore'
-import { OnboardingFlow } from './components/onboarding/OnboardingFlow'
 import { PageSkeleton } from './components/layout/PageSkeleton'
+
+// Lazy: sólo se descarga cuando hay onboarding para mostrar (arrastra framer-motion,
+// fuera del bundle inicial).
+const OnboardingFlow = lazy(() =>
+  import('./components/onboarding/OnboardingFlow').then((m) => ({ default: m.OnboardingFlow }))
+)
 
 const AnimatedRoutes = lazy(() =>
   import('./components/layout/AnimatedRoutes').then((m) => ({ default: m.AnimatedRoutes }))
@@ -33,11 +38,13 @@ function App() {
   return (
     <BrowserRouter>
       {showOnboarding && user && (
-        <OnboardingFlow
-          role={user.role}
-          userId={user.id}
-          onDone={() => setOnboardingDismissed(true)}
-        />
+        <Suspense fallback={null}>
+          <OnboardingFlow
+            role={user.role}
+            userId={user.id}
+            onDone={() => setOnboardingDismissed(true)}
+          />
+        </Suspense>
       )}
       <AppInner />
       <ScrollToTop />
