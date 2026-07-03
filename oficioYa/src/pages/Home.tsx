@@ -18,15 +18,15 @@ export default function Home() {
     <header
       className="sticky top-0 z-50"
       style={{
-        background: '#191410',
-        boxShadow: '0 2px 12px rgba(0,0,0,.25)',
+        background: '#FFFFFF',
+        boxShadow: '0 1px 0 #EDE8DE, 0 2px 8px rgba(0,0,0,.04)',
       }}
     >
       <div
         className="flex items-center"
         style={{ padding: 'calc(14px + var(--safe-top)) var(--px-container) 10px' }}
       >
-        <BrandLogo size="md" />
+        <BrandLogo size="md" theme="light" />
       </div>
       <div style={{ padding: '0 var(--px-container) 12px' }}>
         <button
