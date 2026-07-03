@@ -114,3 +114,35 @@ inconsistente con la separación de roles.
 
 **[O2] ✅ RESUELTO** — `SplashScreen.tsx` (huérfano tras P1.2) eliminado.
 Fix commit `chore(P2-O2)`.
+
+---
+
+## P3 — Optimización (resultados)
+
+**Lighthouse mobile (Slow-4G + CPU simuladas), producción Vercel:**
+
+| Métrica | Baseline | Final | Meta |
+|---|---|---|---|
+| **Performance** | 61 | **86–89** | ≥85 ✅ |
+| **Accessibility** | 95 | **95** | ≥90 ✅ |
+| FCP | 5.8 s | 1.9 s | — |
+| LCP | 6.8 s | 3.3–3.5 s | — |
+| Speed Index | 6.5 s | 3.4 s | — |
+| TBT | 60 ms | 60–180 ms | — |
+| CLS | 0 | **0** | <0.1 ✅ |
+
+**Cambios aplicados:**
+- **Carga diferida de Supabase** (`getSupabase()` dynamic import): fuera del critical path en demo (−50KB gzip iniciales).
+- **Chunking**: lucide-react e íconos en 1 chunk, framer-motion aparte (chunks 85→63).
+- **framer-motion fuera del critical path de Home** (TicketEntryCard, FeaturedProfessionals, ProfessionalCard, banner): tap/animaciones vía CSS con `prefers-reduced-motion`. OnboardingFlow lazy.
+- **Shell HTML de carga** que imita el header real (logo + barra) → FCP inmediato y **CLS 0**.
+- **Router eager** para acortar el waterfall inicial.
+- **Fuente** `display=optional` + weight 800 (sin FOUT/reflow).
+- **Contraste WCAG AA** en textos secundarios de Home/cards.
+- **Touch targets**: favorito 44px, input de búsqueda llena el campo (48px).
+- **Responsive** verificado sin overflow horizontal en 360 / 390 / 768px.
+
+**Pendientes menores (no bloquean metas):**
+- Consolidación total de **design tokens** (colores hardcodeados en ~40 archivos): pendiente como refactor; el contraste se corrigió en las pantallas principales.
+- **44×44 estricto** en todos los controles secundarios (ej. "Ver todos" ~36px).
+- **WebP/AVIF**: las fotos de la app son remotas (Unsplash, ya comprimidas w=200&q75); solo íconos/favicons locales son PNG (impacto marginal).
