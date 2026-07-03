@@ -373,7 +373,7 @@ export function ProfessionalProfile({ professional, photos, portfolio = [] }: Pr
       >
         <motion.button
           type="button"
-          onClick={() => navigate(`/ticket?pro=${id}`)}
+          onClick={() => navigate(`/solicitar/${id}`)}
           whileTap={{ scale: 0.97 }}
           transition={SPRING_SOFT}
           className="w-full py-3.5 text-sm font-bold flex items-center justify-center gap-1.5 text-white"
