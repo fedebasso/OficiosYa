@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 import type { ServiceRequest } from '../store/requestStore'
 
@@ -36,6 +36,7 @@ let mockIdCounter = 300
 export const requestService = {
   async getAll(): Promise<ServiceRequest[]> {
     if (IS_DEMO_MODE) return mockRequests
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('requests')
       .select('*')
@@ -56,6 +57,7 @@ export const requestService = {
       mockRequests = [newReq, ...mockRequests]
       return newReq
     }
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('requests')
       .insert({ ...req, status: 'pending' })
@@ -70,6 +72,7 @@ export const requestService = {
       mockRequests = mockRequests.map((r) => r.id === id ? { ...r, status } : r)
       return
     }
+    const supabase = await getSupabase()
     const { error } = await supabase.from('requests').update({ status }).eq('id', id)
     if (error) throw error
   },
@@ -79,6 +82,7 @@ export const requestService = {
       mockRequests = mockRequests.map((r) => r.id === requestId ? { ...r, status: 'completed' } : r)
       return
     }
+    const supabase = await getSupabase()
     const { error } = await supabase.from('reviews').insert({ request_id: requestId, rating, comment })
     if (error) throw error
   },

@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 import { MOCK_PROFESSIONALS } from '../data/mockProfessionals'
 import type { ProfessionalWithProfile, WorkPhoto } from '../hooks/useProfessionals'
@@ -10,6 +10,7 @@ export const professionalService = {
         ? MOCK_PROFESSIONALS.filter((p) => p.categories.includes(categoria))
         : MOCK_PROFESSIONALS
     }
+    const supabase = await getSupabase()
     let query = supabase.from('professionals').select('*, profiles(*)').eq('verification_status', 'verified')
     if (categoria) query = query.contains('categories', [categoria])
     const { data, error } = await query
@@ -21,6 +22,7 @@ export const professionalService = {
     if (IS_DEMO_MODE) {
       return MOCK_PROFESSIONALS.find((p) => p.id === id) ?? null
     }
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('professionals')
       .select('*, profiles(*)')
@@ -34,6 +36,7 @@ export const professionalService = {
     if (IS_DEMO_MODE) {
       return MOCK_PROFESSIONALS.filter((p) => p.available_now)
     }
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('professionals')
       .select('*, profiles(*)')
@@ -45,6 +48,7 @@ export const professionalService = {
 
   async getPhotos(professionalId: string): Promise<WorkPhoto[]> {
     if (IS_DEMO_MODE) return []
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('work_photos')
       .select('*')

@@ -12,6 +12,9 @@ export default defineConfig({
           if (/node_modules\/(react|react-dom|react-router|scheduler)\//.test(id)) return 'react-vendor'
           if (id.includes('node_modules/@supabase/')) return 'supabase'
           if (/node_modules\/(react-hook-form|@hookform|zod)\//.test(id)) return 'forms'
+          // Agrupar íconos en un chunk en vez de ~40 chunks diminutos (mejor en 4G)
+          if (id.includes('node_modules/lucide-react')) return 'icons'
+          if (id.includes('node_modules/framer-motion') || id.includes('node_modules/motion')) return 'motion'
         },
       },
     },
@@ -24,8 +27,8 @@ export default defineConfig({
         name: 'OFIX',
         short_name: 'OFIX',
         description: 'Encontrá profesionales de confianza en Montevideo',
-        theme_color: '#000000',
-        background_color: '#000000',
+        theme_color: '#F5F0E8',
+        background_color: '#F5F0E8',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

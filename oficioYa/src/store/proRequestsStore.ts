@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 import type { ServiceRequest } from './requestStore'
 
@@ -58,6 +58,7 @@ export const useProRequestsStore = create<ProRequestsStore>((set, get) => ({
       if (isPlaceholder()) {
         set({ requests: MOCK_INCOMING, loading: false, loadedForId: professionalId })
       } else {
+        const supabase = await getSupabase()
         const { data, error: err } = await supabase
           .from('requests')
           .select('*')
@@ -73,6 +74,7 @@ export const useProRequestsStore = create<ProRequestsStore>((set, get) => ({
 
   updateStatus: async (requestId: string, status: ServiceRequest['status']) => {
     if (!isPlaceholder()) {
+      const supabase = await getSupabase()
       await supabase.from('requests').update({ status }).eq('id', requestId)
     }
     set((s) => ({ requests: s.requests.map((r) => r.id === requestId ? { ...r, status } : r) }))

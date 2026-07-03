@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 import type { UserProfile } from '../store/authStore'
 
@@ -21,6 +21,7 @@ export const authService = {
       const stored = localStorage.getItem(STORAGE_KEY)
       return stored ? (JSON.parse(stored) as UserProfile) : null
     }
+    const supabase = await getSupabase()
     const { data: { session } } = await supabase.auth.getSession()
     if (!session?.user) return null
     const { data } = await supabase
@@ -31,8 +32,9 @@ export const authService = {
     return data as UserProfile | null
   },
 
-  onAuthChange(cb: (user: UserProfile | null) => void) {
+  async onAuthChange(cb: (user: UserProfile | null) => void) {
     if (IS_DEMO_MODE) return () => {}
+    const supabase = await getSupabase()
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
@@ -51,6 +53,7 @@ export const authService = {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(mock.profile))
       return mock.profile
     }
+    const supabase = await getSupabase()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
     const profile = await authService.getSession()
@@ -71,6 +74,7 @@ export const authService = {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(profile))
       return profile
     }
+    const supabase = await getSupabase()
     const { data, error } = await supabase.auth.signUp({ email, password })
     if (error) throw error
     if (data.user) {
@@ -86,6 +90,7 @@ export const authService = {
       localStorage.removeItem(STORAGE_KEY)
       return
     }
+    const supabase = await getSupabase()
     await supabase.auth.signOut()
   },
 }

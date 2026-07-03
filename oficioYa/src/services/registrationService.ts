@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 import type {
   RegistrationState,
@@ -63,6 +63,7 @@ function calcScore(
 export const registrationService = {
   async load(proId: string): Promise<RegistrationState | null> {
     if (IS_DEMO_MODE) return null // demo: sin backend de registro
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('professionals')
       .select('*')
@@ -81,6 +82,7 @@ export const registrationService = {
       // demo: calculamos el score con los datos ingresados, sin persistir
       return { quality_score: calcScore(data, 0, 0, false) }
     }
+    const supabase = await getSupabase()
     const current = await this.load(proId)
     const merged = { ...current, ...data }
 
@@ -116,6 +118,7 @@ export const registrationService = {
 
   async submitForReview(proId: string): Promise<void> {
     if (IS_DEMO_MODE) return // demo: no hay revisión real
+    const supabase = await getSupabase()
     await supabase
       .from('professionals')
       .update({ registration_completed: true, verification_status: 'pending' })
@@ -124,6 +127,7 @@ export const registrationService = {
 
   async uploadFile(bucket: string, proId: string, file: File): Promise<string> {
     if (IS_DEMO_MODE) return URL.createObjectURL(file) // demo: preview local
+    const supabase = await getSupabase()
     const ext = file.name.split('.').pop()
     const path = `${proId}/${Date.now()}.${ext}`
     const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true })
@@ -134,6 +138,7 @@ export const registrationService = {
 
   async uploadPrivateFile(bucket: string, proId: string, file: File): Promise<string> {
     if (IS_DEMO_MODE) return URL.createObjectURL(file) // demo: preview local
+    const supabase = await getSupabase()
     const ext = file.name.split('.').pop()
     const path = `${proId}/${Date.now()}.${ext}`
     const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true })
@@ -144,6 +149,7 @@ export const registrationService = {
 
   async getSignedUrl(bucket: string, path: string, expiresIn = 3600): Promise<string> {
     if (IS_DEMO_MODE) return path // demo: el path ya es una URL/objeto local
+    const supabase = await getSupabase()
     const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, expiresIn)
     if (error) throw error
     return data.signedUrl
@@ -151,6 +157,7 @@ export const registrationService = {
 
   async getPortfolio(proId: string): Promise<PortfolioItem[]> {
     if (IS_DEMO_MODE) return [] // demo: sin portfolio persistido
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('work_portfolio')
       .select('*')
@@ -167,6 +174,7 @@ export const registrationService = {
     if (IS_DEMO_MODE) {
       return { ...item, id: `demo-${Date.now()}`, professional_id: proId, created_at: new Date().toISOString() } as PortfolioItem
     }
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('work_portfolio')
       .insert({ ...item, professional_id: proId })
@@ -178,6 +186,7 @@ export const registrationService = {
 
   async deletePortfolioItem(id: string): Promise<void> {
     if (IS_DEMO_MODE) return // demo: nada que borrar
+    const supabase = await getSupabase()
     const { error } = await supabase.from('work_portfolio').delete().eq('id', id)
     if (error) throw error
   },
@@ -189,6 +198,7 @@ export const registrationService = {
     if (IS_DEMO_MODE) {
       return { ...data, id, professional_id: 'demo', created_at: new Date().toISOString() } as PortfolioItem
     }
+    const supabase = await getSupabase()
     const { data: updated, error } = await supabase
       .from('work_portfolio')
       .update(data)
@@ -201,6 +211,7 @@ export const registrationService = {
 
   async toggleFeatured(proId: string, itemId: string, featuredPhotoUrl: string): Promise<void> {
     if (IS_DEMO_MODE) return // demo: sin persistencia de destacado
+    const supabase = await getSupabase()
     // 1. Limpiar is_featured de todos los trabajos del pro
     await supabase
       .from('work_portfolio')
@@ -222,6 +233,7 @@ export const registrationService = {
 
   async getCertifications(proId: string): Promise<CertificationItem[]> {
     if (IS_DEMO_MODE) return [] // demo: sin certificaciones persistidas
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('certifications')
       .select('*')
@@ -241,6 +253,7 @@ export const registrationService = {
     if (IS_DEMO_MODE) {
       return { ...item, id: `demo-${Date.now()}`, professional_id: proId, created_at: new Date().toISOString(), verified: false, ai_extracted_data: null } as CertificationItem
     }
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('certifications')
       .insert({ ...item, professional_id: proId, verified: false, ai_extracted_data: null })
@@ -252,6 +265,7 @@ export const registrationService = {
 
   async getIdentity(proId: string): Promise<IdentityVerification | null> {
     if (IS_DEMO_MODE) return null // demo: sin verificación de identidad
+    const supabase = await getSupabase()
     const { data } = await supabase
       .from('identity_verification')
       .select('*')
@@ -262,6 +276,7 @@ export const registrationService = {
 
   async saveIdentity(proId: string, data: Partial<IdentityVerification>): Promise<void> {
     if (IS_DEMO_MODE) return // demo: sin persistencia de identidad
+    const supabase = await getSupabase()
     await supabase
       .from('identity_verification')
       .upsert({ ...data, professional_id: proId }, { onConflict: 'professional_id' })

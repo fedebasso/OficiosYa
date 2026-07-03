@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../../lib/supabase'
+import { getSupabase } from '../../lib/supabase'
 import { IS_DEMO_MODE } from '../../lib/env'
 import { professionalService } from '../../services/professionalService'
 import { getCategoryMeta } from '../../lib/categories'
@@ -30,14 +30,16 @@ export function TopRated() {
       })
       return
     }
-    supabase
-      .from('professionals')
-      .select('id, avg_rating, jobs_count, categories, zone, profiles(full_name, avatar_url)')
-      .gte('avg_rating', 4.5)
-      .gte('jobs_count', 3)
-      .order('avg_rating', { ascending: false })
-      .limit(4)
-      .then(({ data }) => { if (data) setPros(data as unknown as TopPro[]) })
+    getSupabase().then((supabase) =>
+      supabase
+        .from('professionals')
+        .select('id, avg_rating, jobs_count, categories, zone, profiles(full_name, avatar_url)')
+        .gte('avg_rating', 4.5)
+        .gte('jobs_count', 3)
+        .order('avg_rating', { ascending: false })
+        .limit(4)
+        .then(({ data }) => { if (data) setPros(data as unknown as TopPro[]) })
+    )
   }, [])
 
   if (pros.length === 0) return null

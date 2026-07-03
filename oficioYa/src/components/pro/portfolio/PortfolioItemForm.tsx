@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { registrationService } from '../../../services/registrationService'
+import { getSupabase } from '../../../lib/supabase'
 import { IS_DEMO_MODE } from '../../../lib/env'
 import { ALL_TRADES } from '../../../lib/categories'
 import type { PortfolioItem, WorkPhoto, PhotoType } from '../../../types/registration'
@@ -86,9 +87,8 @@ export function PortfolioItemForm({ item, proId, onSave, onClose, prefill }: Pro
 
       // Si estamos quitando el destacado de un item que antes era destacado
       if (!IS_DEMO_MODE && item && item.is_featured && !featured) {
-        await import('../../../lib/supabase').then(({ supabase }) =>
-          supabase.from('professionals').update({ featured_photo_url: null }).eq('id', proId)
-        )
+        const supabase = await getSupabase()
+        await supabase.from('professionals').update({ featured_photo_url: null }).eq('id', proId)
       }
 
       onSave(saved)

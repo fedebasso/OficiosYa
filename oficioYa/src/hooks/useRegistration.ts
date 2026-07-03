@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { registrationService } from '../services/registrationService'
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 import type { RegistrationState } from '../types/registration'
 
@@ -44,6 +44,7 @@ export function useRegistration() {
     if (!user?.id || !state || state.registration_step <= 1) return
     const prevStep = state.registration_step - 1
     if (!IS_DEMO_MODE) {
+      const supabase = await getSupabase()
       await supabase.from('professionals').update({ registration_step: prevStep }).eq('id', user.id)
     }
     setState((prev) => prev ? { ...prev, registration_step: prevStep } : prev)

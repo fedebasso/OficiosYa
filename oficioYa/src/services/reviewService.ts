@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import { IS_DEMO_MODE } from '../lib/env'
 
 export interface Review {
@@ -30,6 +30,7 @@ export const reviewService = {
     photoFile: File | null
   }): Promise<void> {
     if (IS_DEMO_MODE) return // demo: no persistimos reseñas
+    const supabase = await getSupabase()
     let photo_url: string | null = null
 
     if (photoFile) {
@@ -59,6 +60,7 @@ export const reviewService = {
 
   async fetchByProfessional(professionalId: string): Promise<Review[]> {
     if (IS_DEMO_MODE) return [] // demo: sin reseñas mock
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('reviews')
       .select('*, profiles(full_name, avatar_url)')
@@ -70,6 +72,7 @@ export const reviewService = {
 
   async refreshProfessionalRating(professionalId: string): Promise<void> {
     if (IS_DEMO_MODE) return // demo: no hay backend que recalcular
+    const supabase = await getSupabase()
     // ⚠️ Antes de activar Supabase: verificar que `professionals.id` == `profiles.id`.
     // Si no lo son, este RPC no actualiza el rating. Ver
     // docs/superpowers/notes/2026-07-01-reviewService-id-mismatch.md

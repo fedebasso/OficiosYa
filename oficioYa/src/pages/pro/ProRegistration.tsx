@@ -1,7 +1,7 @@
 import { useAuthStore } from '../../store/authStore'
 import { useRegistration } from '../../hooks/useRegistration'
 import { registrationService } from '../../services/registrationService'
-import { supabase } from '../../lib/supabase'
+import { getSupabase } from '../../lib/supabase'
 import { IS_DEMO_MODE } from '../../lib/env'
 import { RegistrationShell } from '../../components/pro/registration/RegistrationShell'
 import { Step1PersonalData } from '../../components/pro/registration/Step1PersonalData'
@@ -27,6 +27,7 @@ export default function ProRegistration() {
       try {
         const url = await registrationService.uploadFile('pro-avatars', user.id, avatarFile)
         if (!IS_DEMO_MODE) {
+          const supabase = await getSupabase()
           await supabase.from('profiles').update({ avatar_url: url }).eq('id', user.id)
         }
       } catch (e) {

@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="OFIX" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#F5F0E8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>OFIX</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,15 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap"></noscript>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Shell de carga estático: pinta de inmediato (FCP) mientras carga el JS.
+           React reemplaza el contenido de #root al montar; no es un splash artificial. -->
+      <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#F5F0E8">
+        <div style="font-family:'DM Sans',system-ui,sans-serif;font-weight:800;font-size:34px;letter-spacing:-1px;color:#1A1712">
+          O<span style="color:#FF6B00">FIX</span>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
