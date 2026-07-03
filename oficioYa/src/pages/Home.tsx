@@ -1,7 +1,8 @@
 // src/pages/Home.tsx
+import { createElement, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell'
 import { BrandLogo } from '../components/common/BrandLogo'
 import { FeaturedProfessionals } from '../components/home/FeaturedProfessionals'
@@ -10,9 +11,26 @@ import { TicketEntryCard } from '../components/ticket/TicketEntryCard'
 import { UrgenciasFAB } from '../components/home/UrgenciasFAB'
 import { TopRated } from '../components/home/TopRated'
 import { FEATURES } from '../lib/featureFlags'
+import { searchCategories } from '../lib/inferCategory'
+import { getCategoryIcon } from '../lib/categories'
 
 export default function Home() {
   const navigate = useNavigate()
+
+  const [query, setQuery] = useState('')
+  const [searchOpen, setSearchOpen] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const results = searchCategories(query)
+  const showEmpty = searchOpen && query.trim().length > 0 && results.length === 0
+  const popular = searchCategories('') // las 6 categorías, orden fijo
+
+  function goToCategory(id: string) {
+    setSearchOpen(false)
+    setQuery('')
+    inputRef.current?.blur()
+    navigate(`/buscar/${id}`)
+  }
 
   const homeHeader = (
     <header
@@ -29,23 +47,97 @@ export default function Home() {
         <BrandLogo size="md" theme="light" />
       </div>
       <div style={{ padding: '0 var(--px-container) 12px' }}>
-        <button
-          type="button"
-          onClick={() => navigate('/buscar')}
-          className="w-full flex items-center gap-2.5 active:opacity-80 transition-opacity"
+        <div
+          className="w-full flex items-center gap-2.5"
           style={{
             height: 48,
-            background: '#26201A',
-            border: '1.5px solid #342C24',
+            background: '#F5F1E8',
+            border: `1.5px solid ${searchOpen ? '#FF6B00' : '#E5DECF'}`,
             borderRadius: 15,
             padding: '0 14px',
           }}
         >
-          <Search size={19} strokeWidth={2.3} style={{ color: '#7D7264' }} />
-          <span style={{ fontSize: 15, color: '#9A8F80', fontWeight: 500 }}>
-            ¿Qué servicio necesitás?
-          </span>
-        </button>
+          <Search size={19} strokeWidth={2.3} style={{ color: searchOpen ? '#FF6B00' : '#9A8F80' }} />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setSearchOpen(true)}
+            enterKeyHint="search"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && results.length > 0) goToCategory(results[0].id)
+            }}
+            placeholder="¿Qué servicio necesitás?"
+            className="flex-1 bg-transparent outline-none"
+            style={{ fontSize: 15, color: '#1A1712', fontWeight: 500 }}
+          />
+          {searchOpen && (
+            <button
+              type="button"
+              aria-label="Cerrar búsqueda"
+              onClick={() => { setQuery(''); setSearchOpen(false); inputRef.current?.blur() }}
+              className="active:opacity-60"
+            >
+              <X size={18} strokeWidth={2.3} style={{ color: '#9A8F80' }} />
+            </button>
+          )}
+        </div>
+
+        {searchOpen && (
+          <div
+            style={{
+              marginTop: 8,
+              background: '#FFFFFF',
+              border: '1.5px solid #EDE8DE',
+              borderRadius: 15,
+              overflow: 'hidden',
+              boxShadow: '0 6px 20px rgba(0,0,0,.06)',
+            }}
+          >
+            {showEmpty ? (
+              <div style={{ padding: '14px 16px' }}>
+                <p style={{ fontSize: 14, color: '#6B6153', marginBottom: 10 }}>
+                  No encontramos “{query.trim()}”. Probá con:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {popular.map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => goToCategory(c.id)}
+                      className="active:opacity-70"
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: '#1A1712',
+                        background: '#F5F1E8',
+                        border: '1px solid #E5DECF',
+                        borderRadius: 999,
+                        padding: '6px 12px',
+                      }}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              (query.trim() ? results : popular).map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => goToCategory(c.id)}
+                  className="w-full flex items-center gap-3 active:bg-black/[.03]"
+                  style={{ padding: '12px 16px', borderBottom: '1px solid #F2EEE5' }}
+                >
+                  {createElement(getCategoryIcon(c.id), { size: 20, strokeWidth: 2.2, style: { color: '#FF6B00' } })}
+                  <span style={{ fontSize: 15, fontWeight: 500, color: '#1A1712' }}>{c.label}</span>
+                </button>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </header>
   )
