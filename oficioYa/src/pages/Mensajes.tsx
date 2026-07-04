@@ -52,7 +52,7 @@ export default function Mensajes() {
           <h1 className="text-xl font-black leading-tight" style={{ color: '#111111', letterSpacing: '-0.4px' }}>Mensajes</h1>
           {conversations.length > 0 && (
             <p className="text-xs" style={{ color: '#6E6455' }}>
-              {conversations.length} conversación{conversations.length !== 1 ? 'es' : ''}
+              {conversations.length} conversaci{conversations.length !== 1 ? 'ones' : 'ón'}
             </p>
           )}
         </div>
