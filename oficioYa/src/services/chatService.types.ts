@@ -50,8 +50,17 @@ export type ChatEvent =
  * Contrato único del chat. Hoy lo implementa el mock; mañana
  * `chatService.supabase.ts` implementa lo mismo y se cambia un import.
  */
+export interface StartConversationParams {
+  clientId: string
+  professionalId: string
+  serviceRequestId?: string | null
+}
+
 export interface ChatService {
   getConversations(userId: string): Promise<Conversation[]>
+  getConversation(conversationId: string): Promise<Conversation | null>
+  /** Abre (o crea si no existe) la conversación de una solicitud/par cliente-pro. */
+  getOrCreateConversation(params: StartConversationParams): Promise<Conversation>
   getMessages(conversationId: string): Promise<Message[]>
   sendMessage(conversationId: string, msg: NewMessage): Promise<Message>
   subscribeToMessages(conversationId: string, cb: (event: ChatEvent) => void): () => void

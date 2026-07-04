@@ -76,6 +76,7 @@ export function AnimatedRoutes() {
               <Route path="/admin/verificaciones" element={<ProtectedRoute><AdminVerificaciones /></ProtectedRoute>} />
               <Route path="/pro/registro"   element={<ProtectedRoute requiredRole="professional"><ProRegistration /></ProtectedRoute>} />
               <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
+              <Route path="/chat/:conversationId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
               <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
               <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
               {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales"     element={<ClientRoute><OfficialServicesPage /></ClientRoute>} />}

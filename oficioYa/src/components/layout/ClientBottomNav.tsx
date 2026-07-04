@@ -1,15 +1,24 @@
+import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { House, FileText, MessageCircle, UserCircle } from 'lucide-react'
-import { useRequestStore } from '../../store/requestStore'
+import { useChatStore } from '../../store/chatStore'
+import { useAuthStore } from '../../store/authStore'
 
 export function ClientBottomNav() {
   const { pathname } = useLocation()
-  const requests = useRequestStore((s) => s.requests)
+  const userId = useAuthStore((s) => s.user?.id ?? '')
+  const load = useChatStore((s) => s.load)
+  const conversations = useChatStore((s) => s.conversations)
+  const totalUnread = useChatStore((s) => s.totalUnread)
 
-  // Badge: solicitudes con chat activo (confirmed o in_progress)
-  const activeChats = requests.filter(
-    (r) => r.status === 'confirmed' || r.status === 'in_progress'
-  ).length
+  // Recarga conversaciones al navegar (mantiene el badge de no-leídos al día)
+  useEffect(() => {
+    if (userId) load(userId)
+  }, [userId, load, pathname])
+
+  const unread = userId ? totalUnread(userId) : 0
+  // referencia a conversations para recomputar el badge cuando cambian
+  void conversations
 
   function isActive(to: string) {
     return to === '/' ? pathname === '/' : pathname.startsWith(to)
@@ -32,7 +41,7 @@ export function ClientBottomNav() {
       {[
         { label: 'Inicio',      to: '/',               Icon: House },
         { label: 'Solicitudes', to: '/mis-solicitudes', Icon: FileText },
-        { label: 'Mensajes',    to: '/mensajes',         Icon: MessageCircle, badge: activeChats },
+        { label: 'Mensajes',    to: '/mensajes',         Icon: MessageCircle, badge: unread },
         { label: 'Perfil',      to: '/perfil',           Icon: UserCircle },
       ].map(({ label, to, Icon, badge }) => {
         const active = isActive(to)

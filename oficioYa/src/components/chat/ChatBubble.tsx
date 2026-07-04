@@ -1,141 +1,55 @@
-import { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Play, Pause } from 'lucide-react'
-import { fadeUp } from '../../lib/motion'
-import type { ChatMessage } from '../../store/chatStore'
+import { Check, CheckCheck, Clock, AlertCircle } from 'lucide-react'
+import type { Message } from '../../services/chatService.types'
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })
 }
 
-function formatDuration(seconds: number) {
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
-}
-
-interface AudioBubbleProps {
-  src: string
-  duration?: number
-  isOwn: boolean
-}
-
-function AudioBubble({ src, duration, isOwn }: AudioBubbleProps) {
-  const audioRef = useRef<HTMLAudioElement>(null)
-  const [playing, setPlaying] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-
-  function togglePlay() {
-    const audio = audioRef.current
-    if (!audio) return
-    if (playing) {
-      audio.pause()
-    } else {
-      audio.play().catch(() => {})
-    }
-  }
-
-  function handleTimeUpdate() {
-    const audio = audioRef.current
-    if (!audio || !audio.duration) return
-    setCurrentTime(audio.currentTime)
-    setProgress((audio.currentTime / audio.duration) * 100)
-  }
-
-  function handleSeek(e: React.MouseEvent<HTMLDivElement>) {
-    const audio = audioRef.current
-    if (!audio || !audio.duration) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const ratio = (e.clientX - rect.left) / rect.width
-    audio.currentTime = ratio * audio.duration
-  }
-
-  const displayDuration = duration != null
-    ? formatDuration(Math.max(0, duration - Math.floor(currentTime)))
-    : '0:00'
-
-  return (
-    <div
-      className="flex items-center gap-2 px-3 py-2.5"
-      style={{
-        background:   isOwn ? '#E8683A' : '#FFFFFF',
-        border:       isOwn ? 'none' : '1.5px solid #EDE8DE',
-        borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
-        minWidth: 170,
-      }}
-    >
-      <audio
-        ref={audioRef}
-        src={src}
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onEnded={() => { setPlaying(false); setProgress(0); setCurrentTime(0) }}
-        onTimeUpdate={handleTimeUpdate}
-        preload="metadata"
-      />
-
-      {/* Botón play/pause */}
-      <button
-        type="button"
-        onClick={togglePlay}
-        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-transform"
-        style={{ background: isOwn ? 'rgba(255,255,255,0.25)' : '#E8683A' }}
-      >
-        {playing
-          ? <Pause size={12} fill="white" color="white" />
-          : <Play size={12} fill="white" color="white" style={{ marginLeft: 1 }} />
-        }
-      </button>
-
-      {/* Barra de progreso clickeable */}
-      <div className="flex-1 flex flex-col gap-1">
-        <div
-          className="h-[3px] rounded-full cursor-pointer"
-          style={{ background: isOwn ? 'rgba(255,255,255,0.3)' : '#EDE8DE' }}
-          onClick={handleSeek}
-        >
-          <div
-            className="h-full rounded-full transition-all"
-            style={{
-              width: `${progress}%`,
-              background: isOwn ? 'rgba(255,255,255,0.85)' : '#E8683A',
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Duración restante */}
-      <span
-        className="text-[10px] flex-shrink-0 font-medium"
-        style={{ color: isOwn ? 'rgba(255,255,255,0.7)' : '#AAA' }}
-      >
-        {displayDuration}
-      </span>
-    </div>
-  )
-}
-
 interface Props {
-  message: ChatMessage
+  message: Message
   isOwn: boolean
+  /** false cuando el mensaje se agrupa con el siguiente del mismo emisor (Fase 3). */
+  showMeta?: boolean
+  /** el envío falló (estado local optimista) → muestra reintentar */
+  error?: boolean
+  onRetry?: () => void
 }
 
-export function ChatBubble({ message, isOwn }: Props) {
+function StatusTick({ status }: { status: Message['status'] }) {
+  const gray = '#B3A794'
+  if (status === 'sending') return <Clock size={11} style={{ color: gray }} />
+  if (status === 'sent') return <Check size={13} style={{ color: gray }} />
+  if (status === 'delivered') return <CheckCheck size={13} style={{ color: gray }} />
+  // read → color de marca
+  return <CheckCheck size={13} style={{ color: '#E8683A' }} />
+}
+
+export function ChatBubble({ message, isOwn, showMeta = true, error, onRetry }: Props) {
+  // ── Mensaje de sistema: centrado, gris, sin burbuja ──────────────────────
+  if (message.type === 'system') {
+    return (
+      <div className="flex justify-center my-1">
+        <span
+          className="text-[11px] text-center px-3 py-1 rounded-full"
+          style={{ background: 'rgba(0,0,0,0.05)', color: '#8A7F6E' }}
+        >
+          {message.content}
+        </span>
+      </div>
+    )
+  }
 
   return (
-    <motion.div
-      variants={fadeUp}
-      className={`flex flex-col gap-1 ${isOwn ? 'items-end' : 'items-start'}`}
-    >
+    <div className={`flex flex-col gap-0.5 ${isOwn ? 'items-end' : 'items-start'}`}>
       {message.type === 'text' && (
         <div
-          className="max-w-[78%] px-3 py-2 text-[13px] leading-relaxed"
+          className="max-w-[80%] px-3 py-2 text-[13px] leading-relaxed break-words"
           style={{
-            background:   isOwn ? '#E8683A' : '#FFFFFF',
-            color:        isOwn ? '#FFFFFF' : '#111111',
-            border:       isOwn ? 'none' : '1.5px solid #EDE8DE',
+            background: isOwn ? '#E8683A' : '#FFFFFF',
+            color: isOwn ? '#FFFFFF' : '#111111',
+            border: isOwn ? 'none' : '1.5px solid #EDE8DE',
             borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
+            opacity: error ? 0.7 : 1,
           }}
         >
           {message.content}
@@ -144,49 +58,44 @@ export function ChatBubble({ message, isOwn }: Props) {
 
       {message.type === 'image' && (
         <div
-          className="max-w-[78%] overflow-hidden"
+          className="max-w-[80%] overflow-hidden"
           style={{
             borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
             border: '1.5px solid #EDE8DE',
+            opacity: error ? 0.7 : 1,
           }}
         >
           <img
-            src={message.content}
-            alt={message.fileName ?? 'imagen'}
+            src={message.image_url ?? message.content}
+            alt="imagen"
             className="w-full object-cover"
-            style={{ maxWidth: 220, maxHeight: 180, display: 'block' }}
+            style={{ maxWidth: 220, maxHeight: 200, display: 'block' }}
           />
-          {message.fileName && (
-            <div
-              className="px-3 py-1.5"
-              style={{
-                background: isOwn ? '#E8683A' : '#F5F0E8',
-                color: isOwn ? 'rgba(255,255,255,0.8)' : '#888',
-                fontSize: 10,
-              }}
+        </div>
+      )}
+
+      {/* Meta: hora + estado / reintentar */}
+      {(showMeta || error) && (
+        <div className="flex items-center gap-1 px-1">
+          {error ? (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="flex items-center gap-1 text-[10px] font-semibold active:opacity-70"
+              style={{ color: '#DC2626' }}
             >
-              {message.fileName}
-            </div>
+              <AlertCircle size={12} /> No se envió · Reintentar
+            </button>
+          ) : (
+            <>
+              <span className="text-[9px]" style={{ color: isOwn ? 'rgba(0,0,0,0.35)' : '#BBBBBB' }}>
+                {formatTime(message.created_at)}
+              </span>
+              {isOwn && <StatusTick status={message.status} />}
+            </>
           )}
         </div>
       )}
-
-      {message.type === 'audio' && (
-        <div className="max-w-[80%]">
-          <AudioBubble
-            src={message.content}
-            duration={message.duration}
-            isOwn={isOwn}
-          />
-        </div>
-      )}
-
-      <span
-        className="text-[9px] px-1"
-        style={{ color: isOwn ? 'rgba(232,104,58,0.55)' : '#BBBBBB' }}
-      >
-        {formatTime(message.createdAt)}
-      </span>
-    </motion.div>
+    </div>
   )
 }

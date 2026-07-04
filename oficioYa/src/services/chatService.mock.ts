@@ -10,6 +10,7 @@ import type {
   Message,
   NewMessage,
   ChatEvent,
+  StartConversationParams,
 } from './chatService.types'
 
 const LS_CONV = 'ofix_chat_conversations'
@@ -225,6 +226,36 @@ export const chatServiceMock: ChatService = {
       .filter((c) => c.client_id === userId || c.professional_id === userId)
       .sort((a, b) => b.last_message_at.localeCompare(a.last_message_at))
       .map((c) => ({ ...c })) // copia defensiva
+  },
+
+  async getConversation(conversationId) {
+    ensureLoaded()
+    const c = conversations.find((x) => x.id === conversationId)
+    return c ? { ...c } : null
+  },
+
+  async getOrCreateConversation({ clientId, professionalId, serviceRequestId }: StartConversationParams) {
+    ensureLoaded()
+    const existing = conversations.find((c) =>
+      (serviceRequestId != null && c.service_request_id === serviceRequestId) ||
+      (c.client_id === clientId && c.professional_id === professionalId),
+    )
+    if (existing) return { ...existing }
+    const conv: Conversation = {
+      id: uid(),
+      client_id: clientId,
+      professional_id: professionalId,
+      service_request_id: serviceRequestId ?? null,
+      last_message: '',
+      last_message_at: now(),
+      unread_count_client: 0,
+      unread_count_professional: 0,
+      created_at: now(),
+    }
+    conversations = [conv, ...conversations]
+    messages[conv.id] = []
+    persist()
+    return { ...conv }
   },
 
   async getMessages(conversationId) {
