@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, FileText, UserCircle, Calendar } from 'lucide-react'
+import { LayoutDashboard, FileText, UserCircle, Calendar, Wallet } from 'lucide-react'
 import { useProRequestsStore } from '../../store/proRequestsStore'
 
 export function ProBottomNav() {
@@ -11,6 +11,7 @@ export function ProBottomNav() {
     { label: 'Dashboard',   to: '/pro/dashboard',      icon: LayoutDashboard, badge: pendingCount > 0 ? pendingCount : null },
     { label: 'Solicitudes', to: '/pro/solicitudes',     icon: FileText, badge: null },
     { label: 'Agenda',      to: '/pro/disponibilidad',  icon: Calendar, badge: null },
+    { label: 'Ganancias',   to: '/pro/ganancias',       icon: Wallet, badge: null },
     { label: 'Perfil',      to: '/pro/perfil',          icon: UserCircle, badge: null },
   ]
 

@@ -32,6 +32,7 @@ const ProProfile      = lazy(() => import('../../pages/pro/ProProfile'))
 const ProProfileEdit  = lazy(() => import('../../pages/pro/ProProfileEdit'))
 const ProOnboarding   = lazy(() => import('../../pages/pro/ProOnboarding'))
 const ProWorkHistory  = lazy(() => import('../../pages/pro/ProWorkHistory'))
+const ProGanancias    = lazy(() => import('../../pages/pro/ProGanancias'))
 const ProRegistration = lazy(() => import('../../pages/pro/ProRegistration'))
 const ProAvailability = lazy(() => import('../../pages/pro/ProAvailability'))
 const AdminVerificaciones = lazy(() => import('../../pages/admin/AdminVerificaciones'))
@@ -93,6 +94,7 @@ export function AnimatedRoutes() {
                         <Route path="perfil"         element={<ProProfile />} />
                         <Route path="perfil/editar"  element={<ProProfileEdit />} />
                         <Route path="trabajos"       element={<ProWorkHistory />} />
+                        <Route path="ganancias"      element={<ProGanancias />} />
                         <Route path="disponibilidad" element={<ProAvailability />} />
                         <Route path="*"              element={<Navigate to="/pro/dashboard" replace />} />
                       </Routes>
