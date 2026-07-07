@@ -8,6 +8,8 @@ import { MessageCircle, ChevronRight, Bell, User, Briefcase, Star, Clock, CheckC
 import { motion } from 'framer-motion'
 import { useProfessionalStore } from '../../store/professionalStore'
 import { ActiveJobCard } from '../../components/pro/ActiveJobCard'
+import { useCompleteJob } from '../../hooks/useCompleteJob'
+import { CompleteJobSheet } from '../../components/pro/CompleteJobSheet'
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -26,6 +28,7 @@ export default function ProDashboard() {
   const loading = useProRequestsStore((s) => s.loading)
   const load = useProRequestsStore((s) => s.load)
   const updateStatus = useProRequestsStore((s) => s.updateStatus)
+  const complete = useCompleteJob((reqId) => updateStatus(reqId, 'completed'))
   const availableNow = useProfessionalStore((s) => s.availableNow)
   const setAvailableNow = useProfessionalStore((s) => s.setAvailableNow)
   const profile = useProfessionalStore((s) => s.profile)
@@ -168,7 +171,7 @@ export default function ProDashboard() {
                 <ActiveJobCard
                   key={req.id}
                   req={req}
-                  onProgress={() => updateStatus(req.id, isInProgress ? 'completed' : 'in_progress')}
+                  onProgress={() => isInProgress ? complete.open(req) : updateStatus(req.id, 'in_progress')}
                   onChat={() => navigate(`/solicitud/${req.id}/chat`)}
                 />
               )
@@ -268,6 +271,8 @@ export default function ProDashboard() {
         )}
 
         <style>{`@keyframes pro-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }`}</style>
+
+        <CompleteJobSheet req={complete.completing} onConfirm={complete.confirm} onClose={complete.close} />
       </div>
     </PageShell>
   )
