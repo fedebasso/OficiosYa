@@ -25,6 +25,8 @@ export interface ServiceRequest {
   location?: string
   address?: string
   scheduled_date?: string
+  final_amount?: number | null
+  completed_at?: string | null
 }
 
 interface RequestStore {
