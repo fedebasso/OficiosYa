@@ -10,6 +10,8 @@ import { getCategoryMeta, getCategoryIcon } from '../../lib/categories'
 import { timeAgo, formatScheduled } from '../../lib/proFormat'
 import { ActiveJobCard } from '../../components/pro/ActiveJobCard'
 import { fadeUp, staggerFast, scaleIn } from '../../lib/motion'
+import { useCompleteJob } from '../../hooks/useCompleteJob'
+import { CompleteJobSheet } from '../../components/pro/CompleteJobSheet'
 
 // ── Metadatos de estado ─────────────────────────────────────────────────────
 
@@ -240,6 +242,7 @@ export default function ProRequests() {
   const [query, setQuery] = useState('')
   const [rejectingId, setRejectingId] = useState<string | null>(null)
   const [sentProgress, setSentProgress] = useState<string | null>(null)
+  const complete = useCompleteJob((reqId) => updateStatus(reqId, 'completed'))
 
   function handleConfirmReject() {
     if (!rejectingId) return
@@ -437,7 +440,7 @@ export default function ProRequests() {
                     if (s === 'in_progress') {
                       handleInProgress(req.id)
                     } else {
-                      updateStatus(req.id, s)
+                      complete.open(req)   // abre modal de monto en vez de completar directo
                     }
                   }}
                   onChat={() => navigate(`/solicitud/${req.id}/chat`)}
@@ -589,6 +592,8 @@ export default function ProRequests() {
           100% { background-position: -200% 0; }
         }
       `}</style>
+
+      <CompleteJobSheet req={complete.completing} onConfirm={complete.confirm} onClose={complete.close} />
     </div>
   )
 }
