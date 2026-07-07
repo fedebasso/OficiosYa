@@ -3,10 +3,11 @@ import { motion } from 'framer-motion'
 import { TrendingUp, TrendingDown, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { PageShell } from '../../components/layout/PageShell'
 import { useAuthStore } from '../../store/authStore'
-import { earningsService, type EarningsSummary, type DailyEarning } from '../../services/earningsService'
+import { earningsService, type EarningsSummary, type DailyEarning, type EarningJobView } from '../../services/earningsService'
 import { formatUYU } from '../../lib/money'
 import { useCountUp } from '../../hooks/useCountUp'
 import { EarningsBars } from '../../components/pro/EarningsBars'
+import { EarningsJobList } from '../../components/pro/EarningsJobList'
 
 type Tab = 'hoy' | 'semana' | 'total'
 
@@ -26,6 +27,8 @@ export default function ProGanancias() {
   const [weekOffset, setWeekOffset] = useState(0)
   const [weekSeries, setWeekSeries] = useState<DailyEarning[]>([])
   const [totalSeries, setTotalSeries] = useState<DailyEarning[]>([])
+  const [jobsList, setJobsList] = useState<EarningJobView[]>([])
+  const [todayJobs, setTodayJobs] = useState<EarningJobView[]>([])
 
   useEffect(() => {
     let alive = true
@@ -61,6 +64,17 @@ export default function ProGanancias() {
       setTotalSeries(weeks)
     })
   }, [tab, proId])
+
+  useEffect(() => {
+    if (tab === 'hoy') return
+    earningsService.getJobs(proId).then(setJobsList)
+  }, [tab, proId, summary])
+
+  useEffect(() => {
+    if (tab !== 'hoy') return
+    const ymd = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD local
+    earningsService.getJobs(proId, ymd, ymd).then(setTodayJobs)
+  }, [tab, proId, summary])
 
   const amount = !summary ? 0
     : tab === 'hoy' ? summary.today
@@ -183,6 +197,50 @@ export default function ProGanancias() {
             labels={totalSeries.map((_, i) => `S${i + 1}`)}
             highlightIndex={7}
           />
+        )}
+
+        {tab === 'hoy' && (
+          todayJobs.length > 0
+            ? <EarningsJobList jobs={todayJobs} />
+            : (
+              <div className="mx-5 rounded-2xl px-5 py-8 text-center"
+                   style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+                <p className="text-sm font-bold" style={{ color: '#1A1712' }}>Todavía no completaste trabajos hoy</p>
+                <p className="text-xs mt-1" style={{ color: '#9C917E' }}>Cuando finalices uno, aparece acá al instante</p>
+              </div>
+            )
+        )}
+
+        {tab === 'total' && summary && summary.jobsTotal > 0 && (
+          <div className="px-5 grid grid-cols-3 gap-2">
+            {[
+              { label: 'Trabajos', value: String(summary.jobsTotal) },
+              { label: 'Promedio', value: formatUYU(summary.avgPerJob) },
+              { label: 'Mejor día', value: summary.bestDay ? formatUYU(summary.bestDay.amount) : '—' },
+            ].map((c) => (
+              <div key={c.label} className="rounded-2xl p-3 text-center"
+                   style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+                <div className="text-[15px] font-black" style={{ color: '#1A1712', fontVariantNumeric: 'tabular-nums' }}>
+                  {c.value}
+                </div>
+                <div className="text-[9px] font-bold uppercase tracking-widest mt-1" style={{ color: '#B3A794' }}>
+                  {c.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab !== 'hoy' && <EarningsJobList jobs={jobsList} />}
+
+        {summary && summary.jobsTotal === 0 && tab !== 'hoy' && (
+          <div className="mx-5 rounded-2xl px-5 py-10 text-center"
+               style={{ background: '#FFFFFF', border: '1.5px solid #ECE4D8' }}>
+            <p className="text-sm font-bold" style={{ color: '#1A1712' }}>Todavía no tenés ganancias</p>
+            <p className="text-xs mt-1" style={{ color: '#9C917E' }}>
+              Completá tu primer trabajo y empezá a ver tus ingresos acá
+            </p>
+          </div>
         )}
       </div>
     </PageShell>
