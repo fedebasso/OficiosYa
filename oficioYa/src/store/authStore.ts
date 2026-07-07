@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { authService } from '../services/authService'
+import { earningsService } from '../services/earningsService'
 
 export interface UserProfile {
   id: string
@@ -55,6 +56,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   signOut: async () => {
     await authService.signOut()
+    earningsService.clearDemo()
     set({ user: null })
   },
 }))
