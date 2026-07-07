@@ -26,3 +26,6 @@ dist-ssr
 .vercel
 .playwright-cli/
 *.png
+
+# Vite dependency pre-bundle cache
+.vite-cache/
