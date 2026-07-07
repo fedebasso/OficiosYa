@@ -178,7 +178,9 @@ export const earningsService = {
         .update({ final_amount: job.amount, completed_at: job.completedAt, status: 'completed' })
         .eq('id', job.requestId)
     }
-    const all = read().filter((j) => j.requestId !== job.requestId)  // upsert
+    // ensureLoaded siembra la historia demo si aún no existía (evita perder el seed
+    // cuando el pro completa un trabajo antes de abrir la pantalla de Ganancias).
+    const all = ensureLoaded(job.proId).filter((j) => j.requestId !== job.requestId)  // upsert
     all.push(job)
     write(all)
   },
