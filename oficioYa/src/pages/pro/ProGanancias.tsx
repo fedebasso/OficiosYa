@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { PageShell } from '../../components/layout/PageShell'
 import { useAuthStore } from '../../store/authStore'
-import { earningsService, type EarningsSummary } from '../../services/earningsService'
+import { earningsService, type EarningsSummary, type DailyEarning } from '../../services/earningsService'
 import { formatUYU } from '../../lib/money'
 import { useCountUp } from '../../hooks/useCountUp'
+import { EarningsBars } from '../../components/pro/EarningsBars'
 
 type Tab = 'hoy' | 'semana' | 'total'
 
@@ -22,6 +23,9 @@ export default function ProGanancias() {
   const [summary, setSummary] = useState<EarningsSummary | null>(null)
   const [prevWeek, setPrevWeek] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
+  const [weekOffset, setWeekOffset] = useState(0)
+  const [weekSeries, setWeekSeries] = useState<DailyEarning[]>([])
+  const [totalSeries, setTotalSeries] = useState<DailyEarning[]>([])
 
   useEffect(() => {
     let alive = true
@@ -36,6 +40,27 @@ export default function ProGanancias() {
     })
     return () => { alive = false }
   }, [proId])
+
+  useEffect(() => {
+    if (tab !== 'semana') return
+    earningsService.getWeekSeries(proId, weekOffset).then(setWeekSeries)
+  }, [tab, weekOffset, proId])
+
+  useEffect(() => {
+    if (tab !== 'total') return
+    earningsService.getDailySeries(proId, 56).then((days) => {
+      const weeks: DailyEarning[] = []
+      for (let w = 0; w < 8; w++) {
+        const chunk = days.slice(w * 7, w * 7 + 7)
+        weeks.push({
+          date: chunk[0]?.date ?? '',
+          amount: chunk.reduce((a, d) => a + d.amount, 0),
+          jobs: chunk.reduce((a, d) => a + d.jobs, 0),
+        })
+      }
+      setTotalSeries(weeks)
+    })
+  }, [tab, proId])
 
   const amount = !summary ? 0
     : tab === 'hoy' ? summary.today
@@ -128,7 +153,37 @@ export default function ProGanancias() {
           )}
         </div>
 
-        {/* Gráfica (Task 10) y lista (Task 11) se insertan aquí */}
+        {tab === 'semana' && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between px-5">
+              <button type="button" onClick={() => setWeekOffset((o) => o - 1)}
+                      aria-label="Semana anterior" className="p-1.5 rounded-lg active:opacity-60">
+                <ChevronLeft size={20} style={{ color: '#7A6E5E' }} />
+              </button>
+              <span className="text-[12px] font-bold uppercase tracking-widest" style={{ color: '#9C917E' }}>
+                {weekOffset === 0 ? 'Esta semana' : weekOffset === -1 ? 'Semana pasada' : `Hace ${-weekOffset} semanas`}
+              </span>
+              <button type="button" onClick={() => setWeekOffset((o) => Math.min(0, o + 1))}
+                      disabled={weekOffset === 0} aria-label="Semana siguiente"
+                      className="p-1.5 rounded-lg active:opacity-60" style={{ opacity: weekOffset === 0 ? 0.3 : 1 }}>
+                <ChevronRight size={20} style={{ color: '#7A6E5E' }} />
+              </button>
+            </div>
+            <EarningsBars
+              data={weekSeries}
+              labels={['L', 'M', 'M', 'J', 'V', 'S', 'D']}
+              highlightIndex={weekOffset === 0 ? (new Date().getDay() === 0 ? 6 : new Date().getDay() - 1) : undefined}
+            />
+          </div>
+        )}
+
+        {tab === 'total' && (
+          <EarningsBars
+            data={totalSeries}
+            labels={totalSeries.map((_, i) => `S${i + 1}`)}
+            highlightIndex={7}
+          />
+        )}
       </div>
     </PageShell>
   )
