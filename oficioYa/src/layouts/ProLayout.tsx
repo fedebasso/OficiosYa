@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProBottomNav } from '../components/layout/ProBottomNav'
+import { ToastHost } from '../components/ui/ToastHost'
 import { useProfessionalStore } from '../store/professionalStore'
 import { useAuthStore } from '../store/authStore'
 
@@ -23,6 +24,7 @@ export function ProLayout({ children }: { children: ReactNode }) {
     <>
       {children}
       <ProBottomNav />
+      <ToastHost />
     </>
   )
 }
