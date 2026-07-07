@@ -19,6 +19,13 @@ const LS_MSG = 'ofix_chat_messages'
 const DEMO_CLIENT = 'mock-client-1'
 const DEMO_PRO = 'mock-pro-1'
 
+// Cupo de imágenes conservadas por conversación (localStorage ~5MB).
+// A las más viejas se les vacía el contenido y la UI muestra un placeholder.
+const MAX_IMAGES_PER_CONV = 8
+
+const VALID_TYPES = new Set<Message['type']>(['text', 'image', 'system'])
+const VALID_STATUS = new Set<Message['status']>(['sending', 'sent', 'delivered', 'read'])
+
 function uid(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
@@ -119,10 +126,47 @@ function seed(): { conversations: Conversation[]; messages: Record<string, Messa
 let conversations: Conversation[]
 let messages: Record<string, Message[]>
 
+// ── Sanitización de datos persistidos ────────────────────────────────────────
+// Un localStorage viejo/corrupto (p.ej. mensajes 'audio' del modelo anterior)
+// NUNCA debe tirar la app: se descarta lo inválido y, si no queda nada, se re-seedea.
+
+function isConversation(x: unknown): x is Conversation {
+  const c = x as Conversation
+  return !!c && typeof c.id === 'string' && typeof c.client_id === 'string'
+    && typeof c.professional_id === 'string' && typeof c.last_message_at === 'string'
+}
+
+function isMessage(x: unknown): x is Message {
+  const m = x as Message
+  return !!m && typeof m.id === 'string' && typeof m.conversation_id === 'string'
+    && typeof m.sender_id === 'string' && VALID_TYPES.has(m.type)
+    && typeof m.created_at === 'string'
+}
+
+function sanitizeConversations(raw: unknown): Conversation[] | null {
+  if (!Array.isArray(raw)) return null
+  const valid = raw.filter(isConversation)
+  return valid.length ? valid : null
+}
+
+function sanitizeMessages(raw: unknown): Record<string, Message[]> | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null
+  const out: Record<string, Message[]> = {}
+  for (const [key, val] of Object.entries(raw as Record<string, unknown>)) {
+    if (!Array.isArray(val)) continue
+    out[key] = val.filter(isMessage).map((m) => ({
+      ...m,
+      image_url: m.image_url ?? null,
+      status: VALID_STATUS.has(m.status) ? m.status : 'sent',
+    }))
+  }
+  return out
+}
+
 function ensureLoaded() {
   if (conversations) return
-  const storedConv = read<Conversation[] | null>(LS_CONV, null)
-  const storedMsg = read<Record<string, Message[]> | null>(LS_MSG, null)
+  const storedConv = sanitizeConversations(read<unknown>(LS_CONV, null))
+  const storedMsg = sanitizeMessages(read<unknown>(LS_MSG, null))
   if (storedConv && storedMsg) {
     conversations = storedConv
     messages = storedMsg
@@ -134,7 +178,24 @@ function ensureLoaded() {
   }
 }
 
+// Conserva solo las últimas MAX_IMAGES_PER_CONV imágenes por conversación;
+// a las más viejas les vacía content/image_url (la UI muestra placeholder).
+function capImages() {
+  for (const convId of Object.keys(messages)) {
+    const list = messages[convId]
+    const imageIdx = list.reduce<number[]>((acc, m, i) => (m.type === 'image' ? [...acc, i] : acc), [])
+    const excess = imageIdx.length - MAX_IMAGES_PER_CONV
+    if (excess <= 0) continue
+    for (const i of imageIdx.slice(0, excess)) {
+      if (list[i].content || list[i].image_url) {
+        list[i] = { ...list[i], content: '', image_url: null }
+      }
+    }
+  }
+}
+
 function persist() {
+  capImages()
   write(LS_CONV, conversations)
   write(LS_MSG, messages)
 }

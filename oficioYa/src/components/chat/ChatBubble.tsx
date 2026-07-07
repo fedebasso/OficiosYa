@@ -1,4 +1,4 @@
-import { Check, CheckCheck, Clock, AlertCircle } from 'lucide-react'
+import { Check, CheckCheck, Clock, AlertCircle, ImageOff } from 'lucide-react'
 import type { Message } from '../../services/chatService.types'
 
 function formatTime(iso: string) {
@@ -56,23 +56,38 @@ export function ChatBubble({ message, isOwn, showMeta = true, error, onRetry }: 
         </div>
       )}
 
-      {message.type === 'image' && (
-        <div
-          className="max-w-[80%] overflow-hidden"
-          style={{
-            borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
-            border: '1.5px solid #EDE8DE',
-            opacity: error ? 0.7 : 1,
-          }}
-        >
-          <img
-            src={message.image_url ?? message.content}
-            alt="imagen"
-            className="w-full object-cover"
-            style={{ maxWidth: 220, maxHeight: 200, display: 'block' }}
-          />
-        </div>
-      )}
+      {message.type === 'image' && (() => {
+        const src = message.image_url || message.content
+        // blob: no sobrevive al refresh; content vacío = imagen purgada del cupo de localStorage
+        const available = !!src && !src.startsWith('blob:')
+        return (
+          <div
+            className="max-w-[80%] overflow-hidden"
+            style={{
+              borderRadius: isOwn ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
+              border: '1.5px solid #EDE8DE',
+              opacity: error ? 0.7 : 1,
+            }}
+          >
+            {available ? (
+              <img
+                src={src}
+                alt="imagen"
+                className="w-full object-cover"
+                style={{ maxWidth: 220, maxHeight: 200, display: 'block' }}
+              />
+            ) : (
+              <div
+                className="flex flex-col items-center justify-center gap-1"
+                style={{ width: 200, height: 130, background: '#F0EAE0', color: '#9C917E' }}
+              >
+                <ImageOff size={22} />
+                <span className="text-[11px] font-medium">Imagen no disponible</span>
+              </div>
+            )}
+          </div>
+        )
+      })()}
 
       {/* Meta: hora + estado / reintentar */}
       {(showMeta || error) && (
