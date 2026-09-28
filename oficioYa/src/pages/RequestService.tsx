@@ -16,11 +16,13 @@ export default function RequestService() {
   const { professional } = useProfessionalById(id ?? '')
   const addRequest = useRequestStore((s) => s.addRequest)
   const [loading, setLoading] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [sent, setSent] = useState(false)
   const [wizardStep, setWizardStep] = useState(1)
 
   const handleSubmit = async (data: WizardData) => {
     if (!professional) return
+    setSubmitError('')
     setLoading(true)
     try {
       const scheduledDate =
@@ -38,6 +40,8 @@ export default function RequestService() {
         scheduled_date: scheduledDate,
       })
       setSent(true)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'No se pudo enviar. Reintentá sin borrar tus datos.')
     } finally {
       setLoading(false)
     }
@@ -110,6 +114,7 @@ export default function RequestService() {
                 )}
               </div>
             )}
+{submitError && <p role="alert" className="text-sm text-red-700">{submitError}</p>}
             <RequestWizard onSubmit={handleSubmit} loading={loading} step={wizardStep} onStep={setWizardStep} proId={id ?? ''} />
           </>
         ) : (

@@ -67,6 +67,7 @@ export default function TicketConfirm() {
   const [phoneError, setPhoneError] = useState('')
   const [scheduleError, setScheduleError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [sent, setSent] = useState(false)
   const [scheduledDate, setScheduledDate] = useState<string | null>(null)
   const [scheduledTime, setScheduledTime] = useState<string | null>(null)
@@ -82,10 +83,11 @@ export default function TicketConfirm() {
 
   const { ticket, proId, proName, proAvatar, proRating, zone } = state
 
+  const proHasSchedule = Boolean(useAvailabilityStore.getState().schedules[proId])
   const slots = scheduledDate ? getSlots(proId, scheduledDate) : []
 
   const handleSubmit = async () => {
-    if (!scheduledDate || !scheduledTime) {
+    if (proHasSchedule && (!scheduledDate || !scheduledTime)) {
       setScheduleError('Elegí una fecha y un horario para la visita')
       return
     }
@@ -95,6 +97,7 @@ export default function TicketConfirm() {
       return
     }
     setPhoneError('')
+    setSubmitError('')
     setLoading(true)
     try {
       await addRequest({
@@ -110,6 +113,8 @@ export default function TicketConfirm() {
           : scheduledDate ?? undefined,
       })
       setSent(true)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'No se pudo enviar. Reintentá sin borrar tus datos.')
     } finally {
       setLoading(false)
     }
@@ -207,6 +212,7 @@ export default function TicketConfirm() {
               <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#999999' }}>
                 Elegí fecha y horario
               </p>
+              {!proHasSchedule && <p className="text-sm">Este profesional coordina el horario por chat. Podés enviar tu solicitud ahora.</p>}
               <DateStrip
                 proId={proId ?? ''}
                 selected={scheduledDate}
@@ -268,6 +274,7 @@ export default function TicketConfirm() {
               </AnimatePresence>
             </motion.div>
 
+{submitError && <p role="alert" className="text-sm text-red-700">{submitError}</p>}
             {/* Submit */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}

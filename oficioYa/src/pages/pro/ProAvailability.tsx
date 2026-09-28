@@ -1,4 +1,5 @@
 // src/pages/pro/ProAvailability.tsx
+import { IS_DEMO_MODE } from '../../lib/env'
 import { useState } from 'react'
 import { ChevronLeft, CheckCircle2, Plus, Umbrella } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -52,7 +53,7 @@ const SELECT: React.CSSProperties = {
 export default function ProAvailability() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
-  const proId = user?.id ?? '1'
+  const proId = IS_DEMO_MODE && user?.id === 'mock-pro-1' ? '1' : user?.id ?? '1'
 
   const { schedules, blockedSlots, vacations, setSchedule, removeBlockedSlot, removeVacation, getSlots } =
     useAvailabilityStore()

@@ -8,6 +8,7 @@ import { startOfWeek, addDays, toYMD, weekDatesFor } from '../lib/week'
 
 const LS_KEY = 'ofix_earnings'
 const DEMO_PRO = 'mock-pro-1'
+const earningsProId = (id: string) => IS_DEMO_MODE && id === '1' ? DEMO_PRO : id
 
 export interface EarningJob {
   requestId: string
@@ -95,7 +96,7 @@ function seededJobs(): EarningJob[] {
 function ensureLoaded(proId: string): EarningJob[] {
   const existing = read()
   if (existing.length > 0) return existing
-  if (proId === DEMO_PRO) {
+  if (earningsProId(proId) === DEMO_PRO) {
     const seed = seededJobs()
     write(seed)
     return seed
@@ -105,7 +106,7 @@ function ensureLoaded(proId: string): EarningJob[] {
 
 // ── Agregación ───────────────────────────────────────────────────────────────
 function jobsFor(proId: string): EarningJob[] {
-  return ensureLoaded(proId).filter((j) => j.proId === proId)
+  return ensureLoaded(proId).filter((j) => earningsProId(j.proId) === earningsProId(proId))
 }
 const sum = (arr: EarningJob[]) => arr.reduce((a, j) => a + j.amount, 0)
 

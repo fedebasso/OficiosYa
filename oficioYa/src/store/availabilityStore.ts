@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export type DayOfWeek =
   | 'lunes' | 'martes' | 'miercoles' | 'jueves'
@@ -61,6 +62,8 @@ export interface TimeSlot {
   time: string       // 'HH:MM'
   status: SlotStatus
 }
+
+const canonicalProId = (id: string) => id === 'mock-pro-1' ? '1' : id
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -155,16 +158,18 @@ interface AvailabilityStore {
   removeBlockedSlot: (id: string) => void
   addVacation: (v: Omit<Vacation, 'id'>) => void
   removeVacation: (id: string) => void
+  removeBooking: (requestId: string) => void
   addBooking: (b: Omit<Booking, 'id'>) => void
 }
 
-export const useAvailabilityStore = create<AvailabilityStore>((set, get) => ({
+export const useAvailabilityStore = create<AvailabilityStore>()(persist((set, get) => ({
   schedules: DEMO_SCHEDULES,
   blockedSlots: DEMO_BLOCKED,
   vacations: [],
   bookings: DEMO_BOOKINGS,
 
   getSlots: (proId, date) => {
+    proId = canonicalProId(proId)
     const { schedules, blockedSlots, vacations, bookings } = get()
     const schedule = schedules[proId]
     if (!schedule) return []
@@ -220,6 +225,7 @@ export const useAvailabilityStore = create<AvailabilityStore>((set, get) => ({
   },
 
   isDateAvailable: (proId, date) => {
+    proId = canonicalProId(proId)
     const { schedules, vacations } = get()
     const schedule = schedules[proId]
     if (!schedule) return false
@@ -231,14 +237,14 @@ export const useAvailabilityStore = create<AvailabilityStore>((set, get) => ({
 
   setSchedule: (proId, patch) =>
     set((s) => ({
-      schedules: { ...s.schedules, [proId]: { proId, ...patch } },
+      schedules: { ...s.schedules, [canonicalProId(proId)]: { proId: canonicalProId(proId), ...patch }, ...(canonicalProId(proId) === '1' ? { 'mock-pro-1': { proId: 'mock-pro-1', ...patch } } : {}) },
     })),
 
   addBlockedSlot: (slot) =>
     set((s) => ({
       blockedSlots: [
         ...s.blockedSlots,
-        { ...slot, id: `b-${Date.now()}` },
+        { ...slot, proId: canonicalProId(slot.proId), id: `b-${Date.now()}` },
       ],
     })),
 
@@ -247,14 +253,25 @@ export const useAvailabilityStore = create<AvailabilityStore>((set, get) => ({
 
   addVacation: (v) =>
     set((s) => ({
-      vacations: [...s.vacations, { ...v, id: `vac-${Date.now()}` }],
+      vacations: [...s.vacations, { ...v, proId: canonicalProId(v.proId), id: `vac-${Date.now()}` }],
     })),
 
   removeVacation: (id) =>
     set((s) => ({ vacations: s.vacations.filter((v) => v.id !== id) })),
 
+  removeBooking: (requestId) =>
+    set((s) => ({ bookings: s.bookings.filter((b) => b.requestId !== requestId) })),
+
   addBooking: (b) =>
     set((s) => ({
-      bookings: [...s.bookings, { ...b, id: `bk-${Date.now()}` }],
+      bookings: [...s.bookings.filter((item) => item.requestId !== b.requestId), { ...b, proId: canonicalProId(b.proId), id: `bk-${Date.now()}` }],
     })),
+}), {
+  name: 'ofix_demo_availability_v1',
+  partialize: (state) => ({
+    schedules: state.schedules,
+    blockedSlots: state.blockedSlots,
+    vacations: state.vacations,
+    bookings: state.bookings,
+  }),
 }))
