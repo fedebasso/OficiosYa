@@ -4,6 +4,7 @@
 // Con Supabase: getSummary/... agregan sobre la tabla `requests` (status='completed', final_amount).
 import { IS_DEMO_MODE } from '../lib/env'
 import { getSupabase } from '../lib/supabase'
+import { requestService } from './requestService'
 import { startOfWeek, addDays, toYMD, weekDatesFor } from '../lib/week'
 
 const LS_KEY = 'ofix_earnings'
@@ -49,8 +50,11 @@ function read(): EarningJob[] {
 }
 
 function write(jobs: EarningJob[]) {
-  if (typeof localStorage === 'undefined') return
-  try { localStorage.setItem(LS_KEY, JSON.stringify(jobs)) } catch { /* lleno/no disp. */ }
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(jobs))
+  } catch {
+    throw new Error('No se pudieron guardar las ganancias. Liberá espacio y reintentá antes de cerrar esta ventana.')
+  }
 }
 
 // ── Seed demo (solo mock-pro-1) ──────────────────────────────────────────────
@@ -105,8 +109,16 @@ function ensureLoaded(proId: string): EarningJob[] {
 }
 
 // ── Agregación ───────────────────────────────────────────────────────────────
-function jobsFor(proId: string): EarningJob[] {
-  return ensureLoaded(proId).filter((j) => earningsProId(j.proId) === earningsProId(proId))
+async function jobsFor(proId: string): Promise<EarningJob[]> {
+  const confirmed = IS_DEMO_MODE ? (await requestService.getAll()).filter((r) =>
+    earningsProId(r.professional_id) === earningsProId(proId) && r.status === 'completed' &&
+    typeof r.final_amount === 'number' && Number.isFinite(r.final_amount) && r.final_amount >= 0 &&
+    r.completed_at && Number.isFinite(Date.parse(r.completed_at))) : []
+  // Confirmed requests contain their own amount; recovery needs no second write.
+  const legacy = confirmed.length ? read() : ensureLoaded(proId)
+  const jobs = new Map(legacy.filter((j) => earningsProId(j.proId) === earningsProId(proId)).map((j) => [j.requestId, j]))
+  for (const r of confirmed) jobs.set(r.id, { requestId: r.id, proId: r.professional_id, clientName: 'Cliente', category: r.category, amount: r.final_amount!, completedAt: r.completed_at! })
+  return [...jobs.values()]
 }
 const sum = (arr: EarningJob[]) => arr.reduce((a, j) => a + j.amount, 0)
 
@@ -119,7 +131,7 @@ export const earningsService = {
         .eq('professional_id', proId).eq('status', 'completed')
       // (agregación real pendiente para Supabase)
     }
-    const all = jobsFor(proId)
+    const all = await jobsFor(proId)
     const todayYMD = toYMD(new Date())
     const weekSet = new Set(weekDatesFor(0))
     const today = all.filter((j) => toYMD(new Date(j.completedAt)) === todayYMD)
@@ -142,7 +154,7 @@ export const earningsService = {
   },
 
   async getDailySeries(proId: string, days: number): Promise<DailyEarning[]> {
-    const all = jobsFor(proId)
+    const all = await jobsFor(proId)
     const today = new Date()
     const out: DailyEarning[] = []
     for (let i = days - 1; i >= 0; i--) {
@@ -154,7 +166,7 @@ export const earningsService = {
   },
 
   async getWeekSeries(proId: string, weekOffset: number): Promise<DailyEarning[]> {
-    const all = jobsFor(proId)
+    const all = await jobsFor(proId)
     return weekDatesFor(weekOffset).map((ymd) => {
       const dayJobs = all.filter((j) => toYMD(new Date(j.completedAt)) === ymd)
       return { date: ymd, amount: sum(dayJobs), jobs: dayJobs.length }
@@ -162,7 +174,7 @@ export const earningsService = {
   },
 
   async getJobs(proId: string, from?: string, to?: string): Promise<EarningJobView[]> {
-    let all = jobsFor(proId)
+    let all = await jobsFor(proId)
     if (from) all = all.filter((j) => toYMD(new Date(j.completedAt)) >= from)
     if (to) all = all.filter((j) => toYMD(new Date(j.completedAt)) <= to)
     return all
@@ -175,9 +187,11 @@ export const earningsService = {
     if (!isValid(job)) return
     if (!IS_DEMO_MODE) {
       const supabase = await getSupabase()
-      await supabase.from('requests')
+      const { error } = await supabase.from('requests')
         .update({ final_amount: job.amount, completed_at: job.completedAt, status: 'completed' })
         .eq('id', job.requestId)
+      if (error) throw error
+      return
     }
     // ensureLoaded siembra la historia demo si aún no existía (evita perder el seed
     // cuando el pro completa un trabajo antes de abrir la pantalla de Ganancias).

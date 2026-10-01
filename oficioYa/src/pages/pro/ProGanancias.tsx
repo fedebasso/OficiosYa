@@ -24,6 +24,7 @@ export default function ProGanancias() {
   const [summary, setSummary] = useState<EarningsSummary | null>(null)
   const [prevWeek, setPrevWeek] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [weekOffset, setWeekOffset] = useState(0)
   const [weekSeries, setWeekSeries] = useState<DailyEarning[]>([])
   const [totalSeries, setTotalSeries] = useState<DailyEarning[]>([])
@@ -40,13 +41,15 @@ export default function ProGanancias() {
       setSummary(s)
       setPrevWeek(prev.reduce((a, d) => a + d.amount, 0))
       setLoading(false)
+    }).catch(() => {
+      if (alive) { setLoadError(true); setLoading(false) }
     })
     return () => { alive = false }
   }, [proId])
 
   useEffect(() => {
     if (tab !== 'semana') return
-    earningsService.getWeekSeries(proId, weekOffset).then(setWeekSeries)
+    earningsService.getWeekSeries(proId, weekOffset).then(setWeekSeries).catch(() => setLoadError(true))
   }, [tab, weekOffset, proId])
 
   useEffect(() => {
@@ -62,18 +65,18 @@ export default function ProGanancias() {
         })
       }
       setTotalSeries(weeks)
-    })
+    }).catch(() => setLoadError(true))
   }, [tab, proId])
 
   useEffect(() => {
     if (tab === 'hoy') return
-    earningsService.getJobs(proId).then(setJobsList)
+    earningsService.getJobs(proId).then(setJobsList).catch(() => setLoadError(true))
   }, [tab, proId, summary])
 
   useEffect(() => {
     if (tab !== 'hoy') return
     const ymd = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD local
-    earningsService.getJobs(proId, ymd, ymd).then(setTodayJobs)
+    earningsService.getJobs(proId, ymd, ymd).then(setTodayJobs).catch(() => setLoadError(true))
   }, [tab, proId, summary])
 
   const amount = !summary ? 0
@@ -111,6 +114,17 @@ export default function ProGanancias() {
       </div>
     </div>
   )
+
+  if (loadError) {
+    return (
+      <PageShell header={header} showBottomNav>
+        <div className="p-5">
+          <p role="alert" className="text-sm text-red-700">No se pudieron cargar las ganancias. Comprobá el espacio disponible en el navegador y volvé a intentar.</p>
+          <button type="button" className="mt-4 rounded-xl px-4 py-3 font-bold bg-white" onClick={() => window.location.reload()}>Reintentar</button>
+        </div>
+      </PageShell>
+    )
+  }
 
   if (loading) {
     return (

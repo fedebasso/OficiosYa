@@ -9,7 +9,7 @@ import { formatUYU } from '../lib/money'
  * Orquesta el completado de un trabajo con monto.
  * @param onCompleted  la pantalla marca el request como 'completed' en SU store.
  */
-export function useCompleteJob(onCompleted: (reqId: string, amount: number) => void) {
+export function useCompleteJob(onCompleted: (reqId: string, amount: number) => Promise<void>) {
   const [completing, setCompleting] = useState<ServiceRequest | null>(null)
   const showToast = useToastStore((s) => s.show)
 
@@ -20,7 +20,7 @@ export function useCompleteJob(onCompleted: (reqId: string, amount: number) => v
     const req = completing
     if (!req) return
     const completedAt = new Date().toISOString()
-    onCompleted(req.id, amount)  // optimista
+    await onCompleted(req.id, amount)
 
     await earningsService.recordJob({
       requestId: req.id,

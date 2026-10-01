@@ -9,11 +9,18 @@ function demo() {
   let user = { id: 'mock-client-1', role: 'client' }
   let released = null
   let nextId = 0
+  let failWrite = false
   const source = readFileSync(new URL('../src/services/requestService.ts', import.meta.url), 'utf8')
   const { outputText } = ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   })
   const dependencies = {
+    '../lib/visitFlow': (() => {
+      const exports = {}
+      const code = readFileSync(new URL('../src/lib/visitFlow.ts', import.meta.url), 'utf8')
+      runInNewContext(ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, { exports })
+      return exports
+    })(),
     '../lib/supabase': { getSupabase() { throw new Error('Unexpected backend call') } },
     '../lib/env': { IS_DEMO_MODE: true },
     './authService': { authService: { getSession: async () => user } },
@@ -34,13 +41,13 @@ function demo() {
       },
       localStorage: {
         getItem: (key) => storage.get(key) ?? null,
-        setItem: (key, value) => storage.set(key, value),
+        setItem: (key, value) => { if (failWrite) throw new Error('Quota'); storage.set(key, value) },
       },
       crypto: { randomUUID: () => 'request-' + ++nextId },
     })
     return exports.requestService
   }
-  return { reload, login: (value) => { user = value }, released: () => released }
+  return { reload, login: (value) => { user = value }, released: () => released, failWrites: (value) => { failWrite = value } }
 }
 
 const input = {
@@ -80,4 +87,24 @@ test('duplicate active appointment is rejected and cancellation allows retry', a
   await api.updateStatus(created.id, 'cancelled')
   const replacement = await api.create(appointment)
   assert.notEqual(replacement.id, created.id)
+})
+
+test('visit confirmation survives reload and failed writes do not partially complete the request', async () => {
+  const context = demo()
+  context.login({ id: 'mock-pro-1', role: 'professional' })
+  await context.reload().updateVisit('201', { type: 'submit', report: {
+    kind: 'resolved', description: 'Reparación del panel eléctrico', labor: 1500, materials: 300, other: 0, duration: '', validUntil: '',
+  } })
+  context.login({ id: 'mock-client-1', role: 'client' })
+  context.failWrites(true)
+  await assert.rejects(context.reload().updateVisit('201', { type: 'respond', version: 1, decision: 'accepted' }), /guardar/)
+  let request = (await context.reload().getAll()).find((r) => r.id === '201')
+  assert.equal(request.status, 'confirmed')
+  assert.equal(request.visitReports[0].response, undefined)
+  context.failWrites(false)
+  await context.reload().updateVisit('201', { type: 'respond', version: 1, decision: 'accepted' })
+  request = (await context.reload().getAll()).find((r) => r.id === '201')
+  assert.equal(request.status, 'completed')
+  assert.equal(request.final_amount, 1800)
+  assert.ok(request.completed_at)
 })

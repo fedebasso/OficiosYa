@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import type { VisitReport } from '../lib/visitFlow'
 import { requestService } from '../services/requestService'
 import { useAvailabilityStore } from './availabilityStore'
 import { useNotificationStore } from './notificationStore'
@@ -10,6 +11,7 @@ export type UrgencyLevel = 'ahora' | 'hoy' | 'esta_semana' | 'sin_apuro'
 export type RequestType = 'presupuesto' | 'visita'
 
 export interface ServiceRequest {
+  visitReports?: VisitReport[]
   id: string
   client_id: string | null
   professional_id: string

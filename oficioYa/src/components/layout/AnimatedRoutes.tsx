@@ -20,6 +20,7 @@ const Urgencias          = lazy(() => import('../../pages/Urgencias'))
 const Favoritos          = lazy(() => import('../../pages/Favoritos'))
 const MisSolicitudes     = lazy(() => import('../../pages/MisSolicitudes'))
 const SolicitudDetail    = lazy(() => import('../../pages/SolicitudDetail'))
+const TrabajoVisita      = lazy(() => import('../../pages/TrabajoVisita'))
 const Chat               = lazy(() => import('../../pages/Chat'))
 const ClientProfile      = lazy(() => import('../../pages/ClientProfile'))
 const Mensajes           = lazy(() => import('../../pages/Mensajes'))
@@ -79,6 +80,7 @@ export function AnimatedRoutes() {
               <Route path="/pro/onboarding" element={<ProtectedRoute><ProOnboarding /></ProtectedRoute>} />
               <Route path="/chat/:conversationId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
               <Route path="/solicitud/:id/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+              <Route path="/trabajo/:id" element={<ProtectedRoute><TrabajoVisita /></ProtectedRoute>} />
               <Route path="/mensajes"           element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
               {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales"     element={<ClientRoute><OfficialServicesPage /></ClientRoute>} />}
               {FEATURES.SERVICIOS_OFICIALES && <Route path="/servicios-oficiales/:id" element={<ClientRoute><OfficialServiceDetail /></ClientRoute>} />}

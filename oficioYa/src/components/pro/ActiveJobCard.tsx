@@ -1,4 +1,6 @@
 import { createElement } from 'react'
+import { Link } from 'react-router-dom'
+import { IS_DEMO_MODE } from '../../lib/env'
 import { motion } from 'framer-motion'
 import { MessageCircle, Clock, Calendar, Navigation, Flag, CheckCircle2, Siren } from 'lucide-react'
 import type { ServiceRequest } from '../../store/requestStore'
@@ -76,6 +78,7 @@ export function ActiveJobCard({ req, onProgress, onChat, sentProgress = false }:
         )}
 
         <div className="flex gap-2">
+          {IS_DEMO_MODE ? <Link to={`/trabajo/${req.id}`} className="flex-1 rounded-xl bg-[#E8683A] px-3 py-3 text-center text-sm font-bold text-white">{req.visitReports?.length ? 'Ver resultado de la visita' : 'Registrar resultado de visita'}</Link> :
           <motion.button
             type="button"
             onClick={() => onProgress(isInProgress ? 'completed' : 'in_progress')}
@@ -92,7 +95,7 @@ export function ActiveJobCard({ req, onProgress, onChat, sentProgress = false }:
               : isInProgress
                 ? <><Flag size={13} /> Completado</>
                 : <><Navigation size={13} /> En camino</>}
-          </motion.button>
+          </motion.button>}
           <motion.button
             type="button"
             onClick={onChat}

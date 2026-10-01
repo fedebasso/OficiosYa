@@ -1,5 +1,6 @@
 // src/pages/SolicitudDetail.tsx
-import { useState, createElement } from 'react'
+import { useEffect, useState, createElement } from 'react'
+import { IS_DEMO_MODE } from '../lib/env'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ChevronLeft, MessageCircle, XCircle, Star, Clock, CheckCircle2, Navigation, Flag, ClipboardList, MapPin, Calendar, Search, Siren } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -47,6 +48,8 @@ export default function SolicitudDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { requests, updateStatus, submitReview } = useRequestStore()
+  const loadRequests = useRequestStore((s) => s.loadRequests)
+  useEffect(() => { void loadRequests() }, [loadRequests])
   const user = useAuthStore((s) => s.user)
   const [showReview, setShowReview] = useState(false)
   const [showCancel, setShowCancel] = useState(false)
@@ -218,6 +221,7 @@ export default function SolicitudDetail() {
 
         {/* Acciones */}
         <motion.div variants={fadeUp} className="flex flex-col gap-2 mt-1">
+          {IS_DEMO_MODE && req.status !== 'pending' && req.status !== 'cancelled' && <button type="button" onClick={() => navigate(`/trabajo/${req.id}`)} className="w-full rounded-2xl bg-[#E8683A] py-3.5 text-sm font-bold text-white">{req.visitReports?.length ? 'Ver resumen o presupuesto' : 'Seguir la visita'}</button>}
 
           {/* Chat — disponible cuando el profesional aceptó */}
           {(req.status === 'confirmed' || req.status === 'in_progress' || req.status === 'completed') && (

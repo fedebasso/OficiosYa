@@ -3,6 +3,7 @@ import { IS_DEMO_MODE } from '../lib/env'
 import { authService } from './authService'
 import { useAvailabilityStore } from '../store/availabilityStore'
 import type { ServiceRequest } from '../store/requestStore'
+import { updateVisit, type VisitCommand } from '../lib/visitFlow'
 
 // Datos iniciales de la demo; después se conservan en el navegador.
 const initialRequests: ServiceRequest[] = [
@@ -65,6 +66,17 @@ function saveRequests(requests: ServiceRequest[]): void {
 }
 
 export const requestService = {
+  async updateVisit(id: string, command: VisitCommand): Promise<ServiceRequest> {
+    if (!IS_DEMO_MODE) throw new Error('El registro de visitas está disponible en la demo.')
+    const actor = await authService.getSession()
+    if (!actor) throw new Error('Iniciá sesión para continuar.')
+    const requests = readRequests()
+    const req = requests.find((item) => item.id === id)
+    if (!req) throw new Error('La solicitud ya no está disponible.')
+    const updated = updateVisit(req, actor, command, new Date().toISOString())
+    saveRequests(requests.map((item) => item.id === id ? updated : item))
+    return updated
+  },
   async getAll(): Promise<ServiceRequest[]> {
     if (IS_DEMO_MODE) {
       const user = await authService.getSession()
